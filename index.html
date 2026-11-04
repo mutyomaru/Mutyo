@@ -1,0 +1,273 @@
+
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>星詠みの旅団</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#090f20;color:#fff;font-family:system-ui,sans-serif}
+button{font:inherit;cursor:pointer;border:0;color:white}
+#app{max-width:480px;min-height:100vh;margin:auto;background:linear-gradient(160deg,#172344,#0b1020 70%);padding-bottom:85px}
+header{padding:18px 16px 12px;background:#111b35;border-bottom:1px solid #344264;display:flex;justify-content:space-between;align-items:center}
+.logo{font-size:19px;font-weight:900;letter-spacing:1px}
+.resources{font-size:12px;color:#ffe5a0}
+main{padding:16px}
+h2{font-size:20px;margin:5px 0 14px}
+h3{font-size:15px;margin:0 0 8px}
+p{color:#b9c5df;font-size:13px;line-height:1.7}
+.card{background:linear-gradient(145deg,#26395f,#18233e);border:1px solid #43577e;border-radius:16px;padding:14px;margin-bottom:12px}
+.hero{background:linear-gradient(135deg,#553f85,#263b70 60%,#17233e);text-align:center;padding:24px 15px;border-radius:18px;border:1px solid #9b85d3;margin-bottom:16px}
+.hero-art{font-size:65px;margin:8px}
+.hero h2{font-size:23px;margin:6px}
+.small{font-size:11px;color:#bec9e2}
+.btn{background:linear-gradient(100deg,#7862d8,#4c7fe0);padding:12px 16px;border-radius:12px;font-weight:700;margin:4px 2px}
+.btn2{background:#344769;padding:10px 13px;border-radius:10px;font-size:13px;margin:3px}
+.btn:disabled,.btn2:disabled{opacity:.4}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.char{border-radius:14px;padding:12px;text-align:center;background:linear-gradient(145deg,#354b76,#192541);border:1px solid #60739a}
+.portrait{font-size:45px;padding:12px 0}
+.rarity{color:#ffd77a;font-weight:800;font-size:12px}
+.stats{font-size:11px;color:#c7d4ee;line-height:1.8}
+.tag{display:inline-block;border-radius:20px;background:#283b60;padding:4px 9px;font-size:11px;margin:3px}
+.bar{height:8px;background:#11182a;border-radius:8px;overflow:hidden;margin:6px 0}
+.bar span{display:block;height:100%;background:linear-gradient(90deg,#42d6a0,#8be7d0)}
+.gauge span{background:linear-gradient(90deg,#edbb55,#ffea9e)}
+.notice{background:#35496e;border-radius:10px;padding:10px;margin:10px 0;font-size:13px;color:#fff0b8}
+nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;background:#111b35;border-top:1px solid #455477;display:grid;grid-template-columns:repeat(4,1fr);padding:8px 4px max(8px,env(safe-area-inset-bottom));z-index:5}
+nav button{background:none;color:#aab8d5;font-size:11px;padding:5px 0}
+nav button.active{color:#ffe08c;font-weight:800}
+nav b{display:block;font-size:21px;margin-bottom:2px}
+.row{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.center{text-align:center}
+.enemy{background:linear-gradient(145deg,#542e4e,#281c37);border-color:#a45d83;text-align:center}
+hr{border:0;border-top:1px solid #405071;margin:12px 0}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<script>
+const characters=[
+{id:"aoi",name:"アオイ",rarity:5,role:"蒼剣士",art:"⚔️",hp:160,atk:34,speed:18,skill:"蒼天斬",mult:2},
+{id:"luna",name:"ルナ",rarity:5,role:"星の魔導士",art:"🔮",hp:120,atk:43,speed:15,skill:"星降る魔法",mult:2.2},
+{id:"ren",name:"レン",rarity:4,role:"炎の騎士",art:"🔥",hp:145,atk:30,speed:16,skill:"紅蓮撃",mult:1.9},
+{id:"mio",name:"ミオ",rarity:4,role:"癒しの術師",art:"🌸",hp:155,atk:22,speed:20,skill:"花の祈り",mult:1.5},
+{id:"kai",name:"カイ",rarity:3,role:"風の斥候",art:"🌪️",hp:115,atk:25,speed:25,skill:"疾風斬",mult:1.8},
+{id:"yuki",name:"ユキ",rarity:3,role:"氷の弓使い",art:"❄️",hp:125,atk:27,speed:19,skill:"氷結矢",mult:1.8},
+{id:"gaku",name:"ガク",rarity:3,role:"大地の守護者",art:"🛡️",hp:190,atk:20,speed:10,skill:"大地の一撃",mult:1.7}
+];
+const initial={
+gems:500,gold:300,stage:1,
+owned:{aoi:1,ren:1,kai:1},
+party:["aoi","ren","kai"]
+};
+let state;
+try{
+ const old=JSON.parse(localStorage.getItem("hoshiyomi_save"));
+ state=old?{...initial,...old}:structuredClone(initial);
+}catch(e){state=structuredClone(initial)}
+let screen="home",notice="",battle=null;
+
+function save(){
+ try{localStorage.setItem("hoshiyomi_save",JSON.stringify(state))}
+ catch(e){notice="セーブできませんでした"}
+}
+function getChar(id){return characters.find(c=>c.id===id)}
+function levelStats(c){
+ const lv=state.owned[c.id]||1;
+ return {hp:c.hp+(lv-1)*12,atk:c.atk+(lv-1)*3,speed:c.speed};
+}
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+function bar(now,max,type=""){
+ return `<div class="bar ${type}"><span style="width:${Math.max(0,Math.min(100,now/max*100))}%"></span></div>`;
+}
+function characterCard(id,team=false){
+ const c=getChar(id),lv=state.owned[id],s=levelStats(c);
+ const inTeam=state.party.includes(id);
+ return `<div class="char">
+ <div class="rarity">${"★".repeat(c.rarity)}</div>
+ <div class="portrait">${c.art}</div>
+ <h3>${c.name}</h3><div class="small">${c.role}</div>
+ <div class="stats">Lv.${lv}　HP ${s.hp}<br>攻撃 ${s.atk}　速度 ${s.speed}<br>スキル：${c.skill}</div>
+ ${team?`<button class="btn2" data-action="party" data-id="${id}">${inTeam?"編成から外す":"編成に入れる"}</button>`:
+ `<button class="btn2" data-action="level" data-id="${id}">レベルアップ（80G）</button>`}
+ </div>`;
+}
+function homePage(){
+ return `<div class="hero">
+ <div class="small">YOUR ADVENTURE BEGINS</div>
+ <div class="hero-art">🌌</div>
+ <h2>星詠みの旅団</h2>
+ <p>仲間とともに、未知なる世界へ。</p>
+ <button class="btn" data-screen="battle">冒険に出発する</button>
+ </div>
+ <div class="grid">
+ <div class="card center"><div class="small">所持キャラクター</div><h2>${Object.keys(state.owned).length} 体</h2></div>
+ <div class="card center"><div class="small">現在のステージ</div><h2>${state.stage}</h2></div>
+ </div>
+ <div class="card"><h3>現在のパーティー</h3>
+ <div class="row">${state.party.map(id=>`<span>${getChar(id)?.art||"?"} ${getChar(id)?.name||""}</span>`).join("")}</div>
+ <button class="btn2" data-screen="team">編成を変更する</button></div>
+ <div class="card"><h3>冒険のヒント</h3><p>ガチャで仲間を集め、レベルを上げて強敵に挑もう。バトルでは、敵に与えたダメージがスキルゲージに蓄積されるよ。</p></div>`;
+}
+function gachaPage(){
+ return `<h2>✨ 仲間召喚</h2>
+ <div class="hero"><div class="hero-art">💫</div><h2>星の召喚</h2>
+ <p>新しい仲間との出会いが待っている。</p>
+ <div class="tag">★★★★★ 5% </div><div class="tag">★★★★ 25%</div><div class="tag">★★★ 70%</div>
+ <button class="btn" data-action="summon">1回召喚　💎100</button>
+ </div>
+ <div class="card center"><h3>所持ジェム：💎 ${state.gems}</h3><p>召喚結果は図鑑に登録されるよ。同じ仲間が出るとレベルが上がるよ。</p></div>`;
+}
+function rosterPage(team=false){
+ const ids=Object.keys(state.owned);
+ return `<h2>${team?"⚔️ パーティー編成":"📖 キャラクター図鑑"}</h2>
+ <div class="card"><div class="row"><span>所持キャラクター：${ids.length}体</span><span>編成：${state.party.length}/3</span></div>
+ <p>${team?"キャラクターを選んで最大3体まで編成しよう。":"仲間のレベルを上げて強くしよう。"}</p></div>
+ <div class="grid">${ids.map(id=>characterCard(id,team)).join("")}</div>`;
+}
+function battlePage(){
+ if(!battle)return `<h2>⚔️ バトル</h2><div class="hero"><div class="hero-art">🐉</div><h2>ステージ ${state.stage}</h2><p>闇のゴーレムが待ち受けている！</p><button class="btn" data-action="start">バトル開始</button></div>
+ <div class="card"><h3>出撃メンバー</h3><p>${state.party.map(id=>getChar(id)?.name).join(" ・ ")||"編成がありません"}</p></div>`;
+ let enemy=battle.enemy;
+ let partyHtml=battle.party.map(u=>`<div class="card">
+ <div class="row"><b>${u.art} ${u.name}</b><span class="small">HP ${u.hp}/${u.maxHp}</span></div>
+ ${bar(u.hp,u.maxHp)}
+ <div class="row small"><span>行動ゲージ ${Math.floor(u.gauge)}%</span><span>スキル ${Math.floor(u.charge)}%</span></div>
+ ${bar(u.gauge,100,"gauge")}${bar(u.charge,100,"gauge")}
+ </div>`).join("");
+ let result="";
+ if(battle.result==="win")result=`<div class="notice">🎉 勝利！ 報酬を獲得したよ。<br>ゴールド +100 / ジェム +40<br>次のステージ：${state.stage}</div><button class="btn" data-action="restart">次のステージへ</button>`;
+ else if(battle.result==="lose")result=`<div class="notice">旅団は敗北した……編成や育成を見直そう。</div><button class="btn" data-action="restart">もう一度挑戦</button>`;
+ let action="";
+ if(!battle.result&&battle.pendingActor){
+ const u=battle.party.find(x=>x.id===battle.pendingActor);
+ action=`<div class="card center"><h3>${u.name}の行動！</h3><button class="btn" data-action="attack">通常攻撃</button>
+ <button class="btn" data-action="skill" ${u.charge<100?"disabled":""}>スキル：${u.skill}（${Math.floor(u.charge)}%）</button></div>`;
+ }else if(!battle.result){
+ action=`<div class="card center"><p>次の行動を決めよう。</p><button class="btn" data-action="advance">次の行動へ</button></div>`;
+ }
+ return `<h2>⚔️ ステージ ${state.stage}</h2>
+ <div class="card enemy"><div class="small">ENEMY</div><div class="hero-art">👹</div><h3>${enemy.name}</h3><div>HP ${enemy.hp}/${enemy.maxHp}</div>${bar(enemy.hp,enemy.maxHp)}</div>
+ <h3>味方パーティー</h3>${partyHtml}${action}${result}`;
+}
+function render(){
+ const pages={home:homePage,gacha:gachaPage,roster:()=>rosterPage(false),team:()=>rosterPage(true),battle:battlePage};
+ document.getElementById("app").innerHTML=`
+ <header><div class="logo">✦ 星詠みの旅団</div><div class="resources">💎 ${state.gems}　🪙 ${state.gold}</div></header>
+ <main>${notice?`<div class="notice">${esc(notice)}</div>`:""}${pages[screen]()}</main>
+ <nav>
+ <button class="${screen==="home"?"active":""}" data-screen="home"><b>🏠</b>ホーム</button>
+ <button class="${screen==="gacha"?"active":""}" data-screen="gacha"><b>✨</b>ガチャ</button>
+ <button class="${["roster","team"].includes(screen)?"active":""}" data-screen="roster"><b>👥</b>仲間</button>
+ <button class="${screen==="battle"?"active":""}" data-screen="battle"><b>⚔️</b>バトル</button>
+ </nav>`;
+}
+function summon(){
+ if(state.gems<100){notice="ジェムが足りないよ。";render();return}
+ state.gems-=100;
+ const roll=Math.random(),rarity=roll<0.05?5:roll<0.30?4:3;
+ let pool=characters.filter(c=>c.rarity===rarity);
+ const c=pool[Math.floor(Math.random()*pool.length)];
+ if(state.owned[c.id]){
+ state.owned[c.id]=Math.min(20,state.owned[c.id]+1);
+ state.gold+=50;
+ notice=`${c.art} ${c.name}が登場！重複したのでレベルが上がったよ。ゴールド+50`;
+ }else{
+ state.owned[c.id]=1;
+ if(state.party.length<3)state.party.push(c.id);
+ notice=`${"★".repeat(c.rarity)} ${c.name}が仲間になった！`;
+ }
+ save();render();
+}
+function levelUp(id){
+ const lv=state.owned[id];
+ if(state.gold<80){notice="ゴールドが足りないよ。";render();return}
+ if(lv>=20){notice="レベル上限だよ。";render();return}
+ state.gold-=80;state.owned[id]++;notice=`${getChar(id).name}がレベル${state.owned[id]}になった！`;
+ save();render();
+}
+function toggleParty(id){
+ if(state.party.includes(id)){
+ if(state.party.length===1){notice="最低1体は編成してね。";render();return}
+ state.party=state.party.filter(x=>x!==id);
+ }else{
+ if(state.party.length>=3){notice="編成できるのは3体までだよ。";render();return}
+ state.party.push(id);
+ }
+ notice="パーティーを更新したよ。";save();render();
+}
+function startBattle(){
+ if(!state.party.length){notice="先に仲間を編成してね。";render();return}
+ battle={
+ party:state.party.map(id=>{
+ const c=getChar(id),s=levelStats(c);
+ return {id,name:c.name,art:c.art,skill:c.skill,mult:c.mult,hp:s.hp,maxHp:s.hp,atk:s.atk,speed:s.speed,gauge:0,charge:0,team:"ally"};
+ }),
+ enemy:{name:"闇のゴーレム",hp:260+state.stage*35,maxHp:260+state.stage*35,atk:17+state.stage*3,speed:12,gauge:0,team:"enemy"},
+ pendingActor:null,result:null
+ };
+ screen="battle";notice="";render();
+}
+function advanceBattle(){
+ if(!battle||battle.result||battle.pendingActor)return;
+ const units=[...battle.party.filter(u=>u.hp>0),battle.enemy];
+ let ready=units.filter(u=>u.gauge>=100);
+ let loops=0;
+ while(!ready.length&&loops++<30){
+ units.forEach(u=>u.gauge+=u.speed);
+ ready=units.filter(u=>u.gauge>=100);
+ }
+ ready.sort((a,b)=>b.gauge-a.gauge||(a.team===b.team?0:a.team==="ally"?-1:1));
+ const actor=ready[0];
+ if(!actor)return;
+ actor.gauge-=100;
+ if(actor.team==="enemy"){
+ const targets=battle.party.filter(u=>u.hp>0);
+ const target=targets[Math.floor(Math.random()*targets.length)];
+ const damage=Math.max(1,Math.floor(actor.atk*(0.9+Math.random()*0.2)));
+ target.hp=Math.max(0,target.hp-damage);
+ notice=`${actor.name}の攻撃！ ${target.name}に${damage}ダメージ！`;
+ if(!battle.party.some(u=>u.hp>0))battle.result="lose";
+ }else{
+ battle.pendingActor=actor.id;notice=`${actor.name}の番だよ！`;
+ }
+ render();
+}
+function playerAction(useSkill){
+ if(!battle||!battle.pendingActor)return;
+ const actor=battle.party.find(u=>u.id===battle.pendingActor);
+ if(!actor)return;
+ if(useSkill&&actor.charge<100)return;
+ const enemy=battle.enemy;
+ let damage=Math.max(1,Math.floor(actor.atk*(useSkill?actor.mult:1)*(0.9+Math.random()*0.2)));
+ enemy.hp=Math.max(0,enemy.hp-damage);
+ if(useSkill)actor.charge=0;
+ else actor.charge=Math.min(100,actor.charge+damage);
+ notice=useSkill?`${actor.name}の${actor.skill}！ ${damage}ダメージ！`:`${actor.name}の通常攻撃！ ${damage}ダメージ！`;
+ battle.pendingActor=null;
+ if(enemy.hp<=0){
+ battle.result="win";state.gold+=100;state.gems+=40;state.stage++;save();
+ }
+ render();
+}
+document.getElementById("app").addEventListener("click",e=>{
+ const b=e.target.closest("button");
+ if(!b)return;
+ if(b.dataset.screen){screen=b.dataset.screen;notice="";render();return}
+ switch(b.dataset.action){
+ case "summon":summon();break;
+ case "level":levelUp(b.dataset.id);break;
+ case "party":toggleParty(b.dataset.id);break;
+ case "start":startBattle();break;
+ case "advance":advanceBattle();break;
+ case "attack":playerAction(false);break;
+ case "skill":playerAction(true);break;
+ case "restart":battle=null;startBattle();break;
+ }
+});
+save();render();
+</script>
+</body>
+</html>
