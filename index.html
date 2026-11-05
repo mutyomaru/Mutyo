@@ -57,9 +57,7 @@ button:disabled{opacity:.4;cursor:not-allowed}
 }
 .footer{text-align:center;color:var(--muted);font-size:12px;padding:14px}
 
-/* ==============================
-   ガチャ召喚演出
-============================== */
+/* ガチャ召喚演出 */
 .summon-overlay{
   display:none;position:fixed;inset:0;z-index:1000;
   background:radial-gradient(ellipse at center,#26345b 0%,#11172b 55%,#080c18 100%);
@@ -83,12 +81,10 @@ button:disabled{opacity:.4;cursor:not-allowed}
 }
 .magic-stage{
   height:300px;position:relative;display:flex;
-  align-items:center;justify-content:center;
-  overflow:hidden;
+  align-items:center;justify-content:center;overflow:hidden;
 }
 .magic-circle{
-  width:230px;height:230px;border-radius:50%;
-  position:absolute;
+  width:230px;height:230px;border-radius:50%;position:absolute;
   border:3px solid #7ecbff;
   box-shadow:0 0 12px #54aaff,0 0 30px #398cff,inset 0 0 22px #398cff;
   background:
@@ -98,18 +94,16 @@ button:disabled{opacity:.4;cursor:not-allowed}
 }
 .magic-circle:before{
   content:"";position:absolute;inset:17px;border-radius:50%;
-  border:2px dashed #b5e7ff;
-  box-shadow:0 0 12px #64caff;
+  border:2px dashed #b5e7ff;box-shadow:0 0 12px #64caff;
 }
 .magic-circle:after{
   content:"✦　ᚷ　✧　ᚨ　✦　ᚱ　✧　ᚷ　✦";
   position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
-  color:#d5f3ff;font-size:17px;letter-spacing:2px;
-  text-shadow:0 0 9px #48aaff;
+  color:#d5f3ff;font-size:17px;letter-spacing:2px;text-shadow:0 0 9px #48aaff;
 }
 .magic-inner{
-  width:125px;height:125px;border-radius:50%;
-  position:absolute;border:2px solid #a7ddff;
+  width:125px;height:125px;border-radius:50%;position:absolute;
+  border:2px solid #a7ddff;
   box-shadow:0 0 15px #56baff,inset 0 0 20px #56baff;
   background:radial-gradient(circle,#8bdcff44,transparent 70%);
   animation:magicRotateReverse 5s linear infinite;
@@ -121,8 +115,7 @@ button:disabled{opacity:.4;cursor:not-allowed}
 }
 .magic-rune{
   position:absolute;width:280px;height:280px;border-radius:50%;
-  border:1px solid #77caff88;
-  box-shadow:0 0 25px #4aaaff55;
+  border:1px solid #77caff88;box-shadow:0 0 25px #4aaaff55;
   animation:magicRotateReverse 13s linear infinite;
 }
 .magic-rune:before,.magic-rune:after{
@@ -133,12 +126,9 @@ button:disabled{opacity:.4;cursor:not-allowed}
 .summon-beam{
   position:absolute;bottom:10px;left:50%;transform:translateX(-50%);
   width:110px;height:0;opacity:0;
-  background:linear-gradient(0deg,#fff, #9bdcffaa,transparent);
-  filter:blur(5px);
+  background:linear-gradient(0deg,#fff,#9bdcffaa,transparent);filter:blur(5px);
 }
-.summon-overlay.revealing .summon-beam{
-  animation:beamRise 1.1s ease-out forwards;
-}
+.summon-overlay.revealing .summon-beam{animation:beamRise 1.1s ease-out forwards}
 .summon-overlay.epic-mode .magic-circle{
   border-color:#ffe08b;
   box-shadow:0 0 18px #ffc34b,0 0 45px #d58aff,inset 0 0 30px #f4b84b;
@@ -151,14 +141,11 @@ button:disabled{opacity:.4;cursor:not-allowed}
 .epic-mode .magic-inner{
   border-color:#ffe4a1;box-shadow:0 0 22px #ffc34b,inset 0 0 25px #d58aff;
 }
-.epic-mode .magic-inner:after{
-  color:#fff2bd;text-shadow:0 0 25px #ffb52e;
-}
+.epic-mode .magic-inner:after{color:#fff2bd;text-shadow:0 0 25px #ffb52e}
 .epic-mode .magic-rune{border-color:#ffe18c;box-shadow:0 0 35px #d58aff99}
 .epic-mode .magic-rune:before,.epic-mode .magic-rune:after{border-color:#ffe8a6}
 .epic-mode .summon-beam{
-  background:linear-gradient(0deg,#fff,#ffe08b,#d58affaa,transparent);
-  filter:blur(7px);
+  background:linear-gradient(0deg,#fff,#ffe08b,#d58affaa,transparent);filter:blur(7px);
 }
 @keyframes magicRotate{to{transform:rotate(360deg)}}
 @keyframes magicRotateReverse{to{transform:rotate(-360deg)}}
@@ -173,8 +160,8 @@ button:disabled{opacity:.4;cursor:not-allowed}
   100%{height:320px;width:180px;opacity:0}
 }
 .summon-character{
-  display:none;position:relative;z-index:2;
-  width:190px;height:190px;align-items:center;justify-content:center;
+  display:none;position:relative;z-index:2;width:190px;height:190px;
+  align-items:center;justify-content:center;
   animation:characterAppear .65s cubic-bezier(.15,.8,.2,1) both;
 }
 .summon-character img{
@@ -192,16 +179,11 @@ button:disabled{opacity:.4;cursor:not-allowed}
   65%{opacity:1;transform:translateY(-8px) scale(1.12)}
   100%{opacity:1;transform:translateY(0) scale(1)}
 }
-.summon-flash{
-  position:absolute;inset:0;z-index:3;pointer-events:none;
-  background:#fff;opacity:0;
-}
+.summon-flash{position:absolute;inset:0;z-index:3;pointer-events:none;background:#fff;opacity:0}
 .summon-overlay.flash .summon-flash{animation:summonFlash .65s ease-out}
 .epic-mode.flash .summon-flash{animation:epicFlash .9s ease-out}
 @keyframes summonFlash{
-  0%{opacity:0}
-  15%{opacity:.85}
-  100%{opacity:0}
+  0%{opacity:0}15%{opacity:.85}100%{opacity:0}
 }
 @keyframes epicFlash{
   0%{opacity:0;background:#fff}
@@ -209,17 +191,12 @@ button:disabled{opacity:.4;cursor:not-allowed}
   35%{opacity:.8;background:#d9a1ff}
   100%{opacity:0}
 }
-.summon-stars{
-  position:absolute;inset:0;pointer-events:none;overflow:hidden;
-}
+.summon-stars{position:absolute;inset:0;pointer-events:none;overflow:hidden}
 .summon-stars i{
-  position:absolute;color:#bdeaff;font-style:normal;
-  font-size:18px;animation:starFloat 2.2s ease-out infinite;
-  text-shadow:0 0 10px #8bdcff;
+  position:absolute;color:#bdeaff;font-style:normal;font-size:18px;
+  animation:starFloat 2.2s ease-out infinite;text-shadow:0 0 10px #8bdcff;
 }
-.epic-mode .summon-stars i{
-  color:#ffe6a1;text-shadow:0 0 12px #ffb52e,0 0 20px #c17cff;
-}
+.epic-mode .summon-stars i{color:#ffe6a1;text-shadow:0 0 12px #ffb52e,0 0 20px #c17cff}
 .summon-stars i:nth-child(1){left:12%;top:20%;animation-delay:0s}
 .summon-stars i:nth-child(2){left:80%;top:25%;animation-delay:.3s}
 .summon-stars i:nth-child(3){left:20%;top:70%;animation-delay:.6s}
@@ -231,27 +208,14 @@ button:disabled{opacity:.4;cursor:not-allowed}
   100%{opacity:0;transform:translateY(-35px) scale(1.4) rotate(90deg)}
 }
 .summon-result-name{
-  position:relative;z-index:4;min-height:75px;
-  margin-top:-4px;opacity:0;transform:translateY(10px);
+  position:relative;z-index:4;min-height:75px;margin-top:-4px;opacity:0;transform:translateY(10px);
 }
-.summon-overlay.revealed .summon-result-name{
-  animation:resultTextIn .5s .25s ease-out forwards;
-}
+.summon-overlay.revealed .summon-result-name{animation:resultTextIn .5s .25s ease-out forwards}
 @keyframes resultTextIn{to{opacity:1;transform:translateY(0)}}
-.summon-rarity{
-  font-size:15px;font-weight:1000;letter-spacing:4px;
-  color:#a9ddff;text-shadow:0 0 10px #5bbaff;
-}
-.epic-mode .summon-rarity{
-  color:#ffe49a;text-shadow:0 0 12px #ffb52e,0 0 20px #c17cff;
-}
-.summon-result-name h2{
-  font-size:25px;margin:5px 0;color:#fff;
-  text-shadow:0 2px 8px #000,0 0 15px #7ccfff;
-}
-.epic-mode .summon-result-name h2{
-  color:#fff1c5;text-shadow:0 2px 8px #000,0 0 18px #ffbd49,0 0 28px #c17cff;
-}
+.summon-rarity{font-size:15px;font-weight:1000;letter-spacing:4px;color:#a9ddff;text-shadow:0 0 10px #5bbaff}
+.epic-mode .summon-rarity{color:#ffe49a;text-shadow:0 0 12px #ffb52e,0 0 20px #c17cff}
+.summon-result-name h2{font-size:25px;margin:5px 0;color:#fff;text-shadow:0 2px 8px #000,0 0 15px #7ccfff}
+.epic-mode .summon-result-name h2{color:#fff1c5;text-shadow:0 2px 8px #000,0 0 18px #ffbd49,0 0 28px #c17cff}
 .summon-message{font-size:13px;color:#dcecff;min-height:22px}
 .epic-mode .summon-message{color:#ffe7bb}
 .summon-progress{font-size:12px;color:#c5d4ed;margin:8px 0}
@@ -261,8 +225,7 @@ button:disabled{opacity:.4;cursor:not-allowed}
 .summon-finish{display:none;margin-top:14px;position:relative;z-index:5}
 .summon-finish button{width:100%;font-weight:900}
 .summon-summary{
-  display:none;position:relative;z-index:5;
-  margin-top:12px;text-align:left;
+  display:none;position:relative;z-index:5;margin-top:12px;text-align:left;
   background:#111a2dcc;border:1px solid #7185a8;border-radius:13px;
   padding:12px;max-height:210px;overflow-y:auto;
 }
@@ -284,9 +247,7 @@ button:disabled{opacity:.4;cursor:not-allowed}
 .summon-overlay.complete .summon-summary-heading{
   text-align:center;color:var(--gold);font-size:22px;font-weight:1000;margin:5px 0 12px;
 }
-.summon-overlay.complete .summon-summary-grid{
-  display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;
-}
+.summon-overlay.complete .summon-summary-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
 .summon-mini-card{
   background:#202d49;border:1px solid #536486;border-radius:10px;
   padding:8px;text-align:center;min-width:0;
@@ -295,10 +256,7 @@ button:disabled{opacity:.4;cursor:not-allowed}
   border-color:#e8bd69;background:linear-gradient(145deg,#59436d,#292342);
   box-shadow:0 0 12px #d69aff44;
 }
-.summon-mini-card img{
-  width:100%;height:85px;object-fit:contain;
-  filter:drop-shadow(0 3px 5px #0008);
-}
+.summon-mini-card img{width:100%;height:85px;object-fit:contain;filter:drop-shadow(0 3px 5px #0008)}
 .summon-mini-card .mini-name{font-size:12px;font-weight:900;overflow-wrap:anywhere}
 .summon-mini-card .mini-rarity{font-size:11px;color:#cbd5e1}
 .summon-mini-card.epic-result .mini-rarity{color:#ffe09a}
@@ -322,8 +280,7 @@ button:disabled{opacity:.4;cursor:not-allowed}
 }
 .stage-map:before{
   content:"";position:absolute;inset:0;pointer-events:none;opacity:.18;
-  background-image:radial-gradient(#d5e9a0 1px,transparent 1px);
-  background-size:22px 22px;
+  background-image:radial-gradient(#d5e9a0 1px,transparent 1px);background-size:22px 22px;
 }
 .map-heading{
   position:relative;z-index:1;display:flex;justify-content:space-between;
@@ -334,8 +291,8 @@ button:disabled{opacity:.4;cursor:not-allowed}
 .map-grid{position:relative;z-index:1;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
 .stage-node{
   position:relative;min-width:0;min-height:91px;padding:8px 4px;
-  display:flex;flex-direction:column;justify-content:center;align-items:center;
-  gap:3px;border-radius:14px;border:2px solid #b4c98b;
+  display:flex;flex-direction:column;justify-content:center;align-items:center;gap:3px;
+  border-radius:14px;border:2px solid #b4c98b;
   background:linear-gradient(180deg,#e1e9b7,#a9c27b);color:#263b26;
   box-shadow:0 4px 0 #345534,0 5px 9px #152a1b88;text-align:center;
 }
@@ -522,7 +479,6 @@ button:disabled{opacity:.4;cursor:not-allowed}
   </div>
 </section>
 
-<!-- ステージ選択ページ -->
 <section id="battle" class="page">
   <div class="panel">
     <h2 class="section-title">草原マップ</h2>
@@ -538,7 +494,6 @@ button:disabled{opacity:.4;cursor:not-allowed}
   </div>
 </section>
 
-<!-- 戦闘専用ページ -->
 <section id="battleFight" class="page">
   <div class="panel">
     <div class="row" style="justify-content:space-between;margin-bottom:12px">
@@ -568,11 +523,9 @@ button:disabled{opacity:.4;cursor:not-allowed}
 <div class="footer">星詠みの旅団</div>
 </div>
 
-<!-- ガチャ演出画面 -->
 <div id="summonOverlay" class="summon-overlay" aria-live="polite">
   <div class="summon-content">
     <div class="summon-title" id="summonTitle">✦ 星詠み召喚 ✦</div>
-
     <div class="magic-stage">
       <div class="magic-rune"></div>
       <div class="magic-circle"></div>
@@ -586,21 +539,16 @@ button:disabled{opacity:.4;cursor:not-allowed}
         <i>✦</i><i>✧</i><i>✦</i><i>✧</i><i>✦</i>
       </div>
     </div>
-
     <div class="summon-result-name" id="summonResultName">
       <div class="summon-rarity" id="summonRarity"></div>
       <h2 id="summonCharacterName"></h2>
       <div class="summon-message" id="summonMessage"></div>
     </div>
-
     <div class="summon-progress" id="summonProgress"></div>
-
     <div class="summon-controls" id="summonControls">
       <button class="summon-skip" data-action="skipSummon">演出をスキップ</button>
     </div>
-
     <div class="summon-summary" id="summonSummary"></div>
-
     <div class="summon-finish" id="summonFinish">
       <button data-action="closeSummon">召喚結果を確認して戻る</button>
     </div>
@@ -615,6 +563,23 @@ const KEY='hoshiyomi_save_v2';
 const MAX_STAGE=20;
 const IMPLEMENTED_STAGE=10;
 const BOSS_STAGES=[10,20];
+
+/* ステージクリア報酬 */
+const STAGE_GOLD={
+  1:200,2:200,3:200,4:200,5:200,
+  6:300,7:300,8:300,9:300,
+  10:1000
+};
+const GOLD_REDUCTION_RATE=0.8;
+const FIRST_CLEAR_GEM_CHANCE=0.20;
+const FIRST_CLEAR_GEM_AMOUNT=50;
+
+/* ステージクリア時のレアリティ別キャラドロップ率 */
+const CHARACTER_DROP_RATES={
+  'ノーマル':7,
+  'レア':2,
+  'エピック':0.3
+};
 
 const CHARACTERS=[
 {id:'swordman',imageFile:'Swordman.png',name:'剣士',rarity:'ノーマル',hp:100,atk:20,speed:20,charge:3,skill:'強撃',effect:'damage',power:50,target:'one',growth:.07,max:20},
@@ -682,6 +647,8 @@ function fresh(){
     gold:300,
     stage:1,
     clearedStage:0,
+    /* ステージごとのクリア回数 */
+    stageClearCounts:{},
     owned:{
       swordman:{level:1,dupes:0},
       archer:{level:1,dupes:0},
@@ -712,6 +679,28 @@ function loadState(){
     :oldCleared;
 
   s.stage=Math.min(IMPLEMENTED_STAGE,s.clearedStage+1);
+
+  /*
+    新しいクリア回数データがない旧セーブでは、
+    すでにクリア済みのステージを1回クリア済みとして扱う。
+    そのため、旧セーブのクリア済みステージで
+    初回クリアジェムがもう一度発生することはない。
+  */
+  const savedCounts=raw.stageClearCounts&&typeof raw.stageClearCounts==='object'
+    ?raw.stageClearCounts:{};
+
+  s.stageClearCounts={};
+
+  for(let i=1;i<=IMPLEMENTED_STAGE;i++){
+    const saved=Number(savedCounts[i]);
+
+    if(Number.isFinite(saved)&&saved>=0){
+      s.stageClearCounts[i]=Math.floor(saved);
+    }else{
+      s.stageClearCounts[i]=i<=s.clearedStage?1:0;
+    }
+  }
+
   s.owned=raw.owned&&typeof raw.owned==='object'?raw.owned:{};
 
   for(const [id,v] of Object.entries(s.owned)){
@@ -740,7 +729,6 @@ let battle=null;
 let busy=false;
 let enemyTimer=null;
 
-/* ガチャ演出用の状態 */
 let summonBusy=false;
 let summonTimer=null;
 let summonResults=[];
@@ -769,10 +757,6 @@ function esc(s){
   }[c]));
 }
 
-/*
-  画像ファイルの読み込み。
-  画像は images フォルダ内から読み込む。
-*/
 function imagePath(id){
   const c=byId(id);
   const file=c?.imageFile||id+'.png';
@@ -1011,37 +995,145 @@ function selectStage(stage){
 }
 
 /* ==============================
+   キャラクター重複処理
+============================== */
+
+function processDuplicate(c){
+  const o=state.owned[c.id];
+
+  if(!o){
+    state.owned[c.id]={level:1,dupes:0};
+    return '新しい仲間が旅団に加わった！';
+  }
+
+  o.dupes=(o.dupes||0)+1;
+
+  if(o.level<c.max&&o.dupes>=o.level){
+    o.dupes=0;
+    o.level++;
+    return `重複によって Lv.${o.level} に成長！`;
+  }
+
+  if(o.level>=c.max){
+    o.dupes=0;
+    state.gold+=50;
+    return '最大レベルのため、🪙50を獲得！';
+  }
+
+  return `重複 ${o.dupes}/${o.level}`;
+}
+
+/* ==============================
+   ステージクリア報酬
+============================== */
+
+function getStageBaseGold(stage){
+  return STAGE_GOLD[stage]||0;
+}
+
+/*
+  ステージをクリアするたびに、
+  前回の80%の金貨を獲得する。
+  clearCount=0なら初回、1なら2回目。
+*/
+function calculateStageGold(stage,clearCount){
+  const base=getStageBaseGold(stage);
+  return Math.floor(base*Math.pow(GOLD_REDUCTION_RATE,clearCount));
+}
+
+/*
+  ステージに登場した敵のうち、
+  プレイヤーがすでに所持しているキャラクターを抽選対象にする。
+  同じ敵が複数体いても、キャラクターごとに抽選対象は1つ。
+*/
+function createStageDrop(currentBattle){
+  const ownedEnemyIds=[
+    ...new Set(
+      currentBattle.enemies
+        .map(enemy=>enemy.characterId)
+        .filter(id=>id&&state.owned[id]&&byId(id))
+    )
+  ];
+
+  if(ownedEnemyIds.length===0)return null;
+
+  const roll=Math.random()*100;
+  let selectedRarity=null;
+
+  if(roll<CHARACTER_DROP_RATES['ノーマル']){
+    selectedRarity='ノーマル';
+  }else if(roll<
+    CHARACTER_DROP_RATES['ノーマル']+
+    CHARACTER_DROP_RATES['レア']
+  ){
+    selectedRarity='レア';
+  }else if(roll<
+    CHARACTER_DROP_RATES['ノーマル']+
+    CHARACTER_DROP_RATES['レア']+
+    CHARACTER_DROP_RATES['エピック']
+  ){
+    selectedRarity='エピック';
+  }
+
+  if(!selectedRarity)return null;
+
+  const candidates=ownedEnemyIds.filter(id=>
+    byId(id).rarity===selectedRarity
+  );
+
+  if(candidates.length===0)return null;
+
+  const dropId=candidates[
+    Math.floor(Math.random()*candidates.length)
+  ];
+
+  const character=byId(dropId);
+  const message=processDuplicate(character);
+
+  return {character,message};
+}
+
+/*
+  ステージクリア時の報酬をまとめて処理する。
+  ジェムの20%抽選は、そのステージの初クリア時だけ。
+  キャラドロップは初回・周回を問わず毎回抽選する。
+*/
+function grantStageRewards(currentBattle){
+  const stage=currentBattle.stage;
+  const clearCount=Number(state.stageClearCounts[stage])||0;
+  const firstClear=clearCount===0;
+
+  const goldReward=calculateStageGold(stage,clearCount);
+  state.gold+=goldReward;
+
+  let gemReward=0;
+  if(firstClear&&Math.random()<FIRST_CLEAR_GEM_CHANCE){
+    gemReward=FIRST_CLEAR_GEM_AMOUNT;
+    state.gems+=gemReward;
+  }
+
+  state.stageClearCounts[stage]=clearCount+1;
+
+  const characterDrop=createStageDrop(currentBattle);
+
+  return {
+    gold:goldReward,
+    gems:gemReward,
+    firstClear,
+    clearCount:clearCount+1,
+    characterDrop
+  };
+}
+
+/* ==============================
    ガチャ召喚・結果処理
 ============================== */
 
-/* 召喚結果を作成する。演出の前に結果を確定する */
 function createSummonResult(c){
-  let message='';
-
-  if(!state.owned[c.id]){
-    state.owned[c.id]={level:1,dupes:0};
-    message='新しい仲間が旅団に加わった！';
-  }else{
-    const o=state.owned[c.id];
-    o.dupes=(o.dupes||0)+1;
-
-    if(o.level<c.max&&o.dupes>=o.level){
-      o.dupes=0;
-      o.level++;
-      message=`重複によって Lv.${o.level} に成長！`;
-    }else if(o.level>=c.max){
-      o.dupes=0;
-      state.gold+=50;
-      message='最大レベルのため、🪙50を獲得！';
-    }else{
-      message=`重複 ${o.dupes}/${o.level}`;
-    }
-  }
-
+  const message=processDuplicate(c);
   return {character:c,message,epic:c.rarity==='エピック'};
 }
 
-/* ガチャを引く */
 function summon(count){
   if(summonBusy)return;
 
@@ -1078,7 +1170,6 @@ function summon(count){
   startSummonAnimation();
 }
 
-/* 演出画面を初期化 */
 function startSummonAnimation(){
   const overlay=document.getElementById('summonOverlay');
 
@@ -1091,7 +1182,6 @@ function startSummonAnimation(){
   showNextSummon();
 }
 
-/* 次のキャラクターを召喚 */
 function showNextSummon(){
   if(!summonBusy)return;
 
@@ -1120,7 +1210,6 @@ function showNextSummon(){
   document.getElementById('summonProgress').textContent=
     `${summonIndex+1} / ${summonResults.length} 体目`;
 
-  /* 魔法陣が光り、キャラクターを出現させる */
   summonTimer=setTimeout(()=>{
     summonTimer=null;
     if(!summonBusy)return;
@@ -1152,7 +1241,6 @@ function showNextSummon(){
   },1050);
 }
 
-/* 演出をスキップ */
 function skipSummonAnimation(){
   if(!summonBusy)return;
 
@@ -1165,7 +1253,6 @@ function skipSummonAnimation(){
   finishSummonAnimation();
 }
 
-/* 召喚結果一覧 */
 function finishSummonAnimation(){
   if(summonTimer){
     clearTimeout(summonTimer);
@@ -1211,7 +1298,6 @@ function finishSummonAnimation(){
     ).join('<br>');
 }
 
-/* 演出を閉じる */
 function closeSummon(){
   if(summonTimer){
     clearTimeout(summonTimer);
@@ -1266,12 +1352,6 @@ function makeUnit(id,side){
   };
 }
 
-/*
-  敵キャラクター生成。
-  ステージ10の敵ゴーレムだけ、
-  HP700・素早さ12・溜め3に個別設定する。
-  所持キャラクターのゴーレムには影響しない。
-*/
 function makeEnemy(i,stage){
   const formation=STAGE_ENEMIES[stage];
   if(!formation||!formation[i])return null;
@@ -1304,7 +1384,6 @@ function makeEnemy(i,stage){
     strengthLabel+=` / HP ${Math.round(setting.hpMultiplier*100)}%`;
   }
 
-  /* ステージ10の敵ゴーレムだけに適用 */
   const isStage10Golem=Number(stage)===10&&c.id==='ゴーレム';
 
   if(isStage10Golem){
@@ -1442,6 +1521,7 @@ function startBattle(){
     over:false,
     readyActor:null,
     pendingEnemy:null,
+    rewards:null,
     allies:state.party.map(id=>makeUnit(id,'ally')),
     enemies:formation.map((setting,index)=>makeEnemy(index,selectedStage)).filter(Boolean)
   };
@@ -1661,10 +1741,17 @@ function playerAction(id,skill){
   advanceBattle();
 }
 
+/* ==============================
+   戦闘終了・報酬処理
+============================== */
+
 function finishBattle(win){
   if(!battle||battle.over)return;
 
-  if(enemyTimer){clearTimeout(enemyTimer);enemyTimer=null}
+  if(enemyTimer){
+    clearTimeout(enemyTimer);
+    enemyTimer=null;
+  }
 
   battle.over=true;
   battle.pendingEnemy=null;
@@ -1673,10 +1760,12 @@ function finishBattle(win){
 
   if(win){
     const cleared=battle.stage;
+
+    /* 金貨・ジェム・キャラドロップをまとめて処理 */
+    battle.rewards=grantStageRewards(battle);
+
     state.clearedStage=Math.max(state.clearedStage,cleared);
     state.stage=Math.min(IMPLEMENTED_STAGE,state.clearedStage+1);
-    state.gold+=100;
-    state.gems+=40;
     selectedStage=Math.min(IMPLEMENTED_STAGE,state.clearedStage+1);
   }
 
@@ -1746,6 +1835,24 @@ function renderBattle(){
   let actionContent='';
 
   if(battle.over){
+    const r=battle.rewards;
+
+    let rewardHTML='';
+    if(battle.resultWin&&r){
+      const dropHTML=r.characterDrop
+        ?`<p style="color:#ffe09a;font-weight:900">✨ キャラドロップ！ ${esc(r.characterDrop.character.name)}（${esc(r.characterDrop.character.rarity)}）<br>${esc(r.characterDrop.message)}</p>`
+        :'<p>キャラクタードロップ：なし</p>';
+
+      rewardHTML=`
+        <div style="line-height:1.9;margin:12px 0">
+          <p>🪙 金貨 +${r.gold} を獲得！</p>
+          <p>💎 ジェム +${r.gems} ${r.gems>0?'を獲得！':r.firstClear?'（初クリア抽選：今回は獲得なし）':'（初クリア報酬の対象外）'}</p>
+          <p class="small">このステージのクリア回数：${r.clearCount}回目</p>
+          ${dropHTML}
+        </div>
+      `;
+    }
+
     actionContent=`
       <div class="battle-result">
         <h3>${battle.resultWin?'勝利！':'敗北……'}</h3>
@@ -1754,7 +1861,7 @@ function renderBattle(){
             ?`ステージ ${battle.stage} クリア！報酬を獲得した。`
             :'旅団は敗北した。編成を見直して再挑戦しよう。'}
         </p>
-        ${battle.resultWin?'<p>🪙100　💎40を獲得！</p>':''}
+        ${rewardHTML}
         ${battle.resultWin&&battle.isBoss?'<p style="color:#ffcf83;font-weight:900">👑 ボスステージ突破！</p>':''}
         <button data-action="returnMap">ステージ一覧に戻る</button>
         <button data-action="startBattle">もう一度挑戦</button>
