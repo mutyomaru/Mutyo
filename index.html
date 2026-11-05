@@ -766,7 +766,13 @@ function loseBattle(){
  renderBattle();
 }
 
-renderAll();
+window.onerror = function(message, source, lineno, colno, error) {
+  const box = document.createElement('div');
+  box.style.cssText = 'position:fixed;z-index:99999;top:0;left:0;width:100%;background:#8b0000;color:white;padding:15px;font-size:14px;white-space:pre-wrap;';
+  box.textContent = 'JavaScriptエラー:\n' + message + '\n行番号: ' + lineno;
+  document.body.appendChild(box);
+};
+ renderAll();
 </script>
 </body>
 </html>
