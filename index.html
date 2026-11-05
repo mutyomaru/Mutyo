@@ -58,14 +58,14 @@ main{max-width:1100px;margin:20px auto;padding:0 14px 40px}.page{display:none}.p
 
 <script>
 const CHARACTERS = [
-{id:'Swordman',name:'剣士',rarity:'ノーマル',hp:100,atk:20,speed:20,charge:3,skill:'強撃',effect:'damage',power:50,target:'one',growth:.07,max:20},
-{id:'Archer',name:'アーチャー',rarity:'ノーマル',hp:70,atk:10,speed:16,charge:2,skill:'乱射',effect:'damage',power:10,target:'all',growth:.07,max:20},
-{id:'Axeman',name:'アックスマン',rarity:'ノーマル',hp:130,atk:30,speed:9,charge:4,skill:'叩き割り',effect:'damage',power:70,target:'one',growth:.06,max:20},
-{id:'Spearman',name:'スピアマン',rarity:'ノーマル',hp:100,atk:10,speed:20,charge:6,skill:'致命突き',effect:'damage',power:150,target:'one',growth:.07,max:20},
-{id:'Goblin',name:'ゴブリン',rarity:'ノーマル',hp:70,atk:20,speed:25,charge:5,skill:'回避',effect:'evade',power:80,target:'self',growth:.08,max:20},
-{id:'Miner',name:'鉱夫',rarity:'ノーマル',hp:140,atk:10,speed:14,charge:3,skill:'ガード',effect:'guard',power:70,target:'self',growth:.07,max:20},
-{id:'Zonbie',name:'ゾンビ',rarity:'ノーマル',hp:50,atk:50,speed:12,charge:3,skill:'噛みつき',effect:'poison',power:50,target:'one',growth:.07,max:20},
-{id:'Farmer',name:'農夫',rarity:'ノーマル',hp:110,atk:20,speed:15,charge:3,skill:'ランダム回復',effect:'heal',power:20,target:'ally',growth:.07,max:20},
+{id:'swordman',imageFile:'Swordman.png',name:'剣士',rarity:'ノーマル',hp:100,atk:20,speed:20,charge:3,skill:'強撃',effect:'damage',power:50,target:'one',growth:.07,max:20},
+{id:'archer',imageFile:'Archer.png',name:'アーチャー',rarity:'ノーマル',hp:70,atk:10,speed:16,charge:2,skill:'乱射',effect:'damage',power:10,target:'all',growth:.07,max:20},
+{id:'axeman',imageFile:'Axeman.png',name:'アックスマン',rarity:'ノーマル',hp:130,atk:30,speed:9,charge:4,skill:'叩き割り',effect:'damage',power:70,target:'one',growth:.06,max:20},
+{id:'spearman',imageFile:'Spearman.png',name:'スピアマン',rarity:'ノーマル',hp:100,atk:10,speed:20,charge:6,skill:'致命突き',effect:'damage',power:150,target:'one',growth:.07,max:20},
+{id:'goblin',imageFile:'Goblin.png',name:'ゴブリン',rarity:'ノーマル',hp:70,atk:20,speed:25,charge:5,skill:'回避',effect:'evade',power:80,target:'self',growth:.08,max:20},
+{id:'miner',imageFile:'Miner.png',name:'鉱夫',rarity:'ノーマル',hp:140,atk:10,speed:14,charge:3,skill:'ガード',effect:'guard',power:70,target:'self',growth:.07,max:20},
+{id:'zombie',imageFile:'Zombie.png',name:'ゾンビ',rarity:'ノーマル',hp:50,atk:50,speed:12,charge:3,skill:'噛みつき',effect:'poison',power:50,target:'one',growth:.07,max:20},
+{id:'farmer',imageFile:'Farmer.png',name:'農夫',rarity:'ノーマル',hp:110,atk:20,speed:15,charge:3,skill:'ランダム回復',effect:'heal',power:20,target:'ally',growth:.07,max:20},
 {id:'魔導士',name:'魔導士',rarity:'レア',hp:100,atk:30,speed:21,charge:0,skill:'力の魔術',effect:'buffAlly',power:50,target:'ally',growth:.16,max:10},
 {id:'将軍',name:'将軍',rarity:'レア',hp:150,atk:40,speed:23,charge:2,skill:'薙ぎ払い',effect:'damage',power:30,target:'all',growth:.16,max:10},
 {id:'ゴーレム',name:'ゴーレム',rarity:'レア',hp:210,atk:40,speed:7,charge:8,skill:'大地砕き',effect:'damage',power:100,target:'all',growth:.16,max:10},
@@ -76,97 +76,524 @@ const CHARACTERS = [
 {id:'狙撃手アーチャー',name:'戦場の狙撃手アーチャー',rarity:'エピック',hp:160,atk:80,speed:19,charge:4,skill:'正射必中',effect:'damage',power:160,target:'one',growth:.30,max:6,passive:'アタックセレクト'},
 {id:'一閃スピアドン',name:'紫電一閃スピアドン',rarity:'エピック',hp:200,atk:30,speed:24,charge:5,skill:'致命のひと突き',effect:'damage',power:300,target:'one',growth:.30,max:6,passive:'ウィルパワー'}
 ];
+
 const byId=id=>CHARACTERS.find(c=>c.id===id);
 const KEY='hoshiyomi_save_v2';
-const fresh=()=>({gems:500,gold:300,stage:1,owned:{swordman:{level:1,dupes:0},archer:{level:1,dupes:0},spearman:{level:1,dupes:0}},party:['swordman','archer','spearman']});
+
+const fresh=()=>({
+ gems:500,
+ gold:300,
+ stage:1,
+ owned:{
+  swordman:{level:1,dupes:0},
+  archer:{level:1,dupes:0},
+  spearman:{level:1,dupes:0}
+ },
+ party:['swordman','archer','spearman']
+});
+
 let state;
-try{state=JSON.parse(localStorage.getItem(KEY))||fresh()}catch(e){state=fresh()}
-function save(){localStorage.setItem(KEY,JSON.stringify(state));renderAll()}
-function levelStat(base,c,lv){return Math.floor(base*Math.pow(1+c.growth,lv-1))}
-function stats(id){const c=byId(id),o=state.owned[id],lv=o?.level||1;return {hp:levelStat(c.hp,c,lv),atk:levelStat(c.atk,c,lv),speed:c.speed,skill:levelStat(c.power,c,lv),level:lv}}
-function imagePath(id,ext='png'){return './image/'+encodeURIComponent(id)+'.'+ext}
-function portrait(id,big=false){
- const exts=['png','jpg','jpeg','webp','PNG','JPG','JPEG','WEBP'];
- return `<img class="portrait ${big?'big':''}" src="${imagePath(id,exts[0])}" data-id="${encodeURIComponent(id)}" data-ext-index="0" alt="${byId(id).name}" onerror="const exts=['png','jpg','jpeg','webp','PNG','JPG','JPEG','WEBP'];let i=Number(this.dataset.extIndex)+1;if(i<exts.length){this.dataset.extIndex=i;this.src='./image/'+this.dataset.id+'.'+exts[i];}else{this.style.display='none';}">`;
+try{
+ state=JSON.parse(localStorage.getItem(KEY))||fresh();
+}catch(e){
+ state=fresh();
 }
-function showPage(id){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById(id).classList.add('active');renderAll()}
-function cardHTML(id,owned=true){const c=byId(id),o=state.owned[id],s=stats(id);return `<div class="card"><div class="char-head">${portrait(id)}<div><span class="rarity ${c.rarity}">${c.rarity}</span><h3>${c.name}</h3><div class="muted">Lv.${s.level}/${c.max}</div></div></div><div class="stats"><span>HP ${s.hp}</span><span>攻撃 ${s.atk}</span><span>素早さ ${s.speed}</span><span>溜め ${c.charge===0?'開始時OK':c.charge+'回'}</span></div><div class="muted" style="font-size:12px">スキル：${c.skill}（${c.effect==='damage'?s.skill+'ダメージ':c.effect==='heal'?s.skill+'回復':c.effect==='healPercent'?c.power+'%回復':c.effect==='poison'?s.skill+'ダメージ＋毒':c.effect==='buffAlly'?'味方攻撃+'+c.power+'%':c.effect==='buffSelf'?'自身攻撃+'+c.power+'%':c.effect==='guard'?'次の攻撃を'+c.power+'%軽減':'次の攻撃を回避'}）</div>${c.passive?`<div class="muted" style="font-size:12px;margin-top:5px">パッシブ：${c.passive}</div>`:''}<div class="muted" style="font-size:12px;margin-top:5px">成長率 ${Math.round(c.growth*100)}% / 次の強化に重複 ${o?o.dupes:0}/${s.level}</div>${owned?`<div class="actions"><button class="small" onclick="toggleParty('${id}')">${state.party.includes(id)?'編成解除':'編成する'}</button><button class="small" onclick="levelInfo('${id}')">強化条件</button></div>`:''}</div>`}
-function renderAll(){document.getElementById('gems').textContent=state.gems;document.getElementById('gold').textContent=state.gold;document.getElementById('stage').textContent=state.stage;document.getElementById('homeSummary').textContent=`所持キャラクター ${Object.keys(state.owned).length}/17体　編成 ${state.party.length}/3人`;renderTeam();renderGachaResult()}
-function renderTeam(){document.getElementById('partyView').innerHTML=state.party.map((id,i)=>`<div class="team-slot">${i+1}. ${byId(id).name}　Lv.${stats(id).level}</div>`).join('')||'<p class="muted">編成なし</p>';document.getElementById('roster').innerHTML=Object.keys(state.owned).map(id=>cardHTML(id)).join('');document.getElementById('dex').innerHTML=CHARACTERS.map(c=>state.owned[c.id]?`<div class="card"><b>✓ ${c.name}</b><div class="muted">${c.rarity} / 入手済み</div></div>`:`<div class="card"><b>？？？</b><div class="muted">${c.rarity} / 未入手</div></div>`).join('')}
-function toggleParty(id){if(!state.owned[id])return;if(state.party.includes(id))state.party=state.party.filter(x=>x!==id);else if(state.party.length<3)state.party.push(id);else alert('編成できるのは3人までです');save()}
-function levelInfo(id){const c=byId(id),o=state.owned[id];if(o.level>=c.max){alert('最大レベルです');return}alert(`現在 Lv.${o.level}\n次のレベルに必要な重複数：${o.level-o.dupes}体\n入手済み重複：${o.dupes}体\n成長率：${Math.round(c.growth*100)}%`)}
-function summon(n){const cost=n===1?100:900;if(state.gems<cost){alert('宝石が足りません');return}state.gems-=cost;const results=[];for(let i=0;i<n;i++){const r=Math.random()*100;const rarity=r<5?'エピック':r<30?'レア':'ノーマル';const pool=CHARACTERS.filter(c=>c.rarity===rarity);const c=pool[Math.floor(Math.random()*pool.length)];let msg='新規加入';if(state.owned[c.id]){const o=state.owned[c.id],need=o.level;if(o.level>=c.max){state.gold+=50;msg='最大Lv到達：金貨50枚';}else{o.dupes++;if(o.dupes>=need){o.dupes-=need;o.level++;msg=`重複でLv.${o.level}に上昇！`}else msg=`重複 ${o.dupes}/${need}`;}}else state.owned[c.id]={level:1,dupes:0};results.push({id:c.id,msg})}save();document.getElementById('gachaResult').innerHTML=results.map(x=>`<div class="card">${portrait(x.id)}<h3>${byId(x.id).name}</h3><span class="rarity ${byId(x.id).rarity}">${byId(x.id).rarity}</span><p class="muted">${x.msg}</p></div>`).join('')}
-function buyGems(){if(state.gold<500)return alert('金貨が足りません');state.gold-=500;state.gems+=100;save()}
-function buyGold(){if(state.gems<100)return alert('宝石が足りません');state.gems-=100;state.gold+=500;save()}
+
+function save(){
+ localStorage.setItem(KEY,JSON.stringify(state));
+ renderAll();
+}
+
+function levelStat(base,c,lv){
+ return Math.floor(base*Math.pow(1+c.growth,lv-1));
+}
+
+function stats(id){
+ const c=byId(id),o=state.owned[id],lv=o?.level||1;
+ return {
+  hp:levelStat(c.hp,c,lv),
+  atk:levelStat(c.atk,c,lv),
+  speed:c.speed,
+  skill:levelStat(c.power,c,lv),
+  level:lv
+ };
+}
+
+function imagePath(id){
+ const c=byId(id);
+ const filename=c.imageFile||(id+'.png');
+ return './image/'+encodeURIComponent(filename);
+}
+
+function portrait(id,big=false){
+ return `<img class="portrait ${big?'big':''}" src="${imagePath(id)}" alt="${byId(id).name}" onerror="this.style.display='none'">`;
+}
+
+function showPage(id){
+ document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+ document.getElementById(id).classList.add('active');
+ renderAll();
+}
+
+function cardHTML(id,owned=true){
+ const c=byId(id),o=state.owned[id],s=stats(id);
+ return `<div class="card">
+ <div class="char-head">${portrait(id)}<div>
+ <span class="rarity ${c.rarity}">${c.rarity}</span>
+ <h3>${c.name}</h3>
+ <div class="muted">Lv.${s.level}/${c.max}</div>
+ </div></div>
+ <div class="stats">
+ <span>HP ${s.hp}</span>
+ <span>攻撃 ${s.atk}</span>
+ <span>素早さ ${s.speed}</span>
+ <span>溜め ${c.charge===0?'開始時OK':c.charge+'回'}</span>
+ </div>
+ <div class="muted" style="font-size:12px">スキル：${c.skill}（${c.effect==='damage'?s.skill+'ダメージ':c.effect==='heal'?s.skill+'回復':c.effect==='healPercent'?c.power+'%回復':c.effect==='poison'?s.skill+'ダメージ＋毒':c.effect==='buffAlly'?'味方攻撃+'+c.power+'%':c.effect==='buffSelf'?'自身攻撃+'+c.power+'%':c.effect==='guard'?'次の攻撃を'+c.power+'%軽減':'次の攻撃を回避'}）</div>
+ ${c.passive?`<div class="muted" style="font-size:12px;margin-top:5px">パッシブ：${c.passive}</div>`:''}
+ <div class="muted" style="font-size:12px;margin-top:5px">成長率 ${Math.round(c.growth*100)}% / 次の強化に重複 ${o?o.dupes:0}/${s.level}</div>
+ ${owned?`<div class="actions">
+ <button class="small" onclick="toggleParty('${id}')">${state.party.includes(id)?'編成解除':'編成する'}</button>
+ <button class="small" onclick="levelInfo('${id}')">強化条件</button>
+ </div>`:''}
+ </div>`;
+}
+
+function renderAll(){
+ document.getElementById('gems').textContent=state.gems;
+ document.getElementById('gold').textContent=state.gold;
+ document.getElementById('stage').textContent=state.stage;
+ document.getElementById('homeSummary').textContent=`所持キャラクター ${Object.keys(state.owned).length}/17体　編成 ${state.party.length}/3人`;
+ renderTeam();
+ renderGachaResult();
+}
+
+function renderGachaResult(){
+}
+
+function renderTeam(){
+ document.getElementById('partyView').innerHTML=state.party.map((id,i)=>`<div class="team-slot">${i+1}. ${byId(id).name}　Lv.${stats(id).level}</div>`).join('')||'<p class="muted">編成なし</p>';
+ document.getElementById('roster').innerHTML=Object.keys(state.owned).map(id=>cardHTML(id)).join('');
+ document.getElementById('dex').innerHTML=CHARACTERS.map(c=>state.owned[c.id]?`<div class="card"><b>✓ ${c.name}</b><div class="muted">${c.rarity} / 入手済み</div></div>`:`<div class="card"><b>？？？</b><div class="muted">${c.rarity} / 未入手</div></div>`).join('');
+}
+
+function toggleParty(id){
+ if(!state.owned[id])return;
+ if(state.party.includes(id))state.party=state.party.filter(x=>x!==id);
+ else if(state.party.length<3)state.party.push(id);
+ else alert('編成できるのは3人までです');
+ save();
+}
+
+function levelInfo(id){
+ const c=byId(id),o=state.owned[id];
+ if(o.level>=c.max){alert('最大レベルです');return}
+ alert(`現在 Lv.${o.level}\n次のレベルに必要な重複数：${o.level-o.dupes}体\n入手済み重複：${o.dupes}体\n成長率：${Math.round(c.growth*100)}%`);
+}
+
+function summon(n){
+ const cost=n===1?100:900;
+ if(state.gems<cost){alert('宝石が足りません');return}
+ state.gems-=cost;
+ const results=[];
+ for(let i=0;i<n;i++){
+  const r=Math.random()*100;
+  const rarity=r<5?'エピック':r<30?'レア':'ノーマル';
+  const pool=CHARACTERS.filter(c=>c.rarity===rarity);
+  const c=pool[Math.floor(Math.random()*pool.length)];
+  let msg='新規加入';
+  if(state.owned[c.id]){
+   const o=state.owned[c.id],need=o.level;
+   if(o.level>=c.max){
+    state.gold+=50;
+    msg='最大Lv到達：金貨50枚';
+   }else{
+    o.dupes++;
+    if(o.dupes>=need){
+     o.dupes-=need;
+     o.level++;
+     msg=`重複でLv.${o.level}に上昇！`;
+    }else{
+     msg=`重複 ${o.dupes}/${need}`;
+    }
+   }
+  }else{
+   state.owned[c.id]={level:1,dupes:0};
+  }
+  results.push({id:c.id,msg});
+ }
+ save();
+ document.getElementById('gachaResult').innerHTML=results.map(x=>`<div class="card">${portrait(x.id)}<h3>${byId(x.id).name}</h3><span class="rarity ${byId(x.id).rarity}">${byId(x.id).rarity}</span><p class="muted">${x.msg}</p></div>`).join('');
+}
+
+function buyGems(){
+ if(state.gold<500)return alert('金貨が足りません');
+ state.gold-=500;
+ state.gems+=100;
+ save();
+}
+
+function buyGold(){
+ if(state.gems<100)return alert('宝石が足りません');
+ state.gems-=100;
+ state.gold+=500;
+ save();
+}
 
 let battle=null;
-function makeEnemy(i){const hp=Math.floor((90+state.stage*24)*(1+i*.16));return {id:'e'+i,name:['星喰いの獣','迷いの亡霊','深森の魔物'][i],hp,maxHp:hp,atk:Math.floor(12+state.stage*4),speed:10+i*3,gauge:0,alive:true}}
-function startBattle(){if(!state.party.length)return alert('先にキャラクターを編成してください');battle={stage:state.stage,enemies:[makeEnemy(0),makeEnemy(1),makeEnemy(2)],allies:state.party.map(id=>{const s=stats(id);return {id,hp:s.hp,maxHp:s.hp,atk:s.atk,speed:s.speed,gauge:0,actions:0,ready:byId(id).charge===0,evade:0,guard:0,poison:null,buff:0,buffTurns:0,will:0,alive:true}}),turn:null,waiting:false,over:false,log:[]};log('戦闘開始！');document.getElementById('nextBattle').disabled=true;showPage('battle');battleLoop()}
-function log(t){if(!battle)return;battle.log.unshift(t);document.getElementById('battleLog').innerHTML=battle.log.slice(0,35).map(x=>'・'+x).join('<br>')}
-function alive(list){return list.filter(x=>x.alive&&x.hp>0)}
-function battleLoop(){if(!battle||battle.over||battle.waiting)return;if(!alive(battle.enemies).length){winBattle();return}if(!alive(battle.allies).length){loseBattle();return}
-let units=[...alive(battle.allies).map(x=>({...x,side:'ally',ref:x})),...alive(battle.enemies).map(x=>({...x,side:'enemy',ref:x}))];units.forEach(u=>u.ref.gauge+=u.speed);units.sort((a,b)=>b.ref.gauge-a.ref.gauge);let actor=units[0].ref;actor.gauge-=100;
-if(battle.allies.includes(actor)){battle.turn=actor;battle.waiting=true;renderBattle();return}else{enemyAct(actor);setTimeout(battleLoop,450)}}
+
+function makeEnemy(i){
+ const hp=Math.floor((90+state.stage*24)*(1+i*.16));
+ return {
+  id:'e'+i,
+  name:['星喰いの獣','迷いの亡霊','深森の魔物'][i],
+  hp,
+  maxHp:hp,
+  atk:Math.floor(12+state.stage*4),
+  speed:10+i*3,
+  gauge:0,
+  alive:true
+ };
+}
+
+function startBattle(){
+ if(!state.party.length)return alert('先にキャラクターを編成してください');
+ battle={
+  stage:state.stage,
+  enemies:[makeEnemy(0),makeEnemy(1),makeEnemy(2)],
+  allies:state.party.map(id=>{
+   const s=stats(id);
+   return {
+    id,
+    hp:s.hp,
+    maxHp:s.hp,
+    atk:s.atk,
+    speed:s.speed,
+    gauge:0,
+    actions:0,
+    ready:byId(id).charge===0,
+    evade:0,
+    guard:0,
+    poison:null,
+    buff:0,
+    buffTurns:0,
+    will:0,
+    alive:true
+   };
+  }),
+  turn:null,
+  waiting:false,
+  over:false,
+  log:[]
+ };
+ log('戦闘開始！');
+ document.getElementById('nextBattle').disabled=true;
+ showPage('battle');
+ battleLoop();
+}
+
+function log(t){
+ if(!battle)return;
+ battle.log.unshift(t);
+ document.getElementById('battleLog').innerHTML=battle.log.slice(0,35).map(x=>'・'+x).join('<br>');
+}
+
+function alive(list){
+ return list.filter(x=>x.alive&&x.hp>0);
+}
+
+function battleLoop(){
+ if(!battle||battle.over||battle.waiting)return;
+ if(!alive(battle.enemies).length){winBattle();return}
+ if(!alive(battle.allies).length){loseBattle();return}
+
+ let units=[
+  ...alive(battle.allies).map(x=>({...x,side:'ally',ref:x})),
+  ...alive(battle.enemies).map(x=>({...x,side:'enemy',ref:x}))
+ ];
+
+ units.forEach(u=>u.ref.gauge+=u.speed);
+ units.sort((a,b)=>b.ref.gauge-a.ref.gauge);
+ let actor=units[0].ref;
+ actor.gauge-=100;
+
+ if(battle.allies.includes(actor)){
+  battle.turn=actor;
+  battle.waiting=true;
+  renderBattle();
+  return;
+ }else{
+  enemyAct(actor);
+  setTimeout(battleLoop,450);
+ }
+}
+
 function enemyAct(e){
- if(e.poison&&e.poison.turns>0){const pd=Math.max(1,Math.floor(e.maxHp*.05));e.hp=Math.max(0,e.hp-pd);e.poison.turns--;log(`${e.name}は毒で${pd}ダメージ！`);if(e.hp<=0){e.alive=false;log(`${e.name}は毒で倒れた！`);renderBattle();return}}
- const targets=alive(battle.allies);if(!targets.length)return;
+ if(e.poison&&e.poison.turns>0){
+  const pd=Math.max(1,Math.floor(e.maxHp*.05));
+  e.hp=Math.max(0,e.hp-pd);
+  e.poison.turns--;
+  log(`${e.name}は毒で${pd}ダメージ！`);
+  if(e.hp<=0){
+   e.alive=false;
+   log(`${e.name}は毒で倒れた！`);
+   renderBattle();
+   return;
+  }
+ }
+
+ const targets=alive(battle.allies);
+ if(!targets.length)return;
  const aoe=Math.random()<.18;
  const hitList=aoe?targets:[targets[Math.floor(Math.random()*targets.length)]];
  if(aoe)log(`${e.name}の全体攻撃！`);
+
  hitList.forEach(target=>{
   if(!target.alive)return;
   let dmg=e.atk*(aoe?0.75:1);
   const c=byId(target.id);
+
   if(target.evade){
    const canEvadeAll=c.id==='アサシン'||!aoe;
    const chance=target.evade===2?1:.8;
    target.evade=0;
-   if(canEvadeAll&&Math.random()<chance){log(`${c.name}は攻撃を回避！`);return}
+   if(canEvadeAll&&Math.random()<chance){
+    log(`${c.name}は攻撃を回避！`);
+    return;
+   }
   }
-  if(target.guard){dmg=Math.floor(dmg*(1-target.guard/100));target.guard=0}
-  dmg=Math.floor(dmg);target.hp=Math.max(0,target.hp-dmg);
+
+  if(target.guard){
+   dmg=Math.floor(dmg*(1-target.guard/100));
+   target.guard=0;
+  }
+
+  dmg=Math.floor(dmg);
+  target.hp=Math.max(0,target.hp-dmg);
   log(`${e.name}の攻撃！ ${c.name}に${dmg}ダメージ`);
+
   if(c.id==='鍛錬剣士'){
    const reflectChance=aoe?1:.2;
-   if(Math.random()<reflectChance){const reflected=dmg*2;e.hp=Math.max(0,e.hp-reflected);log(`アルティメットカウンター発動！ ${e.name}に${reflected}ダメージを反射！`);if(e.hp<=0){e.alive=false;log(`${e.name}を撃破！`)}}
+   if(Math.random()<reflectChance){
+    const reflected=dmg*2;
+    e.hp=Math.max(0,e.hp-reflected);
+    log(`アルティメットカウンター発動！ ${e.name}に${reflected}ダメージを反射！`);
+    if(e.hp<=0){
+     e.alive=false;
+     log(`${e.name}を撃破！`);
+    }
+   }
   }
-  if(target.hp<=0){target.alive=false;log(`${c.name}は倒れた…`)}
+
+  if(target.hp<=0){
+   target.alive=false;
+   log(`${c.name}は倒れた…`);
+  }
  });
+
  renderBattle();
 }
+
 function finishAllyAction(a,usedSkill=false){
  const c=byId(a.id);
- if(a.buffTurns>0){a.buffTurns--;if(a.buffTurns===0){a.buff=0;log(`${c.name}への一時的な攻撃力上昇が終了した。`)}}
- if(usedSkill)a.actions=0;else a.actions++;
- if(c.id==='一閃スピアドン'){a.will++;a.atk=Math.floor(a.atk*1.1);log(`ウィルパワー！攻撃力が上昇（${a.atk}）`)}
+
+ if(a.buffTurns>0){
+  a.buffTurns--;
+  if(a.buffTurns===0){
+   a.buff=0;
+   log(`${c.name}への一時的な攻撃力上昇が終了した。`);
+  }
+ }
+
+ if(usedSkill)a.actions=0;
+ else a.actions++;
+
+ if(c.id==='一閃スピアドン'){
+  a.will++;
+  a.atk=Math.floor(a.atk*1.1);
+  log(`ウィルパワー！攻撃力が上昇（${a.atk}）`);
+ }
+
  if(c.charge>0&&a.actions>=c.charge)a.ready=true;
- battle.waiting=false;battle.turn=null;renderBattle();setTimeout(battleLoop,350)
+ battle.waiting=false;
+ battle.turn=null;
+ renderBattle();
+ setTimeout(battleLoop,350);
 }
+
 function playerAttack(targetId){
  const a=battle.turn,c=byId(a.id),targets=alive(battle.enemies);
  let e;
+
  if(c.id==='狙撃手アーチャー')e=targets.find(x=>x.id===targetId);
  else e=targets[Math.floor(Math.random()*targets.length)];
+
  if(!e)return;
- let dmg=a.atk;if(a.buff)dmg=Math.floor(dmg*(1+a.buff/100));
- e.hp=Math.max(0,e.hp-dmg);log(`${c.name}の通常攻撃！ ${e.name}に${dmg}ダメージ`);
- if(e.hp<=0){e.alive=false;log(`${e.name}を倒した！`)}
- finishAllyAction(a,false)
+
+ let dmg=a.atk;
+ if(a.buff)dmg=Math.floor(dmg*(1+a.buff/100));
+
+ e.hp=Math.max(0,e.hp-dmg);
+ log(`${c.name}の通常攻撃！ ${e.name}に${dmg}ダメージ`);
+
+ if(e.hp<=0){
+  e.alive=false;
+  log(`${e.name}を倒した！`);
+ }
+
+ finishAllyAction(a,false);
 }
-function playerSkill(targetId){const a=battle.turn,c=byId(a.id),s=stats(a.id);if(!a.ready)return;const enemies=alive(battle.enemies),allies=alive(battle.allies);log(`${c.name}のスキル「${c.skill}」！`);
-if(c.effect==='damage'){const targets=c.target==='all'?enemies:[(c.id==='狙撃手アーチャー'?battle.enemies.find(x=>x.id===targetId&&x.alive):enemies[Math.floor(Math.random()*enemies.length)])].filter(Boolean);targets.forEach(e=>{let dmg=s.skill;if(a.buff)dmg=Math.floor(dmg*(1+a.buff/100));e.hp=Math.max(0,e.hp-dmg);log(`${e.name}に${dmg}ダメージ`);if(e.hp<=0)e.alive=false})}
-if(c.effect==='poison'){const list=alive(battle.enemies);const e=list[Math.floor(Math.random()*list.length)];if(e){e.hp=Math.max(0,e.hp-s.skill);e.poison={turns:2};log(`${e.name}に${s.skill}ダメージ、毒を付与！`)}}
-if(c.effect==='evade'){a.evade=1;log('次に受ける単体攻撃を80%で回避する！')}
-if(c.effect==='evadeSure'){a.evade=2;log('次に受ける攻撃を確実に回避する！')}
-if(c.effect==='guard'){a.guard=70;log('次に受ける攻撃を70%軽減する！')}
-if(c.effect==='heal'){const t=allies[Math.floor(Math.random()*allies.length)];const amount=s.skill;t.hp=Math.min(t.maxHp,t.hp+amount);log(`${byId(t.id).name}のHPを${amount}回復！`)}
-if(c.effect==='healPercent'){const t=allies[Math.floor(Math.random()*allies.length)];const amount=Math.floor(t.maxHp*c.power/100);t.hp=Math.min(t.maxHp,t.hp+amount);log(`${byId(t.id).name}のHPを${amount}回復！`)}
-if(c.effect==='buffAlly'){const t=allies[Math.floor(Math.random()*allies.length)];t.buff=50;t.buffTurns=1;log(`${byId(t.id).name}の次の行動の攻撃力が50%上昇！`)}
-if(c.effect==='buffSelf'){a.buff+=25;log('自身の攻撃力が戦闘終了まで25%上昇！')}
-finishAllyAction(a,true)}
-function renderBattle(){if(!battle)return;document.getElementById('battleStage').textContent=battle.stage;document.getElementById('enemies').innerHTML=battle.enemies.map(e=>`<div class="unit ${e.alive?'':'muted'}"><b>${e.name}</b> ${e.alive?'':'（撃破）'}<div class="bar enemybar"><i style="width:${Math.max(0,e.hp/e.maxHp*100)}%"></i></div><small>${Math.max(0,e.hp)}/${e.maxHp} HP</small></div>`).join('');document.getElementById('allies').innerHTML=battle.allies.map(a=>{const c=byId(a.id);return `<div class="unit ${battle.turn===a?'selected':''}"><div class="char-head">${portrait(a.id)}<div><b>${c.name}</b><div class="muted">HP ${a.hp}/${a.maxHp}</div><div class="bar"><i style="width:${Math.max(0,a.hp/a.maxHp*100)}%"></i></div><small>行動ゲージ ${Math.min(100,Math.floor(a.gauge))}% / スキル ${a.ready?'使用可能':`${a.actions}/${c.charge}回`}</small>${a.buff?`<div class="muted">攻撃上昇 +${a.buff}%</div>`:''}</div></div></div>`}).join('');const area=document.getElementById('actionArea');if(battle.waiting&&battle.turn){const a=battle.turn,c=byId(a.id);let html='';if(c.id==='狙撃手アーチャー'){html+=`<span class="muted">攻撃対象を選択：</span>`+alive(battle.enemies).map(e=>`<button class="small" onclick="playerAttack('${e.id}')">${e.name}を攻撃</button>`).join('')}else html+=`<button class="primary" onclick="playerAttack('random')">通常攻撃（ランダム）</button>`;if(a.ready){if(c.target==='all'||['evade','evadeSure','guard','heal','healPercent','buffAlly','buffSelf'].includes(c.effect))html+=`<button class="primary" onclick="playerSkill('${alive(battle.enemies)[0]?.id||''}')">スキル：${c.skill}</button>`;else if(c.id==='狙撃手アーチャー')html+=alive(battle.enemies).map(e=>`<button class="primary" onclick="playerSkill('${e.id}')">スキル：${c.skill} → ${e.name}</button>`).join('');else html+=`<button class="primary" onclick="playerSkill('random')">スキル：${c.skill}（ランダム）</button>`}area.innerHTML=html;document.getElementById('targetHint').textContent=`${c.name}の行動です。行動回数でスキルが溜まります。`;document.getElementById('battleNotice').textContent=`${c.name}の行動！`}else{area.innerHTML='<span class="muted">敵または味方の行動を処理中…</span>';document.getElementById('targetHint').textContent='';}}
-function winBattle(){battle.over=true;state.gold+=100;state.gems+=40;state.stage++;save();log('勝利！ 金貨100枚・宝石40個を獲得！');document.getElementById('battleNotice').textContent='勝利！報酬を獲得しました。';document.getElementById('nextBattle').disabled=false;renderBattle()}
-function loseBattle(){battle.over=true;log('敗北…編成を見直して再挑戦しよう。');document.getElementById('battleNotice').textContent='敗北…';document.getElementById('nextBattle').disabled=false;renderBattle()}
+
+function playerSkill(targetId){
+ const a=battle.turn,c=byId(a.id),s=stats(a.id);
+ if(!a.ready)return;
+
+ const enemies=alive(battle.enemies),allies=alive(battle.allies);
+ log(`${c.name}のスキル「${c.skill}」！`);
+
+ if(c.effect==='damage'){
+  const targets=c.target==='all'
+   ?enemies
+   :[(c.id==='狙撃手アーチャー'?battle.enemies.find(x=>x.id===targetId&&x.alive):enemies[Math.floor(Math.random()*enemies.length)])].filter(Boolean);
+
+  targets.forEach(e=>{
+   let dmg=s.skill;
+   if(a.buff)dmg=Math.floor(dmg*(1+a.buff/100));
+   e.hp=Math.max(0,e.hp-dmg);
+   log(`${e.name}に${dmg}ダメージ`);
+   if(e.hp<=0)e.alive=false;
+  });
+ }
+
+ if(c.effect==='poison'){
+  const list=alive(battle.enemies);
+  const e=list[Math.floor(Math.random()*list.length)];
+  if(e){
+   e.hp=Math.max(0,e.hp-s.skill);
+   e.poison={turns:2};
+   log(`${e.name}に${s.skill}ダメージ、毒を付与！`);
+  }
+ }
+
+ if(c.effect==='evade'){
+  a.evade=1;
+  log('次に受ける単体攻撃を80%で回避する！');
+ }
+
+ if(c.effect==='evadeSure'){
+  a.evade=2;
+  log('次に受ける攻撃を確実に回避する！');
+ }
+
+ if(c.effect==='guard'){
+  a.guard=70;
+  log('次に受ける攻撃を70%軽減する！');
+ }
+
+ if(c.effect==='heal'){
+  const t=allies[Math.floor(Math.random()*allies.length)];
+  const amount=s.skill;
+  t.hp=Math.min(t.maxHp,t.hp+amount);
+  log(`${byId(t.id).name}のHPを${amount}回復！`);
+ }
+
+ if(c.effect==='healPercent'){
+  const t=allies[Math.floor(Math.random()*allies.length)];
+  const amount=Math.floor(t.maxHp*c.power/100);
+  t.hp=Math.min(t.maxHp,t.hp+amount);
+  log(`${byId(t.id).name}のHPを${amount}回復！`);
+ }
+
+ if(c.effect==='buffAlly'){
+  const t=allies[Math.floor(Math.random()*allies.length)];
+  t.buff=50;
+  t.buffTurns=1;
+  log(`${byId(t.id).name}の次の行動の攻撃力が50%上昇！`);
+ }
+
+ if(c.effect==='buffSelf'){
+  a.buff+=25;
+  log('自身の攻撃力が戦闘終了まで25%上昇！');
+ }
+
+ finishAllyAction(a,true);
+}
+
+function renderBattle(){
+ if(!battle)return;
+
+ document.getElementById('battleStage').textContent=battle.stage;
+
+ document.getElementById('enemies').innerHTML=battle.enemies.map(e=>`<div class="unit ${e.alive?'':'muted'}">
+ <b>${e.name}</b> ${e.alive?'':'（撃破）'}
+ <div class="bar enemybar"><i style="width:${Math.max(0,e.hp/e.maxHp*100)}%"></i></div>
+ <small>${Math.max(0,e.hp)}/${e.maxHp} HP</small>
+ </div>`).join('');
+
+ document.getElementById('allies').innerHTML=battle.allies.map(a=>{
+  const c=byId(a.id);
+  return `<div class="unit ${battle.turn===a?'selected':''}">
+  <div class="char-head">${portrait(a.id)}<div>
+  <b>${c.name}</b>
+  <div class="muted">HP ${a.hp}/${a.maxHp}</div>
+  <div class="bar"><i style="width:${Math.max(0,a.hp/a.maxHp*100)}%"></i></div>
+  <small>行動ゲージ ${Math.min(100,Math.floor(a.gauge))}% / スキル ${a.ready?'使用可能':`${a.actions}/${c.charge}回`}</small>
+  ${a.buff?`<div class="muted">攻撃上昇 +${a.buff}%</div>`:''}
+  </div></div></div>`;
+ }).join('');
+
+ const area=document.getElementById('actionArea');
+
+ if(battle.waiting&&battle.turn){
+  const a=battle.turn,c=byId(a.id);
+  let html='';
+
+  if(c.id==='狙撃手アーチャー'){
+   html+=`<span class="muted">攻撃対象を選択：</span>`+
+   alive(battle.enemies).map(e=>`<button class="small" onclick="playerAttack('${e.id}')">${e.name}を攻撃</button>`).join('');
+  }else{
+   html+=`<button class="primary" onclick="playerAttack('random')">通常攻撃（ランダム）</button>`;
+  }
+
+  if(a.ready){
+   if(c.target==='all'||['evade','evadeSure','guard','heal','healPercent','buffAlly','buffSelf'].includes(c.effect)){
+    html+=`<button class="primary" onclick="playerSkill('${alive(battle.enemies)[0]?.id||''}')">スキル：${c.skill}</button>`;
+   }else if(c.id==='狙撃手アーチャー'){
+    html+=alive(battle.enemies).map(e=>`<button class="primary" onclick="playerSkill('${e.id}')">スキル：${c.skill} → ${e.name}</button>`).join('');
+   }else{
+    html+=`<button class="primary" onclick="playerSkill('random')">スキル：${c.skill}（ランダム）</button>`;
+   }
+  }
+
+  area.innerHTML=html;
+  document.getElementById('targetHint').textContent=`${c.name}の行動です。行動回数でスキルが溜まります。`;
+  document.getElementById('battleNotice').textContent=`${c.name}の行動！`;
+ }else{
+  area.innerHTML='<span class="muted">敵または味方の行動を処理中…</span>';
+  document.getElementById('targetHint').textContent='';
+ }
+}
+
+function winBattle(){
+ battle.over=true;
+ state.gold+=100;
+ state.gems+=40;
+ state.stage++;
+ save();
+ log('勝利！ 金貨100枚・宝石40個を獲得！');
+ document.getElementById('battleNotice').textContent='勝利！報酬を獲得しました。';
+ document.getElementById('nextBattle').disabled=false;
+ renderBattle();
+}
+
+function loseBattle(){
+ battle.over=true;
+ log('敗北…編成を見直して再挑戦しよう。');
+ document.getElementById('battleNotice').textContent='敗北…';
+ document.getElementById('nextBattle').disabled=false;
+ renderBattle();
+}
+
 renderAll();
 </script>
 </body>
