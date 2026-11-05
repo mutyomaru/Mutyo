@@ -298,23 +298,56 @@ button:disabled{opacity:.4;cursor:not-allowed}
   left:50%;
   transform:translate(-50%,-50%);
   pointer-events:none;
-  font-size:25px;
+  font-size:34px;
   font-weight:1000;
   white-space:nowrap;
-  text-shadow:0 2px 5px #000,0 0 8px #000;
-  animation:effectFloat .9s ease-out forwards;
+  text-shadow:
+    0 3px 6px #000,
+    0 0 10px #000,
+    0 0 16px #000;
+  animation:effectFloat 1.2s ease-out forwards;
 }
-.effect-damage{color:#ff7777}
-.effect-heal{color:#79f0a8}
-.effect-buff{color:#ffe27d}
-.effect-guard{color:#8dcaff}
-.effect-evade{color:#d0aaff}
-.effect-miss{color:#d7e4ff}
+.effect-damage{
+  color:#ff7777;
+  -webkit-text-stroke:1px #571d29;
+}
+.effect-heal{
+  color:#79f0a8;
+  -webkit-text-stroke:1px #14552e;
+}
+.effect-buff{
+  color:#ffe27d;
+  -webkit-text-stroke:1px #604b14;
+}
+.effect-guard{
+  color:#8dcaff;
+  -webkit-text-stroke:1px #17436a;
+}
+.effect-evade{
+  color:#d0aaff;
+  -webkit-text-stroke:1px #44276b;
+}
+.effect-miss{
+  color:#d7e4ff;
+  -webkit-text-stroke:1px #283d60;
+}
 @keyframes effectFloat{
-  0%{opacity:0;transform:translate(-50%,0) scale(.65)}
-  15%{opacity:1;transform:translate(-50%,-12px) scale(1.15)}
-  35%{transform:translate(-50%,-20px) scale(1)}
-  100%{opacity:0;transform:translate(-50%,-58px) scale(.95)}
+  0%{
+    opacity:0;
+    transform:translate(-50%,0) scale(.65);
+  }
+  15%{
+    opacity:1;
+    transform:translate(-50%,-12px) scale(1.15);
+  }
+  35%{
+    opacity:1;
+    transform:translate(-50%,-20px) scale(1);
+  }
+  100%{
+    opacity:0;
+    transform:translate(-50%,-58px) scale(.95);
+  }
 }
 .hit-animation{
   animation:hitShake .35s ease-in-out;
@@ -345,11 +378,13 @@ button:disabled{opacity:.4;cursor:not-allowed}
   .panel{padding:13px}
   .battle-side{grid-template-columns:repeat(2,minmax(0,1fr))}
   .battle-image{height:145px}
+  .effect-pop{font-size:31px}
 }
 @media(max-width:360px){
   .battle-side{grid-template-columns:1fr 1fr}
   .battle-image{height:120px}
   .battle-name{font-size:14px}
+  .effect-pop{font-size:28px}
 }
 </style>
 </head>
@@ -778,6 +813,7 @@ function makeUnit(id,side){
     imageId:id,
     effectText:'',
     effectKind:'',
+    effectVersion:0,
     hit:false
   };
 }
@@ -811,6 +847,7 @@ function makeEnemy(i){
     buff:1,
     effectText:'',
     effectKind:'',
+    effectVersion:0,
     hit:false
   };
 }
@@ -847,9 +884,7 @@ function chooseAlly(){
     .sort((a,b)=>a.hp-b.hp)[0]||null;
 }
 
-/* 味方側の攻撃対象
-   狙撃手アーチャーだけ最低HPの敵を狙う
-   それ以外はランダム */
+/* 味方側の攻撃対象 */
 function chooseAttackTarget(actor){
   if(actor&&actor.id==='狙撃手アーチャー'){
     return chooseEnemy();
@@ -858,24 +893,50 @@ function chooseAttackTarget(actor){
   return chooseRandomEnemy();
 }
 
-/* ダメージ・回復などの表示 */
+/*
+  演出表示の修正：
+  ・表示時間を1.2秒に延長
+  ・演出終了時に画面全体を再描画しない
+  ・該当キャラクターの表示だけを消す
+  これにより、別の演出が再描画で再生されるのを防ぐ
+*/
 function showUnitEffect(unit,text,kind='damage'){
   if(!unit)return;
+
+  unit.effectVersion=(unit.effectVersion||0)+1;
+  const thisVersion=unit.effectVersion;
 
   unit.effectText=text;
   unit.effectKind=kind;
   unit.hit=kind==='damage'||kind==='miss';
 
   const currentBattle=battle;
+  const unitId=String(unit.id);
+
+  renderBattle();
 
   setTimeout(()=>{
     if(!currentBattle||battle!==currentBattle)return;
+    if(unit.effectVersion!==thisVersion)return;
 
     unit.effectText='';
     unit.effectKind='';
     unit.hit=false;
-    renderBattle();
-  },950);
+
+    /*
+      renderBattle()は呼ばず、該当キャラクターの
+      演出要素だけを直接削除する
+    */
+    document.querySelectorAll('.battle-character').forEach(el=>{
+      if(el.dataset.unitId!==unitId)return;
+
+      const effect=el.querySelector('.effect-pop');
+      if(effect)effect.remove();
+
+      el.classList.remove('hit-animation');
+    });
+
+  },1250);
 }
 
 function startBattle(){
@@ -909,9 +970,7 @@ function startBattle(){
   advanceBattle();
 }
 
-/* 敵の攻撃対象を決定
-   敵の狙撃手アーチャーだけ最低HPの味方を狙う
-   それ以外はランダム */
+/* 敵の攻撃対象を決定 */
 function chooseEnemyAttackTarget(enemy){
   if(
     enemy&&
@@ -1088,8 +1147,7 @@ function performAlly(actor,useSkill){
   }
 }
 
-/* ダメージ処理
-   戦闘不能時もDOWN演出を重ねず、ダメージ表記を1回だけ表示 */
+/* ダメージ処理 */
 function deal(attacker,target,amount){
   if(!target||!target.alive)return 0;
 
@@ -1108,7 +1166,7 @@ function deal(attacker,target,amount){
 
   target.hp=Math.max(0,target.hp-dmg);
 
-  /* ダメージ演出はここで1回だけ */
+  /* 1回の攻撃につきダメージ演出は1回だけ */
   showUnitEffect(target,'-'+dmg,'damage');
 
   if(target.hp<=0){
@@ -1252,7 +1310,10 @@ function renderBattle(){
     const image=imagePath(u.imageId);
 
     return `
-      <div class="battle-character ${isEnemy?'enemy':'ally'} ${dead?'dead':''} ${u.hit?'hit-animation':''}">
+      <div
+        class="battle-character ${isEnemy?'enemy':'ally'} ${dead?'dead':''} ${u.hit?'hit-animation':''}"
+        data-unit-id="${esc(u.id)}"
+      >
         <div class="battle-image">
           <img src="${image}" alt="${esc(u.name)}"
             onerror="this.style.display='none'">
