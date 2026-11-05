@@ -1,3 +1,4 @@
+
 <!doctype html>
 <html lang="ja">
 <head>
@@ -6,561 +7,481 @@
 <title>星詠みの旅団</title>
 <style>
 :root{
-  --bg:#101525;--panel:#1b2540;--panel2:#263453;
-  --gold:#f4c76b;--text:#f4f5fb;--muted:#aab4ca;
-  --line:#394866;--red:#e87979;--green:#76d6a1;
+  --bg:#101525;
+  --panel:#1b2540;
+  --gold:#f4c76b;
+  --text:#f4f5fb;
+  --muted:#aab4ca;
+  --line:#394866;
 }
 *{box-sizing:border-box}
 body{
-  margin:0;background:radial-gradient(ellipse at top,#202d4c 0,#101525 55%);
-  color:var(--text);font-family:system-ui,-apple-system,"Noto Sans JP",sans-serif;min-height:100vh;
+  margin:0;
+  background:radial-gradient(ellipse at top,#202d4c,#101525 60%);
+  color:var(--text);
+  font-family:system-ui,-apple-system,sans-serif;
 }
 button{
-  font:inherit;color:inherit;border:1px solid #62708e;
-  background:linear-gradient(180deg,#354666,#263453);
-  border-radius:12px;padding:11px 14px;cursor:pointer;
+  font:inherit;
+  color:inherit;
+  border:1px solid #62708e;
+  background:linear-gradient(#354666,#263453);
+  border-radius:11px;
+  padding:10px 13px;
+  cursor:pointer;
 }
-button:disabled{opacity:.4;cursor:not-allowed}
-.wrap{max-width:900px;margin:auto;padding:14px}
-.top{display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap;padding:12px 4px}
-.brand{font-weight:900;color:var(--gold);font-size:22px}
-.resources{display:flex;gap:8px;flex-wrap:wrap}
-.pill{background:#202c46;border:1px solid var(--line);padding:7px 11px;border-radius:999px;font-size:14px}
-.nav{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin:8px 0 16px}
-.nav button{min-height:48px}
+button:disabled{opacity:.4}
+.wrap{max-width:900px;margin:auto;padding:12px}
+.top,.row{display:flex;gap:9px;align-items:center;flex-wrap:wrap}
+.top{justify-content:space-between;padding:12px 0}
+.brand,.section-title{color:var(--gold);font-weight:900}
+.brand{font-size:22px}
+.pill{
+  background:#202c46;
+  border:1px solid var(--line);
+  padding:7px 10px;
+  border-radius:30px;
+}
+.nav{
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  gap:7px;
+  margin:10px 0 16px;
+}
 .page{display:none}
 .page.active{display:block}
 .panel{
   background:linear-gradient(145deg,#1d2945,#172139);
-  border:1px solid var(--line);border-radius:18px;padding:16px;
-  margin-bottom:14px;box-shadow:0 8px 24px #0003;
+  border:1px solid var(--line);
+  border-radius:17px;
+  padding:15px;
+  margin-bottom:13px;
 }
-.hero{text-align:center;padding:28px 16px}
-.hero h1{color:var(--gold);font-size:28px;margin:0 0 8px}
-.muted{color:var(--muted)}
-.section-title{font-size:20px;color:var(--gold);margin:0 0 12px}
-.row{display:flex;gap:9px;align-items:center;flex-wrap:wrap}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(145px,1fr));gap:10px}
+.hero{text-align:center;padding:25px}
+.hero h1{color:var(--gold)}
+.section-title{font-size:20px;margin:0 0 12px}
+.muted,.small{color:var(--muted)}
+.small{font-size:12px}
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(145px,1fr));
+  gap:9px;
+}
 .card{
-  position:relative;background:#202d49;border:1px solid var(--line);
-  border-radius:14px;padding:11px 11px 43px;min-width:0;
+  position:relative;
+  background:#202d49;
+  border:1px solid var(--line);
+  border-radius:13px;
+  padding:10px 10px 43px;
 }
-.card.selected{border:2px solid var(--gold);padding:10px 10px 42px}
-.portrait{height:100px;display:flex;align-items:center;justify-content:center;font-size:52px;margin-bottom:6px}
-.portrait img{max-height:100%;max-width:100%;object-fit:contain}
-.name{font-weight:800}
-.small{font-size:12px;color:var(--muted)}
+.card.selected{outline:2px solid var(--gold)}
+.portrait{
+  height:100px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:48px;
+}
+.portrait img{
+  max-width:100%;
+  max-height:100%;
+  object-fit:contain;
+}
+.name{font-weight:900}
 .stats{font-size:13px;line-height:1.7;margin:6px 0}
-.normal{color:#cbd5e1}.rare{color:#74b8ff}.epic{color:#d9a0ff}
+.normal{color:#cbd5e1}
+.rare{color:#74b8ff}
+.epic{color:#d9a0ff}
 .wide{width:100%}
-.result{line-height:1.8;min-height:40px;margin-top:12px}
-.error{
-  display:none;background:#542d36;border:1px solid #b65d6a;
-  padding:10px;border-radius:10px;margin:8px 0;white-space:pre-wrap;
+.plus{
+  position:absolute;
+  bottom:8px;
+  right:8px;
+  width:32px;
+  height:32px;
+  padding:0;
+  border-radius:9px;
+  color:#ffe5a0;
+  border-color:#b99550;
+  background:#58472d;
+  font-size:23px;
 }
-.footer{text-align:center;color:var(--muted);font-size:12px;padding:14px}
-
-/* 図鑑の指輪ボタン */
-.character-ring-plus{
-  position:absolute;right:9px;bottom:9px;
-  width:32px;height:32px;min-height:32px;
-  padding:0;border-radius:9px;
-  display:flex;align-items:center;justify-content:center;
-  font-size:23px;font-weight:900;line-height:1;
-  color:#ffe5a0;border:1px solid #b99550;
-  background:linear-gradient(145deg,#6e5934,#3c3021);
-  box-shadow:0 2px 5px #0006;
-}
-.character-ring-plus:active{transform:scale(.92)}
-
-/* 指輪一覧画面 */
-.character-ring-modal{
-  display:none;position:fixed;inset:0;z-index:1100;
-  background:#050914e8;align-items:center;justify-content:center;
+.modal{
+  display:none;
+  position:fixed;
+  inset:0;
+  z-index:1000;
+  background:#050914e8;
+  align-items:center;
+  justify-content:center;
   padding:14px;
 }
-.character-ring-modal.active{display:flex}
-.character-ring-box{
-  width:100%;max-width:460px;max-height:88vh;overflow-y:auto;
-  background:linear-gradient(145deg,#263653,#151f34);
-  border:1px solid #7185a8;border-radius:18px;padding:15px;
-  box-shadow:0 15px 50px #000b;
-}
-.character-ring-heading{
-  color:var(--gold);font-size:20px;font-weight:900;
-  margin-bottom:4px;
-}
-.character-ring-subtitle{
-  color:var(--muted);font-size:12px;margin-bottom:13px;
-}
-.character-ring-profile{
-  display:flex;align-items:center;gap:10px;
-  background:#111b30;border:1px solid #465779;
-  border-radius:12px;padding:9px;margin-bottom:12px;
-}
-.character-ring-profile .portrait{
-  width:55px;height:55px;flex-shrink:0;margin:0;font-size:30px;
-}
-.character-ring-profile .portrait img{max-width:100%;max-height:100%}
-.character-ring-inventory{
-  background:#111b30;border:1px solid #465779;
-  border-radius:12px;padding:10px;margin-bottom:13px;
-}
-.character-ring-inventory-title{
-  font-size:13px;font-weight:900;color:#e6d5a7;margin-bottom:8px;
-}
-.character-ring-stock{
-  display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;
-}
-.character-ring-stock-item{
-  min-width:0;text-align:center;padding:7px 3px;
-  border-radius:9px;background:#202d49;border:1px solid #394866;
-  font-size:11px;line-height:1.6;
-}
-.character-ring-stock-item .ring-icon{font-size:19px}
-.character-ring-slots-title{
-  color:#e6d5a7;font-weight:900;font-size:14px;margin:12px 0 8px;
-}
-.character-ring-slots{
-  display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;
-}
-.character-ring-slot{
-  min-width:0;min-height:58px;padding:7px 5px;
-  border-radius:10px;background:#111b30;
-  border:1px solid #465779;text-align:center;
-}
-.character-ring-slot.empty{border-style:dashed;color:var(--muted)}
-.character-ring-slot .slot-title{font-size:10px;color:#c4d0e5;margin-bottom:3px}
-.character-ring-slot .equipped-name{font-size:11px;font-weight:900;margin-bottom:2px}
-.character-ring-slot .slot-hint{font-size:10px;color:#f4c76b;margin-top:3px}
-.character-ring-bonus{
-  background:#111b30;border-radius:10px;padding:9px;
-  margin-top:10px;font-size:11px;line-height:1.8;color:#c5d4e8;
-}
-.character-ring-close{width:100%;margin-top:13px}
-
-/* 指輪選択画面 */
-.equipment-modal{
-  display:none;position:fixed;inset:0;z-index:1200;
-  background:#050914e8;align-items:center;justify-content:center;
+.modal.active{display:flex}
+.modal-box{
+  width:100%;
+  max-width:460px;
+  max-height:88vh;
+  overflow:auto;
+  background:linear-gradient(#263653,#151f34);
+  border:1px solid #7185a8;
+  border-radius:18px;
   padding:16px;
 }
-.equipment-modal.active{display:flex}
-.equipment-modal-box{
-  width:100%;max-width:420px;max-height:85vh;overflow-y:auto;
-  background:linear-gradient(145deg,#263653,#151f34);
-  border:1px solid #7185a8;border-radius:18px;padding:16px;
-  box-shadow:0 15px 50px #000b;
+.slots,.stock{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:8px;
 }
-.equipment-modal-title{
-  color:var(--gold);font-size:19px;font-weight:900;margin-bottom:5px;
+.slot{
+  min-height:65px;
+  background:#111b30;
+  border:1px solid #465779;
+  border-radius:10px;
+  padding:8px;
+  text-align:center;
 }
-.equipment-modal-character{font-size:12px;color:var(--muted);margin-bottom:14px}
-.equipment-choice{
-  display:flex;align-items:center;gap:10px;width:100%;
-  text-align:left;margin:8px 0;padding:11px;border-radius:12px;
+.slot.empty{border-style:dashed}
+.stock{
+  grid-template-columns:repeat(3,1fr);
+  margin:10px 0;
 }
-.equipment-choice-icon{font-size:25px;width:35px;text-align:center;flex-shrink:0}
-.equipment-choice-info{flex:1;min-width:0}
-.equipment-choice-name{font-weight:900;font-size:14px}
-.equipment-choice-description{font-size:11px;color:#c5d4e8;margin-top:3px}
-.equipment-choice-count{font-size:12px;color:var(--gold);white-space:nowrap}
-.equipment-empty-message{
-  padding:18px 10px;text-align:center;color:var(--muted);
-  background:#111b30;border-radius:12px;font-size:13px;line-height:1.8;
+.stock>div{
+  background:#111b30;
+  border-radius:9px;
+  padding:8px 3px;
+  text-align:center;
+  font-size:12px;
 }
-.equipment-modal-close{width:100%;margin-top:12px}
-.ring-power{color:#ffbd70}
-.ring-heart{color:#ff858f}
-.ring-skill{color:#83e2a5}
-.ring-button{
-  width:100%;font-size:11px;padding:6px 4px;margin-top:4px;
+.choice{
+  display:flex;
+  width:100%;
+  justify-content:space-between;
+  align-items:center;
+  text-align:left;
+  margin:8px 0;
 }
-.ring-button.power{border-color:#bd8248;background:linear-gradient(180deg,#78502f,#50351f)}
-.ring-button.heart{border-color:#b65d6a;background:linear-gradient(180deg,#873c50,#542c3e)}
-.ring-button.skill{border-color:#4c9c75;background:linear-gradient(180deg,#28664d,#1d4639)}
-.ring-button.remove{background:linear-gradient(180deg,#59657b,#354158);border-color:#7888a7}
-
-/* ガチャ召喚演出 */
-.summon-overlay{
-  display:none;position:fixed;inset:0;z-index:1000;
-  background:radial-gradient(ellipse at center,#26345b 0%,#11172b 55%,#080c18 100%);
-  align-items:center;justify-content:center;padding:16px;overflow-y:auto;
-}
-.summon-overlay.active{display:flex}
-.summon-content{width:100%;max-width:520px;text-align:center;position:relative;padding:20px 12px}
-.summon-title{color:#b9d9ff;font-size:22px;font-weight:1000;text-shadow:0 0 12px #6daaff;margin-bottom:14px}
-.summon-overlay.epic-mode{background:radial-gradient(ellipse at center,#583c70 0%,#241c42 48%,#090b19 100%)}
-.epic-mode .summon-title{color:#ffe7a0;text-shadow:0 0 12px #ffbf4a,0 0 25px #d58aff}
-.magic-stage{height:300px;position:relative;display:flex;align-items:center;justify-content:center;overflow:hidden}
-.magic-circle{
-  width:230px;height:230px;border-radius:50%;position:absolute;border:3px solid #7ecbff;
-  box-shadow:0 0 12px #54aaff,0 0 30px #398cff,inset 0 0 22px #398cff;
-  background:radial-gradient(circle,transparent 43%,#4b9bff22 44%,transparent 46%),repeating-conic-gradient(from 0deg,#6fcaff 0deg 1deg,transparent 1deg 15deg);
-  animation:magicRotate 8s linear infinite,magicPulse 1.5s ease-in-out infinite alternate;
-}
-.magic-circle:before{content:"";position:absolute;inset:17px;border-radius:50%;border:2px dashed #b5e7ff;box-shadow:0 0 12px #64caff}
-.magic-circle:after{
-  content:"✦　ᚷ　✧　ᚨ　✦　ᚱ　✧　ᚷ　✦";
-  position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
-  color:#d5f3ff;font-size:17px;letter-spacing:2px;text-shadow:0 0 9px #48aaff;
-}
-.magic-inner{
-  width:125px;height:125px;border-radius:50%;position:absolute;border:2px solid #a7ddff;
-  box-shadow:0 0 15px #56baff,inset 0 0 20px #56baff;
-  background:radial-gradient(circle,#8bdcff44,transparent 70%);
-  animation:magicRotateReverse 5s linear infinite;
-}
-.magic-inner:after{content:"✦";position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#fff;font-size:55px;text-shadow:0 0 20px #54baff}
-.magic-rune{position:absolute;width:280px;height:280px;border-radius:50%;border:1px solid #77caff88;box-shadow:0 0 25px #4aaaff55;animation:magicRotateReverse 13s linear infinite}
-.magic-rune:before,.magic-rune:after{content:"";position:absolute;inset:25px;border-radius:50%;border:1px solid #a5e1ff88}
-.magic-rune:after{inset:45px;border-style:dashed}
-.summon-beam{position:absolute;bottom:10px;left:50%;transform:translateX(-50%);width:110px;height:0;opacity:0;background:linear-gradient(0deg,#fff,#9bdcffaa,transparent);filter:blur(5px)}
-.summon-overlay.revealing .summon-beam{animation:beamRise 1.1s ease-out forwards}
-.summon-overlay.epic-mode .magic-circle{
-  border-color:#ffe08b;box-shadow:0 0 18px #ffc34b,0 0 45px #d58aff,inset 0 0 30px #f4b84b;
-  background:radial-gradient(circle,transparent 43%,#d59aff33 44%,transparent 46%),repeating-conic-gradient(from 0deg,#ffe08b 0deg 1deg,transparent 1deg 12deg);
-}
-.epic-mode .magic-circle:before{border-color:#fff0b3;box-shadow:0 0 15px #ffcc62}
-.epic-mode .magic-circle:after{color:#fff0bd;text-shadow:0 0 12px #ffc34b}
-.epic-mode .magic-inner{border-color:#ffe4a1;box-shadow:0 0 22px #ffc34b,inset 0 0 25px #d58aff}
-.epic-mode .magic-inner:after{color:#fff2bd;text-shadow:0 0 25px #ffb52e}
-.epic-mode .magic-rune{border-color:#ffe18c;box-shadow:0 0 35px #d58aff99}
-.epic-mode .magic-rune:before,.epic-mode .magic-rune:after{border-color:#ffe8a6}
-.epic-mode .summon-beam{background:linear-gradient(0deg,#fff,#ffe08b,#d58affaa,transparent);filter:blur(7px)}
-@keyframes magicRotate{to{transform:rotate(360deg)}}
-@keyframes magicRotateReverse{to{transform:rotate(-360deg)}}
-@keyframes magicPulse{from{filter:brightness(.8);transform:scale(.96)}to{filter:brightness(1.5);transform:scale(1.04)}}
-@keyframes beamRise{0%{height:0;width:20px;opacity:0}35%{height:270px;width:65px;opacity:1}75%{height:300px;width:120px;opacity:.85}100%{height:320px;width:180px;opacity:0}}
-.summon-character{display:none;position:relative;z-index:2;width:190px;height:190px;align-items:center;justify-content:center;animation:characterAppear .65s cubic-bezier(.15,.8,.2,1) both}
-.summon-character img{max-width:100%;max-height:100%;object-fit:contain;filter:drop-shadow(0 0 15px #8bdcff) drop-shadow(0 8px 8px #0008)}
-.epic-mode .summon-character img{filter:drop-shadow(0 0 18px #ffe08b) drop-shadow(0 0 35px #c17cff) drop-shadow(0 8px 8px #0008)}
-.summon-overlay.revealed .magic-circle{opacity:.2;transition:opacity .5s}
-.summon-overlay.revealed .magic-inner{opacity:.15;transition:opacity .5s}
-.summon-overlay.revealed .summon-character{display:flex}
-@keyframes characterAppear{0%{opacity:0;transform:translateY(35px) scale(.35)}65%{opacity:1;transform:translateY(-8px) scale(1.12)}100%{opacity:1;transform:translateY(0) scale(1)}}
-.summon-flash{position:absolute;inset:0;z-index:3;pointer-events:none;background:#fff;opacity:0}
-.summon-overlay.flash .summon-flash{animation:summonFlash .65s ease-out}
-.epic-mode.flash .summon-flash{animation:epicFlash .9s ease-out}
-@keyframes summonFlash{0%{opacity:0}15%{opacity:.85}100%{opacity:0}}
-@keyframes epicFlash{0%{opacity:0;background:#fff}12%{opacity:1;background:#fff4c4}35%{opacity:.8;background:#d9a1ff}100%{opacity:0}}
-.summon-stars{position:absolute;inset:0;pointer-events:none;overflow:hidden}
-.summon-stars i{position:absolute;color:#bdeaff;font-style:normal;font-size:18px;animation:starFloat 2.2s ease-out infinite;text-shadow:0 0 10px #8bdcff}
-.epic-mode .summon-stars i{color:#ffe6a1;text-shadow:0 0 12px #ffb52e,0 0 20px #c17cff}
-.summon-stars i:nth-child(1){left:12%;top:20%;animation-delay:0s}
-.summon-stars i:nth-child(2){left:80%;top:25%;animation-delay:.3s}
-.summon-stars i:nth-child(3){left:20%;top:70%;animation-delay:.6s}
-.summon-stars i:nth-child(4){left:75%;top:72%;animation-delay:.9s}
-.summon-stars i:nth-child(5){left:50%;top:12%;animation-delay:1.2s}
-@keyframes starFloat{0%{opacity:0;transform:translateY(15px) scale(.5) rotate(0)}30%{opacity:1}100%{opacity:0;transform:translateY(-35px) scale(1.4) rotate(90deg)}}
-.summon-result-name{position:relative;z-index:4;min-height:75px;margin-top:-4px;opacity:0;transform:translateY(10px)}
-.summon-overlay.revealed .summon-result-name{animation:resultTextIn .5s .25s ease-out forwards}
-@keyframes resultTextIn{to{opacity:1;transform:translateY(0)}}
-.summon-rarity{font-size:15px;font-weight:1000;letter-spacing:4px;color:#a9ddff;text-shadow:0 0 10px #5bbaff}
-.epic-mode .summon-rarity{color:#ffe49a;text-shadow:0 0 12px #ffb52e,0 0 20px #c17cff}
-.summon-result-name h2{font-size:25px;margin:5px 0;color:#fff;text-shadow:0 2px 8px #000,0 0 15px #7ccfff}
-.epic-mode .summon-result-name h2{color:#fff1c5;text-shadow:0 2px 8px #000,0 0 18px #ffbd49,0 0 28px #c17cff}
-.summon-message{font-size:13px;color:#dcecff;min-height:22px}
-.epic-mode .summon-message{color:#ffe7bb}
-.summon-progress{font-size:12px;color:#c5d4ed;margin:8px 0}
-.summon-controls{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin-top:12px;position:relative;z-index:5}
-.summon-controls button{min-width:130px}
-.summon-skip{background:linear-gradient(180deg,#53627d,#303d57)}
-.summon-finish{display:none;margin-top:14px;position:relative;z-index:5}
-.summon-finish button{width:100%;font-weight:900}
-.summon-summary{display:none;position:relative;z-index:5;margin-top:12px;text-align:left;background:#111a2dcc;border:1px solid #7185a8;border-radius:13px;padding:12px;max-height:210px;overflow-y:auto}
-.summon-summary-row{display:flex;justify-content:space-between;gap:8px;padding:6px 2px;border-bottom:1px solid #52617c66;font-size:13px}
-.summon-summary-row:last-child{border-bottom:0}
-.summon-summary-row.epic-result{color:#ffe09a;font-weight:900}
-.summon-overlay.complete .magic-stage,.summon-overlay.complete .summon-title,.summon-overlay.complete .summon-result-name,.summon-overlay.complete .summon-progress,.summon-overlay.complete .summon-stars{display:none}
-.summon-overlay.complete .summon-summary{display:block}
-.summon-overlay.complete .summon-finish{display:block}
-.summon-overlay.complete .summon-controls{display:none}
-.summon-overlay.complete .summon-content{max-width:600px}
-.summon-overlay.complete .summon-summary-heading{text-align:center;color:var(--gold);font-size:22px;font-weight:1000;margin:5px 0 12px}
-.summon-overlay.complete .summon-summary-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
-.summon-mini-card{background:#202d49;border:1px solid #536486;border-radius:10px;padding:8px;text-align:center;min-width:0}
-.summon-mini-card.epic-result{border-color:#e8bd69;background:linear-gradient(145deg,#59436d,#292342);box-shadow:0 0 12px #d69aff44}
-.summon-mini-card img{width:100%;height:85px;object-fit:contain;filter:drop-shadow(0 3px 5px #0008)}
-.summon-mini-card .mini-name{font-size:12px;font-weight:900;overflow-wrap:anywhere}
-.summon-mini-card .mini-rarity{font-size:11px;color:#cbd5e1}
-.summon-mini-card.epic-result .mini-rarity{color:#ffe09a}
-
-/* 草原ステージマップ */
 .stage-map{
-  position:relative;overflow:hidden;padding:16px;border:2px solid #58794e;border-radius:18px;
-  background:radial-gradient(ellipse at 15% 20%,#729d58 0,transparent 28%),radial-gradient(ellipse at 85% 75%,#668d4b 0,transparent 32%),linear-gradient(145deg,#456c43,#31543b 55%,#426a40);
+  padding:15px;
+  border:2px solid #58794e;
+  border-radius:18px;
+  background:linear-gradient(145deg,#456c43,#31543b 55%,#426a40);
 }
-.stage-map:before{content:"";position:absolute;inset:0;pointer-events:none;opacity:.18;background-image:radial-gradient(#d5e9a0 1px,transparent 1px);background-size:22px 22px}
-.map-heading{position:relative;z-index:1;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:14px}
-.map-heading h3{color:#fff3bd;margin:0;font-size:19px;text-shadow:0 2px 4px #172b18}
-.map-progress{color:#fff;background:#203c2dcc;border:1px solid #a4c27c;padding:6px 10px;border-radius:20px;font-size:12px}
-.map-grid{position:relative;z-index:1;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
-.stage-node{position:relative;min-width:0;min-height:91px;padding:8px 4px;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:3px;border-radius:14px;border:2px solid #b4c98b;background:linear-gradient(180deg,#e1e9b7,#a9c27b);color:#263b26;box-shadow:0 4px 0 #345534,0 5px 9px #152a1b88;text-align:center}
-.stage-node .stage-number{font-size:23px;font-weight:1000;line-height:1.1}
-.stage-node .stage-label{font-size:11px;font-weight:900}
-.stage-node .stage-status{font-size:10px;font-weight:800}
-.stage-node.completed{background:linear-gradient(180deg,#c5e9bb,#76b879);border-color:#e2f6c9}
-.stage-node.current{background:linear-gradient(180deg,#fff0a8,#e9b94e);border-color:#fff0a8;box-shadow:0 0 0 3px #f4c76b66,0 4px 0 #87632b}
-.stage-node.selected{outline:3px solid #fff;outline-offset:2px;transform:translateY(-2px)}
-.stage-node.boss{background:linear-gradient(180deg,#f1b2a3,#bd625b);color:#451e25;border-color:#ffd0bd}
-.stage-node.boss.completed{background:linear-gradient(180deg,#e8b5a5,#b86d62)}
-.stage-node.boss.current{box-shadow:0 0 0 3px #ffb0a266,0 4px 0 #713b37}
-.stage-node.locked{background:linear-gradient(180deg,#9ba58d,#697568);border-color:#a6b19c;color:#344236;box-shadow:0 4px 0 #354337}
-.stage-node.unimplemented{background:linear-gradient(180deg,#737c72,#4d574e);border-color:#899387;color:#d1d7ce;box-shadow:0 4px 0 #343c35;opacity:.65}
-.stage-node:disabled{cursor:not-allowed}
-.map-legend{position:relative;z-index:1;display:flex;gap:12px;flex-wrap:wrap;margin-top:16px;font-size:11px;color:#fff;text-shadow:0 1px 3px #172b18}
-.map-legend span{display:flex;align-items:center;gap:4px}
-.legend-dot{display:inline-block;width:11px;height:11px;border-radius:4px;border:1px solid #fff8}
-.legend-normal{background:#c9d99c}.legend-clear{background:#83c987}.legend-boss{background:#d77d70}.legend-locked{background:#788477}
-.selected-stage-info{margin-top:13px;padding:12px;background:#203c2dcc;border:1px solid #a4c27c;border-radius:12px;color:#fff;position:relative;z-index:1}
-.selected-stage-info strong{color:#ffe69a}
-.map-start-button{width:100%;margin-top:10px;background:linear-gradient(180deg,#e6c16a,#a77c32);border-color:#ffe4a1;color:#30230e;font-weight:1000}
-.enemy-formation-info{margin-top:8px;font-size:12px;line-height:1.7;color:#e3eddb}
-
-/* 戦闘画面 */
-.battle-screen{display:flex;flex-direction:column;gap:15px}
-.battle-side-heading{font-size:19px;font-weight:900;margin:0 0 10px}
-.enemy-heading{color:#ffaaaa}.ally-heading{color:#9acbff}
-.battle-side{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
-.battle-character{position:relative;min-width:0;overflow:hidden;text-align:center;padding:10px 8px 12px;border-radius:16px;border:1px solid var(--line);background:linear-gradient(155deg,#263653,#17233b)}
-.battle-character.enemy{background:linear-gradient(155deg,#513541,#2b2030);border-color:#895767}
-.battle-character.ally{background:linear-gradient(155deg,#294264,#192943);border-color:#5476a4}
-.battle-character.dead{opacity:.35;filter:grayscale(1)}
-.battle-character.turn-active{border:3px solid #ffe17c;padding:8px 6px 10px;box-shadow:0 0 0 3px #f4c76b55,0 0 20px #f4c76b99,inset 0 0 16px #f4c76b22;animation:turnPulse 1.2s ease-in-out infinite alternate}
-.battle-character.enemy.turn-active{border-color:#ff8585;box-shadow:0 0 0 3px #ff858555,0 0 20px #ff858599,inset 0 0 16px #ff858522}
-.turn-badge{position:absolute;z-index:7;top:5px;left:50%;transform:translateX(-50%);white-space:nowrap;padding:4px 10px;border-radius:20px;background:linear-gradient(180deg,#ffe99c,#e9b94e);color:#35250a;font-size:12px;font-weight:1000;box-shadow:0 2px 7px #0008}
-.enemy .turn-badge{background:linear-gradient(180deg,#ffc1c1,#e87979);color:#501b25}
-@keyframes turnPulse{from{filter:brightness(1)}to{filter:brightness(1.35)}}
-.battle-image{width:100%;height:165px;display:flex;align-items:center;justify-content:center;margin:0 auto 6px}
-.battle-image img{width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 5px 5px #0006)}
-.battle-name{font-size:16px;font-weight:900;margin:4px 0 6px;min-height:24px}
-.battle-hp-text{font-size:12px;color:#d8dfed}
-.hpbar{height:10px;background:#101827;border-radius:10px;overflow:hidden;margin:6px 0}
-.hpbar i{display:block;height:100%;background:linear-gradient(90deg,#35bd75,#9be5a9);transition:width .35s}
-.gaugebar{height:7px;background:#101827;border-radius:10px;overflow:hidden;margin:4px 0 7px}
-.gaugebar i{display:block;height:100%;background:linear-gradient(90deg,#579dff,#c09aff);transition:width .25s}
-.battle-divider{display:flex;align-items:center;gap:12px;color:var(--gold);font-size:19px;font-weight:900;justify-content:center}
-.battle-divider:before,.battle-divider:after{content:"";height:1px;flex:1;background:linear-gradient(90deg,transparent,#9b8150,transparent)}
-.action-panel{background:linear-gradient(145deg,#202e4b,#151f34);border:1px solid #536486;border-radius:16px;padding:14px;min-height:95px}
-.action-title{font-size:18px;font-weight:900;color:var(--gold);margin-bottom:10px}
-.action-character{background:#263653;border:1px solid #536486;border-radius:12px;padding:12px}
-.action-buttons{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:11px}
-.action-buttons button{min-height:52px;font-weight:800}
-.attack-button{background:linear-gradient(180deg,#a34d59,#713443);border-color:#d17a87}
-.skill-button{background:linear-gradient(180deg,#6950a8,#45336e);border-color:#a58ad8}
-.enemy-preview{background:linear-gradient(145deg,#633b48,#342536);border:2px solid #bd687b;border-radius:14px;padding:15px;animation:previewIn .25s ease-out}
-.preview-title{color:#ffb1b1;font-weight:900;font-size:18px;margin-bottom:8px}
-.preview-detail{font-size:15px;line-height:1.9}
-.preview-wait{color:#ffd0d0;font-size:12px;margin-top:8px}
-.battle-result{text-align:center;padding:18px;background:#202d49;border:1px solid var(--gold);border-radius:14px}
-.battle-result h3{color:var(--gold);font-size:25px;margin:0 0 12px}
-
-/* ダメージ・回復演出 */
-.effect-pop{position:absolute;z-index:5;top:38%;left:50%;transform:translate(-50%,-50%);pointer-events:none;font-size:34px;font-weight:1000;white-space:nowrap;text-shadow:0 3px 6px #000,0 0 10px #000,0 0 16px #000;animation:effectFloat 1.2s ease-out forwards}
-.effect-damage{color:#ff7777;-webkit-text-stroke:1px #571d29}
-.effect-heal{color:#79f0a8;-webkit-text-stroke:1px #14552e}
-.effect-buff{color:#ffe27d;-webkit-text-stroke:1px #604b14}
-.effect-guard{color:#8dcaff;-webkit-text-stroke:1px #17436a}
-.effect-evade{color:#d0aaff;-webkit-text-stroke:1px #44276b}
-.effect-miss{color:#d7e4ff;-webkit-text-stroke:1px #283d60}
-@keyframes effectFloat{0%{opacity:0;transform:translate(-50%,0) scale(.65)}15%{opacity:1;transform:translate(-50%,-12px) scale(1.15)}35%{opacity:1;transform:translate(-50%,-20px) scale(1)}100%{opacity:0;transform:translate(-50%,-58px) scale(.95)}}
-.hit-animation{animation:hitShake .35s ease-in-out}
-@keyframes hitShake{0%,100%{transform:translateX(0)}20%{transform:translateX(-5px)}40%{transform:translateX(5px)}60%{transform:translateX(-3px)}80%{transform:translateX(3px)}}
-@keyframes previewIn{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:translateY(0)}}
-
+.map-grid{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:10px;
+}
+.stage-node{
+  min-height:83px;
+  padding:7px 2px;
+  background:linear-gradient(#e1e9b7,#a9c27b);
+  color:#263b26;
+  border:2px solid #b4c98b;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:2px;
+}
+.stage-node .num{font-size:22px;font-weight:900}
+.stage-node .small{color:inherit;font-size:10px}
+.stage-node.completed{background:linear-gradient(#c5e9bb,#76b879)}
+.stage-node.current{background:linear-gradient(#fff0a8,#e9b94e)}
+.stage-node.boss{
+  background:linear-gradient(#f1b2a3,#bd625b);
+  color:#451e25;
+}
+.stage-node.locked{background:#788477;color:#344236}
+.stage-node.selected{outline:3px solid white}
+.stage-info{
+  margin-top:14px;
+  background:#203c2dcc;
+  padding:12px;
+  border-radius:11px;
+  line-height:1.7;
+}
+.map-start{
+  width:100%;
+  margin-top:10px;
+  background:linear-gradient(#e6c16a,#a77c32);
+  color:#30230e;
+  font-weight:900;
+}
+.battle-side{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:9px;
+}
+.unit{
+  position:relative;
+  min-width:0;
+  background:#263653;
+  border:1px solid #5476a4;
+  border-radius:13px;
+  text-align:center;
+  padding:9px 5px;
+}
+.unit.enemy{background:#513541;border-color:#895767}
+.unit.dead{opacity:.35;filter:grayscale(1)}
+.unit.active{
+  outline:3px solid #ffe17c;
+  box-shadow:0 0 15px #f4c76b99;
+}
+.unit.enemy.active{outline-color:#ff8585}
+.unit .portrait{height:130px}
+.hpbar,.gaugebar{
+  height:9px;
+  background:#101827;
+  border-radius:10px;
+  overflow:hidden;
+  margin:6px 0;
+}
+.hpbar i{display:block;height:100%;background:#76d6a1}
+.gaugebar{height:7px}
+.gaugebar i{display:block;height:100%;background:#8c9fff}
+.battle-divider{
+  text-align:center;
+  font-size:20px;
+  color:var(--gold);
+  font-weight:900;
+  margin:12px;
+}
+.action-panel{
+  margin-top:13px;
+  background:#202e4b;
+  border:1px solid #536486;
+  border-radius:13px;
+  padding:13px;
+}
+.action-buttons{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  margin-top:10px;
+}
+.action-buttons button{min-height:50px}
+.attack{background:#853c49}
+.skill{background:#5b4694}
+.enemy-preview{
+  background:#633b48;
+  border:2px solid #bd687b;
+  padding:14px;
+  border-radius:12px;
+  line-height:1.8;
+}
+.result{text-align:center;line-height:1.8}
+.result h2{color:var(--gold)}
+.effect{
+  position:absolute;
+  top:30%;
+  left:0;
+  width:100%;
+  font-size:26px;
+  font-weight:900;
+  color:#ff8585;
+  text-shadow:0 2px 5px black;
+  pointer-events:none;
+}
+.error{
+  display:none;
+  background:#542d36;
+  border:1px solid #b65d6a;
+  padding:10px;
+  border-radius:10px;
+  margin-bottom:10px;
+}
+.summon{
+  display:none;
+  position:fixed;
+  inset:0;
+  z-index:1100;
+  background:radial-gradient(ellipse,#26345b,#080c18);
+  align-items:center;
+  justify-content:center;
+  padding:15px;
+}
+.summon.active{display:flex}
+.summon-box{text-align:center;max-width:520px;width:100%}
+.magic{
+  position:relative;
+  margin:15px auto;
+  width:230px;
+  height:230px;
+  border-radius:50%;
+  border:3px solid #7ecbff;
+  box-shadow:0 0 20px #398cff,inset 0 0 30px #398cff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  animation:rotate 6s linear infinite;
+}
+.magic:before{
+  content:'✦ ᚷ ✧ ᚨ ✦ ᚱ ✧';
+  position:absolute;
+  inset:20px;
+  border:2px dashed #b5e7ff;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:#d5f3ff;
+}
+.magic img{
+  position:relative;
+  z-index:1;
+  width:160px;
+  height:160px;
+  object-fit:contain;
+  animation:counterrotate 6s linear infinite;
+}
+.summon.epic-mode .magic{
+  border-color:#ffe08b;
+  box-shadow:0 0 28px #ffc34b,0 0 42px #d58aff;
+}
+.summon-name{font-size:23px;font-weight:900;color:var(--gold)}
+@keyframes rotate{to{transform:rotate(360deg)}}
+@keyframes counterrotate{to{transform:rotate(-360deg)}}
+.footer{
+  text-align:center;
+  color:var(--muted);
+  font-size:12px;
+  padding:12px;
+}
 @media(max-width:600px){
-  .wrap{padding:10px}.nav{grid-template-columns:repeat(2,1fr)}
-  .hero h1{font-size:24px}.panel{padding:13px}
+  .nav{grid-template-columns:repeat(2,1fr)}
   .battle-side{grid-template-columns:repeat(2,minmax(0,1fr))}
-  .battle-image{height:145px}.effect-pop{font-size:31px}
-  .map-grid{gap:9px}.stage-node{min-height:82px}
-  .summon-content{padding:12px 5px}.magic-stage{height:270px}
-  .magic-circle{width:205px;height:205px}.magic-rune{width:250px;height:250px}
-  .summon-character{width:165px;height:165px}.summon-result-name h2{font-size:22px}
-}
-@media(max-width:400px){
-  .character-ring-stock{grid-template-columns:1fr 1fr 1fr}
-  .character-ring-slots{gap:5px}
-  .character-ring-slot{padding:6px 3px}
-}
-@media(max-width:360px){
-  .battle-side{grid-template-columns:1fr 1fr}
-  .battle-image{height:120px}.battle-name{font-size:14px}
-  .effect-pop{font-size:28px}.stage-node .stage-number{font-size:20px}
-  .stage-node .stage-label{font-size:10px}
+  .unit .portrait{height:115px}
+  .map-grid{gap:7px}
+  .stage-node{min-height:78px}
+  .wrap{padding:9px}
 }
 </style>
 </head>
-
 <body>
 <div class="wrap">
-<header class="top">
-  <div class="brand">✦ 星詠みの旅団</div>
-  <div class="resources">
-    <span class="pill">💎 <b id="gems">0</b></span>
-    <span class="pill">🪙 <b id="gold">0</b></span>
-    <span class="pill">到達ステージ <b id="stage">1</b></span>
-  </div>
-</header>
-
-<div id="errorBox" class="error"></div>
-
-<nav class="nav">
-  <button data-page="home">ホーム</button>
-  <button data-page="gacha">ガチャ</button>
-  <button data-page="team">編成・図鑑</button>
-  <button data-page="battle">戦闘</button>
-  <button data-page="shop">ショップ</button>
-</nav>
-
-<main>
-<section id="home" class="page active">
-  <div class="panel hero">
-    <h1>星の導きが、旅の始まり</h1>
-    <p class="muted">仲間を集め、育て、未知の敵に挑もう。</p>
-    <div class="row" style="justify-content:center">
-      <button data-page="gacha">仲間を召喚する</button>
-      <button data-page="team">編成を確認する</button>
-      <button data-page="battle">冒険に出る</button>
-    </div>
-  </div>
-  <div class="panel">
-    <h2 class="section-title">旅団の状況</h2>
-    <div id="homeSummary"></div>
-  </div>
-</section>
-
-<section id="gacha" class="page">
-  <div class="panel">
-    <h2 class="section-title">星詠み召喚</h2>
-    <p>ノーマル 70% / レア 25% / エピック 5%</p>
+  <header class="top">
+    <div class="brand">✦ 星詠みの旅団</div>
     <div class="row">
-      <button data-action="summon" data-count="1">1回召喚（💎100）</button>
-      <button data-action="summon" data-count="10">10回召喚（💎900）</button>
+      <span class="pill">💎 <b id="gems">0</b></span>
+      <span class="pill">🪙 <b id="gold">0</b></span>
+      <span class="pill">到達ステージ <b id="stage">1</b></span>
     </div>
-    <div id="gachaResult" class="result muted">召喚結果がここに表示されます。</div>
-  </div>
-  <div class="panel">
-    <h2 class="section-title">所持状況</h2>
-    <div id="gachaOwned" class="small"></div>
-  </div>
-</section>
-
-<section id="team" class="page">
-  <div class="panel">
-    <h2 class="section-title">パーティ編成</h2>
-    <p class="muted">所持キャラクターを選択して最大3人まで編成できます。</p>
-    <div id="partyView" class="grid"></div>
-  </div>
-
-  <div class="panel">
-    <h2 class="section-title">キャラクター図鑑</h2>
-    <p class="muted">キャラクター右下の「＋」から、そのキャラクターの指輪を確認・装備できます。</p>
-    <div id="characterList" class="grid"></div>
-  </div>
-</section>
-
-<section id="shop" class="page">
-  <div class="panel">
-    <h2 class="section-title">ショップ</h2>
-    <p>ショップは準備中です。</p>
-  </div>
-</section>
-
-<section id="battle" class="page">
-  <div class="panel">
-    <h2 class="section-title">草原マップ</h2>
-    <p class="muted">ステージを選択して冒険に出よう。クリア済みのステージにも再挑戦できる。</p>
-    <div id="stageMap"></div>
-  </div>
-  <div class="panel">
-    <h2 class="section-title">冒険準備</h2>
-    <div id="battleIntro"></div>
-    <div class="row" style="margin-top:12px">
-      <button id="startBattleButton" class="map-start-button" data-action="startBattle">選択したステージに挑戦</button>
-    </div>
-  </div>
-</section>
-
-<section id="battleFight" class="page">
-  <div class="panel">
-    <div class="row" style="justify-content:space-between;margin-bottom:12px">
-      <h2 class="section-title" style="margin:0">戦闘</h2>
-      <button data-action="returnMap">ステージ選択に戻る</button>
-    </div>
-    <div id="battleArea">
-      <div class="battle-screen">
-        <div>
-          <div class="battle-side-heading enemy-heading" id="enemyHeading">▼ 敵軍</div>
+  </header>
+  <div id="errorBox" class="error"></div>
+  <nav class="nav">
+    <button data-page="home">ホーム</button>
+    <button data-page="gacha">ガチャ</button>
+    <button data-page="team">編成・図鑑</button>
+    <button data-page="battle">戦闘</button>
+    <button data-page="shop">ショップ</button>
+  </nav>
+  <main>
+    <section id="home" class="page active">
+      <div class="panel hero">
+        <h1>星の導きが、旅の始まり</h1>
+        <p class="muted">仲間を集め、育て、未知の敵に挑もう。</p>
+        <div class="row" style="justify-content:center">
+          <button data-page="gacha">仲間を召喚する</button>
+          <button data-page="team">編成を確認する</button>
+          <button data-page="battle">冒険に出る</button>
+        </div>
+      </div>
+      <div class="panel">
+        <h2 class="section-title">旅団の状況</h2>
+        <div id="homeSummary"></div>
+      </div>
+    </section>
+    <section id="gacha" class="page">
+      <div class="panel">
+        <h2 class="section-title">星詠み召喚</h2>
+        <p>ノーマル 70% / レア 25% / エピック 5%</p>
+        <div class="row">
+          <button data-action="summon" data-count="1">1回召喚（💎100）</button>
+          <button data-action="summon" data-count="10">10回召喚（💎900）</button>
+        </div>
+        <div id="gachaResult" class="muted" style="margin-top:12px">
+          召喚結果がここに表示されます。
+        </div>
+      </div>
+      <div class="panel">
+        <h2 class="section-title">所持状況</h2>
+        <div id="gachaOwned"></div>
+      </div>
+    </section>
+    <section id="team" class="page">
+      <div class="panel">
+        <h2 class="section-title">パーティ編成</h2>
+        <p class="muted">所持キャラクターを最大3人まで編成できます。</p>
+        <div id="partyView" class="grid"></div>
+      </div>
+      <div class="panel">
+        <h2 class="section-title">キャラクター図鑑</h2>
+        <p class="muted">右下の「＋」から指輪を装備できます。</p>
+        <div id="characterList" class="grid"></div>
+      </div>
+    </section>
+    <section id="shop" class="page">
+      <div class="panel">
+        <h2 class="section-title">ショップ</h2>
+        <p>ショップは準備中です。</p>
+      </div>
+    </section>
+    <section id="battle" class="page">
+      <div class="panel">
+        <h2 class="section-title">草原マップ</h2>
+        <p class="muted">クリア済みのステージにも再挑戦できます。</p>
+        <div id="stageMap"></div>
+      </div>
+      <div class="panel">
+        <h2 class="section-title">冒険準備</h2>
+        <div id="battleIntro"></div>
+        <button id="startBattleButton" class="map-start" data-action="startBattle">
+          挑戦する
+        </button>
+      </div>
+    </section>
+    <section id="battleFight" class="page">
+      <div class="panel">
+        <div class="row" style="justify-content:space-between">
+          <h2 class="section-title">戦闘</h2>
+          <button data-action="returnMap">ステージ選択に戻る</button>
+        </div>
+        <div id="battleArea">
+          <h3 style="color:#ffaaaa">▼ 敵軍 <span id="bossLabel"></span></h3>
           <div id="enemyUnits" class="battle-side"></div>
-        </div>
-        <div class="battle-divider">✦ VS ✦</div>
-        <div>
-          <div class="battle-side-heading ally-heading">▲ 旅団</div>
+          <div class="battle-divider">✦ VS ✦</div>
+          <h3 style="color:#9acbff">▲ 旅団</h3>
           <div id="allyUnits" class="battle-side"></div>
-        </div>
-        <div id="actionArea" class="action-panel">
-          <div class="muted">戦闘準備中...</div>
+          <div id="actionArea" class="action-panel"></div>
         </div>
       </div>
-    </div>
-  </div>
-</section>
-</main>
-
-<div class="footer">星詠みの旅団</div>
+    </section>
+  </main>
+  <div class="footer">星詠みの旅団</div>
 </div>
 
-<!-- キャラクター別の指輪一覧 -->
-<div id="characterRingModal" class="character-ring-modal">
-  <div class="character-ring-box">
-    <div class="character-ring-heading">アクセサリー一覧</div>
-    <div class="character-ring-subtitle">このキャラクターの装備状況</div>
+<div id="characterRingModal" class="modal">
+  <div class="modal-box">
+    <h2 class="section-title">アクセサリー一覧</h2>
     <div id="characterRingContent"></div>
-    <button class="character-ring-close" data-action="closeCharacterRingModal">図鑑に戻る</button>
+    <button class="wide" data-action="closeCharacterRingModal">図鑑に戻る</button>
   </div>
 </div>
 
-<!-- 指輪選択モーダル -->
-<div id="equipmentModal" class="equipment-modal">
-  <div class="equipment-modal-box">
-    <div class="equipment-modal-title">指輪を選択</div>
-    <div id="equipmentModalCharacter" class="equipment-modal-character"></div>
+<div id="equipmentModal" class="modal">
+  <div class="modal-box">
+    <h2 class="section-title">指輪を選択</h2>
+    <div id="equipmentModalCharacter" class="small"></div>
     <div id="equipmentModalChoices"></div>
-    <button class="equipment-modal-close" data-action="closeEquipmentModal">戻る</button>
+    <button class="wide" data-action="closeEquipmentModal">戻る</button>
   </div>
 </div>
 
-<div id="summonOverlay" class="summon-overlay" aria-live="polite">
-  <div class="summon-content">
-    <div class="summon-title" id="summonTitle">✦ 星詠み召喚 ✦</div>
-    <div class="magic-stage">
-      <div class="magic-rune"></div>
-      <div class="magic-circle"></div>
-      <div class="magic-inner"></div>
-      <div class="summon-beam"></div>
-      <div class="summon-character" id="summonCharacter">
-        <img id="summonCharacterImage" src="" alt="召喚されたキャラクター">
-      </div>
-      <div class="summon-flash"></div>
-      <div class="summon-stars">
-        <i>✦</i><i>✧</i><i>✦</i><i>✧</i><i>✦</i>
-      </div>
-    </div>
-    <div class="summon-result-name" id="summonResultName">
-      <div class="summon-rarity" id="summonRarity"></div>
-      <h2 id="summonCharacterName"></h2>
-      <div class="summon-message" id="summonMessage"></div>
-    </div>
-    <div class="summon-progress" id="summonProgress"></div>
-    <div class="summon-controls" id="summonControls">
-      <button class="summon-skip" data-action="skipSummon">演出をスキップ</button>
-    </div>
-    <div class="summon-summary" id="summonSummary"></div>
-    <div class="summon-finish" id="summonFinish">
-      <button data-action="closeSummon">召喚結果を確認して戻る</button>
-    </div>
+<div id="summonOverlay" class="summon">
+  <div class="summon-box">
+    <h2 class="section-title">星詠み召喚</h2>
+    <div id="summonVisual"></div>
+    <div id="summonControls"></div>
   </div>
 </div>
 
@@ -568,23 +489,23 @@ button:disabled{opacity:.4;cursor:not-allowed}
 'use strict';
 
 const KEY='hoshiyomi_save_v2';
-
 const MAX_STAGE=20;
-const IMPLEMENTED_STAGE=10;
+const IMPLEMENTED_STAGE=20;
 const BOSS_STAGES=[10,20];
 
 const STAGE_GOLD={
   1:200,2:200,3:200,4:200,5:200,
-  6:300,7:300,8:300,9:300,10:1000
+  6:300,7:300,8:300,9:300,
+  10:1000,
+  11:500,12:500,13:500,14:500,15:500,
+  16:700,17:700,18:700,19:700,
+  20:2000
 };
-const GOLD_REDUCTION_RATE=0.8;
-const FIRST_CLEAR_GEM_CHANCE=0.20;
-const FIRST_CLEAR_GEM_AMOUNT=50;
 
 const CHARACTER_DROP_RATES={
   'ノーマル':7,
   'レア':2,
-  'エピック':0.3
+  'エピック':.3
 };
 
 const EQUIPMENT_SLOTS={
@@ -598,9 +519,9 @@ const EQUIPMENT_SLOTS={
   miner:2,
   '魔導士':2,
   '将軍':2,
+  'ゴーレム':1,
   'ドワーフ':2,
   'エルフ':2,
-  'ゴーレム':1,
   'アサシン':1,
   '鍛錬剣士':2,
   '狙撃手アーチャー':2,
@@ -611,84 +532,184 @@ const RINGS={
   power:{
     name:'チカラの指輪',
     icon:'🟠',
-    className:'power',
     description:'攻撃力 +10%'
   },
   heart:{
     name:'ハートの指輪',
-    icon:'❤️',
-    className:'heart',
-    description:'最大HP +10%'
+    icon:'🔴',
+    description:'体力 +10%'
   },
   skill:{
     name:'スキルの指輪',
     icon:'🟢',
-    className:'skill',
     description:'スキル効果 +10%'
   }
 };
 
-const RING_IDS=Object.keys(RINGS);
-
 const CHARACTERS=[
-{id:'swordman',imageFile:'Swordman.png',name:'剣士',rarity:'ノーマル',hp:100,atk:20,speed:20,charge:3,skill:'強撃',effect:'damage',power:50,target:'one',growth:.07,max:20},
-{id:'archer',imageFile:'Archer.png',name:'アーチャー',rarity:'ノーマル',hp:70,atk:10,speed:16,charge:2,skill:'乱射',effect:'damage',power:10,target:'all',growth:.07,max:20},
-{id:'axeman',imageFile:'Axeman.png',name:'アックスマン',rarity:'ノーマル',hp:130,atk:30,speed:9,charge:4,skill:'叩き割り',power:70,effect:'damage',target:'one',growth:.06,max:20},
-{id:'spearman',imageFile:'Spearman.png',name:'スピアマン',rarity:'ノーマル',hp:100,atk:10,speed:20,charge:6,skill:'致命突き',effect:'damage',power:150,target:'one',growth:.07,max:20},
-{id:'goblin',imageFile:'Goblin.png',name:'ゴブリン',rarity:'ノーマル',hp:70,atk:20,speed:25,charge:5,skill:'回避',effect:'evade',power:80,target:'self',growth:.08,max:20},
-{id:'miner',imageFile:'Miner.png',name:'鉱夫',rarity:'ノーマル',hp:140,atk:10,speed:14,charge:3,skill:'ガード',effect:'guard',power:70,target:'self',growth:.07,max:20},
-{id:'zombie',imageFile:'Zombie.png',name:'ゾンビ',rarity:'ノーマル',hp:50,atk:50,speed:12,charge:3,skill:'噛みつき',effect:'poison',power:50,target:'one',growth:.07,max:20},
-{id:'farmer',imageFile:'Farmer.png',name:'農夫',rarity:'ノーマル',hp:110,atk:20,speed:15,charge:3,skill:'ランダム回復',effect:'heal',power:20,target:'ally',growth:.07,max:20},
-{id:'魔導士',imageFile:'魔導士.png',name:'魔導士',rarity:'レア',hp:100,atk:30,speed:21,charge:0,skill:'力の魔術',effect:'buffAlly',power:50,target:'ally',growth:.16,max:10},
-{id:'将軍',imageFile:'将軍.png',name:'将軍',rarity:'レア',hp:150,atk:40,speed:23,charge:2,skill:'薙ぎ払い',effect:'damage',power:30,target:'all',growth:.16,max:10},
-{id:'ゴーレム',imageFile:'ゴーレム.png',name:'ゴーレム',rarity:'レア',hp:210,atk:40,speed:7,charge:8,skill:'大地砕き',effect:'damage',power:100,target:'all',growth:.16,max:10},
-{id:'ドワーフ',imageFile:'ドワーフ.png',name:'ドワーフ',rarity:'レア',hp:170,atk:30,speed:15,charge:5,skill:'職人の心得',effect:'buffSelf',power:25,target:'self',growth:.16,max:10},
-{id:'エルフ',imageFile:'エルフ.png',name:'エルフ',rarity:'レア',hp:100,atk:10,speed:24,charge:1,skill:'癒しのオーラ',effect:'healPercent',power:15,target:'ally',growth:.16,max:10},
-{id:'アサシン',imageFile:'アサシン.png',name:'アサシン',rarity:'レア',hp:70,atk:70,speed:29,charge:2,skill:'回避',effect:'evadeSure',power:100,target:'self',growth:.16,max:10},
-{id:'鍛錬剣士',imageFile:'鍛錬剣士.png',name:'果てしなき鍛錬剣士',rarity:'エピック',hp:200,atk:40,speed:22,charge:2,skill:'乱舞',effect:'damage',power:40,target:'all',growth:.30,max:6,passive:'アルティメットカウンター'},
-{id:'狙撃手アーチャー',imageFile:'狙撃手アーチャー.png',name:'戦場の狙撃手アーチャー',rarity:'エピック',hp:160,atk:80,speed:19,charge:4,skill:'正射必中',effect:'damage',power:160,target:'one',growth:.30,max:6,passive:'アタックセレクト'},
-{id:'一閃スピアドン',imageFile:'一閃スピアドン.png',name:'紫電一閃スピアドン',rarity:'エピック',hp:200,atk:30,speed:24,charge:5,skill:'致命のひと突き',effect:'damage',power:300,target:'one',growth:.30,max:6,passive:'ウィルパワー'}
+  {
+    id:'swordman',imageFile:'Swordman.png',
+    name:'剣士',rarity:'ノーマル',
+    hp:150,atk:30,speed:20,charge:2,
+    skill:'斬撃',power:60,effect:'damage',target:'single',
+    growth:.1,maxLevel:10
+  },
+  {
+    id:'archer',imageFile:'Archer.png',
+    name:'アーチャー',rarity:'ノーマル',
+    hp:100,atk:40,speed:25,charge:3,
+    skill:'連射',power:70,effect:'damage',target:'single',
+    growth:.1,maxLevel:10
+  },
+  {
+    id:'axeman',imageFile:'Axeman.png',
+    name:'アックスマン',rarity:'ノーマル',
+    hp:180,atk:45,speed:12,charge:3,
+    skill:'強打',power:100,effect:'damage',target:'single',
+    growth:.1,maxLevel:10
+  },
+  {
+    id:'spearman',imageFile:'Spearman.png',
+    name:'スピアマン',rarity:'ノーマル',
+    hp:120,atk:35,speed:22,charge:2,
+    skill:'突撃',power:65,effect:'damage',target:'single',
+    growth:.1,maxLevel:10
+  },
+  {
+    id:'goblin',imageFile:'Goblin.png',
+    name:'ゴブリン',rarity:'ノーマル',
+    hp:80,atk:20,speed:35,charge:2,
+    skill:'回避',power:1,effect:'evade',target:'self',
+    growth:.1,maxLevel:10
+  },
+  {
+    id:'miner',imageFile:'Miner.png',
+    name:'鉱夫',rarity:'ノーマル',
+    hp:140,atk:25,speed:15,charge:2,
+    skill:'一撃',power:55,effect:'damage',target:'single',
+    growth:.1,maxLevel:10
+  },
+  {
+    id:'zombie',imageFile:'Zombie.png',
+    name:'ゾンビ',rarity:'ノーマル',
+    hp:200,atk:20,speed:8,charge:3,
+    skill:'再生',power:50,effect:'heal',target:'self',
+    growth:.1,maxLevel:10
+  },
+  {
+    id:'farmer',imageFile:'Farmer.png',
+    name:'農夫',rarity:'ノーマル',
+    hp:110,atk:20,speed:18,charge:2,
+    skill:'応急処置',power:40,effect:'heal',target:'ally',
+    growth:.1,maxLevel:10
+  },
+  {
+    id:'魔導士',imageFile:'魔導士.png',
+    name:'魔導士',rarity:'レア',
+    hp:100,atk:50,speed:20,charge:3,
+    skill:'魔法攻撃',power:80,effect:'damage',target:'all',
+    growth:.2,maxLevel:8
+  },
+  {
+    id:'将軍',imageFile:'将軍.png',
+    name:'将軍',rarity:'レア',
+    hp:150,atk:45,speed:20,charge:3,
+    skill:'鼓舞',power:30,effect:'buffAlly',target:'ally',
+    growth:.2,maxLevel:8
+  },
+  {
+    id:'ゴーレム',imageFile:'ゴーレム.png',
+    name:'ゴーレム',rarity:'レア',
+    hp:300,atk:35,speed:8,charge:3,
+    skill:'防御',power:70,effect:'guard',target:'self',
+    growth:.2,maxLevel:8
+  },
+  {
+    id:'ドワーフ',imageFile:'ドワーフ.png',
+    name:'ドワーフ',rarity:'レア',
+    hp:180,atk:50,speed:14,charge:3,
+    skill:'大打撃',power:120,effect:'damage',target:'single',
+    growth:.2,maxLevel:8
+  },
+  {
+    id:'エルフ',imageFile:'エルフ.png',
+    name:'エルフ',rarity:'レア',
+    hp:110,atk:45,speed:28,charge:3,
+    skill:'精霊の矢',power:100,effect:'damage',target:'single',
+    growth:.2,maxLevel:8
+  },
+  {
+    id:'アサシン',imageFile:'アサシン.png',
+    name:'アサシン',rarity:'レア',
+    hp:100,atk:60,speed:35,charge:3,
+    skill:'暗殺',power:140,effect:'damage',target:'single',
+    growth:.2,maxLevel:8
+  },
+  {
+    id:'鍛錬剣士',imageFile:'鍛錬剣士.png',
+    name:'果てしなき鍛錬剣士',rarity:'エピック',
+    hp:200,atk:40,speed:22,charge:2,
+    skill:'乱舞',power:40,effect:'damage',target:'all',
+    growth:.3,maxLevel:6,
+    passive:'アルティメットカウンター'
+  },
+  {
+    id:'狙撃手アーチャー',imageFile:'狙撃手アーチャー.png',
+    name:'戦場の狙撃手アーチャー',rarity:'エピック',
+    hp:160,atk:80,speed:19,charge:4,
+    skill:'正射必中',power:160,effect:'damage',target:'single',
+    growth:.3,maxLevel:6,
+    passive:'アタックセレクト'
+  },
+  {
+    id:'一閃スピアドン',imageFile:'一閃スピアドン.png',
+    name:'紫電一閃スピアドン',rarity:'エピック',
+    hp:180,atk:70,speed:30,charge:3,
+    skill:'一閃',power:180,effect:'damage',target:'single',
+    growth:.3,maxLevel:6
+  }
 ];
 
+const STAGE_ENEMIES={
+  1:[['goblin',.5]],
+  2:[['goblin',.5],['goblin',.5]],
+  3:[['farmer',.6],['goblin',.6]],
+  4:[['swordman',.7],['archer',.7]],
+  5:[['axeman',.8],['spearman',.8]],
+  6:[['miner',.8],['zombie',.8]],
+  7:[['swordman',.9],['archer',.9],['farmer',.9]],
+  8:[['axeman',1],['spearman',1]],
+  9:[['魔導士',1],['goblin',1],['miner',1]],
+  10:[['ゴーレム',1],['swordman',1],['archer',1]],
+  11:[['axeman',1],['farmer',1]],
+  12:[['アサシン',1],['miner',1]],
+  13:[['swordman',1],['ドワーフ',1]],
+  14:[['エルフ',1],['miner',1]],
+  15:[['将軍',1],['spearman',1]],
+  16:[['ゴーレム',1],['goblin',1],['zombie',1]],
+  17:[['アサシン',1],['アサシン',1]],
+  18:[['エルフ',1],['ドワーフ',1]],
+  19:[['魔導士',1],['axeman',1],['archer',1]],
+  20:[
+    ['spearman',1],
+    ['swordman',1],
+    ['将軍',1,{hpMultiplier:10}]
+  ]
+};
+const $=id=>document.getElementById(id);
 const byId=id=>CHARACTERS.find(c=>c.id===id);
+const RING_IDS=Object.keys(RINGS);
 
-function isBossStage(stage){
-  return BOSS_STAGES.includes(Number(stage));
+function esc(value){
+  return String(value??'').replace(/[&<>"']/g,c=>({
+    '&':'&amp;',
+    '<':'&lt;',
+    '>':'&gt;',
+    '"':'&quot;',
+    "'":'&#39;'
+  }[c]));
 }
 
-const STAGE_ENEMIES={
-  1:[{id:'goblin',type:'multiplier',multiplier:.50}],
-  2:[
-    {id:'goblin',type:'multiplier',multiplier:.50},
-    {id:'goblin',type:'multiplier',multiplier:.50}
-  ],
-  3:[
-    {id:'zombie',type:'level',level:1},
-    {id:'goblin',type:'multiplier',multiplier:.50}
-  ],
-  4:[{id:'swordman',type:'level',level:1}],
-  5:[
-    {id:'swordman',type:'multiplier',multiplier:.75},
-    {id:'spearman',type:'multiplier',multiplier:.75}
-  ],
-  6:[
-    {id:'miner',type:'multiplier',multiplier:.75},
-    {id:'miner',type:'multiplier',multiplier:.75}
-  ],
-  7:[{id:'axeman',type:'multiplier',multiplier:1.00}],
-  8:[
-    {id:'farmer',type:'multiplier',multiplier:1.00},
-    {id:'miner',type:'multiplier',multiplier:.75}
-  ],
-  9:[
-    {id:'swordman',type:'multiplier',multiplier:.75},
-    {id:'archer',type:'multiplier',multiplier:.75},
-    {id:'spearman',type:'multiplier',multiplier:.75}
-  ],
-  10:[{id:'ゴーレム',type:'level',level:1}]
-};
-
-/* セーブデータ */
 function fresh(){
   return {
     gems:500,
@@ -708,654 +729,1450 @@ function fresh(){
 }
 
 function loadState(){
-  let raw=null;
-  try{raw=JSON.parse(localStorage.getItem(KEY)||'null')}catch(e){}
+  let saved=null;
+  try{
+    saved=JSON.parse(localStorage.getItem(KEY));
+  }catch(e){}
 
-  const d=fresh();
-  if(!raw||typeof raw!=='object')return d;
+  const base=fresh();
+  if(!saved||typeof saved!=='object')return base;
 
-  const s={...d,...raw};
-  s.gems=Number.isFinite(+s.gems)?Math.max(0,+s.gems):d.gems;
-  s.gold=Number.isFinite(+s.gold)?Math.max(0,+s.gold):d.gold;
+  const s={...base,...saved};
+  s.owned=saved.owned&&typeof saved.owned==='object'
+    ?saved.owned:base.owned;
+  s.party=Array.isArray(saved.party)
+    ?saved.party.filter(id=>s.owned[id]&&byId(id)).slice(0,3)
+    :base.party;
+  s.stageClearCounts={
+    ...base.stageClearCounts,
+    ...(saved.stageClearCounts||{})
+  };
+  s.ringInventory={
+    ...base.ringInventory,
+    ...(saved.ringInventory||{})
+  };
+  s.equipment=saved.equipment&&typeof saved.equipment==='object'
+    ?saved.equipment:{};
 
-  s.stage=Number.isFinite(+s.stage)
-    ?Math.min(IMPLEMENTED_STAGE,Math.max(1,Math.floor(+s.stage)))
-    :1;
+  s.gems=Math.max(0,Number(s.gems)||0);
+  s.gold=Math.max(0,Number(s.gold)||0);
+  s.clearedStage=Math.min(
+    IMPLEMENTED_STAGE,
+    Math.max(0,Number(s.clearedStage)||0)
+  );
+  s.stage=Math.min(
+    IMPLEMENTED_STAGE,
+    Math.max(1,Number(s.stage)||1)
+  );
 
-  const oldCleared=s.stage-1;
-  s.clearedStage=Number.isFinite(+raw.clearedStage)
-    ?Math.min(IMPLEMENTED_STAGE,Math.max(oldCleared,Math.floor(+raw.clearedStage)))
-    :oldCleared;
-
-  s.stage=Math.min(IMPLEMENTED_STAGE,s.clearedStage+1);
-
-  const savedCounts=raw.stageClearCounts&&typeof raw.stageClearCounts==='object'
-    ?raw.stageClearCounts:{};
-
-  s.stageClearCounts={};
-  for(let i=1;i<=IMPLEMENTED_STAGE;i++){
-    const saved=Number(savedCounts[i]);
-    if(Number.isFinite(saved)&&saved>=0){
-      s.stageClearCounts[i]=Math.floor(saved);
-    }else{
-      s.stageClearCounts[i]=i<=s.clearedStage?1:0;
-    }
-  }
-
-  s.owned=raw.owned&&typeof raw.owned==='object'?raw.owned:{};
-
-  for(const [id,v] of Object.entries(s.owned)){
-    if(!byId(id)||!v||typeof v!=='object'){
+  for(const id of Object.keys(s.owned)){
+    const c=byId(id);
+    if(!c){
       delete s.owned[id];
       continue;
     }
-    v.level=Math.min(byId(id).max,Math.max(1,Number(v.level)||1));
-    v.dupes=Math.max(0,Number(v.dupes)||0);
-  }
-
-  for(const id of Object.keys(d.owned)){
-    if(!s.owned[id])s.owned[id]={...d.owned[id]};
-  }
-
-  s.party=Array.isArray(raw.party)
-    ?raw.party.filter((id,i,a)=>byId(id)&&s.owned[id]&&a.indexOf(id)===i).slice(0,3)
-    :d.party.slice();
-
-  if(!s.party.length)s.party=d.party.filter(id=>s.owned[id]);
-
-  const inv=raw.ringInventory&&typeof raw.ringInventory==='object'
-    ?raw.ringInventory:{};
-
-  s.ringInventory={};
-  RING_IDS.forEach(type=>{
-    s.ringInventory[type]=Math.max(0,Math.floor(Number(inv[type])||0));
-  });
-
-  const rawEquipment=raw.equipment&&typeof raw.equipment==='object'
-    ?raw.equipment:{};
-
-  s.equipment={};
-
-  for(const [id,slotCount] of Object.entries(EQUIPMENT_SLOTS)){
-    if(!s.owned[id]||slotCount<=0)continue;
-
-    const list=Array.isArray(rawEquipment[id])?rawEquipment[id]:[];
-    s.equipment[id]=list
-      .filter(type=>RING_IDS.includes(type))
-      .slice(0,slotCount);
-  }
-
-  const used={power:0,heart:0,skill:0};
-
-  for(const id of Object.keys(s.equipment)){
-    s.equipment[id]=s.equipment[id].filter(type=>{
-      if(used[type]>=s.ringInventory[type])return false;
-      used[type]++;
-      return true;
-    });
+    const entry=s.owned[id];
+    if(typeof entry!=='object'||!entry){
+      s.owned[id]={level:1,dupes:0};
+    }else{
+      entry.level=Math.min(
+        c.maxLevel,
+        Math.max(1,Number(entry.level)||1)
+      );
+      entry.dupes=Math.max(0,Number(entry.dupes)||0);
+    }
   }
 
   return s;
 }
 
 let state=loadState();
-let battle=null;
-let busy=false;
-let enemyTimer=null;
-
-let summonBusy=false;
-let summonTimer=null;
-let summonResults=[];
-let summonIndex=0;
-
-/* 指輪選択画面の対象 */
-let equipmentModalTarget=null;
+let selectedStage=Math.min(
+  IMPLEMENTED_STAGE,
+  state.clearedStage+1
+);
 let characterRingTarget=null;
-
-let selectedStage=Math.min(IMPLEMENTED_STAGE,state.clearedStage+1);
+let equipmentModalTarget=null;
+let battle=null;
+let summonQueue=[];
+let summonIndex=0;
+let summonTimer=null;
+let summonSkipping=false;
 
 function save(){
   try{
     localStorage.setItem(KEY,JSON.stringify(state));
   }catch(e){
-    showError('セーブを保存できませんでした。ブラウザの保存容量・設定を確認してください。');
+    console.warn('保存できませんでした',e);
   }
-  renderAll();
 }
 
-function showError(msg){
-  const el=document.getElementById('errorBox');
-  if(el){el.textContent=msg;el.style.display='block'}
+function showError(message){
+  const box=$('errorBox');
+  box.textContent=message;
+  box.style.display='block';
+  setTimeout(()=>{
+    if(box.textContent===message){
+      box.style.display='none';
+    }
+  },5000);
 }
 
-window.addEventListener('error',e=>{
-  showError('ゲーム内でエラーが発生しました: '+e.message);
-});
-
-function esc(s){
-  return String(s).replace(/[&<>"']/g,c=>({
-    '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
-  }[c]));
+function showPage(page){
+  document.querySelectorAll('.page').forEach(el=>{
+    el.classList.toggle('active',el.id===page);
+  });
+  window.scrollTo(0,0);
+  if(page!=='battleFight')renderAll();
 }
 
 function imagePath(id){
   const c=byId(id);
-  const file=c?.imageFile||id+'.png';
-  return './images/'+encodeURIComponent(file);
-}
-
-function unitImagePath(unit){
-  const c=byId(unit.characterId||unit.imageId);
-  const file=unit.imageFile||c?.imageFile||(unit.imageId||unit.characterId)+'.png';
-  return './images/'+encodeURIComponent(file);
+  return c?'images/'+encodeURIComponent(c.imageFile):'';
 }
 
 function portrait(id){
   const c=byId(id);
-  return `
-    <div class="portrait">
-      <img src="${imagePath(id)}" alt="${esc(c?.name||id)}"
-        onerror="this.style.display='none'">
-    </div>
-  `;
+  if(!c)return '<div class="portrait">？</div>';
+  return `<div class="portrait">
+    <img src="${imagePath(id)}"
+      alt="${esc(c.name)}"
+      onerror="this.style.display='none';this.parentElement.insertAdjacentText('beforeend','⚔️')">
+  </div>`;
 }
 
-function stats(c,o){
-  const lv=o?.level||1;
-  const mul=Math.pow(1+c.growth,lv-1);
-  return {
-    hp:Math.round(c.hp*mul),
-    atk:Math.round(c.atk*mul),
-    power:Math.round(c.power*mul),
-    speed:c.speed
-  };
-}
-
-/* 装備システム */
-function getEquipped(id,type){
-  return (state.equipment[id]||[]).filter(x=>x===type).length;
-}
-
-function getRingMultiplier(id,type){
-  return 1+getEquipped(id,type)*0.1;
-}
-
-function getRingInventoryCount(type){
-  return Math.max(0,Number(state.ringInventory[type])||0);
-}
-
-function getRingEquippedCount(type){
-  return Object.values(state.equipment).reduce((sum,list)=>{
-    return sum+list.filter(x=>x===type).length;
-  },0);
-}
-
-function getRingAvailable(type){
-  return Math.max(0,getRingInventoryCount(type)-getRingEquippedCount(type));
+function getLevelMultiplier(id){
+  const c=byId(id);
+  if(!c)return 1;
+  const level=state.owned[id]?.level||1;
+  return 1+(level-1)*c.growth;
 }
 
 function getSlotCount(id){
   return EQUIPMENT_SLOTS[id]||0;
 }
 
+function getEquipped(id,type){
+  const equipment=state.equipment[id]||[];
+  return equipment.filter(t=>t===type).length;
+}
+
+function getRingAvailable(type){
+  const total=Number(state.ringInventory[type])||0;
+  let used=0;
+  for(const equipment of Object.values(state.equipment)){
+    if(Array.isArray(equipment)){
+      used+=equipment.filter(t=>t===type).length;
+    }
+  }
+  return Math.max(0,total-used);
+}
+
 function getCharacterEquipmentStats(id){
   const c=byId(id);
-  const o=state.owned[id];
-  if(!c||!o)return null;
-
-  const base=stats(c,o);
+  if(!c)return null;
+  const multiplier=getLevelMultiplier(id);
   return {
-    hp:Math.round(base.hp*getRingMultiplier(id,'heart')),
-    atk:Math.round(base.atk*getRingMultiplier(id,'power')),
-    speed:base.speed,
-    power:base.power
+    hp:Math.floor(
+      c.hp*multiplier*(1+.1*getEquipped(id,'heart'))
+    ),
+    atk:Math.floor(
+      c.atk*multiplier*(1+.1*getEquipped(id,'power'))
+    ),
+    speed:c.speed,
+    skillMultiplier:1+.1*getEquipped(id,'skill')
   };
 }
 
-function equipRing(id,type){
-  if(!state.owned[id]){
-    showError('所持していないキャラクターには装備できません。');
-    return;
-  }
-
-  if(!RINGS[type]){
-    showError('指定された指輪は存在しません。');
-    return;
-  }
-
-  if(getRingAvailable(type)<=0){
-    showError('その指輪は所持していません。');
-    return;
-  }
-
-  const maxSlots=getSlotCount(id);
-  if(maxSlots<=0){
-    showError('このキャラクターには装備枠がありません。');
-    return;
-  }
-
-  if(!state.equipment[id])state.equipment[id]=[];
-
-  if(state.equipment[id].length>=maxSlots){
-    showError('装備枠がいっぱいです。');
-    return;
-  }
-
-  state.equipment[id].push(type);
-  closeEquipmentModal();
-  save();
+function rarityClass(rarity){
+  if(rarity==='エピック')return 'epic';
+  if(rarity==='レア')return 'rare';
+  return 'normal';
 }
 
-function unequipRing(id,index){
-  const list=state.equipment[id];
-  if(!Array.isArray(list)||index<0||index>=list.length)return;
+function cardHTML(id,encyclopedia=false){
+  const c=byId(id);
+  if(!c||!state.owned[id])return '';
 
-  list.splice(index,1);
-  save();
+  const data=state.owned[id];
+  const st=getCharacterEquipmentStats(id);
+  const inParty=state.party.includes(id);
+  const slots=getSlotCount(id);
+  const equipped=(state.equipment[id]||[])
+    .filter(Boolean)
+    .map(type=>RINGS[type]?.icon||'')
+    .join('');
+
+  return `<article class="card ${inParty?'selected':''}">
+    ${portrait(id)}
+    <div class="name ${rarityClass(c.rarity)}">
+      ${esc(c.name)}
+    </div>
+    <div class="small">
+      ${esc(c.rarity)} / Lv.${data.level}/${c.maxLevel}
+    </div>
+    <div class="stats">
+      HP ${st.hp}<br>
+      攻撃力 ${st.atk}<br>
+      素早さ ${st.speed}<br>
+      スキル ${esc(c.skill)}<br>
+      溜め ${c.charge}<br>
+      成長率 ${Math.round(c.growth*100)}%
+    </div>
+    <div class="small">
+      装備 ${equipped||'なし'}（${slots}枠）
+    </div>
+    <button class="wide"
+      data-action="toggleParty"
+      data-id="${esc(id)}">
+      ${inParty?'編成から外す':'編成する'}
+    </button>
+    ${encyclopedia?`
+      <button class="plus"
+        data-action="openCharacterRingModal"
+        data-id="${esc(id)}">＋</button>
+    `:''}
+  </article>`;
 }
 
-/* キャラクターごとの指輪一覧を開く */
-function openCharacterRingList(id){
+function toggleParty(id){
   if(!state.owned[id])return;
 
+  if(state.party.includes(id)){
+    state.party=state.party.filter(x=>x!==id);
+  }else{
+    if(state.party.length>=3){
+      showError('編成できるのは最大3体です。');
+      return;
+    }
+    state.party.push(id);
+  }
+
+  save();
+  renderAll();
+}
+
+function openCharacterRingModal(id){
+  if(!state.owned[id])return;
   characterRingTarget=id;
   renderCharacterRingList();
+  $('characterRingModal').classList.add('active');
+}
 
-  document.getElementById('characterRingModal').classList.add('active');
+function closeCharacterRingModal(){
+  $('characterRingModal').classList.remove('active');
+  characterRingTarget=null;
 }
 
 function renderCharacterRingList(){
   const id=characterRingTarget;
-  const content=document.getElementById('characterRingContent');
-  if(!content||!id||!state.owned[id])return;
+  if(!id)return;
 
   const c=byId(id);
   const slots=getSlotCount(id);
-  const equipped=state.equipment[id]||[];
+  const equipment=state.equipment[id]||[];
   const st=getCharacterEquipmentStats(id);
 
+  const stock=RING_IDS.map(type=>`
+    <div>
+      ${RINGS[type].icon}<br>
+      ${RINGS[type].name}<br>
+      <b>${getRingAvailable(type)}個</b>
+    </div>
+  `).join('');
+
   let slotHTML='';
-
-  if(slots===0){
-    slotHTML=`
-      <div class="equipment-empty-message">
-        このキャラクターには指輪を装備できません。
-      </div>
-    `;
-  }else{
-    for(let i=0;i<slots;i++){
-      const type=equipped[i];
-
-      if(type){
-        const ring=RINGS[type];
-        slotHTML+=`
-          <button class="character-ring-slot"
-            data-action="openRingList"
-            data-id="${esc(id)}"
-            data-index="${i}">
-            <div class="slot-title">装備枠 ${i+1}</div>
-            <div class="equipped-name ring-${type}">${ring.icon} ${ring.name}</div>
-            <div class="small">${ring.description}</div>
-            <div class="slot-hint">タップして変更・解除</div>
-          </button>
-        `;
-      }else{
-        slotHTML+=`
-          <button class="character-ring-slot empty"
-            data-action="openRingList"
-            data-id="${esc(id)}"
-            data-index="${i}">
-            <div class="slot-title">装備枠 ${i+1}</div>
-            <div style="font-size:19px;margin:1px 0">＋</div>
-            <div class="small">空きスロット</div>
-          </button>
-        `;
-      }
-    }
+  for(let i=0;i<slots;i++){
+    const type=equipment[i];
+    slotHTML+=`
+      <button class="slot ${type?'':'empty'}"
+        data-action="openRingList"
+        data-id="${esc(id)}"
+        data-index="${i}">
+        <div class="small">装備枠 ${i+1}</div>
+        ${type?`
+          ${RINGS[type].icon}<br>
+          ${RINGS[type].name}
+        `:'<div style="font-size:23px">＋</div>'}
+      </button>`;
   }
 
-  const inventoryHTML=RING_IDS.map(type=>{
-    const ring=RINGS[type];
-    return `
-      <div class="character-ring-stock-item">
-        <div class="ring-icon">${ring.icon}</div>
-        <div class="ring-${type}">${ring.name}</div>
-        <b>${getRingAvailable(type)}個</b>
-        <div class="small">未装備</div>
-      </div>
-    `;
-  }).join('');
+  if(!slots){
+    slotHTML='<p>このキャラクターは装備枠がありません。</p>';
+  }
 
-  const powerCount=getEquipped(id,'power');
-  const heartCount=getEquipped(id,'heart');
-  const skillCount=getEquipped(id,'skill');
-
-  content.innerHTML=`
-    <div class="character-ring-profile">
+  $('characterRingContent').innerHTML=`
+    <div class="row">
       ${portrait(id)}
       <div>
-        <div class="name">${esc(c.name)}</div>
-        <div class="small">${esc(c.rarity)} / Lv.${state.owned[id].level}</div>
-        <div class="small">装備枠：${slots}個</div>
+        <b>${esc(c.name)}</b>
+        <div class="small">装備枠 ${slots}</div>
       </div>
     </div>
-
-    <div class="character-ring-inventory">
-      <div class="character-ring-inventory-title">指輪の未装備所持数</div>
-      <div class="character-ring-stock">${inventoryHTML}</div>
-    </div>
-
-    <div class="character-ring-slots-title">このキャラクターの装備枠</div>
-    <div class="character-ring-slots">${slotHTML}</div>
-
-    ${st?`
-      <div class="character-ring-bonus">
-        <b>現在の装備効果</b><br>
-        HP：${st.hp}（ハートの指輪 +${heartCount*10}%）<br>
-        攻撃力：${st.atk}（チカラの指輪 +${powerCount*10}%）<br>
-        スキル効果：+${skillCount*10}%
-      </div>
-    `:''}
-  `;
+    <h4>所持している未装備の指輪</h4>
+    <div class="stock">${stock}</div>
+    <h4>装備スロット</h4>
+    <div class="slots">${slotHTML}</div>
+    <p class="small">
+      HP ${st.hp} /
+      攻撃力 ${st.atk}<br>
+      スキル効果
+      +${getEquipped(id,'skill')*10}%
+    </p>`;
 }
 
-function closeCharacterRingModal(){
-  characterRingTarget=null;
-  document.getElementById('characterRingModal').classList.remove('active');
-}
-
-/* 指輪の選択 */
-function openEquipmentModal(id,index){
+function openRingList(id,index){
   if(!state.owned[id])return;
+  if(index<0||index>=getSlotCount(id))return;
 
   equipmentModalTarget={id,index};
-
-  const c=byId(id);
-  document.getElementById('equipmentModalCharacter').textContent=
-    `${c?.name||id} / 装備枠 ${index+1}`;
+  $('equipmentModalCharacter').textContent=
+    byId(id).name+' / 装備枠 '+(index+1);
 
   renderEquipmentModal();
-
-  document.getElementById('equipmentModal').classList.add('active');
-}
-
-function renderEquipmentModal(){
-  const choices=document.getElementById('equipmentModalChoices');
-  if(!choices||!equipmentModalTarget)return;
-
-  const {id,index}=equipmentModalTarget;
-  const equipped=state.equipment[id]||[];
-
-  if(equipped[index]){
-    const type=equipped[index];
-    const ring=RINGS[type];
-
-    choices.innerHTML=`
-      <div class="equipment-choice" style="background:#111b30">
-        <div class="equipment-choice-icon">${ring.icon}</div>
-        <div class="equipment-choice-info">
-          <div class="equipment-choice-name ring-${type}">${ring.name}</div>
-          <div class="equipment-choice-description">${ring.description}</div>
-        </div>
-      </div>
-      <button class="ring-button remove" data-action="unequipRing"
-        data-id="${esc(id)}" data-index="${index}">
-        この指輪を取り外す
-      </button>
-    `;
-    return;
-  }
-
-  const availableTypes=RING_IDS.filter(type=>getRingAvailable(type)>0);
-
-  if(!availableTypes.length){
-    choices.innerHTML=`
-      <div class="equipment-empty-message">
-        装備できる指輪を所持していません。<br>
-        現在、指輪の所持数はすべて0個です。<br><br>
-        指輪を入手すると、ここから装備できるようになります。
-      </div>
-    `;
-    return;
-  }
-
-  choices.innerHTML=RING_IDS.map(type=>{
-    const ring=RINGS[type];
-    const available=getRingAvailable(type);
-
-    return `
-      <button class="equipment-choice ring-button ${ring.className}"
-        data-action="equipRing"
-        data-id="${esc(id)}"
-        data-type="${type}"
-        ${available<=0?'disabled':''}>
-        <span class="equipment-choice-icon">${ring.icon}</span>
-        <span class="equipment-choice-info">
-          <span class="equipment-choice-name">${ring.name}</span>
-          <span class="equipment-choice-description">${ring.description}</span>
-        </span>
-        <span class="equipment-choice-count">${available}個</span>
-      </button>
-    `;
-  }).join('');
+  $('equipmentModal').classList.add('active');
 }
 
 function closeEquipmentModal(){
+  $('equipmentModal').classList.remove('active');
   equipmentModalTarget=null;
-  document.getElementById('equipmentModal').classList.remove('active');
+  if(characterRingTarget)renderCharacterRingList();
 }
 
-/* 装備変更後、開いている指輪一覧も更新 */
-function refreshCharacterRingList(){
-  if(characterRingTarget&&document.getElementById('characterRingModal').classList.contains('active')){
-    renderCharacterRingList();
+function renderEquipmentModal(){
+  if(!equipmentModalTarget)return;
+
+  const {id,index}=equipmentModalTarget;
+  const equipped=state.equipment[id]?.[index];
+
+  let html='';
+
+  if(equipped){
+    html+=`<p>
+      現在の装備：
+      ${RINGS[equipped].icon}
+      ${RINGS[equipped].name}
+    </p>
+    <button class="wide"
+      data-action="unequipRing"
+      data-id="${esc(id)}"
+      data-index="${index}">
+      指輪を取り外す
+    </button>`;
+  }else{
+    html=RING_IDS.map(type=>`
+      <button class="choice"
+        data-action="equipRing"
+        data-id="${esc(id)}"
+        data-index="${index}"
+        data-type="${type}"
+        ${getRingAvailable(type)>0?'':'disabled'}>
+        <span>
+          ${RINGS[type].icon}
+          ${RINGS[type].name}<br>
+          <span class="small">
+            ${RINGS[type].description}
+          </span>
+        </span>
+        <b>${getRingAvailable(type)}個</b>
+      </button>
+    `).join('');
   }
+
+  $('equipmentModalChoices').innerHTML=html;
 }
 
-function rarityClass(r){
-  return r==='エピック'?'epic':r==='レア'?'rare':'normal';
+function equipRing(id,index,type){
+  if(!RINGS[type])return;
+  if(getRingAvailable(type)<=0)return;
+  if(index<0||index>=getSlotCount(id))return;
+
+  if(!state.equipment[id])state.equipment[id]=[];
+  if(state.equipment[id][index])return;
+
+  state.equipment[id][index]=type;
+  save();
+  renderEquipmentModal();
+  renderCharacterRingList();
+  renderAll();
 }
 
-/* キャラクターカード */
-function cardHTML(id,selectable=false){
-  const c=byId(id);
-  const o=state.owned[id];
-  if(!c)return '';
-
-  const st=stats(c,o);
-  const selected=state.party.includes(id);
-
-  return `
-    <article class="card ${selectable&&selected?'selected':''}">
-      ${portrait(id)}
-      <div class="name">${esc(c.name)}</div>
-      <div class="small ${rarityClass(c.rarity)}">${c.rarity} / Lv.${o?.level||1}</div>
-      <div class="stats">
-        HP ${st.hp}　攻撃 ${st.atk}<br>
-        素早さ ${st.speed}<br>
-        スキル：${esc(c.skill)}
-        ${c.passive?'<br>特性：'+esc(c.passive):''}
-      </div>
-      ${selectable?`
-        <button class="wide" data-action="toggleParty" data-id="${esc(id)}">
-          ${selected?'編成から外す':'編成に加える'}
-        </button>
-        <button class="character-ring-plus"
-          data-action="openCharacterRingList"
-          data-id="${esc(id)}"
-          aria-label="${esc(c.name)}の指輪一覧"
-          title="指輪一覧">＋</button>
-      `:''}
-    </article>
-  `;
+function unequipRing(id,index){
+  if(!state.equipment[id])return;
+  state.equipment[id][index]=null;
+  save();
+  renderEquipmentModal();
+  renderCharacterRingList();
+  renderAll();
 }
 
 function getFormationText(stage){
-  const formation=STAGE_ENEMIES[stage];
-  if(!formation)return '未実装';
+  const enemies=STAGE_ENEMIES[stage]||[];
 
-  return formation.map(enemy=>{
-    const c=byId(enemy.id);
-    if(!c)return '不明な敵';
+  return enemies.map(([id,multiplier,extra])=>{
+    const c=byId(id);
+    let text=(c?.name||id)+' '+Math.round(multiplier*100)+'%';
 
-    if(stage===10&&enemy.id==='ゴーレム'){
-      return `${c.name} ×1（HP 700 / 素早さ12 / 溜め3）`;
+    if(extra?.hpMultiplier){
+      text+='（HP '+Math.round(
+        multiplier*extra.hpMultiplier*100
+      )+'%）';
     }
 
-    if(enemy.type==='level')return `${c.name} Lv.${enemy.level||1}`;
-    return `${c.name} ${Math.round(enemy.multiplier*100)}%`;
+    return text;
   }).join(' / ');
 }
 
 function renderStageMap(){
-  const map=document.getElementById('stageMap');
-  if(!map)return;
+  const cleared=state.clearedStage;
+  const unlocked=Math.min(IMPLEMENTED_STAGE,cleared+1);
 
-  const unlocked=Math.min(IMPLEMENTED_STAGE,state.clearedStage+1);
-  const cleared=Math.min(IMPLEMENTED_STAGE,state.clearedStage);
   let nodes='';
 
-  for(let i=1;i<=MAX_STAGE;i++){
-    const boss=isBossStage(i);
-    const implemented=i<=IMPLEMENTED_STAGE;
-    const isCleared=i<=cleared;
-    const isUnlocked=implemented&&i<=unlocked;
-    const isCurrent=implemented&&i===unlocked;
-    const isSelected=i===selectedStage;
-
-    let classes='stage-node';
-    if(boss)classes+=' boss';
-    if(isCleared)classes+=' completed';
-    if(isCurrent)classes+=' current';
-    if(isSelected)classes+=' selected';
-    if(!implemented)classes+=' unimplemented';
-    else if(!isUnlocked)classes+=' locked';
-
-    let status='🔒 未解放';
-    if(!implemented)status='未実装';
-    else if(isCleared)status='✓ クリア済み';
-    else if(isCurrent)status='挑戦可能';
+  for(let i=1;i<=IMPLEMENTED_STAGE;i++){
+    const boss=BOSS_STAGES.includes(i);
+    const locked=i>unlocked;
 
     nodes+=`
-      <button class="${classes}" data-action="selectStage" data-stage="${i}"
-        ${!isUnlocked?'disabled':''} aria-label="ステージ${i}${boss?' ボス':''}">
-        <span class="stage-number">${boss?'👑 ':''}${i}</span>
-        <span class="stage-label">${boss?'BOSS STAGE':'STAGE'}</span>
-        <span class="stage-status">${status}</span>
-      </button>
-    `;
+      <button
+        class="stage-node
+          ${boss?'boss':''}
+          ${i<=cleared?'completed':''}
+          ${i===unlocked?'current':''}
+          ${i===selectedStage?'selected':''}
+          ${locked?'locked':''}"
+        data-action="selectStage"
+        data-stage="${i}"
+        ${locked?'disabled':''}>
+        <span class="num">${boss?'👑 ':''}${i}</span>
+        <span class="small">
+          ${boss?'BOSS STAGE':'STAGE'}
+        </span>
+        <span class="small">
+          ${locked?'🔒 未解放':
+            i<=cleared?'✓ クリア済み':'挑戦可能'}
+        </span>
+      </button>`;
   }
 
-  const bossText=isBossStage(selectedStage)?' <strong>👑 ボスステージ</strong>':'';
-  const replayText=selectedStage<=cleared?'クリア済みステージへの再挑戦':'新しいステージへの挑戦';
-  const formationText=getFormationText(selectedStage);
+  const count=state.stageClearCounts[selectedStage]||0;
+  const gold=Math.floor(
+    STAGE_GOLD[selectedStage]*Math.pow(.8,count)
+  );
 
-  map.innerHTML=`
+  $('stageMap').innerHTML=`
     <div class="stage-map">
-      <div class="map-heading">
-        <h3>🌿 緑風の草原</h3>
-        <div class="map-progress">クリア ${cleared} / ${IMPLEMENTED_STAGE}</div>
-      </div>
+      <h3>🌿 緑風の草原</h3>
+      <p>クリア済み ${cleared} / 20</p>
       <div class="map-grid">${nodes}</div>
-      <div class="map-legend">
-        <span><i class="legend-dot legend-normal"></i>通常</span>
-        <span><i class="legend-dot legend-clear"></i>クリア済み</span>
-        <span><i class="legend-dot legend-boss"></i>ボス</span>
-        <span><i class="legend-dot legend-locked"></i>未解放・未実装</span>
+      <div class="stage-info">
+        <b>ステージ ${selectedStage}</b>
+        ${BOSS_STAGES.includes(selectedStage)?'👑 BOSS':''}
+        <br>
+        敵編成：${esc(getFormationText(selectedStage))}
+        <br>
+        次回の金貨報酬：🪙 ${gold}
+        ${selectedStage===20&&count===0?
+          '<br>初回確定報酬：🟠 チカラの指輪 ×1':''}
       </div>
-      <div class="selected-stage-info">
-        選択中：<strong>ステージ ${selectedStage}</strong>${bossText}<br>
-        <span class="small">${replayText}</span>
-        <div class="enemy-formation-info">敵編成：${esc(formationText)}</div>
-        <div class="enemy-formation-info">ステージ11～20は今後実装予定です。</div>
-      </div>
-      <button class="map-start-button" data-action="startBattle" ${!state.party.length?'disabled':''}>
-        ステージ ${selectedStage} に挑戦する
+      <button class="map-start"
+        data-action="startBattle"
+        ${state.party.length?'':'disabled'}>
+        ステージ ${selectedStage} に挑戦
       </button>
-    </div>
-  `;
+    </div>`;
 }
 
 function renderAll(){
-  document.getElementById('gems').textContent=state.gems;
-  document.getElementById('gold').textContent=state.gold;
-  document.getElementById('stage').textContent=state.stage;
+  $('gems').textContent=state.gems;
+  $('gold').textContent=state.gold;
+  $('stage').textContent=Math.min(
+    IMPLEMENTED_STAGE,state.clearedStage+1
+  );
 
-  document.getElementById('homeSummary').innerHTML=`
-    所持キャラクター：${Object.keys(state.owned).length}体<br>
-    編成中：${state.party.map(id=>esc(byId(id)?.name||id)).join(' / ')||'なし'}<br>
-    クリア済み：${state.clearedStage} / ${IMPLEMENTED_STAGE}<br>
-    次の冒険：${state.clearedStage>=IMPLEMENTED_STAGE?'草原ステージはすべてクリア！':'ステージ '+Math.min(IMPLEMENTED_STAGE,state.clearedStage+1)}
+  $('homeSummary').innerHTML=`
+    所持キャラクター：
+    ${Object.keys(state.owned).length}体<br>
+    編成中：
+    ${state.party.map(id=>esc(byId(id)?.name||id)).join(' / ')||'なし'}
+    <br>
+    草原クリア状況：
+    ${state.clearedStage} / 20
   `;
 
-  document.getElementById('gachaOwned').textContent=
-    `${Object.keys(state.owned).length} / ${CHARACTERS.length}体を所持`;
+  $('gachaOwned').textContent=
+    Object.keys(state.owned).length+
+    ' / '+CHARACTERS.length+'体を所持';
 
-  document.getElementById('partyView').innerHTML=
-    state.party.map(id=>cardHTML(id)).join('')||'<p class="muted">編成がありません。</p>';
+  $('partyView').innerHTML=
+    state.party.map(id=>cardHTML(id)).join('')||
+    '<p>キャラクターを編成してください。</p>';
 
-  document.getElementById('characterList').innerHTML=
-    CHARACTERS.map(c=>
-      state.owned[c.id]?cardHTML(c.id,true):`
-        <article class="card">
-          <div class="portrait">🔒</div>
-          <div class="name">？？？</div>
-          <div class="small">${c.rarity}</div>
-          <div class="stats">未獲得</div>
-        </article>
-      `
-    ).join('');
+  $('characterList').innerHTML=CHARACTERS.map(c=>{
+    if(state.owned[c.id])return cardHTML(c.id,true);
+
+    return `<article class="card">
+      <div class="portrait">🔒</div>
+      <div class="name">？？？</div>
+      <div class="small">${esc(c.rarity)}</div>
+      <div class="stats">未獲得</div>
+    </article>`;
+  }).join('');
 
   renderStageMap();
 
-  const unlocked=Math.min(IMPLEMENTED_STAGE,state.clearedStage+1);
-  const boss=isBossStage(selectedStage);
-
-  document.getElementById('battleIntro').innerHTML=`
-    選択中のステージ：<b>${selectedStage}</b>
-    ${boss?'<span style="color:#ffaaaa;font-weight:900"> 👑 BOSS STAGE</span>':''}
-    <br>
-    <span class="muted">
-      解放済み：ステージ1～${unlocked}<br>
-      クリア済み：${state.clearedStage}ステージ<br>
-      実装済み：ステージ1～${IMPLEMENTED_STAGE}
-    </span><br>
-    <span class="muted">
-      編成：${state.party.map(id=>esc(byId(id)?.name||id)).join(' / ')||'なし'}
-    </span>
+  $('battleIntro').innerHTML=`
+    選択中：ステージ ${selectedStage}<br>
+    敵編成：${esc(getFormationText(selectedStage))}<br>
+    味方編成：
+    ${state.party.map(id=>esc(byId(id).name)).join(' / ')||'なし'}
   `;
 
-  const startButton=document.getElementById('startBattleButton');
-  if(startButton){
-    startButton.textContent=`ステージ ${selectedStage} に挑戦`;
-    startButton.disabled=!state.party.length;
+  $('startBattleButton').textContent=
+    'ステージ '+selectedStage+' に挑戦';
+  $('startBattleButton').disabled=!state.party.length;
+}
+
+function addCharacter(id){
+  const c=byId(id);
+  if(!c)return '';
+
+  if(!state.owned[id]){
+    state.owned[id]={level:1,dupes:0};
+    return '新しい仲間を獲得！';
   }
 
-  refreshCharacterRingList();
+  const entry=state.owned[id];
+  entry.dupes=(entry.dupes||0)+1;
+
+  if(entry.level<c.maxLevel){
+    entry.level++;
+    return '重複獲得！ Lv.'+entry.level+' に成長！';
+  }
+
+  return '重複獲得！（最大レベル）';
 }
 
-/* ページ切り替え */
-function showPage(name){
-  if(summonBusy)return;
+function drawCharacter(){
+  const r=Math.random();
+  const rarity=r<.7?'ノーマル':
+    r<.95?'レア':'エピック';
 
-  document.querySelectorAll('.page').forEach(p=>{
-    p.classList.toggle('active',p.id===name);
+  const pool=CHARACTERS.filter(c=>c.rarity===rarity);
+  return pool[Math.floor(Math.random()*pool.length)];
+}
+
+function summon(count){
+  const cost=count===10?900:100;
+
+  if(state.gems<cost){
+    showError('ジェムが足りません。');
+    return;
+  }
+
+  state.gems-=cost;
+  summonQueue=[];
+
+  for(let i=0;i<count;i++){
+    const c=drawCharacter();
+    const message=addCharacter(c.id);
+    summonQueue.push({character:c,message});
+  }
+
+  save();
+  renderAll();
+
+  summonIndex=0;
+  summonSkipping=false;
+
+  $('summonOverlay').classList.add('active');
+  showSummonResult();
+}
+
+function showSummonResult(){
+  if(summonTimer){
+    clearTimeout(summonTimer);
+    summonTimer=null;
+  }
+
+  const item=summonQueue[summonIndex];
+  if(!item){
+    finishSummon();
+    return;
+  }
+
+  const c=item.character;
+  const rarity=c.rarity;
+
+  $('summonVisual').innerHTML=`
+    <div class="magic">
+      <img src="${imagePath(c.id)}"
+        alt="${esc(c.name)}">
+    </div>
+    <div class="summon-name">${esc(c.name)}</div>
+    <p class="${rarityClass(rarity)}">
+      ${esc(rarity)}
+    </p>
+    <p>${esc(item.message)}</p>
+  `;
+
+  $('summonProgress').textContent=
+    (summonIndex+1)+' / '+summonQueue.length;
+
+  $('summonControls').innerHTML=`
+    <button data-action="nextSummon">
+      ${summonIndex===summonQueue.length-1?
+        '結果を確認':'次の召喚結果へ'}
+    </button>
+    <button data-action="skipSummon">
+      スキップ
+    </button>
+  `;
+}
+
+function nextSummon(){
+  summonIndex++;
+  showSummonResult();
+}
+
+function skipSummon(){
+  finishSummon();
+}
+
+function finishSummon(){
+  const html=summonQueue.map(item=>`
+    <div class="row" style="margin:8px 0">
+      <div style="width:80px">
+        ${portrait(item.character.id)}
+      </div>
+      <div>
+        <b class="${rarityClass(item.character.rarity)}">
+          ${esc(item.character.name)}
+        </b><br>
+        <span class="small">${esc(item.message)}</span>
+      </div>
+    </div>
+  `).join('');
+
+  $('gachaResult').innerHTML=html;
+
+  $('summonOverlay').classList.remove('active');
+  summonQueue=[];
+  renderAll();
+}
+/* =========================
+   戦闘システム
+========================= */
+
+const sleep=ms=>new Promise(resolve=>setTimeout(resolve,ms));
+
+function randomAlive(units){
+  const alive=units.filter(u=>u.hp>0);
+  return alive.length
+    ?alive[Math.floor(Math.random()*alive.length)]
+    :null;
+}
+
+function aliveUnits(units){
+  return units.filter(u=>u.hp>0);
+}
+
+function makeUnit(id,side,options={}){
+  const c=byId(id);
+  if(!c)return null;
+
+  let hp,atk,speed,skillMultiplier=1;
+
+  if(side==='ally'){
+    const st=getCharacterEquipmentStats(id);
+    hp=st.hp;
+    atk=st.atk;
+    speed=st.speed;
+    skillMultiplier=st.skillMultiplier;
+  }else{
+    const multiplier=options.multiplier??1;
+    hp=Math.max(1,Math.floor(
+      c.hp*multiplier*(options.hpMultiplier||1)
+    ));
+    atk=Math.max(1,Math.floor(c.atk*multiplier));
+    speed=Math.max(1,Math.floor(c.speed*multiplier));
+  }
+
+  if(options.hp)hp=options.hp;
+  if(options.speed)speed=options.speed;
+
+  return {
+    uid:Math.random().toString(36).slice(2),
+    id,
+    side,
+    name:c.name,
+    rarity:c.rarity,
+    maxHp:hp,
+    hp,
+    atk,
+    speed,
+    charge:options.charge??c.charge,
+    skillCount:0,
+    gauge:0,
+    skillMultiplier,
+    buff:1,
+    buffTurns:0,
+    permanentBuff:1,
+    guard:0,
+    evade:0,
+    poison:0,
+    acting:false
+  };
+}
+
+function makeEnemy(setting){
+  const [id,multiplier,extra={}]=setting;
+  return makeUnit(id,'enemy',{
+    multiplier,
+    ...extra
+  });
+}
+
+function startBattle(){
+  if(battle&&battle.running)return;
+
+  if(selectedStage>state.clearedStage+1){
+    showError('このステージはまだ解放されていません。');
+    return;
+  }
+
+  if(!state.party.length){
+    showError('キャラクターを編成してください。');
+    return;
+  }
+
+  const allies=state.party
+    .map(id=>makeUnit(id,'ally'))
+    .filter(Boolean);
+
+  const enemies=(STAGE_ENEMIES[selectedStage]||[])
+    .map(makeEnemy)
+    .filter(Boolean);
+
+  if(!allies.length||!enemies.length){
+    showError('戦闘を開始できませんでした。');
+    return;
+  }
+
+  battle={
+    stage:selectedStage,
+    allies,
+    enemies,
+    running:true,
+    busy:false,
+    current:null,
+    awaitingAction:false,
+    result:null,
+    token:Date.now()+Math.random(),
+    message:'戦闘開始！'
+  };
+
+  showPage('battleFight');
+  renderBattle();
+  advanceTurn();
+}
+
+function unitCard(u){
+  const c=byId(u.id);
+  const hpRate=Math.max(0,100*u.hp/u.maxHp);
+  const gaugeRate=Math.max(0,Math.min(100,u.gauge));
+
+  return `<div class="unit
+    ${u.side==='enemy'?'enemy':''}
+    ${u.hp<=0?'dead':''}
+    ${u.acting?'active':''}">
+    ${u.acting?`
+      <div style="color:#ffe17c;font-weight:900">
+        ▶ 行動中
+      </div>`:''}
+    ${portrait(u.id)}
+    <div class="name ${rarityClass(c.rarity)}">
+      ${esc(u.name)}
+    </div>
+    <div class="small">
+      HP ${Math.max(0,u.hp)} / ${u.maxHp}
+    </div>
+    <div class="hpbar">
+      <i style="width:${hpRate}%"></i>
+    </div>
+    <div class="small">
+      行動ゲージ
+    </div>
+    <div class="gaugebar">
+      <i style="width:${gaugeRate}%"></i>
+    </div>
+    <div class="small">
+      スキル ${Math.min(u.skillCount,u.charge)}
+      / ${u.charge}
+    </div>
+    ${u.guard>0?'<div class="small">🛡️ 防御中</div>':''}
+    ${u.evade>0?'<div class="small">💨 回避状態</div>':''}
+    ${u.poison>0?'<div class="small">☠️ 毒状態</div>':''}
+  </div>`;
+}
+
+function renderBattle(){
+  if(!battle)return;
+
+  $('bossLabel').textContent=
+    BOSS_STAGES.includes(battle.stage)
+      ?'👑 BOSS STAGE '+battle.stage
+      :'STAGE '+battle.stage;
+
+  $('enemyUnits').innerHTML=
+    battle.enemies.map(unitCard).join('');
+
+  $('allyUnits').innerHTML=
+    battle.allies.map(unitCard).join('');
+
+  if(battle.result){
+    renderBattleResult();
+    return;
+  }
+
+  const u=battle.current;
+
+  if(battle.awaitingAction&&u&&u.side==='ally'){
+    const c=byId(u.id);
+    const ready=u.skillCount>=u.charge;
+
+    $('actionArea').innerHTML=`
+      <b>${esc(u.name)} の行動</b>
+      <p class="small">
+        ${esc(battle.message)}
+      </p>
+      <div class="action-buttons">
+        <button class="attack" data-action="battleAttack">
+          ⚔️ 通常攻撃
+        </button>
+        <button class="skill"
+          data-action="battleSkill"
+          ${ready?'':'disabled'}>
+          ✨ ${esc(c.skill)}
+          ${ready?'':'（溜め中）'}
+        </button>
+      </div>`;
+  }else{
+    $('actionArea').innerHTML=`
+      <div class="${u?.side==='enemy'?'enemy-preview':''}">
+        ${esc(battle.message||'次の行動を待っています…')}
+      </div>`;
+  }
+}
+
+function chooseNextUnit(){
+  if(!battle)return null;
+
+  const units=[
+    ...aliveUnits(battle.allies),
+    ...aliveUnits(battle.enemies)
+  ];
+
+  if(!units.length)return null;
+
+  let loops=0;
+
+  while(loops++<10000){
+    const ready=units.filter(u=>u.gauge>=100);
+
+    if(ready.length){
+      ready.sort((a,b)=>{
+        if(a.side!==b.side){
+          return a.side==='ally'?-1:1;
+        }
+        return b.gauge-a.gauge;
+      });
+
+      const next=ready[0];
+      next.gauge-=100;
+      return next;
+    }
+
+    for(const u of units){
+      u.gauge+=u.speed;
+    }
+  }
+
+  return units[0];
+}
+
+function clearActing(){
+  if(!battle)return;
+  [...battle.allies,...battle.enemies]
+    .forEach(u=>u.acting=false);
+}
+
+async function advanceTurn(){
+  if(!battle||!battle.running||battle.busy)return;
+
+  if(checkBattleEnd())return;
+
+  clearActing();
+
+  const next=chooseNextUnit();
+  if(!next)return;
+
+  battle.current=next;
+  next.acting=true;
+
+  if(next.poison>0){
+    const damage=Math.max(1,Math.floor(next.maxHp*.08));
+    next.hp=Math.max(0,next.hp-damage);
+    next.poison--;
+
+    battle.message=
+      next.name+' は毒で '+damage+' ダメージを受けた！';
+
+    renderBattle();
+    await sleep(650);
+
+    if(!battle||!battle.running)return;
+
+    if(next.hp<=0){
+      clearActing();
+      if(checkBattleEnd())return;
+      advanceTurn();
+      return;
+    }
+  }
+
+  if(next.side==='ally'){
+    battle.awaitingAction=true;
+    battle.message=next.name+' の行動を選択してください。';
+    renderBattle();
+    return;
+  }
+
+  battle.awaitingAction=false;
+  const c=byId(next.id);
+  const skillReady=next.skillCount>=next.charge;
+
+  battle.message=
+    next.name+' の行動！'+
+    (skillReady?' スキル「'+c.skill+'」を準備中':' 通常攻撃を準備中');
+
+  renderBattle();
+
+  const token=battle.token;
+  await sleep(1100);
+
+  if(!battle||!battle.running||battle.token!==token)return;
+
+  await enemyAct(next);
+}
+
+function getAttackPower(unit){
+  let atk=unit.atk*unit.buff*unit.permanentBuff;
+
+  if(
+    unit.id==='一閃スピアドン'&&
+    unit.hp<=unit.maxHp/2
+  ){
+    atk*=1.5;
+  }
+
+  return Math.max(1,Math.floor(atk));
+}
+
+function showEffect(target,text,healing=false){
+  if(!battle||!target)return;
+
+  const list=target.side==='ally'
+    ?battle.allies:battle.enemies;
+
+  const index=list.indexOf(target);
+  const parent=$(target.side==='ally'
+    ?'allyUnits':'enemyUnits');
+
+  const card=parent?.children[index];
+  if(!card)return;
+
+  const el=document.createElement('div');
+  el.className='effect';
+  el.textContent=text;
+
+  if(healing)el.style.color='#86f3ad';
+
+  card.appendChild(el);
+
+  el.animate([
+    {transform:'translateY(15px)',opacity:0},
+    {transform:'translateY(-10px)',opacity:1},
+    {transform:'translateY(-32px)',opacity:0}
+  ],{
+    duration:800,
+    easing:'ease-out'
   });
 
-  if(name==='battle')renderStageMap();
-  if(name==='battleFight')renderBattle();
-
-  window.scrollTo(0,0);
+  setTimeout(()=>el.remove(),800);
 }
 
+function dealDamage(attacker,target,amount,isSkill=false){
+  if(!target||target.hp<=0)return 0;
+
+  if(target.evade>0){
+    target.evade--;
+    battle.message=target.name+' は攻撃を回避した！';
+    return 0;
+  }
+
+  let damage=Math.max(1,Math.floor(amount));
+
+  if(target.guard>0){
+    damage=Math.max(1,Math.floor(
+      damage*(1-target.guard)
+    ));
+    target.guard=0;
+  }
+
+  target.hp=Math.max(0,target.hp-damage);
+
+  battle.message=
+    attacker.name+' → '+target.name+
+    ' に '+damage+' ダメージ！';
+
+  if(
+    target.id==='鍛錬剣士'&&
+    target.hp>0&&
+    attacker.hp>0
+  ){
+    const counterChance=isSkill?1:.2;
+
+    if(Math.random()<counterChance){
+      const reflected=Math.max(1,damage*2);
+      attacker.hp=Math.max(0,attacker.hp-reflected);
+      battle.message+=
+        ' アルティメットカウンター！'+
+        reflected+' ダメージを反射！';
+    }
+  }
+
+  return damage;
+}
+
+function healUnit(target,amount){
+  if(!target||target.hp<=0)return 0;
+
+  const before=target.hp;
+  target.hp=Math.min(
+    target.maxHp,
+    target.hp+Math.max(1,Math.floor(amount))
+  );
+
+  return target.hp-before;
+}
+
+function chooseAttackTarget(attacker){
+  const opponents=attacker.side==='ally'
+    ?battle.enemies:battle.allies;
+
+  const alive=aliveUnits(opponents);
+  if(!alive.length)return null;
+
+  if(attacker.id==='狙撃手アーチャー'){
+    return [...alive].sort((a,b)=>a.hp-b.hp)[0];
+  }
+
+  return randomAlive(alive);
+}
+
+async function allyAct(useSkill){
+  if(
+    !battle||
+    !battle.running||
+    !battle.awaitingAction||
+    battle.busy
+  )return;
+
+  const u=battle.current;
+  if(!u||u.side!=='ally')return;
+
+  if(useSkill&&u.skillCount<u.charge)return;
+
+  battle.busy=true;
+  battle.awaitingAction=false;
+
+  await performAction(u,useSkill);
+
+  if(!battle||!battle.running)return;
+
+  battle.busy=false;
+  clearActing();
+
+  if(checkBattleEnd())return;
+
+  await sleep(450);
+  advanceTurn();
+}
+
+async function enemyAct(u){
+  if(!battle||!battle.running)return;
+
+  battle.busy=true;
+
+  const c=byId(u.id);
+  const useSkill=u.skillCount>=u.charge;
+
+  battle.message=
+    u.name+' の'+
+    (useSkill?'スキル「'+c.skill+'」':'通常攻撃')+
+    '！';
+
+  renderBattle();
+
+  await sleep(350);
+  await performAction(u,useSkill);
+
+  if(!battle||!battle.running)return;
+
+  battle.busy=false;
+  clearActing();
+
+  if(checkBattleEnd())return;
+
+  await sleep(500);
+  advanceTurn();
+}
+
+async function performAction(u,useSkill){
+  if(!battle||!battle.running)return;
+
+  const c=byId(u.id);
+  let targets=[];
+
+  if(!useSkill){
+    const target=chooseAttackTarget(u);
+
+    if(target){
+      dealDamage(u,target,getAttackPower(u),false);
+      targets=[target];
+    }
+
+    u.skillCount=Math.min(
+      u.charge,
+      u.skillCount+1
+    );
+  }else{
+    u.skillCount=0;
+
+    const power=c.power*u.skillMultiplier;
+
+    if(c.effect==='damage'){
+      if(c.target==='all'){
+        targets=aliveUnits(
+          u.side==='ally'?battle.enemies:battle.allies
+        );
+
+        for(const target of targets){
+          dealDamage(u,target,power,true);
+        }
+
+        battle.message=
+          u.name+' の「'+c.skill+'」！'+
+          '敵全体に攻撃！';
+      }else{
+        const target=chooseAttackTarget(u);
+        if(target){
+          dealDamage(u,target,power,true);
+          targets=[target];
+        }
+      }
+    }
+
+    else if(c.effect==='heal'){
+      const allies=u.side==='ally'
+        ?battle.allies:battle.enemies;
+
+      const target=c.target==='self'
+        ?u
+        :[...aliveUnits(allies)]
+          .sort((a,b)=>a.hp/a.maxHp-b.hp/b.maxHp)[0];
+
+      if(target){
+        const amount=healUnit(target,power);
+        battle.message=
+          u.name+' の「'+c.skill+'」！'+
+          target.name+' のHPを '+amount+' 回復！';
+        targets=[target];
+      }
+    }
+
+    else if(c.effect==='evade'){
+      u.evade=1;
+      battle.message=
+        u.name+' は回避状態になった！';
+      targets=[u];
+    }
+
+    else if(c.effect==='guard'){
+      u.guard=Math.min(.95,power/100);
+      battle.message=
+        u.name+' は防御態勢を取った！';
+      targets=[u];
+    }
+
+    else if(c.effect==='buffAlly'){
+      const allies=u.side==='ally'
+        ?battle.allies:battle.enemies;
+
+      for(const target of aliveUnits(allies)){
+        target.buff=1+power/100;
+        target.buffTurns=2;
+      }
+
+      battle.message=
+        u.name+' の「'+c.skill+'」！'+
+        '味方の攻撃力が上昇！';
+      targets=aliveUnits(allies);
+    }
+  }
+
+  if(u.buffTurns>0){
+    u.buffTurns--;
+    if(u.buffTurns===0)u.buff=1;
+  }
+
+  renderBattle();
+
+  for(const target of targets){
+    if(c.effect==='heal'&&useSkill){
+      showEffect(target,'回復',true);
+    }else if(
+      useSkill&&
+      ['guard','evade','buffAlly'].includes(c.effect)
+    ){
+      showEffect(target,'強化',true);
+    }else{
+      showEffect(target,'HIT!');
+    }
+  }
+
+  await sleep(650);
+}
+
+function checkBattleEnd(){
+  if(!battle||!battle.running)return true;
+
+  if(aliveUnits(battle.enemies).length===0){
+    finishBattle(true);
+    return true;
+  }
+
+  if(aliveUnits(battle.allies).length===0){
+    finishBattle(false);
+    return true;
+  }
+
+  return false;
+}
+
+/* =========================
+   ステージ報酬
+========================= */
+
+function createStageDrop(stage){
+  const settings=STAGE_ENEMIES[stage]||[];
+  const candidates=[...new Set(
+    settings.map(item=>item[0])
+  )];
+
+  const successful=[];
+
+  for(const id of candidates){
+    const c=byId(id);
+    if(!c)continue;
+
+    const chance=CHARACTER_DROP_RATES[c.rarity]||0;
+
+    if(Math.random()*100<chance){
+      successful.push(id);
+    }
+  }
+
+  if(!successful.length)return null;
+
+  const id=successful[
+    Math.floor(Math.random()*successful.length)
+  ];
+
+  const message=addCharacter(id);
+
+  return {
+    id,
+    name:byId(id).name,
+    rarity:byId(id).rarity,
+    message
+  };
+}
+
+function grantStageRewards(stage){
+  const previousClears=
+    Number(state.stageClearCounts[stage])||0;
+
+  const firstClear=previousClears===0;
+  const baseGold=STAGE_GOLD[stage]||200;
+
+  const gold=Math.floor(
+    baseGold*Math.pow(.8,previousClears)
+  );
+
+  state.gold+=gold;
+
+  let gems=0;
+
+  if(firstClear&&Math.random()<.2){
+    gems=50;
+    state.gems+=gems;
+  }
+
+  let ringReward=null;
+
+  if(stage===20&&firstClear){
+    state.ringInventory.power=
+      (Number(state.ringInventory.power)||0)+1;
+
+    ringReward='power';
+  }
+
+  const drop=createStageDrop(stage);
+
+  state.stageClearCounts[stage]=previousClears+1;
+
+  if(stage>state.clearedStage){
+    state.clearedStage=stage;
+  }
+
+  state.stage=Math.min(
+    IMPLEMENTED_STAGE,
+    state.clearedStage+1
+  );
+
+  save();
+
+  return {
+    firstClear,
+    gold,
+    gems,
+    ringReward,
+    drop
+  };
+}
+
+function finishBattle(victory){
+  if(!battle||!battle.running)return;
+
+  battle.running=false;
+  battle.busy=false;
+  battle.awaitingAction=false;
+  clearActing();
+
+  const rewards=victory
+    ?grantStageRewards(battle.stage)
+    :null;
+
+  battle.result={
+    victory,
+    rewards
+  };
+
+  renderBattle();
+}
+
+function renderBattleResult(){
+  if(!battle?.result)return;
+
+  const {victory,rewards}=battle.result;
+
+  if(!victory){
+    $('actionArea').innerHTML=`
+      <div class="result">
+        <h2>敗北…</h2>
+        <p>編成や装備を見直して再挑戦しよう。</p>
+        <button data-action="returnMap">
+          草原マップへ戻る
+        </button>
+      </div>`;
+    return;
+  }
+
+  let rewardHTML=`
+    <p>🪙 金貨 +${rewards.gold}</p>
+  `;
+
+  if(rewards.gems){
+    rewardHTML+=`
+      <p>💎 ジェム +${rewards.gems}</p>
+    `;
+  }
+
+  if(rewards.ringReward){
+    const ring=RINGS[rewards.ringReward];
+
+    rewardHTML+=`
+      <p>
+        ${ring.icon}
+        ${ring.name} ×1
+        <br>
+        <span class="small">初回クリア確定報酬</span>
+      </p>`;
+  }
+
+  if(rewards.drop){
+    rewardHTML+=`
+      <p>
+        🎁 キャラクタードロップ！<br>
+        <b>${esc(rewards.drop.name)}</b><br>
+        <span class="small">
+          ${esc(rewards.drop.message)}
+        </span>
+      </p>`;
+  }
+
+  $('actionArea').innerHTML=`
+    <div class="result">
+      <h2>🎉 ステージクリア！</h2>
+      <p>ステージ ${battle.stage} 勝利！</p>
+      ${rewards.firstClear?
+        '<p>✨ 初回クリア！</p>':''}
+      ${rewardHTML}
+      <button data-action="returnMap">
+        草原マップへ戻る
+      </button>
+    </div>`;
+}
+
+function returnMap(){
+  if(battle?.running){
+    battle.running=false;
+    battle.token=-1;
+  }
+
+  battle=null;
+
+  selectedStage=Math.min(
+    IMPLEMENTED_STAGE,
+    Math.max(1,state.clearedStage+1)
+  );
+
+  showPage('battle');
+}
+
+/* =========================
+   ステージ選択
+========================= */
+
 function selectStage(stage){
-  stage=Number(stage);
-  const unlocked=Math.min(IMPLEMENTED_STAGE,state.clearedStage+1);
+  if(!Number.isInteger(stage))return;
 
-  if(!Number.isInteger(stage)||stage<1||stage>unlocked)return;
+  if(stage<1||stage>IMPLEMENTED_STAGE)return;
 
-  if(battle&&!battle.over){
-    showError('戦闘中はステージを変更できません。');
+  if(stage>state.clearedStage+1){
+    showError('まだ解放されていません。');
     return;
   }
 
@@ -1363,964 +2180,125 @@ function selectStage(stage){
   renderAll();
 }
 
-/* キャラクター重複処理 */
-function processDuplicate(c){
-  const o=state.owned[c.id];
+/* =========================
+   ガチャ表示の補助
+========================= */
 
-  if(!o){
-    state.owned[c.id]={level:1,dupes:0};
-    return '新しい仲間が旅団に加わった！';
-  }
+function ensureSummonProgress(){
+  if($('summonProgress'))return;
 
-  o.dupes=(o.dupes||0)+1;
+  const progress=document.createElement('div');
+  progress.id='summonProgress';
+  progress.className='small';
+  progress.style.marginBottom='10px';
 
-  if(o.level<c.max&&o.dupes>=o.level){
-    o.dupes=0;
-    o.level++;
-    return `重複によって Lv.${o.level} に成長！`;
-  }
-
-  if(o.level>=c.max){
-    o.dupes=0;
-    state.gold+=50;
-    return '最大レベルのため、🪙50を獲得！';
-  }
-
-  return `重複 ${o.dupes}/${o.level}`;
+  const controls=$('summonControls');
+  controls.parentNode.insertBefore(progress,controls);
 }
 
-/* ステージクリア報酬 */
-function getStageBaseGold(stage){
-  return STAGE_GOLD[stage]||0;
-}
+/* =========================
+   ボタン操作
+========================= */
 
-function calculateStageGold(stage,clearCount){
-  const base=getStageBaseGold(stage);
-  return Math.floor(base*Math.pow(GOLD_REDUCTION_RATE,clearCount));
-}
+document.addEventListener('click',event=>{
+  const button=event.target.closest('button');
+  if(!button||button.disabled)return;
 
-function createStageDrop(currentBattle){
-  const ownedEnemyIds=[
-    ...new Set(
-      currentBattle.enemies
-        .map(enemy=>enemy.characterId)
-        .filter(id=>id&&state.owned[id]&&byId(id))
-    )
-  ];
+  const page=button.dataset.page;
 
-  if(ownedEnemyIds.length===0)return null;
-
-  const roll=Math.random()*100;
-  let selectedRarity=null;
-
-  if(roll<CHARACTER_DROP_RATES['ノーマル']){
-    selectedRarity='ノーマル';
-  }else if(roll<CHARACTER_DROP_RATES['ノーマル']+CHARACTER_DROP_RATES['レア']){
-    selectedRarity='レア';
-  }else if(roll<CHARACTER_DROP_RATES['ノーマル']+CHARACTER_DROP_RATES['レア']+CHARACTER_DROP_RATES['エピック']){
-    selectedRarity='エピック';
-  }
-
-  if(!selectedRarity)return null;
-
-  const candidates=ownedEnemyIds.filter(id=>byId(id).rarity===selectedRarity);
-  if(candidates.length===0)return null;
-
-  const dropId=candidates[Math.floor(Math.random()*candidates.length)];
-  const character=byId(dropId);
-  const message=processDuplicate(character);
-
-  return {character,message};
-}
-
-function grantStageRewards(currentBattle){
-  const stage=currentBattle.stage;
-  const clearCount=Number(state.stageClearCounts[stage])||0;
-  const firstClear=clearCount===0;
-
-  const goldReward=calculateStageGold(stage,clearCount);
-  state.gold+=goldReward;
-
-  let gemReward=0;
-  if(firstClear&&Math.random()<FIRST_CLEAR_GEM_CHANCE){
-    gemReward=FIRST_CLEAR_GEM_AMOUNT;
-    state.gems+=gemReward;
-  }
-
-  state.stageClearCounts[stage]=clearCount+1;
-  const characterDrop=createStageDrop(currentBattle);
-
-  return {
-    gold:goldReward,
-    gems:gemReward,
-    firstClear,
-    clearCount:clearCount+1,
-    characterDrop
-  };
-}
-
-/* ガチャ召喚 */
-function createSummonResult(c){
-  const message=processDuplicate(c);
-  return {character:c,message,epic:c.rarity==='エピック'};
-}
-
-function summon(count){
-  if(summonBusy)return;
-
-  const cost=count===10?900:100;
-
-  if(state.gems<cost){
-    document.getElementById('gachaResult').textContent='💎が足りません。';
-    return;
-  }
-
-  state.gems-=cost;
-  summonResults=[];
-
-  for(let i=0;i<count;i++){
-    const roll=Math.random()*100;
-    const pool=CHARACTERS.filter(c=>
-      roll<5?c.rarity==='エピック':
-      roll<30?c.rarity==='レア':
-      c.rarity==='ノーマル'
-    );
-
-    const c=pool[Math.floor(Math.random()*pool.length)];
-    summonResults.push(createSummonResult(c));
-  }
-
-  summonIndex=0;
-  summonBusy=true;
-  save();
-
-  document.getElementById('gachaResult').textContent=
-    count===10?'10回召喚中……':'召喚中……';
-
-  startSummonAnimation();
-}
-
-function startSummonAnimation(){
-  const overlay=document.getElementById('summonOverlay');
-
-  overlay.className='summon-overlay active';
-  document.getElementById('summonSummary').innerHTML='';
-  document.getElementById('summonFinish').style.display='none';
-  document.getElementById('summonControls').style.display='flex';
-  document.getElementById('summonProgress').style.display='block';
-
-  showNextSummon();
-}
-
-function showNextSummon(){
-  if(!summonBusy)return;
-
-  if(summonIndex>=summonResults.length){
-    finishSummonAnimation();
-    return;
-  }
-
-  const result=summonResults[summonIndex];
-  const c=result.character;
-  const epic=result.epic;
-  const overlay=document.getElementById('summonOverlay');
-
-  overlay.className='summon-overlay active revealing'+(epic?' epic-mode':'');
-  overlay.classList.remove('revealed','complete','flash');
-
-  document.getElementById('summonTitle').textContent=
-    epic?'★ EPIC SUMMON ★':'✦ 星詠み召喚 ✦';
-
-  document.getElementById('summonCharacterImage').src=imagePath(c.id);
-  document.getElementById('summonCharacterImage').alt=c.name;
-  document.getElementById('summonCharacterName').textContent='';
-  document.getElementById('summonRarity').textContent='';
-  document.getElementById('summonMessage').textContent='';
-
-  document.getElementById('summonProgress').textContent=
-    `${summonIndex+1} / ${summonResults.length} 体目`;
-
-  summonTimer=setTimeout(()=>{
-    summonTimer=null;
-    if(!summonBusy)return;
-
-    overlay.classList.add('flash');
-
-    summonTimer=setTimeout(()=>{
-      summonTimer=null;
-      if(!summonBusy)return;
-
-      overlay.classList.remove('revealing');
-      overlay.classList.add('revealed');
-
-      document.getElementById('summonRarity').textContent=
-        epic?'✦ EPIC ✦':c.rarity==='レア'?'✧ RARE ✧':'NORMAL';
-
-      document.getElementById('summonCharacterName').textContent=c.name;
-      document.getElementById('summonMessage').textContent=result.message;
-
-      summonTimer=setTimeout(()=>{
-        summonTimer=null;
-        if(!summonBusy)return;
-
-        summonIndex++;
-        showNextSummon();
-      },1450);
-
-    },450);
-  },1050);
-}
-
-function skipSummonAnimation(){
-  if(!summonBusy)return;
-
-  if(summonTimer){
-    clearTimeout(summonTimer);
-    summonTimer=null;
-  }
-
-  summonIndex=summonResults.length;
-  finishSummonAnimation();
-}
-
-function finishSummonAnimation(){
-  if(summonTimer){
-    clearTimeout(summonTimer);
-    summonTimer=null;
-  }
-
-  const overlay=document.getElementById('summonOverlay');
-  overlay.className='summon-overlay active complete';
-
-  const epicCount=summonResults.filter(r=>r.epic).length;
-  const rareCount=summonResults.filter(r=>r.character.rarity==='レア').length;
-  const normalCount=summonResults.filter(r=>r.character.rarity==='ノーマル').length;
-
-  const cards=summonResults.map(result=>{
-    const c=result.character;
-    return `
-      <div class="summon-mini-card ${result.epic?'epic-result':''}">
-        <img src="${imagePath(c.id)}" alt="${esc(c.name)}"
-          onerror="this.style.display='none'">
-        <div class="mini-name">${esc(c.name)}</div>
-        <div class="mini-rarity">${esc(c.rarity)}</div>
-      </div>
-    `;
-  }).join('');
-
-  document.getElementById('summonSummary').innerHTML=`
-    <div class="summon-summary-heading">✦ 召喚結果 ✦</div>
-    <div style="text-align:center;font-size:13px;margin-bottom:12px;line-height:1.8">
-      エピック：<b style="color:#ffe09a">${epicCount}体</b>　
-      レア：<b style="color:#74b8ff">${rareCount}体</b>　
-      ノーマル：<b>${normalCount}体</b>
-    </div>
-    <div class="summon-summary-grid">${cards}</div>
-  `;
-
-  document.getElementById('summonFinish').style.display='block';
-  document.getElementById('summonControls').style.display='none';
-  document.getElementById('summonProgress').style.display='none';
-
-  document.getElementById('gachaResult').innerHTML=
-    summonResults.map(r=>
-      `<span class="${rarityClass(r.character.rarity)}">${esc(r.character.name)}（${esc(r.message)}）</span>`
-    ).join('<br>');
-}
-
-function closeSummon(){
-  if(summonTimer){
-    clearTimeout(summonTimer);
-    summonTimer=null;
-  }
-
-  summonBusy=false;
-  summonResults=[];
-  summonIndex=0;
-
-  const overlay=document.getElementById('summonOverlay');
-  overlay.className='summon-overlay';
-
-  document.getElementById('summonCharacterImage').src='';
-  document.getElementById('summonSummary').innerHTML='';
-
-  renderAll();
-}
-
-function toggleParty(id){
-  if(!state.owned[id])return;
-  const i=state.party.indexOf(id);
-
-  if(i>=0)state.party.splice(i,1);
-  else if(state.party.length<3)state.party.push(id);
-  else{
-    showError('編成できるのは3人までです。');
-    return;
-  }
-
-  save();
-}
-
-/* 戦闘システム */
-function makeUnit(id,side){
-  const c=byId(id);
-  const o=state.owned[id]||{level:1};
-  const base=stats(c,o);
-
-  const st=side==='ally'
-    ?getCharacterEquipmentStats(id)
-    :base;
-
-  return {
-    id,side,name:c.name,
-    hp:st.hp,maxHp:st.hp,atk:st.atk,speed:st.speed,
-    gauge:0,charge:c.charge,actions:0,
-    skill:c.skill,effect:c.effect,power:base.power,target:c.target,
-    passive:c.passive,guard:false,guardReduction:0.70,
-    evade:0,evadeExtraChance:0,poison:0,poisonDamage:8,
-    poisonTurns:0,buff:1,
-    skillMultiplier:side==='ally'?getRingMultiplier(id,'skill'):1,
-    alive:true,counter:false,imageId:id,characterId:id,
-    imageFile:c.imageFile,effectText:'',effectKind:'',
-    effectVersion:0,hit:false
-  };
-}
-
-function makeEnemy(i,stage){
-  const formation=STAGE_ENEMIES[stage];
-  if(!formation||!formation[i])return null;
-
-  const setting=formation[i];
-  const c=byId(setting.id);
-  if(!c)return null;
-
-  let st;
-  let strengthLabel;
-
-  if(setting.type==='level'){
-    const level=Math.min(c.max,Math.max(1,setting.level||1));
-    st=stats(c,{level});
-    strengthLabel=`Lv.${level}`;
-  }else{
-    const multiplier=setting.multiplier;
-    const base=stats(c,{level:1});
-    st={
-      hp:Math.round(base.hp*multiplier),
-      atk:Math.round(base.atk*multiplier),
-      power:Math.round(base.power*multiplier),
-      speed:base.speed
-    };
-    strengthLabel=`${Math.round(multiplier*100)}%`;
-  }
-
-  if(setting.hpMultiplier){
-    st.hp=Math.round(st.hp*setting.hpMultiplier);
-    strengthLabel+=` / HP ${Math.round(setting.hpMultiplier*100)}%`;
-  }
-
-  const isStage10Golem=Number(stage)===10&&c.id==='ゴーレム';
-
-  if(isStage10Golem){
-    st.hp=700;
-    st.speed=12;
-    strengthLabel='ボス専用ステータス';
-  }
-
-  return {
-    id:'enemy-'+stage+'-'+i,
-    name:c.name,
-    imageId:c.id,
-    characterId:c.id,
-    imageFile:c.imageFile,
-    side:'enemy',
-    hp:st.hp,maxHp:st.hp,atk:st.atk,speed:st.speed,
-    gauge:0,charge:isStage10Golem?3:c.charge,
-    actions:0,skill:c.skill,effect:c.effect,power:st.power,
-    target:c.target,passive:c.passive,alive:true,
-    guard:false,guardReduction:0.70,
-    evade:0,evadeExtraChance:0,poison:0,poisonDamage:8,
-    poisonTurns:0,buff:1,skillMultiplier:1,
-    effectText:'',effectKind:'',effectVersion:0,hit:false,
-    strengthLabel
-  };
-}
-
-function alive(arr){
-  return arr.filter(x=>x.alive&&x.hp>0);
-}
-
-function chooseRandomEnemy(){
-  const enemies=alive(battle.enemies);
-  if(!enemies.length)return null;
-  return enemies[Math.floor(Math.random()*enemies.length)];
-}
-
-function chooseRandomAlly(){
-  const allies=alive(battle.allies);
-  if(!allies.length)return null;
-  return allies[Math.floor(Math.random()*allies.length)];
-}
-
-function chooseEnemy(){
-  return alive(battle.enemies).sort((a,b)=>a.hp-b.hp)[0]||null;
-}
-
-function chooseAlly(){
-  return alive(battle.allies).sort((a,b)=>a.hp-b.hp)[0]||null;
-}
-
-function chooseAttackTarget(actor){
-  if(actor&&actor.id==='狙撃手アーチャー')return chooseEnemy();
-  return chooseRandomEnemy();
-}
-
-function showUnitEffect(unit,text,kind='damage'){
-  if(!unit)return;
-
-  unit.effectVersion=(unit.effectVersion||0)+1;
-  const thisVersion=unit.effectVersion;
-  unit.effectText=text;
-  unit.effectKind=kind;
-  unit.hit=kind==='damage'||kind==='miss';
-
-  const currentBattle=battle;
-  const unitId=String(unit.id);
-
-  setTimeout(()=>{
-    if(!currentBattle||battle!==currentBattle)return;
-    if(unit.effectVersion!==thisVersion)return;
-
-    unit.effectText='';
-    unit.effectKind='';
-    unit.hit=false;
-
-    document.querySelectorAll('.battle-character').forEach(el=>{
-      if(el.dataset.unitId!==unitId)return;
-      const effect=el.querySelector('.effect-pop');
-      if(effect)effect.remove();
-      el.classList.remove('hit-animation');
-    });
-  },1250);
-}
-
-function startBattle(){
-  if(busy||summonBusy)return;
-
-  if(battle&&!battle.over){
-    showPage('battleFight');
-    return;
-  }
-
-  if(enemyTimer){
-    clearTimeout(enemyTimer);
-    enemyTimer=null;
-  }
-
-  if(!state.party.length){
-    showError('先に編成を設定してください。');
-    return;
-  }
-
-  const unlocked=Math.min(IMPLEMENTED_STAGE,state.clearedStage+1);
-
-  if(selectedStage>unlocked){
-    showError('そのステージはまだ解放されていません。');
-    return;
-  }
-
-  if(selectedStage>IMPLEMENTED_STAGE||!STAGE_ENEMIES[selectedStage]){
-    showError('このステージはまだ実装されていません。');
-    return;
-  }
-
-  const formation=STAGE_ENEMIES[selectedStage];
-
-  battle={
-    stage:selectedStage,
-    isBoss:isBossStage(selectedStage),
-    turn:0,
-    over:false,
-    readyActor:null,
-    pendingEnemy:null,
-    rewards:null,
-    allies:state.party.map(id=>makeUnit(id,'ally')),
-    enemies:formation.map((setting,index)=>makeEnemy(index,selectedStage)).filter(Boolean)
-  };
-
-  busy=false;
-  showPage('battleFight');
-  renderBattle();
-  advanceBattle();
-}
-
-function chooseEnemyAttackTarget(enemy){
-  if(enemy&&(enemy.characterId==='狙撃手アーチャー'||enemy.id==='狙撃手アーチャー')){
-    return chooseAlly();
-  }
-  return chooseRandomAlly();
-}
-
-function prepareEnemyAction(enemy){
-  const target=chooseEnemyAttackTarget(enemy);
-  if(!target)return;
-
-  battle.pendingEnemy={
-    actorId:enemy.id,
-    targetId:target.id,
-    actorName:enemy.name,
-    targetName:target.name,
-    actionName:'通常攻撃'
-  };
-
-  busy=true;
-  renderBattle();
-  const currentBattle=battle;
-
-  enemyTimer=setTimeout(()=>{
-    enemyTimer=null;
-
-    if(!battle||battle!==currentBattle||battle.over){
-      busy=false;
-      return;
-    }
-
-    const pending=battle.pendingEnemy;
-    if(!pending){busy=false;return}
-
-    const actor=battle.enemies.find(x=>x.id===pending.actorId&&x.alive);
-    const victim=battle.allies.find(x=>x.id===pending.targetId&&x.alive);
-
-    battle.pendingEnemy=null;
-    if(actor&&victim)enemyAct(actor,victim);
-
-    for(const e of alive(battle.enemies)){
-      if(e.poisonTurns>0){
-        const poisonDamage=e.poisonDamage||8;
-        e.hp=Math.max(0,e.hp-poisonDamage);
-        e.poisonTurns--;
-        e.poison=e.poisonTurns;
-        showUnitEffect(e,'毒 -'+poisonDamage,'damage');
-        if(e.hp===0)e.alive=false;
-      }
-    }
-
-    busy=false;
-
-    if(alive(battle.enemies).length===0){finishBattle(true);return}
-    if(alive(battle.allies).length===0){finishBattle(false);return}
-
-    renderBattle();
-    advanceBattle();
-  },1100);
-}
-
-function performAlly(actor,useSkill){
-  const c=byId(actor.id);
-  if(!c)return;
-
-  const skillRate=actor.skillMultiplier||1;
-
-  if(useSkill){
-    if(actor.charge>0&&actor.actions<actor.charge)return;
-    actor.actions=0;
-    showUnitEffect(actor,'SKILL!','buff');
-
-    if(actor.effect==='damage'){
-      const targets=actor.target==='all'?alive(battle.enemies):[chooseAttackTarget(actor)];
-      targets.forEach(t=>{
-        if(t)deal(actor,t,actor.power*skillRate);
-      });
-
-    }else if(actor.effect==='evade'||actor.effect==='evadeSure'){
-      const extra=skillRate-1;
-      actor.evade=1+Math.floor(extra);
-      actor.evadeExtraChance=extra-Math.floor(extra);
-      showUnitEffect(actor,'回避態勢','evade');
-
-    }else if(actor.effect==='guard'){
-      actor.guard=true;
-      actor.guardReduction=Math.min(.95,.70*skillRate);
-      showUnitEffect(actor,'GUARD','guard');
-
-    }else if(actor.effect==='poison'){
-      const t=chooseAttackTarget(actor);
-      if(t){
-        deal(actor,t,actor.power*skillRate);
-        t.poisonTurns=Math.max(1,Math.ceil(3*skillRate));
-        t.poison=t.poisonTurns;
-        t.poisonDamage=Math.max(1,Math.round(8*skillRate));
-      }
-
-    }else if(actor.effect==='heal'||actor.effect==='healPercent'){
-      const allies=alive(battle.allies);
-      const t=actor.effect==='heal'
-        ?allies[Math.floor(Math.random()*allies.length)]
-        :chooseAlly();
-
-      if(t){
-        const amount=actor.effect==='healPercent'
-          ?Math.round(t.maxHp*actor.power*skillRate/100)
-          :Math.round(actor.power*skillRate);
-
-        const actual=Math.min(t.maxHp-t.hp,amount);
-        t.hp=Math.min(t.maxHp,t.hp+amount);
-        showUnitEffect(t,'+'+actual,'heal');
-      }
-
-    }else if(actor.effect==='buffSelf'){
-      actor.buff+=actor.power*skillRate/100;
-      showUnitEffect(actor,'攻撃力UP','buff');
-
-    }else if(actor.effect==='buffAlly'){
-      const t=chooseAlly();
-      if(t){
-        t.buff+=actor.power*skillRate/100;
-        showUnitEffect(t,'攻撃力UP','buff');
-      }
-    }
-
-  }else{
-    actor.actions++;
-    const t=chooseAttackTarget(actor);
-    if(t)deal(actor,t,actor.atk*actor.buff);
-  }
-
-  if(actor.passive==='ウィルパワー'){
-    actor.atk+=Math.max(1,Math.round(actor.atk*.1));
-    showUnitEffect(actor,'攻撃力上昇','buff');
-  }
-
-  if(actor.passive==='アルティメットカウンター')actor.counter=true;
-}
-
-function deal(attacker,target,amount){
-  if(!target||!target.alive)return 0;
-
-  if(target.evade>0){
-    target.evade--;
-    showUnitEffect(target,'MISS!','miss');
-    return 0;
-  }
-
-  if(target.evadeExtraChance>0&&Math.random()<target.evadeExtraChance){
-    target.evadeExtraChance=0;
-    showUnitEffect(target,'MISS!','miss');
-    return 0;
-  }
-  target.evadeExtraChance=0;
-
-  let dmg=Math.max(1,Math.round(amount));
-
-  if(target.guard){
-    dmg=Math.max(1,Math.round(dmg*(1-target.guardReduction)));
-    target.guard=false;
-    target.guardReduction=.70;
-  }
-
-  target.hp=Math.max(0,target.hp-dmg);
-  showUnitEffect(target,'-'+dmg,'damage');
-
-  if(target.hp<=0)target.alive=false;
-  return dmg;
-}
-
-function enemyAct(e,target){
-  if(!target||!target.alive)return;
-
-  const dmg=deal(e,target,e.atk*e.buff);
-
-  if(target.passive==='アルティメットカウンター'&&Math.random()<.2){
-    const reflected=Math.round(dmg*2);
-    e.hp=Math.max(0,e.hp-reflected);
-    showUnitEffect(e,'反射 -'+reflected,'damage');
-    if(e.hp===0)e.alive=false;
-  }
-}
-
-function advanceBattle(){
-  if(!battle||battle.over||busy)return;
-
-  let guard=0;
-
-  while(!battle.readyActor&&guard++<100){
-    if(alive(battle.enemies).length===0){finishBattle(true);return}
-    if(alive(battle.allies).length===0){finishBattle(false);return}
-
-    const units=[...alive(battle.allies),...alive(battle.enemies)];
-    units.forEach(u=>u.gauge+=u.speed);
-
-    const ready=units.filter(u=>u.gauge>=100).sort((a,b)=>
-      b.gauge-a.gauge||(a.side===b.side?0:(a.side==='ally'?-1:1))
-    );
-
-    if(!ready.length)continue;
-
-    const actor=ready[0];
-    actor.gauge-=100;
-
-    if(actor.side==='ally'){
-      battle.readyActor=actor.id;
-      renderBattle();
-      return;
-    }
-
-    prepareEnemyAction(actor);
-    return;
-  }
-
-  renderBattle();
-}
-
-function playerAction(id,skill){
-  if(!battle||battle.over||busy||battle.readyActor!==id)return;
-
-  const actor=battle.allies.find(x=>x.id===id&&x.alive);
-  if(!actor)return;
-  if(skill&&actor.charge>0&&actor.actions<actor.charge)return;
-
-  busy=true;
-  performAlly(actor,skill);
-  battle.readyActor=null;
-
-  if(alive(battle.enemies).length===0){busy=false;finishBattle(true);return}
-  if(alive(battle.allies).length===0){busy=false;finishBattle(false);return}
-
-  busy=false;
-  renderBattle();
-  advanceBattle();
-}
-
-/* 戦闘終了・報酬処理 */
-function finishBattle(win){
-  if(!battle||battle.over)return;
-
-  if(enemyTimer){
-    clearTimeout(enemyTimer);
-    enemyTimer=null;
-  }
-
-  battle.over=true;
-  battle.pendingEnemy=null;
-  battle.resultWin=win;
-  busy=false;
-
-  if(win){
-    const cleared=battle.stage;
-    battle.rewards=grantStageRewards(battle);
-
-    state.clearedStage=Math.max(state.clearedStage,cleared);
-    state.stage=Math.min(IMPLEMENTED_STAGE,state.clearedStage+1);
-    selectedStage=Math.min(IMPLEMENTED_STAGE,state.clearedStage+1);
-  }
-
-  save();
-  renderBattle();
-}
-
-function renderBattle(){
-  const area=document.getElementById('battleArea');
-
-  if(!battle){
-    area.style.display='none';
-    return;
-  }
-
-  area.style.display='block';
-
-  const activeId=battle.readyActor||(battle.pendingEnemy?battle.pendingEnemy.actorId:null);
-
-  const unitHTML=u=>{
-    const isEnemy=u.side==='enemy';
-    const dead=!u.alive||u.hp<=0;
-    const image=unitImagePath(u);
-    const isActive=u.id===activeId;
-
-    let badge='';
-    if(isActive){
-      badge=isEnemy
-        ?'<div class="turn-badge">敵の行動予告</div>'
-        :'<div class="turn-badge">★ 行動権あり ★</div>';
-    }
-
-    return `
-      <div class="battle-character ${isEnemy?'enemy':'ally'} ${dead?'dead':''} ${u.hit?'hit-animation':''} ${isActive?'turn-active':''}"
-        data-unit-id="${esc(u.id)}">
-        ${badge}
-        <div class="battle-image">
-          <img src="${image}" alt="${esc(u.name)}" onerror="this.style.display='none'">
-        </div>
-        ${u.effectText?`
-          <div class="effect-pop effect-${esc(u.effectKind)}">${esc(u.effectText)}</div>
-        `:''}
-        <div class="battle-name">${esc(u.name)}</div>
-        ${isEnemy&&u.strengthLabel?`
-          <div class="small">強化：${esc(u.strengthLabel)}</div>
-        `:''}
-        ${isEnemy&&u.charge!==undefined?`
-          <div class="small">素早さ：${u.speed} / 溜め：${u.charge}</div>
-        `:''}
-        <div class="battle-hp-text">HP ${Math.max(0,u.hp)} / ${u.maxHp}</div>
-        <div class="hpbar"><i style="width:${Math.max(0,u.hp/u.maxHp*100)}%"></i></div>
-        ${!isEnemy?`
-          <div class="small">通常攻撃回数：${u.actions}/${u.charge||'—'}</div>
-          ${u.charge===0?'<div class="small">スキル使用可能</div>':''}
-        `:''}
-      </div>
-    `;
-  };
-
-  document.getElementById('allyUnits').innerHTML=battle.allies.map(unitHTML).join('');
-  document.getElementById('enemyUnits').innerHTML=battle.enemies.map(unitHTML).join('');
-
-  const enemyHeading=document.getElementById('enemyHeading');
-  enemyHeading.textContent=battle.isBoss?'▼ 敵軍　👑 BOSS BATTLE':'▼ 敵軍';
-
-  const active=battle.allies.find(a=>a.id===battle.readyActor);
-  let actionContent='';
-
-  if(battle.over){
-    const r=battle.rewards;
-
-    let rewardHTML='';
-    if(battle.resultWin&&r){
-      const dropHTML=r.characterDrop
-        ?`<p style="color:#ffe09a;font-weight:900">✨ キャラドロップ！ ${esc(r.characterDrop.character.name)}（${esc(r.characterDrop.character.rarity)}）<br>${esc(r.characterDrop.message)}</p>`
-        :'<p>キャラクタードロップ：なし</p>';
-
-      rewardHTML=`
-        <div style="line-height:1.9;margin:12px 0">
-          <p>🪙 金貨 +${r.gold} を獲得！</p>
-          <p>💎 ジェム +${r.gems} ${r.gems>0?'を獲得！':r.firstClear?'（初クリア抽選：今回は獲得なし）':'（初クリア報酬の対象外）'}</p>
-          <p class="small">このステージのクリア回数：${r.clearCount}回目</p>
-          ${dropHTML}
-        </div>
-      `;
-    }
-
-    actionContent=`
-      <div class="battle-result">
-        <h3>${battle.resultWin?'勝利！':'敗北……'}</h3>
-        <p>
-          ${battle.resultWin
-            ?`ステージ ${battle.stage} クリア！報酬を獲得した。`
-            :'旅団は敗北した。編成を見直して再挑戦しよう。'}
-        </p>
-        ${rewardHTML}
-        ${battle.resultWin&&battle.isBoss?'<p style="color:#ffcf83;font-weight:900">👑 ボスステージ突破！</p>':''}
-        <button data-action="returnMap">ステージ一覧に戻る</button>
-        <button data-action="startBattle">もう一度挑戦</button>
-      </div>
-    `;
-
-  }else if(battle.pendingEnemy){
-    const p=battle.pendingEnemy;
-    actionContent=`
-      <div class="enemy-preview">
-        <div class="preview-title">⚠ 敵の行動予告</div>
-        <div class="preview-detail">
-          <b>${esc(p.actorName)}</b> が行動する！<br>
-          行動内容：<b>${esc(p.actionName)}</b><br>
-          攻撃対象：<b>${esc(p.targetName)}</b>
-        </div>
-        <div class="preview-wait">敵が攻撃を準備している……（約1.1秒）</div>
-      </div>
-    `;
-
-  }else if(active){
-    const skillReady=active.charge===0||active.actions>=active.charge;
-
-    actionContent=`
-      <div class="action-title">★ ${esc(active.name)} が行動権を獲得！</div>
-      <div class="action-character">
-        <div class="name">${esc(active.name)}</div>
-        <div class="small">
-          攻撃力：${active.atk}<br>
-          スキル：${esc(active.skill)}
-          ${active.skillMultiplier>1?`<br>スキル効果補正：+${Math.round((active.skillMultiplier-1)*100)}%`:''}
-        </div>
-        ${active.charge>0?`
-          <div class="small">スキル準備：${active.actions}/${active.charge} 回</div>
-          <div class="gaugebar">
-            <i style="width:${Math.min(100,active.actions/active.charge*100)}%"></i>
-          </div>
-        `:'<div class="small">スキルはいつでも使用可能</div>'}
-      </div>
-      <div class="action-buttons">
-        <button class="attack-button" data-action="attack" data-id="${esc(active.id)}">通常攻撃</button>
-        <button class="skill-button" data-action="skill" data-id="${esc(active.id)}" ${!skillReady?'disabled':''}>
-          ${esc(active.skill)}
-          ${!skillReady?'（あと'+(active.charge-active.actions)+'回）':''}
-        </button>
-      </div>
-    `;
-  }else{
-    actionContent='<div class="muted">次の行動順を計算中...</div>';
-  }
-
-  document.getElementById('actionArea').innerHTML=actionContent;
-}
-
-/* ボタン操作 */
-function handleClick(e){
-  const page=e.target.closest('[data-page]');
   if(page){
-    showPage(page.dataset.page);
+    showPage(page);
     return;
   }
 
-  const b=e.target.closest('[data-action]');
-  if(!b||b.disabled)return;
+  const action=button.dataset.action;
+  if(!action)return;
 
-  const a=b.dataset.action;
-  const id=b.dataset.id;
+  const id=button.dataset.id;
+  const index=Number(button.dataset.index);
+  const type=button.dataset.type;
+  const stage=Number(button.dataset.stage);
 
-  if(a==='summon'){
-    summon(Number(b.dataset.count));
-  }else if(a==='skipSummon'){
-    skipSummonAnimation();
-  }else if(a==='closeSummon'){
-    closeSummon();
-  }else if(a==='toggleParty'){
-    toggleParty(id);
-  }else if(a==='openCharacterRingList'){
-    openCharacterRingList(id);
-  }else if(a==='closeCharacterRingModal'){
-    closeCharacterRingModal();
-  }else if(a==='openRingList'){
-    openEquipmentModal(id,Number(b.dataset.index));
-  }else if(a==='equipRing'){
-    equipRing(id,b.dataset.type);
-  }else if(a==='unequipRing'){
-    unequipRing(id,Number(b.dataset.index));
-    closeEquipmentModal();
-  }else if(a==='closeEquipmentModal'){
-    closeEquipmentModal();
-  }else if(a==='selectStage'){
-    selectStage(Number(b.dataset.stage));
-  }else if(a==='startBattle'){
-    startBattle();
-  }else if(a==='returnMap'){
-    if(battle&&!battle.over)return;
-    showPage('battle');
-  }else if(a==='attack'){
-    playerAction(id,false);
-  }else if(a==='skill'){
-    playerAction(id,true);
+  switch(action){
+    case 'summon':
+      ensureSummonProgress();
+      summon(Number(button.dataset.count));
+      break;
+
+    case 'nextSummon':
+      nextSummon();
+      break;
+
+    case 'skipSummon':
+      skipSummon();
+      break;
+
+    case 'toggleParty':
+      toggleParty(id);
+      break;
+
+    case 'openCharacterRingModal':
+      openCharacterRingModal(id);
+      break;
+
+    case 'closeCharacterRingModal':
+      closeCharacterRingModal();
+      break;
+
+    case 'openRingList':
+      openRingList(id,index);
+      break;
+
+    case 'closeEquipmentModal':
+      closeEquipmentModal();
+      break;
+
+    case 'equipRing':
+      equipRing(id,index,type);
+      break;
+
+    case 'unequipRing':
+      unequipRing(id,index);
+      break;
+
+    case 'selectStage':
+      selectStage(stage);
+      break;
+
+    case 'startBattle':
+      startBattle();
+      break;
+
+    case 'battleAttack':
+      allyAct(false);
+      break;
+
+    case 'battleSkill':
+      allyAct(true);
+      break;
+
+    case 'returnMap':
+      returnMap();
+      break;
   }
-}
-
-document.addEventListener('click',handleClick);
-
-/* モーダルの背景部分をタップして閉じる */
-document.getElementById('equipmentModal').addEventListener('click',e=>{
-  if(e.target.id==='equipmentModal')closeEquipmentModal();
 });
 
-document.getElementById('characterRingModal').addEventListener('click',e=>{
-  if(e.target.id==='characterRingModal')closeCharacterRingModal();
+/* =========================
+   初期化
+========================= */
+
+window.addEventListener('error',event=>{
+  console.error(event.error||event.message);
+  showError(
+    'ゲーム内でエラーが発生しました：'+
+    (event.message||'不明なエラー')
+  );
 });
 
 renderAll();
+
 </script>
 </body>
 </html>
+
+
