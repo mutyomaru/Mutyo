@@ -116,58 +116,163 @@ button:disabled{opacity:.4;cursor:not-allowed}
 }
 .footer{text-align:center;color:var(--muted);font-size:12px;padding:14px}
 
-/* ステージ一覧 */
+/* 草原ステージマップ */
 
-.stage-grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(125px,1fr));
-  gap:10px;
+.stage-map{
+  position:relative;
+  overflow:hidden;
+  padding:16px;
+  border:2px solid #58794e;
+  border-radius:18px;
+  background:
+    radial-gradient(ellipse at 15% 20%,#729d58 0,transparent 28%),
+    radial-gradient(ellipse at 85% 75%,#668d4b 0,transparent 32%),
+    linear-gradient(145deg,#456c43,#31543b 55%,#426a40);
 }
-.stage-button{
-  min-height:100px;
+.stage-map:before{
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  opacity:.18;
+  background-image:
+    radial-gradient(#d5e9a0 1px,transparent 1px);
+  background-size:22px 22px;
+}
+.map-heading{
+  position:relative;
+  z-index:1;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:8px;
+  margin-bottom:14px;
+}
+.map-heading h3{
+  color:#fff3bd;
+  margin:0;
+  font-size:19px;
+  text-shadow:0 2px 4px #172b18;
+}
+.map-progress{
+  color:#fff;
+  background:#203c2dcc;
+  border:1px solid #a4c27c;
+  padding:6px 10px;
+  border-radius:20px;
+  font-size:12px;
+}
+.map-grid{
+  position:relative;
+  z-index:1;
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:12px;
+}
+.stage-node{
+  position:relative;
+  min-width:0;
+  min-height:91px;
+  padding:8px 4px;
   display:flex;
   flex-direction:column;
   justify-content:center;
   align-items:center;
-  gap:6px;
-  background:linear-gradient(155deg,#263653,#17233b);
-  border:1px solid #536486;
+  gap:3px;
   border-radius:14px;
-  padding:12px 8px;
+  border:2px solid #b4c98b;
+  background:linear-gradient(180deg,#e1e9b7,#a9c27b);
+  color:#263b26;
+  box-shadow:0 4px 0 #345534,0 5px 9px #152a1b88;
+  text-align:center;
 }
-.stage-button.selected{
-  border:2px solid var(--gold);
-  background:linear-gradient(155deg,#51452d,#302b25);
+.stage-node .stage-number{
+  font-size:23px;
+  font-weight:1000;
+  line-height:1.1;
 }
-.stage-button.cleared{
-  border-color:#5d9b79;
-}
-.stage-button.locked{
-  opacity:.4;
-  filter:grayscale(.8);
-}
-.stage-number{
-  font-size:19px;
+.stage-node .stage-label{
+  font-size:11px;
   font-weight:900;
 }
-.stage-status{
-  font-size:12px;
-  color:var(--muted);
+.stage-node .stage-status{
+  font-size:10px;
+  font-weight:800;
 }
-.stage-button.cleared .stage-status{
-  color:var(--green);
-  font-weight:900;
+.stage-node.completed{
+  background:linear-gradient(180deg,#c5e9bb,#76b879);
+  border-color:#e2f6c9;
 }
-.stage-button.selected .stage-status{
-  color:var(--gold);
+.stage-node.current{
+  background:linear-gradient(180deg,#fff0a8,#e9b94e);
+  border-color:#fff0a8;
+  box-shadow:0 0 0 3px #f4c76b66,0 4px 0 #87632b;
 }
-.stage-selected-info{
-  margin-top:12px;
+.stage-node.selected{
+  outline:3px solid #fff;
+  outline-offset:2px;
+  transform:translateY(-2px);
+}
+.stage-node.boss{
+  background:linear-gradient(180deg,#f1b2a3,#bd625b);
+  color:#451e25;
+  border-color:#ffd0bd;
+}
+.stage-node.boss.completed{
+  background:linear-gradient(180deg,#e8b5a5,#b86d62);
+}
+.stage-node.boss.current{
+  box-shadow:0 0 0 3px #ffb0a266,0 4px 0 #713b37;
+}
+.stage-node.locked{
+  background:linear-gradient(180deg,#9ba58d,#697568);
+  border-color:#a6b19c;
+  color:#344236;
+  box-shadow:0 4px 0 #354337;
+}
+.stage-node:disabled{opacity:.75;cursor:not-allowed}
+.map-legend{
+  position:relative;
+  z-index:1;
+  display:flex;
+  gap:12px;
+  flex-wrap:wrap;
+  margin-top:16px;
+  font-size:11px;
+  color:#fff;
+  text-shadow:0 1px 3px #172b18;
+}
+.map-legend span{display:flex;align-items:center;gap:4px}
+.legend-dot{
+  display:inline-block;
+  width:11px;
+  height:11px;
+  border-radius:4px;
+  border:1px solid #fff8;
+}
+.legend-normal{background:#c9d99c}
+.legend-clear{background:#83c987}
+.legend-boss{background:#d77d70}
+.legend-locked{background:#788477}
+.selected-stage-info{
+  margin-top:13px;
   padding:12px;
-  background:#202d49;
-  border:1px solid var(--line);
+  background:#203c2dcc;
+  border:1px solid #a4c27c;
   border-radius:12px;
-  line-height:1.8;
+  color:#fff;
+  position:relative;
+  z-index:1;
+}
+.selected-stage-info strong{color:#ffe69a}
+.map-start-button{
+  width:100%;
+  margin-top:10px;
+  background:linear-gradient(180deg,#e6c16a,#a77c32);
+  border-color:#ffe4a1;
+  color:#30230e;
+  font-weight:1000;
 }
 
 /* 戦闘画面 */
@@ -211,6 +316,48 @@ button:disabled{opacity:.4;cursor:not-allowed}
   opacity:.35;
   filter:grayscale(1);
 }
+
+/* 行動権を持つキャラクターの強調 */
+.battle-character.turn-active{
+  border:3px solid #ffe17c;
+  padding:8px 6px 10px;
+  box-shadow:
+    0 0 0 3px #f4c76b55,
+    0 0 20px #f4c76b99,
+    inset 0 0 16px #f4c76b22;
+  animation:turnPulse 1.2s ease-in-out infinite alternate;
+}
+.battle-character.enemy.turn-active{
+  border-color:#ff8585;
+  box-shadow:
+    0 0 0 3px #ff858555,
+    0 0 20px #ff858599,
+    inset 0 0 16px #ff858522;
+}
+.turn-badge{
+  position:absolute;
+  z-index:7;
+  top:5px;
+  left:50%;
+  transform:translateX(-50%);
+  white-space:nowrap;
+  padding:4px 10px;
+  border-radius:20px;
+  background:linear-gradient(180deg,#ffe99c,#e9b94e);
+  color:#35250a;
+  font-size:12px;
+  font-weight:1000;
+  box-shadow:0 2px 7px #0008;
+}
+.enemy .turn-badge{
+  background:linear-gradient(180deg,#ffc1c1,#e87979);
+  color:#501b25;
+}
+@keyframes turnPulse{
+  from{filter:brightness(1)}
+  to{filter:brightness(1.35)}
+}
+
 .battle-image{
   width:100%;
   height:165px;
@@ -355,10 +502,7 @@ button:disabled{opacity:.4;cursor:not-allowed}
   font-size:34px;
   font-weight:1000;
   white-space:nowrap;
-  text-shadow:
-    0 3px 6px #000,
-    0 0 10px #000,
-    0 0 16px #000;
+  text-shadow:0 3px 6px #000,0 0 10px #000,0 0 16px #000;
   animation:effectFloat 1.2s ease-out forwards;
 }
 .effect-damage{
@@ -386,40 +530,18 @@ button:disabled{opacity:.4;cursor:not-allowed}
   -webkit-text-stroke:1px #283d60;
 }
 @keyframes effectFloat{
-  0%{
-    opacity:0;
-    transform:translate(-50%,0) scale(.65);
-  }
-  15%{
-    opacity:1;
-    transform:translate(-50%,-12px) scale(1.15);
-  }
-  35%{
-    opacity:1;
-    transform:translate(-50%,-20px) scale(1);
-  }
-  100%{
-    opacity:0;
-    transform:translate(-50%,-58px) scale(.95);
-  }
+  0%{opacity:0;transform:translate(-50%,0) scale(.65)}
+  15%{opacity:1;transform:translate(-50%,-12px) scale(1.15)}
+  35%{opacity:1;transform:translate(-50%,-20px) scale(1)}
+  100%{opacity:0;transform:translate(-50%,-58px) scale(.95)}
 }
-.hit-animation{
-  animation:hitShake .35s ease-in-out;
-}
+.hit-animation{animation:hitShake .35s ease-in-out}
 @keyframes hitShake{
   0%,100%{transform:translateX(0)}
   20%{transform:translateX(-5px)}
   40%{transform:translateX(5px)}
   60%{transform:translateX(-3px)}
   80%{transform:translateX(3px)}
-}
-.attack-flash{
-  animation:attackFlash .35s ease-out;
-}
-@keyframes attackFlash{
-  0%{filter:brightness(1)}
-  35%{filter:brightness(2.1)}
-  100%{filter:brightness(1)}
 }
 @keyframes previewIn{
   from{opacity:0;transform:translateY(7px)}
@@ -433,12 +555,16 @@ button:disabled{opacity:.4;cursor:not-allowed}
   .battle-side{grid-template-columns:repeat(2,minmax(0,1fr))}
   .battle-image{height:145px}
   .effect-pop{font-size:31px}
+  .map-grid{gap:9px}
+  .stage-node{min-height:82px}
 }
 @media(max-width:360px){
   .battle-side{grid-template-columns:1fr 1fr}
   .battle-image{height:120px}
   .battle-name{font-size:14px}
   .effect-pop{font-size:28px}
+  .stage-node .stage-number{font-size:20px}
+  .stage-node .stage-label{font-size:10px}
 }
 </style>
 </head>
@@ -519,29 +645,28 @@ button:disabled{opacity:.4;cursor:not-allowed}
 </section>
 
 <section id="battle" class="page">
-
-  <!-- ステージ一覧 -->
   <div class="panel">
-    <h2 class="section-title">ステージ一覧</h2>
+    <h2 class="section-title">草原マップ</h2>
     <p class="muted">
-      クリア済みのステージと、次のステージに挑戦できます。
+      ステージを選択して冒険に出よう。クリア済みのステージにも再挑戦できる。
     </p>
-    <div id="stageList" class="stage-grid"></div>
-    <div id="stageSelectedInfo" class="stage-selected-info"></div>
+    <div id="stageMap"></div>
   </div>
 
   <div class="panel">
-    <h2 class="section-title">冒険・戦闘</h2>
+    <h2 class="section-title">冒険準備</h2>
     <div id="battleIntro"></div>
     <div class="row" style="margin-top:12px">
-      <button data-action="startBattle">ステージに挑戦する</button>
+      <button id="startBattleButton" class="map-start-button" data-action="startBattle">
+        選択したステージに挑戦
+      </button>
     </div>
   </div>
 
   <div id="battleArea" class="panel" style="display:none">
     <div class="battle-screen">
       <div>
-        <div class="battle-side-heading enemy-heading">▼ 敵軍</div>
+        <div class="battle-side-heading enemy-heading" id="enemyHeading">▼ 敵軍</div>
         <div id="enemyUnits" class="battle-side"></div>
       </div>
 
@@ -568,6 +693,8 @@ button:disabled{opacity:.4;cursor:not-allowed}
 'use strict';
 
 const KEY='hoshiyomi_save_v2';
+const MAX_STAGE=20;
+const BOSS_STAGES=[10,20];
 
 const CHARACTERS=[
 {id:'swordman',imageFile:'Swordman.png',name:'剣士',rarity:'ノーマル',hp:100,atk:20,speed:20,charge:3,skill:'強撃',effect:'damage',power:50,target:'one',growth:.07,max:20},
@@ -593,12 +720,16 @@ const CHARACTERS=[
 
 const byId=id=>CHARACTERS.find(c=>c.id===id);
 
+function isBossStage(stage){
+  return BOSS_STAGES.includes(Number(stage));
+}
+
 function fresh(){
   return {
     gems:500,
     gold:300,
     stage:1,
-    clearedStages:[],
+    clearedStage:0,
     owned:{
       swordman:{level:1,dupes:0},
       archer:{level:1,dupes:0},
@@ -620,25 +751,20 @@ function loadState(){
   const s={...d,...raw};
   s.gems=Number.isFinite(+s.gems)?Math.max(0,+s.gems):d.gems;
   s.gold=Number.isFinite(+s.gold)?Math.max(0,+s.gold):d.gold;
-  s.stage=Number.isFinite(+s.stage)?Math.max(1,Math.floor(+s.stage)):1;
+  s.stage=Number.isFinite(+s.stage)
+    ?Math.min(MAX_STAGE,Math.max(1,Math.floor(+s.stage)))
+    :1;
 
   /*
-    過去バージョンのセーブデータには
-    clearedStagesが存在しないため、
-    到達ステージからクリア記録を復元する。
+    以前のセーブデータにはclearedStageがないため、
+    旧データのstageからクリア済みステージを復元する。
   */
-  if(Array.isArray(raw.clearedStages)){
-    s.clearedStages=[...new Set(
-      raw.clearedStages
-        .map(Number)
-        .filter(n=>Number.isInteger(n)&&n>=1&&n<s.stage)
-    )];
-  }else{
-    s.clearedStages=[];
-    for(let i=1;i<s.stage;i++){
-      s.clearedStages.push(i);
-    }
-  }
+  const oldCleared=s.stage-1;
+  s.clearedStage=Number.isFinite(+raw.clearedStage)
+    ?Math.min(MAX_STAGE,Math.max(oldCleared,Math.floor(+raw.clearedStage)))
+    :oldCleared;
+
+  s.stage=Math.min(MAX_STAGE,s.clearedStage+1);
 
   s.owned=raw.owned&&typeof raw.owned==='object'?raw.owned:{};
 
@@ -670,9 +796,7 @@ let state=loadState();
 let battle=null;
 let busy=false;
 let enemyTimer=null;
-
-/* 現在選択しているステージ */
-let selectedStage=state.stage;
+let selectedStage=Math.min(MAX_STAGE,state.clearedStage+1);
 
 function save(){
   try{
@@ -755,65 +879,92 @@ function cardHTML(id,selectable=false){
   `;
 }
 
-/* ステージ一覧を描画 */
-function renderStageList(){
-  const list=document.getElementById('stageList');
-  const info=document.getElementById('stageSelectedInfo');
+/* ステージマップを描画 */
+function renderStageMap(){
+  const map=document.getElementById('stageMap');
+  if(!map)return;
 
-  if(!list||!info)return;
+  const unlocked=Math.min(MAX_STAGE,state.clearedStage+1);
+  const cleared=Math.min(MAX_STAGE,state.clearedStage);
 
-  let html='';
+  let nodes='';
 
-  for(let i=1;i<=state.stage;i++){
-    const cleared=state.clearedStages.includes(i);
-    const selected=selectedStage===i;
-    const disabled=!!(battle&&!battle.over);
+  for(let i=1;i<=MAX_STAGE;i++){
+    const boss=isBossStage(i);
+    const isCleared=i<=cleared;
+    const isUnlocked=i<=unlocked;
+    const isCurrent=i===unlocked;
+    const isSelected=i===selectedStage;
 
-    html+=`
+    let classes='stage-node';
+
+    if(boss)classes+=' boss';
+    if(isCleared)classes+=' completed';
+    if(isCurrent)classes+=' current';
+    if(isSelected)classes+=' selected';
+    if(!isUnlocked)classes+=' locked';
+
+    let status='🔒 未解放';
+    if(isCleared)status='✓ クリア済み';
+    else if(isCurrent)status='挑戦可能';
+
+    nodes+=`
       <button
-        class="stage-button
-          ${cleared?'cleared':''}
-          ${selected?'selected':''}"
+        class="${classes}"
         data-action="selectStage"
         data-stage="${i}"
-        ${disabled?'disabled':''}
+        ${!isUnlocked?'disabled':''}
+        aria-label="ステージ${i}${boss?' ボス':''}"
       >
-        <span class="stage-number">STAGE ${i}</span>
-        <span class="stage-status">
-          ${cleared?'✓ CLEAR':selected?'▶ 選択中':'挑戦可能'}
-        </span>
+        <span class="stage-number">${boss?'👑 ':''}${i}</span>
+        <span class="stage-label">${boss?'BOSS STAGE':'STAGE'}</span>
+        <span class="stage-status">${status}</span>
       </button>
     `;
   }
 
-  /* 次のステージ以外は表示しない */
-  list.innerHTML=html;
+  const bossText=isBossStage(selectedStage)
+    ?' <strong>👑 ボスステージ</strong>'
+    :'';
 
-  const cleared=state.clearedStages.includes(selectedStage);
+  const replayText=selectedStage<=cleared
+    ?'クリア済みステージへの再挑戦'
+    :'新しいステージへの挑戦';
 
-  info.innerHTML=`
-    <b>選択中：ステージ ${selectedStage}</b><br>
-    ${cleared
-      ?'<span style="color:var(--green)">このステージはクリア済みです。再挑戦できます。</span>'
-      :'<span style="color:var(--gold)">新しいステージです。勝利すると次のステージが解放されます。</span>'
-    }
-    ${battle&&!battle.over
-      ?'<br><span class="muted">戦闘中はステージを変更できません。</span>'
-      :''
-    }
+  map.innerHTML=`
+    <div class="stage-map">
+      <div class="map-heading">
+        <h3>🌿 緑風の草原</h3>
+        <div class="map-progress">
+          クリア ${cleared} / ${MAX_STAGE}
+        </div>
+      </div>
+
+      <div class="map-grid">
+        ${nodes}
+      </div>
+
+      <div class="map-legend">
+        <span><i class="legend-dot legend-normal"></i>通常</span>
+        <span><i class="legend-dot legend-clear"></i>クリア済み</span>
+        <span><i class="legend-dot legend-boss"></i>ボス</span>
+        <span><i class="legend-dot legend-locked"></i>未解放</span>
+      </div>
+
+      <div class="selected-stage-info">
+        選択中：<strong>ステージ ${selectedStage}</strong>${bossText}<br>
+        <span class="small">${replayText}</span>
+      </div>
+
+      <button
+        class="map-start-button"
+        data-action="startBattle"
+        ${!state.party.length?'disabled':''}
+      >
+        ステージ ${selectedStage} に挑戦する
+      </button>
+    </div>
   `;
-}
-
-/* ステージ選択 */
-function selectStage(stageNo){
-  const n=Number(stageNo);
-
-  if(!Number.isInteger(n)||n<1||n>state.stage)return;
-  if(battle&&!battle.over)return;
-
-  selectedStage=n;
-
-  renderAll();
 }
 
 function renderAll(){
@@ -824,8 +975,8 @@ function renderAll(){
   document.getElementById('homeSummary').innerHTML=
     `所持キャラクター：${Object.keys(state.owned).length}体<br>
     編成中：${state.party.map(id=>esc(byId(id)?.name||id)).join(' / ')||'なし'}<br>
-    次の冒険：ステージ ${state.stage}<br>
-    クリア済みステージ：${state.clearedStages.length}個`;
+    クリア済み：${state.clearedStage} / ${MAX_STAGE}<br>
+    次の冒険：ステージ ${Math.min(MAX_STAGE,state.clearedStage+1)}`;
 
   document.getElementById('gachaOwned').textContent=
     `${Object.keys(state.owned).length} / ${CHARACTERS.length}体を所持`;
@@ -846,11 +997,29 @@ function renderAll(){
           </article>`
     ).join('');
 
-  document.getElementById('battleIntro').innerHTML=
-    `挑戦するステージ：<b>${selectedStage}</b><br>
-    <span class="muted">編成：${state.party.map(id=>esc(byId(id)?.name||id)).join(' / ')||'なし'}</span>`;
+  renderStageMap();
 
-  renderStageList();
+  const unlocked=Math.min(MAX_STAGE,state.clearedStage+1);
+  const boss=isBossStage(selectedStage);
+
+  document.getElementById('battleIntro').innerHTML=`
+    選択中のステージ：<b>${selectedStage}</b>
+    ${boss?'<span style="color:#ffaaaa;font-weight:900"> 👑 BOSS STAGE</span>':''}
+    <br>
+    <span class="muted">
+      解放済み：ステージ1～${unlocked}<br>
+      クリア済み：${state.clearedStage}ステージ
+    </span><br>
+    <span class="muted">
+      編成：${state.party.map(id=>esc(byId(id)?.name||id)).join(' / ')||'なし'}
+    </span>
+  `;
+
+  const startButton=document.getElementById('startBattleButton');
+  if(startButton){
+    startButton.textContent=`ステージ ${selectedStage} に挑戦`;
+    startButton.disabled=!state.party.length;
+  }
 }
 
 function showPage(name){
@@ -859,11 +1028,25 @@ function showPage(name){
   });
 
   if(name==='battle'){
-    renderStageList();
+    renderStageMap();
     renderBattle();
   }
 
   window.scrollTo(0,0);
+}
+
+function selectStage(stage){
+  stage=Number(stage);
+  const unlocked=Math.min(MAX_STAGE,state.clearedStage+1);
+
+  if(!Number.isInteger(stage)||stage<1||stage>unlocked)return;
+  if(battle&&!battle.over){
+    showError('戦闘中はステージを変更できません。');
+    return;
+  }
+
+  selectedStage=stage;
+  renderAll();
 }
 
 function summon(count){
@@ -974,14 +1157,14 @@ function makeUnit(id,side){
 }
 
 /* 敵の名前・画像・ステータス */
-function makeEnemy(i,stageNo){
+function makeEnemy(i){
   const enemyIds=['goblin','zombie','ゴーレム'];
   const id=enemyIds[i];
   const c=byId(id);
 
   if(!c)return null;
 
-  const enemyLevel=Math.min(c.max,Math.max(1,stageNo));
+  const enemyLevel=Math.min(c.max,Math.max(1,selectedStage));
   const st=stats(c,{level:enemyLevel});
 
   return {
@@ -1011,47 +1194,38 @@ function alive(arr){
   return arr.filter(x=>x.alive&&x.hp>0);
 }
 
-/* 生存している敵からランダムに選ぶ */
 function chooseRandomEnemy(){
   const enemies=alive(battle.enemies);
   if(!enemies.length)return null;
-
   return enemies[Math.floor(Math.random()*enemies.length)];
 }
 
-/* 生存している味方からランダムに選ぶ */
 function chooseRandomAlly(){
   const allies=alive(battle.allies);
   if(!allies.length)return null;
-
   return allies[Math.floor(Math.random()*allies.length)];
 }
 
-/* 現在HPが最も低い敵を選ぶ */
 function chooseEnemy(){
   return alive(battle.enemies)
     .sort((a,b)=>a.hp-b.hp)[0]||null;
 }
 
-/* 現在HPが最も低い味方を選ぶ */
 function chooseAlly(){
   return alive(battle.allies)
     .sort((a,b)=>a.hp-b.hp)[0]||null;
 }
 
-/* 味方側の攻撃対象 */
 function chooseAttackTarget(actor){
   if(actor&&actor.id==='狙撃手アーチャー'){
     return chooseEnemy();
   }
-
   return chooseRandomEnemy();
 }
 
 /*
   演出はここで再描画しない。
-  行動処理が終わったタイミングのrenderBattle()で
-  1回だけ表示する。
+  行動処理後のrenderBattle()で一度だけ表示する。
 */
 function showUnitEffect(unit,text,kind='damage'){
   if(!unit)return;
@@ -1082,15 +1256,11 @@ function showUnitEffect(unit,text,kind='damage'){
 
       el.classList.remove('hit-animation');
     });
-
   },1250);
 }
 
-/* 戦闘開始 */
 function startBattle(){
   if(busy)return;
-
-  if(battle&&!battle.over)return;
 
   if(enemyTimer){
     clearTimeout(enemyTimer);
@@ -1102,31 +1272,33 @@ function startBattle(){
     return;
   }
 
-  if(selectedStage<1||selectedStage>state.stage){
-    showError('このステージはまだ解放されていません。');
+  const unlocked=Math.min(MAX_STAGE,state.clearedStage+1);
+  if(selectedStage>unlocked){
+    showError('そのステージはまだ解放されていません。');
     return;
   }
 
   battle={
     stage:selectedStage,
+    isBoss:isBossStage(selectedStage),
     turn:0,
     over:false,
     readyActor:null,
     pendingEnemy:null,
     allies:state.party.map(id=>makeUnit(id,'ally')),
     enemies:[
-      makeEnemy(0,selectedStage),
-      makeEnemy(1,selectedStage),
-      ...(selectedStage>=3?[makeEnemy(2,selectedStage)]:[])
+      makeEnemy(0),
+      makeEnemy(1),
+      ...(selectedStage>=3||isBossStage(selectedStage)?[makeEnemy(2)]:[])
     ].filter(Boolean)
   };
 
   busy=false;
   showPage('battle');
+  renderBattle();
   advanceBattle();
 }
 
-/* 敵の攻撃対象を決定 */
 function chooseEnemyAttackTarget(enemy){
   if(
     enemy&&
@@ -1137,11 +1309,10 @@ function chooseEnemyAttackTarget(enemy){
   ){
     return chooseAlly();
   }
-
   return chooseRandomAlly();
 }
 
-/* 敵の行動を先に決め、画面に予告してから実行 */
+/* 敵の行動を予告してから実行 */
 function prepareEnemyAction(enemy){
   const target=chooseEnemyAttackTarget(enemy);
   if(!target)return;
@@ -1187,13 +1358,11 @@ function prepareEnemyAction(enemy){
       enemyAct(actor,victim);
     }
 
-    /* 敵側の毒ダメージ処理 */
     for(const e of alive(battle.enemies)){
       if(e.poison>0){
         e.hp=Math.max(0,e.hp-8);
         e.poison--;
         showUnitEffect(e,'毒 -8','damage');
-
         if(e.hp===0)e.alive=false;
       }
     }
@@ -1246,7 +1415,6 @@ function performAlly(actor,useSkill){
 
     }else if(actor.effect==='poison'){
       const t=chooseAttackTarget(actor);
-
       if(t){
         deal(actor,t,actor.power);
         t.poison=3;
@@ -1275,7 +1443,6 @@ function performAlly(actor,useSkill){
 
     }else if(actor.effect==='buffAlly'){
       const t=chooseAlly();
-
       if(t){
         t.buff+=actor.power/100;
         showUnitEffect(t,'攻撃力UP','buff');
@@ -1283,11 +1450,8 @@ function performAlly(actor,useSkill){
     }
 
   }else{
-    /* 通常攻撃回数を加算 */
     actor.actions++;
-
     const t=chooseAttackTarget(actor);
-
     if(t){
       deal(actor,t,actor.atk*actor.buff);
     }
@@ -1321,8 +1485,6 @@ function deal(attacker,target,amount){
   }
 
   target.hp=Math.max(0,target.hp-dmg);
-
-  /* 1回の攻撃につきダメージ演出は1回だけ */
   showUnitEffect(target,'-'+dmg,'damage');
 
   if(target.hp<=0){
@@ -1332,7 +1494,6 @@ function deal(attacker,target,amount){
   return dmg;
 }
 
-/* 予告に表示した対象へ攻撃 */
 function enemyAct(e,target){
   if(!target||!target.alive)return;
 
@@ -1427,7 +1588,6 @@ function playerAction(id,skill){
   advanceBattle();
 }
 
-/* 戦闘終了 */
 function finishBattle(win){
   if(!battle||battle.over)return;
 
@@ -1442,36 +1602,21 @@ function finishBattle(win){
   busy=false;
 
   if(win){
-    /*
-      クリアしたステージを記録する。
-      同じステージを何度クリアしても
-      記録が重複しないようにする。
-    */
-    const clearedNo=battle.stage;
+    const cleared=battle.stage;
 
-    if(!state.clearedStages.includes(clearedNo)){
-      state.clearedStages.push(clearedNo);
-      state.clearedStages.sort((a,b)=>a-b);
-    }
-
-    /*
-      現在の到達ステージをクリアした場合だけ
-      次のステージを解放する。
-      過去ステージの再クリアでは進行度は変わらない。
-    */
-    if(clearedNo>=state.stage){
-      state.stage=clearedNo+1;
-    }
+    state.clearedStage=Math.max(state.clearedStage,cleared);
+    state.stage=Math.min(MAX_STAGE,state.clearedStage+1);
 
     state.gold+=100;
     state.gems+=40;
+
+    selectedStage=Math.min(MAX_STAGE,state.clearedStage+1);
   }
 
   save();
   renderBattle();
 }
 
-/* 戦闘画面の描画 */
 function renderBattle(){
   const area=document.getElementById('battleArea');
 
@@ -1482,16 +1627,29 @@ function renderBattle(){
 
   area.style.display='block';
 
+  const activeId=battle.readyActor||
+    (battle.pendingEnemy?battle.pendingEnemy.actorId:null);
+
   const unitHTML=u=>{
     const isEnemy=u.side==='enemy';
     const dead=!u.alive||u.hp<=0;
     const image=imagePath(u.imageId);
+    const isActive=u.id===activeId;
+
+    let badge='';
+    if(isActive){
+      badge=isEnemy
+        ?'<div class="turn-badge">敵の行動予告</div>'
+        :'<div class="turn-badge">★ 行動権あり ★</div>';
+    }
 
     return `
       <div
-        class="battle-character ${isEnemy?'enemy':'ally'} ${dead?'dead':''} ${u.hit?'hit-animation':''}"
+        class="battle-character ${isEnemy?'enemy':'ally'} ${dead?'dead':''} ${u.hit?'hit-animation':''} ${isActive?'turn-active':''}"
         data-unit-id="${esc(u.id)}"
       >
+        ${badge}
+
         <div class="battle-image">
           <img src="${image}" alt="${esc(u.name)}"
             onerror="this.style.display='none'">
@@ -1529,6 +1687,11 @@ function renderBattle(){
   document.getElementById('enemyUnits').innerHTML=
     battle.enemies.map(unitHTML).join('');
 
+  const enemyHeading=document.getElementById('enemyHeading');
+  enemyHeading.textContent=battle.isBoss
+    ?'▼ 敵軍　👑 BOSS BATTLE'
+    :'▼ 敵軍';
+
   const active=battle.allies.find(a=>a.id===battle.readyActor);
   let actionContent='';
 
@@ -1538,11 +1701,13 @@ function renderBattle(){
         <h3>${battle.resultWin?'勝利！':'敗北……'}</h3>
         <p>
           ${battle.resultWin
-            ?'ステージ'+battle.stage+'をクリア！報酬を獲得した。'
+            ?`ステージ ${battle.stage} クリア！報酬を獲得した。`
             :'旅団は敗北した。編成を見直して再挑戦しよう。'}
         </p>
         ${battle.resultWin?'<p>🪙100　💎40を獲得！</p>':''}
-        <button data-action="startBattle">このステージにもう一度挑戦</button>
+        ${battle.resultWin&&battle.isBoss?'<p style="color:#ffcf83;font-weight:900">👑 ボスステージ突破！</p>':''}
+        <button data-action="returnMap">ステージ一覧に戻る</button>
+        <button data-action="startBattle">もう一度挑戦</button>
       </div>
     `;
 
@@ -1570,7 +1735,7 @@ function renderBattle(){
 
     actionContent=`
       <div class="action-title">
-        ⚔ ${esc(active.name)} の行動
+        ★ ${esc(active.name)} が行動権を獲得！
       </div>
 
       <div class="action-character">
@@ -1637,10 +1802,14 @@ function handleClick(e){
     summon(Number(b.dataset.count));
   }else if(a==='toggleParty'){
     toggleParty(id);
+  }else if(a==='selectStage'){
+    selectStage(Number(b.dataset.stage));
   }else if(a==='startBattle'){
     startBattle();
-  }else if(a==='selectStage'){
-    selectStage(b.dataset.stage);
+  }else if(a==='returnMap'){
+    if(battle&& !battle.over)return;
+    showPage('battle');
+    document.getElementById('battleArea').style.display='none';
   }else if(a==='attack'){
     playerAction(id,false);
   }else if(a==='skill'){
