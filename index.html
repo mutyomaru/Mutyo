@@ -653,6 +653,7 @@ button:disabled{opacity:.4;cursor:not-allowed}
   </div>
 </section>
 
+<!-- ステージ選択ページ -->
 <section id="battle" class="page">
   <div class="panel">
     <h2 class="section-title">草原マップ</h2>
@@ -671,23 +672,33 @@ button:disabled{opacity:.4;cursor:not-allowed}
       </button>
     </div>
   </div>
+</section>
 
-  <div id="battleArea" class="panel" style="display:none">
-    <div class="battle-screen">
-      <div>
-        <div class="battle-side-heading enemy-heading" id="enemyHeading">▼ 敵軍</div>
-        <div id="enemyUnits" class="battle-side"></div>
-      </div>
+<!-- 戦闘専用ページ -->
+<section id="battleFight" class="page">
+  <div class="panel">
+    <div class="row" style="justify-content:space-between;margin-bottom:12px">
+      <h2 class="section-title" style="margin:0">戦闘</h2>
+      <button data-action="returnMap">ステージ選択に戻る</button>
+    </div>
 
-      <div class="battle-divider">✦ VS ✦</div>
+    <div id="battleArea">
+      <div class="battle-screen">
+        <div>
+          <div class="battle-side-heading enemy-heading" id="enemyHeading">▼ 敵軍</div>
+          <div id="enemyUnits" class="battle-side"></div>
+        </div>
 
-      <div>
-        <div class="battle-side-heading ally-heading">▲ 旅団</div>
-        <div id="allyUnits" class="battle-side"></div>
-      </div>
+        <div class="battle-divider">✦ VS ✦</div>
 
-      <div id="actionArea" class="action-panel">
-        <div class="muted">戦闘準備中...</div>
+        <div>
+          <div class="battle-side-heading ally-heading">▲ 旅団</div>
+          <div id="allyUnits" class="battle-side"></div>
+        </div>
+
+        <div id="actionArea" class="action-panel">
+          <div class="muted">戦闘準備中...</div>
+        </div>
       </div>
     </div>
   </div>
@@ -735,19 +746,6 @@ function isBossStage(stage){
   return BOSS_STAGES.includes(Number(stage));
 }
 
-/*
-  敵編成データ
-
-  type:'level'
-  → 指定レベルまで通常成長させる。
-
-  type:'multiplier'
-  → レベル1の基本ステータスに倍率をかける。
-     50%なら0.5、75%なら0.75、100%なら1.0。
-
-  hpMultiplier
-  → HPだけに別の倍率をかける。
-*/
 const STAGE_ENEMIES={
   1:[
     {id:'goblin',type:'multiplier',multiplier:.50}
@@ -907,6 +905,14 @@ function imagePath(id){
   return './images/'+encodeURIComponent(file);
 }
 
+/* ユニットに設定された画像ファイルを優先して読み込む */
+function unitImagePath(unit){
+  const c=byId(unit.characterId||unit.imageId);
+  const file=unit.imageFile||c?.imageFile||(unit.imageId||unit.characterId)+'.png';
+
+  return './images/'+encodeURIComponent(file);
+}
+
 function portrait(id){
   const c=byId(id);
 
@@ -976,7 +982,6 @@ function cardHTML(id,selectable=false){
   `;
 }
 
-/* ステージの敵編成を説明する */
 function getFormationText(stage){
   const formation=STAGE_ENEMIES[stage];
 
@@ -986,6 +991,10 @@ function getFormationText(stage){
     const c=byId(enemy.id);
     if(!c)return '不明な敵';
 
+    if(stage===10&&enemy.id==='ゴーレム'){
+      return `${c.name} ×1（HP 200%）`;
+    }
+
     if(enemy.type==='level'){
       return `${c.name} Lv.${enemy.level||1}`;
     }
@@ -994,7 +1003,6 @@ function getFormationText(stage){
   }).join(' / ');
 }
 
-/* ステージマップ */
 function renderStageMap(){
   const map=document.getElementById('stageMap');
   if(!map)return;
@@ -1090,6 +1098,9 @@ function renderStageMap(){
         <div class="enemy-formation-info">
           敵編成：${esc(formationText)}
         </div>
+        <div class="enemy-formation-info">
+          ステージ11～20は今後実装予定です。
+        </div>
       </div>
 
       <button
@@ -1175,6 +1186,7 @@ function renderAll(){
   }
 }
 
+/* ページ切り替え */
 function showPage(name){
   document.querySelectorAll('.page').forEach(p=>{
     p.classList.toggle('active',p.id===name);
@@ -1182,6 +1194,9 @@ function showPage(name){
 
   if(name==='battle'){
     renderStageMap();
+  }
+
+  if(name==='battleFight'){
     renderBattle();
   }
 
@@ -1318,6 +1333,8 @@ function makeUnit(id,side){
     alive:true,
     counter:false,
     imageId:id,
+    characterId:id,
+    imageFile:c.imageFile,
     effectText:'',
     effectKind:'',
     effectVersion:0,
@@ -1328,17 +1345,13 @@ function makeUnit(id,side){
 /*
   敵キャラクター生成
 
-  レベル指定の場合：
-  stats()で通常の成長率を適用。
+  通常の敵：
+  元キャラクターの設定をそのまま使用。
 
-  倍率指定の場合：
-  レベル1の基本ステータスに倍率を適用。
-  HP・攻撃力・スキル威力が対象。
-  素早さは既存仕様どおりレベルで成長しないため、
-  倍率による変化もさせない。
-
-  hpMultiplierがある場合：
-  HPだけに追加倍率を適用。
+  ステージ10のボスゴーレム：
+  HPは基本HPの200%。
+  素早さ14、溜め2に個別設定する。
+  ここでの変更はステージ10の敵個体だけに適用する。
 */
 function makeEnemy(i,stage){
   const formation=STAGE_ENEMIES[stage];
@@ -1364,7 +1377,6 @@ function makeEnemy(i,stage){
 
   }else{
     const multiplier=setting.multiplier;
-
     const base=stats(c,{level:1});
 
     st={
@@ -1382,11 +1394,19 @@ function makeEnemy(i,stage){
     strengthLabel+=` / HP ${Math.round(setting.hpMultiplier*100)}%`;
   }
 
+  /* ステージ10のボスゴーレムだけの個別調整 */
+  const isStage10Golem=stage===10&&setting.id==='ゴーレム';
+
+  if(isStage10Golem){
+    st.speed=14;
+  }
+
   return {
-    id:'enemy'+i,
+    id:'enemy-'+stage+'-'+i,
     name:c.name,
     imageId:c.id,
     characterId:c.id,
+    imageFile:c.imageFile,
     side:'enemy',
 
     hp:st.hp,
@@ -1395,6 +1415,14 @@ function makeEnemy(i,stage){
     speed:st.speed,
 
     gauge:0,
+    charge:isStage10Golem?2:c.charge,
+    actions:0,
+    skill:c.skill,
+    effect:c.effect,
+    power:st.power,
+    target:c.target,
+    passive:c.passive,
+
     alive:true,
     guard:false,
     evade:0,
@@ -1448,7 +1476,6 @@ function chooseAttackTarget(actor){
   return chooseRandomEnemy();
 }
 
-/* 演出はここで再描画しない */
 function showUnitEffect(unit,text,kind='damage'){
   if(!unit)return;
 
@@ -1530,7 +1557,8 @@ function startBattle(){
 
   busy=false;
 
-  showPage('battle');
+  /* 戦闘専用ページに切り替える */
+  showPage('battleFight');
   renderBattle();
   advanceBattle();
 }
@@ -1549,7 +1577,6 @@ function chooseEnemyAttackTarget(enemy){
   return chooseRandomAlly();
 }
 
-/* 敵の行動を予告してから実行 */
 function prepareEnemyAction(enemy){
   const target=chooseEnemyAttackTarget(enemy);
 
@@ -1626,7 +1653,6 @@ function prepareEnemyAction(enemy){
   },1100);
 }
 
-/* 味方の行動 */
 function performAlly(actor,useSkill){
   const c=byId(actor.id);
 
@@ -1719,7 +1745,6 @@ function performAlly(actor,useSkill){
   }
 }
 
-/* ダメージ処理 */
 function deal(attacker,target,amount){
   if(!target||!target.alive)return 0;
 
@@ -1907,7 +1932,7 @@ function renderBattle(){
   const unitHTML=u=>{
     const isEnemy=u.side==='enemy';
     const dead=!u.alive||u.hp<=0;
-    const image=imagePath(u.imageId);
+    const image=unitImagePath(u);
     const isActive=u.id===activeId;
 
     let badge='';
@@ -1945,6 +1970,10 @@ function renderBattle(){
 
         ${isEnemy&&u.strengthLabel?`
           <div class="small">強化：${esc(u.strengthLabel)}</div>
+        `:''}
+
+        ${isEnemy&&u.side==='enemy'&&u.charge!==undefined?`
+          <div class="small">素早さ：${u.speed} / 溜め：${u.charge}</div>
         `:''}
 
         <div class="battle-hp-text">
@@ -2117,8 +2146,6 @@ function handleClick(e){
     if(battle&&!battle.over)return;
 
     showPage('battle');
-
-    document.getElementById('battleArea').style.display='none';
 
   }else if(a==='attack'){
     playerAction(id,false);
