@@ -175,18 +175,18 @@ const CHARACTERS=[
 {id:'miner',imageFile:'Miner.png',name:'鉱夫',rarity:'ノーマル',hp:140,atk:10,speed:14,charge:3,skill:'ガード',effect:'guard',power:70,target:'self',growth:.07,max:20},
 {id:'zombie',imageFile:'Zombie.png',name:'ゾンビ',rarity:'ノーマル',hp:50,atk:50,speed:12,charge:3,skill:'噛みつき',effect:'poison',power:50,target:'one',growth:.07,max:20},
 {id:'farmer',imageFile:'Farmer.png',name:'農夫',rarity:'ノーマル',hp:110,atk:20,speed:15,charge:3,skill:'ランダム回復',effect:'heal',power:20,target:'ally',growth:.07,max:20},
-{id:'魔導士',name:'魔導士',rarity:'レア',hp:100,atk:30,speed:21,charge:0,skill:'力の魔術',effect:'buffAlly',power:50,target:'ally',growth:.16,max:10},
-{id:'将軍',name:'将軍',rarity:'レア',hp:150,atk:40,speed:23,charge:2,skill:'薙ぎ払い',effect:'damage',power:30,target:'all',growth:.16,max:10},
-{id:'ゴーレム',name:'ゴーレム',rarity:'レア',hp:210,atk:40,speed:7,charge:8,skill:'大地砕き',effect:'damage',power:100,target:'all',growth:.16,max:10},
-{id:'ドワーフ',name:'ドワーフ',rarity:'レア',hp:170,atk:30,speed:15,charge:5,skill:'職人の心得',effect:'buffSelf',power:25,target:'self',growth:.16,max:10},
-{id:'エルフ',name:'エルフ',rarity:'レア',hp:100,atk:10,speed:24,charge:1,skill:'癒しのオーラ',effect:'healPercent',power:15,target:'ally',growth:.16,max:10},
-{id:'アサシン',name:'アサシン',rarity:'レア',hp:70,atk:70,speed:29,charge:2,skill:'回避',effect:'evadeSure',power:100,target:'self',growth:.16,max:10},
-{id:'鍛錬剣士',name:'果てしなき鍛錬剣士',rarity:'エピック',hp:200,atk:40,speed:22,charge:2,skill:'乱舞',effect:'damage',power:40,target:'all',growth:.30,max:6,passive:'アルティメットカウンター'},
-{id:'狙撃手アーチャー',name:'戦場の狙撃手アーチャー',rarity:'エピック',hp:160,atk:80,speed:19,charge:4,skill:'正射必中',effect:'damage',power:160,target:'one',growth:.30,max:6,passive:'アタックセレクト'},
-{id:'一閃スピアドン',name:'紫電一閃スピアドン',rarity:'エピック',hp:200,atk:30,speed:24,charge:5,skill:'致命のひと突き',effect:'damage',power:300,target:'one',growth:.30,max:6,passive:'ウィルパワー'}
-];
 
-CHARACTERS[16].target='one';
+{id:'魔導士',imageFile:'魔導士.png',name:'魔導士',rarity:'レア',hp:100,atk:30,speed:21,charge:0,skill:'力の魔術',effect:'buffAlly',power:50,target:'ally',growth:.16,max:10},
+{id:'将軍',imageFile:'将軍.png',name:'将軍',rarity:'レア',hp:150,atk:40,speed:23,charge:2,skill:'薙ぎ払い',effect:'damage',power:30,target:'all',growth:.16,max:10},
+{id:'ゴーレム',imageFile:'ゴーレム.png',name:'ゴーレム',rarity:'レア',hp:210,atk:40,speed:7,charge:8,skill:'大地砕き',effect:'damage',power:100,target:'all',growth:.16,max:10},
+{id:'ドワーフ',imageFile:'ドワーフ.png',name:'ドワーフ',rarity:'レア',hp:170,atk:30,speed:15,charge:5,skill:'職人の心得',effect:'buffSelf',power:25,target:'self',growth:.16,max:10},
+{id:'エルフ',imageFile:'エルフ.png',name:'エルフ',rarity:'レア',hp:100,atk:10,speed:24,charge:1,skill:'癒しのオーラ',effect:'healPercent',power:15,target:'ally',growth:.16,max:10},
+{id:'アサシン',imageFile:'アサシン.png',name:'アサシン',rarity:'レア',hp:70,atk:70,speed:29,charge:2,skill:'回避',effect:'evadeSure',power:100,target:'self',growth:.16,max:10},
+
+{id:'鍛錬剣士',imageFile:'鍛錬剣士.png',name:'果てしなき鍛錬剣士',rarity:'エピック',hp:200,atk:40,speed:22,charge:2,skill:'乱舞',effect:'damage',power:40,target:'all',growth:.30,max:6,passive:'アルティメットカウンター'},
+{id:'狙撃手アーチャー',imageFile:'狙撃手アーチャー.png',name:'戦場の狙撃手アーチャー',rarity:'エピック',hp:160,atk:80,speed:19,charge:4,skill:'正射必中',effect:'damage',power:160,target:'one',growth:.30,max:6,passive:'アタックセレクト'},
+{id:'一閃スピアドン',imageFile:'一閃スピアドン.png',name:'紫電一閃スピアドン',rarity:'エピック',hp:200,atk:30,speed:24,charge:5,skill:'致命のひと突き',effect:'damage',power:300,target:'one',growth:.30,max:6,passive:'ウィルパワー'}
+];
 
 const byId=id=>CHARACTERS.find(c=>c.id===id);
 
@@ -280,10 +280,11 @@ function esc(s){
   }[c]));
 }
 
+/* 画像の読み込み先を images フォルダに統一 */
 function imagePath(id){
   const c=byId(id);
   const file=c?.imageFile||id+'.png';
-  return './image/'+encodeURIComponent(file);
+  return './images/'+encodeURIComponent(file);
 }
 
 function portrait(id){
@@ -884,4 +885,3 @@ renderAll();
 </script>
 </body>
 </html>
-
