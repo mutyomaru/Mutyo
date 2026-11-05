@@ -1295,51 +1295,85 @@ renderBattle = function(){
 };
 
 // ダメージ演出は数字だけを1回表示
-showEffect = function(target,text,kind=''){
-  if(!battle || !target)return;
 
-  const parent = $(target.side === 'enemy'
-    ? 'enemyUnits'
-    : 'allyUnits');
+showEffect = function(target, text, kind = '') {
+  if (!battle || !target) return;
 
+  // 戦闘データにも演出内容を保存
+  target.effectText = String(text);
+  target.effectKind = kind;
+
+  const token = battle.token;
+  const uid = target.uid;
+
+  // HP表示を更新
+  renderBattle();
+
+  // キャラの表示位置を取得
   const units = target.side === 'enemy'
     ? battle.enemies
     : battle.allies;
 
-  const index = units.indexOf(target);
+  const parent = target.side === 'enemy'
+    ? $('enemyUnits')
+    : $('allyUnits');
+
+  const index = units.findIndex(u => u.uid === uid);
   const card = parent?.children[index];
 
-  if(!card)return;
+  if (!card) return;
 
-  // 同じキャラの古い演出を削除
-  card.querySelectorAll('.effect').forEach(el=>el.remove());
+  // ダメージ演出を戦闘カードの外側に表示
+  // 再描画で消されないようにする
+  const rect = card.getBoundingClientRect();
 
-  const effect = document.createElement('div');
-  effect.className = 'effect ' + kind;
-  effect.textContent = String(text);
-  effect.dataset.started = String(performance.now());
+  const popup = document.createElement('div');
+  popup.textContent = String(text);
 
-  card.appendChild(effect);
+  Object.assign(popup.style, {
+    position: 'fixed',
+    left: (rect.left + rect.width / 2) + 'px',
+    top: (rect.top + rect.height * 0.3) + 'px',
+    transform: 'translateX(-50%)',
+    zIndex: '9999',
+    pointerEvents: 'none',
+    fontSize: '32px',
+    fontWeight: '900',
+    color: kind === 'heal'
+      ? '#86f3ad'
+      : kind === 'buff'
+        ? '#ffe17c'
+        : '#ff8585',
+    textShadow: '0 2px 5px black',
+    whiteSpace: 'nowrap',
+    transition: 'transform 0.9s ease-out, opacity 0.9s ease-out'
+  });
 
-  const token = battle.token;
+  document.body.appendChild(popup);
 
-  setTimeout(()=>{
-    if(!battle || battle.token !== token)return;
+  requestAnimationFrame(() => {
+    popup.style.transform = 'translate(-50%, -45px)';
+    popup.style.opacity = '0';
+  });
 
-    const currentParent = $(target.side === 'enemy'
-      ? 'enemyUnits'
-      : 'allyUnits');
+  setTimeout(() => popup.remove(), 950);
 
-    const currentCard = currentParent?.children[index];
+  // キャラカード内の古い演出を消す
+  target.effectText = '';
+  target.effectKind = '';
 
-    currentCard?.querySelectorAll('.effect')
-      .forEach(el=>{
-        if(el.textContent === String(text)){
-          el.remove();
-        }
-      });
-  },900);
+  setTimeout(() => {
+    if (!battle || battle.token !== token) return;
+    const unit = [...battle.allies, ...battle.enemies]
+      .find(u => u.uid === uid);
+
+    if (unit && unit.effectText === String(text)) {
+      unit.effectText = '';
+      unit.effectKind = '';
+    }
+  }, 950);
 };
+
 
 </script>
 </body>
