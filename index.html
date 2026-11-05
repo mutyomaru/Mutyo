@@ -208,12 +208,7 @@ button:disabled{opacity:.4;cursor:not-allowed}
   transition:width .35s;
 }
 
-.gauge-label{
-  font-size:11px;
-  color:var(--muted);
-  text-align:left;
-  margin-top:5px;
-}
+/* スキルの溜め表示用。行動ゲージには使用しない */
 .gaugebar{
   height:7px;
   background:#101827;
@@ -782,6 +777,7 @@ function toggleParty(id){
    戦闘システム
    スキルは元の仕様を維持：
    通常攻撃の回数(actions)で蓄積
+   行動ゲージは内部の行動順決定にのみ使用
 ============================== */
 
 function makeUnit(id,side){
@@ -818,20 +814,28 @@ function makeUnit(id,side){
   };
 }
 
+/* 敵の名前・画像・ステータスを対応するキャラクターに統一 */
 function makeEnemy(i){
-  const names=['ウルフ','ゴースト','オーガ'];
-  const images=['goblin','zombie','ゴーレム'];
-  const hp=90+state.stage*22+i*35;
+  const enemyIds=['goblin','zombie','ゴーレム'];
+  const id=enemyIds[i];
+  const c=byId(id);
+
+  if(!c)return null;
+
+  /* ステージに応じて敵レベルを上昇させる */
+  const enemyLevel=Math.min(c.max,Math.max(1,state.stage));
+  const st=stats(c,{level:enemyLevel});
 
   return {
     id:'enemy'+i,
-    name:names[i],
-    imageId:images[i],
+    name:c.name,
+    imageId:id,
+    characterId:id,
     side:'enemy',
-    hp,
-    maxHp:hp,
-    atk:12+state.stage*3+i*5,
-    speed:12+i*3,
+    hp:st.hp,
+    maxHp:st.hp,
+    atk:st.atk,
+    speed:st.speed,
     gauge:0,
     alive:true,
     guard:false,
@@ -846,6 +850,23 @@ function makeEnemy(i){
 
 function alive(arr){
   return arr.filter(x=>x.alive&&x.hp>0);
+}
+
+/* ランダムな敵を攻撃対象にする */
+function chooseRandomEnemy(){
+  const enemies=alive(battle.enemies);
+  if(!enemies.length)return null;
+
+  return enemies[Math.floor(Math.random()*enemies.length)];
+}
+
+/* 狙撃手アーチャーは従来どおりHPが最も低い敵を選ぶ */
+function chooseAttackTarget(actor){
+  if(actor&&actor.id==='狙撃手アーチャー'){
+    return chooseEnemy();
+  }
+
+  return chooseRandomEnemy();
 }
 
 function showUnitEffect(unit,text,kind='damage'){
@@ -890,7 +911,7 @@ function startBattle(){
       makeEnemy(0),
       makeEnemy(1),
       ...(state.stage>=3?[makeEnemy(2)]:[])
-    ]
+    ].filter(Boolean)
   };
 
   busy=false;
@@ -1022,7 +1043,7 @@ function performAlly(actor,useSkill){
     if(actor.effect==='damage'){
       const targets=actor.target==='all'
         ?alive(battle.enemies)
-        :[chooseEnemy()];
+        :[chooseAttackTarget(actor)];
 
       targets.forEach(t=>{
         if(t)deal(actor,t,actor.power);
@@ -1037,7 +1058,7 @@ function performAlly(actor,useSkill){
       showUnitEffect(actor,'GUARD','guard');
 
     }else if(actor.effect==='poison'){
-      const t=chooseEnemy();
+      const t=chooseAttackTarget(actor);
 
       if(t){
         deal(actor,t,actor.power);
@@ -1078,7 +1099,7 @@ function performAlly(actor,useSkill){
     /* 通常攻撃をした回数だけactionsが増える */
     actor.actions++;
 
-    const t=chooseEnemy();
+    const t=chooseAttackTarget(actor);
 
     if(t){
       deal(actor,t,actor.atk*actor.buff);
@@ -1133,6 +1154,7 @@ function advanceBattle(){
       ...alive(battle.enemies)
     ];
 
+    /* 行動ゲージは内部処理として従来どおり使用 */
     units.forEach(u=>u.gauge+=u.speed);
 
     const ready=units
@@ -1249,11 +1271,6 @@ function renderBattle(){
 
         <div class="hpbar">
           <i style="width:${Math.max(0,u.hp/u.maxHp*100)}%"></i>
-        </div>
-
-        <div class="gauge-label">行動ゲージ　${Math.min(100,Math.round(u.gauge))}%</div>
-        <div class="gaugebar">
-          <i style="width:${Math.min(100,u.gauge)}%"></i>
         </div>
 
         ${!isEnemy?`
