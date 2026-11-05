@@ -1,4 +1,4 @@
- <!doctype html>
+<!doctype html>
 <html lang="ja">
 <head>
 <meta charset="utf-8">
@@ -60,43 +60,79 @@ button:disabled{opacity:.4;cursor:not-allowed}
 /* 装備画面 */
 .equipment-summary{
   background:#202d49;border:1px solid var(--line);border-radius:13px;
-  padding:12px;margin-bottom:12px;line-height:1.9;
+  padding:10px;margin-bottom:12px;line-height:1.8;
 }
 .equipment-card{
   background:linear-gradient(145deg,#202d49,#19243c);
-  border:1px solid #485a7a;border-radius:14px;padding:12px;
-  margin-bottom:12px;
+  border:1px solid #485a7a;border-radius:13px;padding:10px;
+  margin-bottom:10px;
 }
 .equipment-character{
-  display:flex;align-items:center;gap:12px;margin-bottom:10px;
+  display:flex;align-items:center;gap:10px;margin-bottom:8px;
 }
-.equipment-character .portrait{width:76px;height:76px;flex-shrink:0;margin:0}
+.equipment-character .portrait{
+  width:54px;height:54px;flex-shrink:0;margin:0;font-size:30px;
+}
 .equipment-character .portrait img{max-width:100%;max-height:100%}
-.equipment-slots{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.equipment-slots{
+  display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;
+}
 .equipment-slot{
   min-width:0;background:#111b30;border:1px solid #465779;
-  border-radius:11px;padding:9px;
+  border-radius:9px;padding:7px;min-height:67px;
 }
 .equipment-slot.empty{border-style:dashed;color:var(--muted)}
-.slot-title{font-size:12px;color:#c4d0e5;margin-bottom:7px}
-.equipped-name{font-size:13px;font-weight:900;margin-bottom:7px}
+.slot-title{font-size:10px;color:#c4d0e5;margin-bottom:4px}
+.equipped-name{font-size:12px;font-weight:900;margin-bottom:3px}
 .ring-power{color:#ffbd70}
 .ring-heart{color:#ff858f}
 .ring-skill{color:#83e2a5}
 .ring-button{
-  width:100%;font-size:12px;padding:8px 5px;margin-top:5px;
+  width:100%;font-size:11px;padding:6px 4px;margin-top:4px;
 }
 .ring-button.power{border-color:#bd8248;background:linear-gradient(180deg,#78502f,#50351f)}
 .ring-button.heart{border-color:#b65d6a;background:linear-gradient(180deg,#873c50,#542c3e)}
 .ring-button.skill{border-color:#4c9c75;background:linear-gradient(180deg,#28664d,#1d4639)}
 .ring-button.remove{background:linear-gradient(180deg,#59657b,#354158);border-color:#7888a7}
-.ring-stock{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.ring-stock{display:flex;gap:6px;flex-wrap:wrap;margin-top:7px}
 .ring-stock-item{
-  flex:1;min-width:100px;background:#111b30;border:1px solid var(--line);
-  border-radius:10px;padding:9px;font-size:13px;
+  flex:1;min-width:90px;background:#111b30;border:1px solid var(--line);
+  border-radius:9px;padding:7px;font-size:12px;
 }
-.equipment-bonus{font-size:12px;color:#c5d4e8;line-height:1.7;margin-top:8px}
-.no-slots{font-size:12px;color:var(--muted);padding:8px}
+.equipment-bonus{font-size:11px;color:#c5d4e8;line-height:1.6;margin:6px 0}
+.no-slots{font-size:11px;color:var(--muted);padding:6px}
+
+/* 指輪選択画面 */
+.equipment-modal{
+  display:none;position:fixed;inset:0;z-index:1200;
+  background:#050914d9;align-items:center;justify-content:center;
+  padding:16px;
+}
+.equipment-modal.active{display:flex}
+.equipment-modal-box{
+  width:100%;max-width:420px;max-height:85vh;overflow-y:auto;
+  background:linear-gradient(145deg,#263653,#151f34);
+  border:1px solid #7185a8;border-radius:18px;padding:16px;
+  box-shadow:0 15px 50px #000b;
+}
+.equipment-modal-title{
+  color:var(--gold);font-size:19px;font-weight:900;margin-bottom:5px;
+}
+.equipment-modal-character{font-size:12px;color:var(--muted);margin-bottom:14px}
+.equipment-choice{
+  display:flex;align-items:center;gap:10px;width:100%;
+  text-align:left;margin:8px 0;padding:11px;border-radius:12px;
+}
+.equipment-choice-icon{font-size:25px;width:35px;text-align:center;flex-shrink:0}
+.equipment-choice-info{flex:1;min-width:0}
+.equipment-choice-name{font-weight:900;font-size:14px}
+.equipment-choice-description{font-size:11px;color:#c5d4e8;margin-top:3px}
+.equipment-choice-count{font-size:12px;color:var(--gold);white-space:nowrap}
+.equipment-empty-message{
+  padding:18px 10px;text-align:center;color:var(--muted);
+  background:#111b30;border-radius:12px;font-size:13px;line-height:1.8;
+}
+.equipment-modal-close{width:100%;margin-top:12px}
 
 /* ガチャ召喚演出 */
 .summon-overlay{
@@ -296,7 +332,7 @@ button:disabled{opacity:.4;cursor:not-allowed}
   .summon-character{width:165px;height:165px}.summon-result-name h2{font-size:22px}
 }
 @media(max-width:400px){
-  .equipment-slots{grid-template-columns:1fr}
+  .equipment-slots{grid-template-columns:repeat(2,minmax(0,1fr))}
 }
 @media(max-width:360px){
   .battle-side{grid-template-columns:1fr 1fr}
@@ -371,7 +407,7 @@ button:disabled{opacity:.4;cursor:not-allowed}
   <div class="panel">
     <h2 class="section-title">アクセサリー装備</h2>
     <p class="muted">
-      所持している指輪をキャラクターに装備できます。装備中の指輪は他のキャラクターには装備できません。
+      空いている装備枠をタップして指輪を選択できます。装備中の指輪は他のキャラクターには装備できません。
     </p>
     <div id="equipmentInventory"></div>
     <div id="equipmentList"></div>
@@ -434,6 +470,16 @@ button:disabled{opacity:.4;cursor:not-allowed}
 <div class="footer">星詠みの旅団</div>
 </div>
 
+<!-- 指輪選択モーダル -->
+<div id="equipmentModal" class="equipment-modal">
+  <div class="equipment-modal-box">
+    <div class="equipment-modal-title">指輪を選択</div>
+    <div id="equipmentModalCharacter" class="equipment-modal-character"></div>
+    <div id="equipmentModalChoices"></div>
+    <button class="equipment-modal-close" data-action="closeEquipmentModal">閉じる</button>
+  </div>
+</div>
+
 <div id="summonOverlay" class="summon-overlay" aria-live="polite">
   <div class="summon-content">
     <div class="summon-title" id="summonTitle">✦ 星詠み召喚 ✦</div>
@@ -489,7 +535,6 @@ const CHARACTER_DROP_RATES={
   'エピック':0.3
 };
 
-/* キャラクターごとの装備枠 */
 const EQUIPMENT_SLOTS={
   swordman:1,
   archer:1,
@@ -499,20 +544,17 @@ const EQUIPMENT_SLOTS={
   zombie:0,
   goblin:2,
   miner:2,
-
   '魔導士':2,
   '将軍':2,
   'ドワーフ':2,
   'エルフ':2,
   'ゴーレム':1,
   'アサシン':1,
-
   '鍛錬剣士':2,
   '狙撃手アーチャー':2,
   '一閃スピアドン':2
 };
 
-/* 指輪の種類 */
 const RINGS={
   power:{
     name:'チカラの指輪',
@@ -545,14 +587,12 @@ const CHARACTERS=[
 {id:'miner',imageFile:'Miner.png',name:'鉱夫',rarity:'ノーマル',hp:140,atk:10,speed:14,charge:3,skill:'ガード',effect:'guard',power:70,target:'self',growth:.07,max:20},
 {id:'zombie',imageFile:'Zombie.png',name:'ゾンビ',rarity:'ノーマル',hp:50,atk:50,speed:12,charge:3,skill:'噛みつき',effect:'poison',power:50,target:'one',growth:.07,max:20},
 {id:'farmer',imageFile:'Farmer.png',name:'農夫',rarity:'ノーマル',hp:110,atk:20,speed:15,charge:3,skill:'ランダム回復',effect:'heal',power:20,target:'ally',growth:.07,max:20},
-
 {id:'魔導士',imageFile:'魔導士.png',name:'魔導士',rarity:'レア',hp:100,atk:30,speed:21,charge:0,skill:'力の魔術',effect:'buffAlly',power:50,target:'ally',growth:.16,max:10},
 {id:'将軍',imageFile:'将軍.png',name:'将軍',rarity:'レア',hp:150,atk:40,speed:23,charge:2,skill:'薙ぎ払い',effect:'damage',power:30,target:'all',growth:.16,max:10},
 {id:'ゴーレム',imageFile:'ゴーレム.png',name:'ゴーレム',rarity:'レア',hp:210,atk:40,speed:7,charge:8,skill:'大地砕き',effect:'damage',power:100,target:'all',growth:.16,max:10},
 {id:'ドワーフ',imageFile:'ドワーフ.png',name:'ドワーフ',rarity:'レア',hp:170,atk:30,speed:15,charge:5,skill:'職人の心得',effect:'buffSelf',power:25,target:'self',growth:.16,max:10},
 {id:'エルフ',imageFile:'エルフ.png',name:'エルフ',rarity:'レア',hp:100,atk:10,speed:24,charge:1,skill:'癒しのオーラ',effect:'healPercent',power:15,target:'ally',growth:.16,max:10},
 {id:'アサシン',imageFile:'アサシン.png',name:'アサシン',rarity:'レア',hp:70,atk:70,speed:29,charge:2,skill:'回避',effect:'evadeSure',power:100,target:'self',growth:.16,max:10},
-
 {id:'鍛錬剣士',imageFile:'鍛錬剣士.png',name:'果てしなき鍛錬剣士',rarity:'エピック',hp:200,atk:40,speed:22,charge:2,skill:'乱舞',effect:'damage',power:40,target:'all',growth:.30,max:6,passive:'アルティメットカウンター'},
 {id:'狙撃手アーチャー',imageFile:'狙撃手アーチャー.png',name:'戦場の狙撃手アーチャー',rarity:'エピック',hp:160,atk:80,speed:19,charge:4,skill:'正射必中',effect:'damage',power:160,target:'one',growth:.30,max:6,passive:'アタックセレクト'},
 {id:'一閃スピアドン',imageFile:'一閃スピアドン.png',name:'紫電一閃スピアドン',rarity:'エピック',hp:200,atk:30,speed:24,charge:5,skill:'致命のひと突き',effect:'damage',power:300,target:'one',growth:.30,max:6,passive:'ウィルパワー'}
@@ -596,10 +636,7 @@ const STAGE_ENEMIES={
   10:[{id:'ゴーレム',type:'level',level:1}]
 };
 
-/* ==============================
-   セーブデータ
-============================== */
-
+/* セーブデータ */
 function fresh(){
   return {
     gems:500,
@@ -613,15 +650,7 @@ function fresh(){
       spearman:{level:1,dupes:0}
     },
     party:['swordman','archer','spearman'],
-
-    /* 指輪はすべて0個から開始 */
-    ringInventory:{
-      power:0,
-      heart:0,
-      skill:0
-    },
-
-    /* キャラクターごとの装備 */
+    ringInventory:{power:0,heart:0,skill:0},
     equipment:{}
   };
 }
@@ -652,7 +681,6 @@ function loadState(){
     ?raw.stageClearCounts:{};
 
   s.stageClearCounts={};
-
   for(let i=1;i<=IMPLEMENTED_STAGE;i++){
     const saved=Number(savedCounts[i]);
     if(Number.isFinite(saved)&&saved>=0){
@@ -683,7 +711,6 @@ function loadState(){
 
   if(!s.party.length)s.party=d.party.filter(id=>s.owned[id]);
 
-  /* 古いセーブデータにも装備データを追加する */
   const inv=raw.ringInventory&&typeof raw.ringInventory==='object'
     ?raw.ringInventory:{};
 
@@ -706,7 +733,6 @@ function loadState(){
       .slice(0,slotCount);
   }
 
-  /* 装備中の指輪数を数え、所持数を超えた装備を除外 */
   const used={power:0,heart:0,skill:0};
 
   for(const id of Object.keys(s.equipment)){
@@ -729,6 +755,9 @@ let summonBusy=false;
 let summonTimer=null;
 let summonResults=[];
 let summonIndex=0;
+
+/* 指輪選択画面の対象 */
+let equipmentModalTarget=null;
 
 let selectedStage=Math.min(IMPLEMENTED_STAGE,state.clearedStage+1);
 
@@ -789,10 +818,7 @@ function stats(c,o){
   };
 }
 
-/* ==============================
-   装備システム
-============================== */
-
+/* 装備システム */
 function getEquipped(id,type){
   return (state.equipment[id]||[]).filter(x=>x===type).length;
 }
@@ -863,6 +889,7 @@ function equipRing(id,type){
   }
 
   state.equipment[id].push(type);
+  closeEquipmentModal();
   save();
 }
 
@@ -872,6 +899,86 @@ function unequipRing(id,index){
 
   list.splice(index,1);
   save();
+}
+
+function openEquipmentModal(id,index){
+  if(!state.owned[id])return;
+
+  equipmentModalTarget={id,index};
+
+  const c=byId(id);
+  document.getElementById('equipmentModalCharacter').textContent=
+    `${c?.name||id} / 装備枠 ${index+1}`;
+
+  renderEquipmentModal();
+
+  document.getElementById('equipmentModal').classList.add('active');
+}
+
+function renderEquipmentModal(){
+  const choices=document.getElementById('equipmentModalChoices');
+  if(!choices||!equipmentModalTarget)return;
+
+  const {id,index}=equipmentModalTarget;
+  const equipped=state.equipment[id]||[];
+
+  if(equipped[index]){
+    const type=equipped[index];
+    const ring=RINGS[type];
+
+    choices.innerHTML=`
+      <div class="equipment-choice" style="background:#111b30">
+        <div class="equipment-choice-icon">${ring.icon}</div>
+        <div class="equipment-choice-info">
+          <div class="equipment-choice-name ring-${type}">${ring.name}</div>
+          <div class="equipment-choice-description">${ring.description}</div>
+        </div>
+      </div>
+      <button class="ring-button remove" data-action="unequipRing"
+        data-id="${esc(id)}" data-index="${index}">
+        この指輪を取り外す
+      </button>
+    `;
+    return;
+  }
+
+  const availableTypes=RING_IDS.filter(type=>getRingAvailable(type)>0);
+
+  if(!availableTypes.length){
+    choices.innerHTML=`
+      <div class="equipment-empty-message">
+        装備できる指輪を所持していません。<br>
+        現在、指輪の所持数はすべて0個です。<br><br>
+        指輪を入手すると、ここから装備できるようになります。
+      </div>
+    `;
+    return;
+  }
+
+  choices.innerHTML=RING_IDS.map(type=>{
+    const ring=RINGS[type];
+    const available=getRingAvailable(type);
+
+    return `
+      <button class="equipment-choice ring-button ${ring.className}"
+        data-action="equipRing"
+        data-id="${esc(id)}"
+        data-type="${type}"
+        ${available<=0?'disabled':''}>
+        <span class="equipment-choice-icon">${ring.icon}</span>
+        <span class="equipment-choice-info">
+          <span class="equipment-choice-name">${ring.name}</span>
+          <span class="equipment-choice-description">${ring.description}</span>
+        </span>
+        <span class="equipment-choice-count">${available}個</span>
+      </button>
+    `;
+  }).join('');
+}
+
+function closeEquipmentModal(){
+  equipmentModalTarget=null;
+  document.getElementById('equipmentModal').classList.remove('active');
 }
 
 function renderEquipment(){
@@ -895,15 +1002,13 @@ function renderEquipment(){
           `;
         }).join('')}
       </div>
-      <p class="small" style="margin:9px 0 0">
-        同じ種類の指輪は効果が加算されます。例えば同じ指輪を2個装備すると効果は+20%になります。
+      <p class="small" style="margin:8px 0 0">
+        同じ種類の指輪は効果が加算されます。2個装備すると効果は+20%になります。
       </p>
     </div>
   `;
 
-  const ownedIds=CHARACTERS
-    .filter(c=>state.owned[c.id])
-    .map(c=>c.id);
+  const ownedIds=CHARACTERS.filter(c=>state.owned[c.id]).map(c=>c.id);
 
   if(!ownedIds.length){
     list.innerHTML='<p class="muted">所持キャラクターがいません。</p>';
@@ -923,7 +1028,7 @@ function renderEquipment(){
             ${portrait(id)}
             <div>
               <div class="name">${esc(c.name)}</div>
-              <div class="small">${c.rarity}</div>
+              <div class="small">${c.rarity} / Lv.${state.owned[id].level}</div>
               <div class="small">装備枠：0個</div>
             </div>
           </div>
@@ -940,37 +1045,22 @@ function renderEquipment(){
       if(type){
         const ring=RINGS[type];
         slotHTML+=`
-          <div class="equipment-slot">
+          <button class="equipment-slot" data-action="openRingList"
+            data-id="${esc(id)}" data-index="${i}">
             <div class="slot-title">装備枠 ${i+1}</div>
-            <div class="equipped-name ring-${type}">
-              ${ring.icon} ${ring.name}
-            </div>
+            <div class="equipped-name ring-${type}">${ring.icon} ${ring.name}</div>
             <div class="small">${ring.description}</div>
-            <button class="ring-button remove" data-action="unequipRing"
-              data-id="${esc(id)}" data-index="${i}">
-              装備を解除する
-            </button>
-          </div>
+            <div class="small" style="color:#f4c76b;margin-top:3px">タップして変更・解除</div>
+          </button>
         `;
       }else{
         slotHTML+=`
-          <div class="equipment-slot empty">
-            <div class="slot-title">装備枠 ${i+1}（空き）</div>
-            ${RING_IDS.map(type=>{
-              const ring=RINGS[type];
-              const available=getRingAvailable(type);
-              return `
-                <button class="ring-button ${ring.className}"
-                  data-action="equipRing"
-                  data-id="${esc(id)}"
-                  data-type="${type}"
-                  ${available<=0?'disabled':''}>
-                  ${ring.icon} ${ring.name}<br>
-                  <span class="small">未装備 ${available}個</span>
-                </button>
-              `;
-            }).join('')}
-          </div>
+          <button class="equipment-slot empty" data-action="openRingList"
+            data-id="${esc(id)}" data-index="${i}">
+            <div class="slot-title">装備枠 ${i+1}</div>
+            <div style="font-size:20px;margin:3px 0">＋</div>
+            <div class="small">空きスロット</div>
+          </button>
         `;
       }
     }
@@ -991,10 +1081,9 @@ function renderEquipment(){
         </div>
 
         <div class="equipment-bonus">
-          装備反映後のステータス<br>
-          最大HP：${st.hp}（ハートの指輪 ${heartCount*10}%）<br>
-          攻撃力：${st.atk}（チカラの指輪 ${powerCount*10}%）<br>
-          スキル効果：+${skillCount*10}%（スキルの指輪）
+          HP：${st.hp}（ハート +${heartCount*10}%）　
+          攻撃：${st.atk}（チカラ +${powerCount*10}%）<br>
+          スキル効果：+${skillCount*10}%
         </div>
 
         <div class="equipment-slots">${slotHTML}</div>
@@ -1007,16 +1096,14 @@ function rarityClass(r){
   return r==='エピック'?'epic':r==='レア'?'rare':'normal';
 }
 
+/* 図鑑・キャラクターカードは旧形式に戻す */
 function cardHTML(id,selectable=false){
   const c=byId(id);
   const o=state.owned[id];
   if(!c)return '';
 
-  const st=getCharacterEquipmentStats(id);
+  const st=stats(c,o);
   const selected=state.party.includes(id);
-  const powerCount=getEquipped(id,'power');
-  const heartCount=getEquipped(id,'heart');
-  const skillCount=getEquipped(id,'skill');
 
   return `
     <article class="card ${selectable&&selected?'selected':''}">
@@ -1028,11 +1115,6 @@ function cardHTML(id,selectable=false){
         素早さ ${st.speed}<br>
         スキル：${esc(c.skill)}
         ${c.passive?'<br>特性：'+esc(c.passive):''}
-        ${powerCount||heartCount||skillCount?`
-          <br><span class="ring-power">攻撃 +${powerCount*10}%</span>
-          <br><span class="ring-heart">HP +${heartCount*10}%</span>
-          <br><span class="ring-skill">スキル +${skillCount*10}%</span>
-        `:''}
       </div>
       ${selectable?`
         <button class="wide" data-action="toggleParty" data-id="${esc(id)}">
@@ -1215,10 +1297,7 @@ function selectStage(stage){
   renderAll();
 }
 
-/* ==============================
-   キャラクター重複処理
-============================== */
-
+/* キャラクター重複処理 */
 function processDuplicate(c){
   const o=state.owned[c.id];
 
@@ -1244,10 +1323,7 @@ function processDuplicate(c){
   return `重複 ${o.dupes}/${o.level}`;
 }
 
-/* ==============================
-   ステージクリア報酬
-============================== */
-
+/* ステージクリア報酬 */
 function getStageBaseGold(stage){
   return STAGE_GOLD[stage]||0;
 }
@@ -1317,10 +1393,7 @@ function grantStageRewards(currentBattle){
   };
 }
 
-/* ==============================
-   ガチャ召喚
-============================== */
-
+/* ガチャ召喚 */
 function createSummonResult(c){
   const message=processDuplicate(c);
   return {character:c,message,epic:c.rarity==='エピック'};
@@ -1522,11 +1595,7 @@ function toggleParty(id){
   save();
 }
 
-/* ==============================
-   戦闘システム
-============================== */
-
-/* 味方のみに装備効果を適用する */
+/* 戦闘システム */
 function makeUnit(id,side){
   const c=byId(id);
   const o=state.owned[id]||{level:1};
@@ -1758,7 +1827,6 @@ function prepareEnemyAction(enemy){
     battle.pendingEnemy=null;
     if(actor&&victim)enemyAct(actor,victim);
 
-    /* 毒ダメージ。毒を付与した側のスキル指輪効果も保持 */
     for(const e of alive(battle.enemies)){
       if(e.poisonTurns>0){
         const poisonDamage=e.poisonDamage||8;
@@ -1798,10 +1866,6 @@ function performAlly(actor,useSkill){
       });
 
     }else if(actor.effect==='evade'||actor.effect==='evadeSure'){
-      /*
-        基本の回避1回に加え、指輪の増加分を追加回避として扱う。
-        例：指輪1個なら、基本回避後に10%でもう1回回避する。
-      */
       const extra=skillRate-1;
       actor.evade=1+Math.floor(extra);
       actor.evadeExtraChance=extra-Math.floor(extra);
@@ -1960,10 +2024,7 @@ function playerAction(id,skill){
   advanceBattle();
 }
 
-/* ==============================
-   戦闘終了・報酬処理
-============================== */
-
+/* 戦闘終了・報酬処理 */
 function finishBattle(win){
   if(!battle||battle.over)return;
 
@@ -2133,10 +2194,7 @@ function renderBattle(){
   document.getElementById('actionArea').innerHTML=actionContent;
 }
 
-/* ==============================
-   ボタン操作
-============================== */
-
+/* ボタン操作 */
 function handleClick(e){
   const page=e.target.closest('[data-page]');
   if(page){
@@ -2158,10 +2216,15 @@ function handleClick(e){
     closeSummon();
   }else if(a==='toggleParty'){
     toggleParty(id);
+  }else if(a==='openRingList'){
+    openEquipmentModal(id,Number(b.dataset.index));
   }else if(a==='equipRing'){
     equipRing(id,b.dataset.type);
   }else if(a==='unequipRing'){
     unequipRing(id,Number(b.dataset.index));
+    closeEquipmentModal();
+  }else if(a==='closeEquipmentModal'){
+    closeEquipmentModal();
   }else if(a==='selectStage'){
     selectStage(Number(b.dataset.stage));
   }else if(a==='startBattle'){
@@ -2177,6 +2240,12 @@ function handleClick(e){
 }
 
 document.addEventListener('click',handleClick);
+
+/* モーダルの背景部分をタップして閉じる */
+document.getElementById('equipmentModal').addEventListener('click',e=>{
+  if(e.target.id==='equipmentModal')closeEquipmentModal();
+});
+
 renderAll();
 </script>
 </body>
