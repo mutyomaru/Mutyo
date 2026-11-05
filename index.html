@@ -116,6 +116,60 @@ button:disabled{opacity:.4;cursor:not-allowed}
 }
 .footer{text-align:center;color:var(--muted);font-size:12px;padding:14px}
 
+/* ステージ一覧 */
+
+.stage-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(125px,1fr));
+  gap:10px;
+}
+.stage-button{
+  min-height:100px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  gap:6px;
+  background:linear-gradient(155deg,#263653,#17233b);
+  border:1px solid #536486;
+  border-radius:14px;
+  padding:12px 8px;
+}
+.stage-button.selected{
+  border:2px solid var(--gold);
+  background:linear-gradient(155deg,#51452d,#302b25);
+}
+.stage-button.cleared{
+  border-color:#5d9b79;
+}
+.stage-button.locked{
+  opacity:.4;
+  filter:grayscale(.8);
+}
+.stage-number{
+  font-size:19px;
+  font-weight:900;
+}
+.stage-status{
+  font-size:12px;
+  color:var(--muted);
+}
+.stage-button.cleared .stage-status{
+  color:var(--green);
+  font-weight:900;
+}
+.stage-button.selected .stage-status{
+  color:var(--gold);
+}
+.stage-selected-info{
+  margin-top:12px;
+  padding:12px;
+  background:#202d49;
+  border:1px solid var(--line);
+  border-radius:12px;
+  line-height:1.8;
+}
+
 /* 戦闘画面 */
 
 .battle-screen{
@@ -465,11 +519,22 @@ button:disabled{opacity:.4;cursor:not-allowed}
 </section>
 
 <section id="battle" class="page">
+
+  <!-- ステージ一覧 -->
+  <div class="panel">
+    <h2 class="section-title">ステージ一覧</h2>
+    <p class="muted">
+      クリア済みのステージと、次のステージに挑戦できます。
+    </p>
+    <div id="stageList" class="stage-grid"></div>
+    <div id="stageSelectedInfo" class="stage-selected-info"></div>
+  </div>
+
   <div class="panel">
     <h2 class="section-title">冒険・戦闘</h2>
     <div id="battleIntro"></div>
     <div class="row" style="margin-top:12px">
-      <button data-action="startBattle">戦闘開始</button>
+      <button data-action="startBattle">ステージに挑戦する</button>
     </div>
   </div>
 
@@ -533,6 +598,7 @@ function fresh(){
     gems:500,
     gold:300,
     stage:1,
+    clearedStages:[],
     owned:{
       swordman:{level:1,dupes:0},
       archer:{level:1,dupes:0},
@@ -554,7 +620,25 @@ function loadState(){
   const s={...d,...raw};
   s.gems=Number.isFinite(+s.gems)?Math.max(0,+s.gems):d.gems;
   s.gold=Number.isFinite(+s.gold)?Math.max(0,+s.gold):d.gold;
-  s.stage=Number.isFinite(+s.stage)?Math.max(1,+s.stage):1;
+  s.stage=Number.isFinite(+s.stage)?Math.max(1,Math.floor(+s.stage)):1;
+
+  /*
+    過去バージョンのセーブデータには
+    clearedStagesが存在しないため、
+    到達ステージからクリア記録を復元する。
+  */
+  if(Array.isArray(raw.clearedStages)){
+    s.clearedStages=[...new Set(
+      raw.clearedStages
+        .map(Number)
+        .filter(n=>Number.isInteger(n)&&n>=1&&n<s.stage)
+    )];
+  }else{
+    s.clearedStages=[];
+    for(let i=1;i<s.stage;i++){
+      s.clearedStages.push(i);
+    }
+  }
 
   s.owned=raw.owned&&typeof raw.owned==='object'?raw.owned:{};
 
@@ -586,6 +670,9 @@ let state=loadState();
 let battle=null;
 let busy=false;
 let enemyTimer=null;
+
+/* 現在選択しているステージ */
+let selectedStage=state.stage;
 
 function save(){
   try{
@@ -668,6 +755,67 @@ function cardHTML(id,selectable=false){
   `;
 }
 
+/* ステージ一覧を描画 */
+function renderStageList(){
+  const list=document.getElementById('stageList');
+  const info=document.getElementById('stageSelectedInfo');
+
+  if(!list||!info)return;
+
+  let html='';
+
+  for(let i=1;i<=state.stage;i++){
+    const cleared=state.clearedStages.includes(i);
+    const selected=selectedStage===i;
+    const disabled=!!(battle&&!battle.over);
+
+    html+=`
+      <button
+        class="stage-button
+          ${cleared?'cleared':''}
+          ${selected?'selected':''}"
+        data-action="selectStage"
+        data-stage="${i}"
+        ${disabled?'disabled':''}
+      >
+        <span class="stage-number">STAGE ${i}</span>
+        <span class="stage-status">
+          ${cleared?'✓ CLEAR':selected?'▶ 選択中':'挑戦可能'}
+        </span>
+      </button>
+    `;
+  }
+
+  /* 次のステージ以外は表示しない */
+  list.innerHTML=html;
+
+  const cleared=state.clearedStages.includes(selectedStage);
+
+  info.innerHTML=`
+    <b>選択中：ステージ ${selectedStage}</b><br>
+    ${cleared
+      ?'<span style="color:var(--green)">このステージはクリア済みです。再挑戦できます。</span>'
+      :'<span style="color:var(--gold)">新しいステージです。勝利すると次のステージが解放されます。</span>'
+    }
+    ${battle&&!battle.over
+      ?'<br><span class="muted">戦闘中はステージを変更できません。</span>'
+      :''
+    }
+  `;
+}
+
+/* ステージ選択 */
+function selectStage(stageNo){
+  const n=Number(stageNo);
+
+  if(!Number.isInteger(n)||n<1||n>state.stage)return;
+  if(battle&&!battle.over)return;
+
+  selectedStage=n;
+
+  renderAll();
+}
+
 function renderAll(){
   document.getElementById('gems').textContent=state.gems;
   document.getElementById('gold').textContent=state.gold;
@@ -676,7 +824,8 @@ function renderAll(){
   document.getElementById('homeSummary').innerHTML=
     `所持キャラクター：${Object.keys(state.owned).length}体<br>
     編成中：${state.party.map(id=>esc(byId(id)?.name||id)).join(' / ')||'なし'}<br>
-    次の冒険：ステージ ${state.stage}`;
+    次の冒険：ステージ ${state.stage}<br>
+    クリア済みステージ：${state.clearedStages.length}個`;
 
   document.getElementById('gachaOwned').textContent=
     `${Object.keys(state.owned).length} / ${CHARACTERS.length}体を所持`;
@@ -698,8 +847,10 @@ function renderAll(){
     ).join('');
 
   document.getElementById('battleIntro').innerHTML=
-    `現在のステージ：<b>${state.stage}</b><br>
+    `挑戦するステージ：<b>${selectedStage}</b><br>
     <span class="muted">編成：${state.party.map(id=>esc(byId(id)?.name||id)).join(' / ')||'なし'}</span>`;
+
+  renderStageList();
 }
 
 function showPage(name){
@@ -707,7 +858,11 @@ function showPage(name){
     p.classList.toggle('active',p.id===name);
   });
 
-  if(name==='battle')renderBattle();
+  if(name==='battle'){
+    renderStageList();
+    renderBattle();
+  }
+
   window.scrollTo(0,0);
 }
 
@@ -819,14 +974,14 @@ function makeUnit(id,side){
 }
 
 /* 敵の名前・画像・ステータス */
-function makeEnemy(i){
+function makeEnemy(i,stageNo){
   const enemyIds=['goblin','zombie','ゴーレム'];
   const id=enemyIds[i];
   const c=byId(id);
 
   if(!c)return null;
 
-  const enemyLevel=Math.min(c.max,Math.max(1,state.stage));
+  const enemyLevel=Math.min(c.max,Math.max(1,stageNo));
   const st=stats(c,{level:enemyLevel});
 
   return {
@@ -894,11 +1049,9 @@ function chooseAttackTarget(actor){
 }
 
 /*
-  演出表示の修正：
-  ・表示時間を1.2秒に延長
-  ・演出終了時に画面全体を再描画しない
-  ・該当キャラクターの表示だけを消す
-  これにより、別の演出が再描画で再生されるのを防ぐ
+  演出はここで再描画しない。
+  行動処理が終わったタイミングのrenderBattle()で
+  1回だけ表示する。
 */
 function showUnitEffect(unit,text,kind='damage'){
   if(!unit)return;
@@ -913,8 +1066,6 @@ function showUnitEffect(unit,text,kind='damage'){
   const currentBattle=battle;
   const unitId=String(unit.id);
 
-  renderBattle();
-
   setTimeout(()=>{
     if(!currentBattle||battle!==currentBattle)return;
     if(unit.effectVersion!==thisVersion)return;
@@ -923,10 +1074,6 @@ function showUnitEffect(unit,text,kind='damage'){
     unit.effectKind='';
     unit.hit=false;
 
-    /*
-      renderBattle()は呼ばず、該当キャラクターの
-      演出要素だけを直接削除する
-    */
     document.querySelectorAll('.battle-character').forEach(el=>{
       if(el.dataset.unitId!==unitId)return;
 
@@ -939,8 +1086,11 @@ function showUnitEffect(unit,text,kind='damage'){
   },1250);
 }
 
+/* 戦闘開始 */
 function startBattle(){
   if(busy)return;
+
+  if(battle&&!battle.over)return;
 
   if(enemyTimer){
     clearTimeout(enemyTimer);
@@ -952,16 +1102,22 @@ function startBattle(){
     return;
   }
 
+  if(selectedStage<1||selectedStage>state.stage){
+    showError('このステージはまだ解放されていません。');
+    return;
+  }
+
   battle={
+    stage:selectedStage,
     turn:0,
     over:false,
     readyActor:null,
     pendingEnemy:null,
     allies:state.party.map(id=>makeUnit(id,'ally')),
     enemies:[
-      makeEnemy(0),
-      makeEnemy(1),
-      ...(state.stage>=3?[makeEnemy(2)]:[])
+      makeEnemy(0,selectedStage),
+      makeEnemy(1,selectedStage),
+      ...(selectedStage>=3?[makeEnemy(2,selectedStage)]:[])
     ].filter(Boolean)
   };
 
@@ -1057,7 +1213,7 @@ function prepareEnemyAction(enemy){
     renderBattle();
     advanceBattle();
 
-  },600);
+  },1100);
 }
 
 /* 味方の行動 */
@@ -1271,6 +1427,7 @@ function playerAction(id,skill){
   advanceBattle();
 }
 
+/* 戦闘終了 */
 function finishBattle(win){
   if(!battle||battle.over)return;
 
@@ -1285,15 +1442,36 @@ function finishBattle(win){
   busy=false;
 
   if(win){
+    /*
+      クリアしたステージを記録する。
+      同じステージを何度クリアしても
+      記録が重複しないようにする。
+    */
+    const clearedNo=battle.stage;
+
+    if(!state.clearedStages.includes(clearedNo)){
+      state.clearedStages.push(clearedNo);
+      state.clearedStages.sort((a,b)=>a-b);
+    }
+
+    /*
+      現在の到達ステージをクリアした場合だけ
+      次のステージを解放する。
+      過去ステージの再クリアでは進行度は変わらない。
+    */
+    if(clearedNo>=state.stage){
+      state.stage=clearedNo+1;
+    }
+
     state.gold+=100;
     state.gems+=40;
-    state.stage++;
   }
 
   save();
   renderBattle();
 }
 
+/* 戦闘画面の描画 */
 function renderBattle(){
   const area=document.getElementById('battleArea');
 
@@ -1360,11 +1538,11 @@ function renderBattle(){
         <h3>${battle.resultWin?'勝利！':'敗北……'}</h3>
         <p>
           ${battle.resultWin
-            ?'ステージクリア！報酬を獲得した。'
+            ?'ステージ'+battle.stage+'をクリア！報酬を獲得した。'
             :'旅団は敗北した。編成を見直して再挑戦しよう。'}
         </p>
         ${battle.resultWin?'<p>🪙100　💎40を獲得！</p>':''}
-        <button data-action="startBattle">もう一度挑戦</button>
+        <button data-action="startBattle">このステージにもう一度挑戦</button>
       </div>
     `;
 
@@ -1380,7 +1558,7 @@ function renderBattle(){
           攻撃対象：<b>${esc(p.targetName)}</b>
         </div>
         <div class="preview-wait">
-          敵が攻撃を準備している……（約0.6秒）
+          敵が攻撃を準備している……（約1.1秒）
         </div>
       </div>
     `;
@@ -1461,6 +1639,8 @@ function handleClick(e){
     toggleParty(id);
   }else if(a==='startBattle'){
     startBattle();
+  }else if(a==='selectStage'){
+    selectStage(b.dataset.stage);
   }else if(a==='attack'){
     playerAction(id,false);
   }else if(a==='skill'){
