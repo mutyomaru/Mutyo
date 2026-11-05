@@ -135,8 +135,7 @@ button:disabled{opacity:.4;cursor:not-allowed}
   inset:0;
   pointer-events:none;
   opacity:.18;
-  background-image:
-    radial-gradient(#d5e9a0 1px,transparent 1px);
+  background-image:radial-gradient(#d5e9a0 1px,transparent 1px);
   background-size:22px 22px;
 }
 .map-heading{
@@ -231,7 +230,14 @@ button:disabled{opacity:.4;cursor:not-allowed}
   color:#344236;
   box-shadow:0 4px 0 #354337;
 }
-.stage-node:disabled{opacity:.75;cursor:not-allowed}
+.stage-node.unimplemented{
+  background:linear-gradient(180deg,#737c72,#4d574e);
+  border-color:#899387;
+  color:#d1d7ce;
+  box-shadow:0 4px 0 #343c35;
+  opacity:.65;
+}
+.stage-node:disabled{cursor:not-allowed}
 .map-legend{
   position:relative;
   z-index:1;
@@ -273,6 +279,12 @@ button:disabled{opacity:.4;cursor:not-allowed}
   border-color:#ffe4a1;
   color:#30230e;
   font-weight:1000;
+}
+.enemy-formation-info{
+  margin-top:8px;
+  font-size:12px;
+  line-height:1.7;
+  color:#e3eddb;
 }
 
 /* 戦闘画面 */
@@ -316,8 +328,6 @@ button:disabled{opacity:.4;cursor:not-allowed}
   opacity:.35;
   filter:grayscale(1);
 }
-
-/* 行動権を持つキャラクターの強調 */
 .battle-character.turn-active{
   border:3px solid #ffe17c;
   padding:8px 6px 10px;
@@ -357,7 +367,6 @@ button:disabled{opacity:.4;cursor:not-allowed}
   from{filter:brightness(1)}
   to{filter:brightness(1.35)}
 }
-
 .battle-image{
   width:100%;
   height:165px;
@@ -693,7 +702,9 @@ button:disabled{opacity:.4;cursor:not-allowed}
 'use strict';
 
 const KEY='hoshiyomi_save_v2';
+
 const MAX_STAGE=20;
+const IMPLEMENTED_STAGE=10;
 const BOSS_STAGES=[10,20];
 
 const CHARACTERS=[
@@ -724,6 +735,59 @@ function isBossStage(stage){
   return BOSS_STAGES.includes(Number(stage));
 }
 
+/*
+  敵編成データ
+
+  type:'level'
+  → 指定レベルまで通常成長させる。
+
+  type:'multiplier'
+  → レベル1の基本ステータスに倍率をかける。
+     50%なら0.5、75%なら0.75、100%なら1.0。
+
+  hpMultiplier
+  → HPだけに別の倍率をかける。
+*/
+const STAGE_ENEMIES={
+  1:[
+    {id:'goblin',type:'multiplier',multiplier:.50}
+  ],
+  2:[
+    {id:'goblin',type:'multiplier',multiplier:.50},
+    {id:'goblin',type:'multiplier',multiplier:.50}
+  ],
+  3:[
+    {id:'zombie',type:'level',level:1},
+    {id:'goblin',type:'multiplier',multiplier:.50}
+  ],
+  4:[
+    {id:'swordman',type:'level',level:1}
+  ],
+  5:[
+    {id:'swordman',type:'multiplier',multiplier:.75},
+    {id:'spearman',type:'multiplier',multiplier:.75}
+  ],
+  6:[
+    {id:'miner',type:'multiplier',multiplier:.75},
+    {id:'miner',type:'multiplier',multiplier:.75}
+  ],
+  7:[
+    {id:'axeman',type:'multiplier',multiplier:1.00}
+  ],
+  8:[
+    {id:'farmer',type:'multiplier',multiplier:1.00},
+    {id:'miner',type:'multiplier',multiplier:.75}
+  ],
+  9:[
+    {id:'swordman',type:'multiplier',multiplier:.75},
+    {id:'archer',type:'multiplier',multiplier:.75},
+    {id:'spearman',type:'multiplier',multiplier:.75}
+  ],
+  10:[
+    {id:'ゴーレム',type:'level',level:1,hpMultiplier:2.00}
+  ]
+};
+
 function fresh(){
   return {
     gems:500,
@@ -741,6 +805,7 @@ function fresh(){
 
 function loadState(){
   let raw=null;
+
   try{
     raw=JSON.parse(localStorage.getItem(KEY)||'null');
   }catch(e){}
@@ -749,22 +814,21 @@ function loadState(){
   if(!raw||typeof raw!=='object')return d;
 
   const s={...d,...raw};
+
   s.gems=Number.isFinite(+s.gems)?Math.max(0,+s.gems):d.gems;
   s.gold=Number.isFinite(+s.gold)?Math.max(0,+s.gold):d.gold;
+
   s.stage=Number.isFinite(+s.stage)
-    ?Math.min(MAX_STAGE,Math.max(1,Math.floor(+s.stage)))
+    ?Math.min(IMPLEMENTED_STAGE,Math.max(1,Math.floor(+s.stage)))
     :1;
 
-  /*
-    以前のセーブデータにはclearedStageがないため、
-    旧データのstageからクリア済みステージを復元する。
-  */
   const oldCleared=s.stage-1;
+
   s.clearedStage=Number.isFinite(+raw.clearedStage)
-    ?Math.min(MAX_STAGE,Math.max(oldCleared,Math.floor(+raw.clearedStage)))
+    ?Math.min(IMPLEMENTED_STAGE,Math.max(oldCleared,Math.floor(+raw.clearedStage)))
     :oldCleared;
 
-  s.stage=Math.min(MAX_STAGE,s.clearedStage+1);
+  s.stage=Math.min(IMPLEMENTED_STAGE,s.clearedStage+1);
 
   s.owned=raw.owned&&typeof raw.owned==='object'?raw.owned:{};
 
@@ -773,6 +837,7 @@ function loadState(){
       delete s.owned[id];
       continue;
     }
+
     v.level=Math.min(byId(id).max,Math.max(1,Number(v.level)||1));
     v.dupes=Math.max(0,Number(v.dupes)||0);
   }
@@ -796,7 +861,11 @@ let state=loadState();
 let battle=null;
 let busy=false;
 let enemyTimer=null;
-let selectedStage=Math.min(MAX_STAGE,state.clearedStage+1);
+
+let selectedStage=Math.min(
+  IMPLEMENTED_STAGE,
+  state.clearedStage+1
+);
 
 function save(){
   try{
@@ -804,11 +873,13 @@ function save(){
   }catch(e){
     showError('セーブを保存できませんでした。ブラウザの保存容量・設定を確認してください。');
   }
+
   renderAll();
 }
 
 function showError(msg){
   const el=document.getElementById('errorBox');
+
   if(el){
     el.textContent=msg;
     el.style.display='block';
@@ -832,17 +903,26 @@ function esc(s){
 function imagePath(id){
   const c=byId(id);
   const file=c?.imageFile||id+'.png';
+
   return './images/'+encodeURIComponent(file);
 }
 
 function portrait(id){
   const c=byId(id);
-  return `<div class="portrait"><img src="${imagePath(id)}" alt="${esc(c?.name||id)}" onerror="this.style.display='none'"></div>`;
+
+  return `
+    <div class="portrait">
+      <img src="${imagePath(id)}"
+        alt="${esc(c?.name||id)}"
+        onerror="this.style.display='none'">
+    </div>
+  `;
 }
 
 function stats(c,o){
   const lv=o?.level||1;
   const mul=Math.pow(1+c.growth,lv-1);
+
   return {
     hp:Math.round(c.hp*mul),
     atk:Math.round(c.atk*mul),
@@ -852,12 +932,17 @@ function stats(c,o){
 }
 
 function rarityClass(r){
-  return r==='エピック'?'epic':r==='レア'?'rare':'normal';
+  return r==='エピック'
+    ?'epic'
+    :r==='レア'
+      ?'rare'
+      :'normal';
 }
 
 function cardHTML(id,selectable=false){
   const c=byId(id);
   const o=state.owned[id];
+
   if(!c)return '';
 
   const st=stats(c,o);
@@ -866,34 +951,72 @@ function cardHTML(id,selectable=false){
   return `
     <article class="card ${selectable&&selected?'selected':''}">
       ${portrait(id)}
+
       <div class="name">${esc(c.name)}</div>
-      <div class="small ${rarityClass(c.rarity)}">${c.rarity} / Lv.${o?.level||1}</div>
+
+      <div class="small ${rarityClass(c.rarity)}">
+        ${c.rarity} / Lv.${o?.level||1}
+      </div>
+
       <div class="stats">
         HP ${st.hp}　攻撃 ${st.atk}<br>
         素早さ ${st.speed}<br>
         スキル：${esc(c.skill)}
         ${c.passive?'<br>特性：'+esc(c.passive):''}
       </div>
-      ${selectable?`<button class="wide" data-action="toggleParty" data-id="${esc(id)}">${selected?'編成から外す':'編成に加える'}</button>`:''}
+
+      ${selectable?`
+        <button class="wide"
+          data-action="toggleParty"
+          data-id="${esc(id)}">
+          ${selected?'編成から外す':'編成に加える'}
+        </button>
+      `:''}
     </article>
   `;
 }
 
-/* ステージマップを描画 */
+/* ステージの敵編成を説明する */
+function getFormationText(stage){
+  const formation=STAGE_ENEMIES[stage];
+
+  if(!formation)return '未実装';
+
+  return formation.map(enemy=>{
+    const c=byId(enemy.id);
+    if(!c)return '不明な敵';
+
+    if(enemy.type==='level'){
+      return `${c.name} Lv.${enemy.level||1}`;
+    }
+
+    return `${c.name} ${Math.round(enemy.multiplier*100)}%`;
+  }).join(' / ');
+}
+
+/* ステージマップ */
 function renderStageMap(){
   const map=document.getElementById('stageMap');
   if(!map)return;
 
-  const unlocked=Math.min(MAX_STAGE,state.clearedStage+1);
-  const cleared=Math.min(MAX_STAGE,state.clearedStage);
+  const unlocked=Math.min(
+    IMPLEMENTED_STAGE,
+    state.clearedStage+1
+  );
+
+  const cleared=Math.min(
+    IMPLEMENTED_STAGE,
+    state.clearedStage
+  );
 
   let nodes='';
 
   for(let i=1;i<=MAX_STAGE;i++){
     const boss=isBossStage(i);
+    const implemented=i<=IMPLEMENTED_STAGE;
     const isCleared=i<=cleared;
-    const isUnlocked=i<=unlocked;
-    const isCurrent=i===unlocked;
+    const isUnlocked=implemented&&i<=unlocked;
+    const isCurrent=implemented&&i===unlocked;
     const isSelected=i===selectedStage;
 
     let classes='stage-node';
@@ -902,11 +1025,18 @@ function renderStageMap(){
     if(isCleared)classes+=' completed';
     if(isCurrent)classes+=' current';
     if(isSelected)classes+=' selected';
-    if(!isUnlocked)classes+=' locked';
+    if(!implemented)classes+=' unimplemented';
+    else if(!isUnlocked)classes+=' locked';
 
     let status='🔒 未解放';
-    if(isCleared)status='✓ クリア済み';
-    else if(isCurrent)status='挑戦可能';
+
+    if(!implemented){
+      status='未実装';
+    }else if(isCleared){
+      status='✓ クリア済み';
+    }else if(isCurrent){
+      status='挑戦可能';
+    }
 
     nodes+=`
       <button
@@ -931,12 +1061,15 @@ function renderStageMap(){
     ?'クリア済みステージへの再挑戦'
     :'新しいステージへの挑戦';
 
+  const formationText=getFormationText(selectedStage);
+
   map.innerHTML=`
     <div class="stage-map">
+
       <div class="map-heading">
         <h3>🌿 緑風の草原</h3>
         <div class="map-progress">
-          クリア ${cleared} / ${MAX_STAGE}
+          クリア ${cleared} / ${IMPLEMENTED_STAGE}
         </div>
       </div>
 
@@ -948,12 +1081,15 @@ function renderStageMap(){
         <span><i class="legend-dot legend-normal"></i>通常</span>
         <span><i class="legend-dot legend-clear"></i>クリア済み</span>
         <span><i class="legend-dot legend-boss"></i>ボス</span>
-        <span><i class="legend-dot legend-locked"></i>未解放</span>
+        <span><i class="legend-dot legend-locked"></i>未解放・未実装</span>
       </div>
 
       <div class="selected-stage-info">
         選択中：<strong>ステージ ${selectedStage}</strong>${bossText}<br>
         <span class="small">${replayText}</span>
+        <div class="enemy-formation-info">
+          敵編成：${esc(formationText)}
+        </div>
       </div>
 
       <button
@@ -963,6 +1099,7 @@ function renderStageMap(){
       >
         ステージ ${selectedStage} に挑戦する
       </button>
+
     </div>
   `;
 }
@@ -972,11 +1109,18 @@ function renderAll(){
   document.getElementById('gold').textContent=state.gold;
   document.getElementById('stage').textContent=state.stage;
 
-  document.getElementById('homeSummary').innerHTML=
-    `所持キャラクター：${Object.keys(state.owned).length}体<br>
-    編成中：${state.party.map(id=>esc(byId(id)?.name||id)).join(' / ')||'なし'}<br>
-    クリア済み：${state.clearedStage} / ${MAX_STAGE}<br>
-    次の冒険：ステージ ${Math.min(MAX_STAGE,state.clearedStage+1)}`;
+  document.getElementById('homeSummary').innerHTML=`
+    所持キャラクター：${Object.keys(state.owned).length}体<br>
+    編成中：
+    ${state.party.map(id=>esc(byId(id)?.name||id)).join(' / ')||'なし'}<br>
+    クリア済み：${state.clearedStage} / ${IMPLEMENTED_STAGE}<br>
+    次の冒険：
+    ${
+      state.clearedStage>=IMPLEMENTED_STAGE
+        ?'草原ステージはすべてクリア！'
+        :'ステージ '+Math.min(IMPLEMENTED_STAGE,state.clearedStage+1)
+    }
+  `;
 
   document.getElementById('gachaOwned').textContent=
     `${Object.keys(state.owned).length} / ${CHARACTERS.length}体を所持`;
@@ -989,17 +1133,23 @@ function renderAll(){
     CHARACTERS.map(c=>
       state.owned[c.id]
         ?cardHTML(c.id,true)
-        :`<article class="card">
+        :`
+          <article class="card">
             <div class="portrait">🔒</div>
             <div class="name">？？？</div>
             <div class="small">${c.rarity}</div>
             <div class="stats">未獲得</div>
-          </article>`
+          </article>
+        `
     ).join('');
 
   renderStageMap();
 
-  const unlocked=Math.min(MAX_STAGE,state.clearedStage+1);
+  const unlocked=Math.min(
+    IMPLEMENTED_STAGE,
+    state.clearedStage+1
+  );
+
   const boss=isBossStage(selectedStage);
 
   document.getElementById('battleIntro').innerHTML=`
@@ -1008,14 +1158,17 @@ function renderAll(){
     <br>
     <span class="muted">
       解放済み：ステージ1～${unlocked}<br>
-      クリア済み：${state.clearedStage}ステージ
+      クリア済み：${state.clearedStage}ステージ<br>
+      実装済み：ステージ1～${IMPLEMENTED_STAGE}
     </span><br>
     <span class="muted">
-      編成：${state.party.map(id=>esc(byId(id)?.name||id)).join(' / ')||'なし'}
+      編成：
+      ${state.party.map(id=>esc(byId(id)?.name||id)).join(' / ')||'なし'}
     </span>
   `;
 
   const startButton=document.getElementById('startBattleButton');
+
   if(startButton){
     startButton.textContent=`ステージ ${selectedStage} に挑戦`;
     startButton.disabled=!state.party.length;
@@ -1037,9 +1190,14 @@ function showPage(name){
 
 function selectStage(stage){
   stage=Number(stage);
-  const unlocked=Math.min(MAX_STAGE,state.clearedStage+1);
+
+  const unlocked=Math.min(
+    IMPLEMENTED_STAGE,
+    state.clearedStage+1
+  );
 
   if(!Number.isInteger(stage)||stage<1||stage>unlocked)return;
+
   if(battle&&!battle.over){
     showError('戦闘中はステージを変更できません。');
     return;
@@ -1075,26 +1233,37 @@ function summon(count){
 
     if(!state.owned[c.id]){
       state.owned[c.id]={level:1,dupes:0};
-      results.push(`<span class="${rarityClass(c.rarity)}">${esc(c.name)}（初獲得）</span>`);
+
+      results.push(
+        `<span class="${rarityClass(c.rarity)}">${esc(c.name)}（初獲得）</span>`
+      );
+
     }else{
       const o=state.owned[c.id];
+
       o.dupes=(o.dupes||0)+1;
 
       if(o.level<c.max&&o.dupes>=o.level){
         o.dupes=0;
         o.level++;
+
         results.push(`${esc(c.name)}：Lv.${o.level}に成長！`);
+
       }else if(o.level>=c.max){
         o.dupes=0;
         state.gold+=50;
+
         results.push(`${esc(c.name)}：最大Lvのため🪙50獲得`);
+
       }else{
         results.push(`${esc(c.name)}：重複 ${o.dupes}/${o.level}`);
       }
     }
   }
 
-  document.getElementById('gachaResult').innerHTML=results.join('<br>');
+  document.getElementById('gachaResult').innerHTML=
+    results.join('<br>');
+
   save();
 }
 
@@ -1105,8 +1274,10 @@ function toggleParty(id){
 
   if(i>=0){
     state.party.splice(i,1);
+
   }else if(state.party.length<3){
     state.party.push(id);
+
   }else{
     showError('編成できるのは3人までです。');
     return;
@@ -1117,8 +1288,6 @@ function toggleParty(id){
 
 /* ==============================
    戦闘システム
-   スキルは通常攻撃回数(actions)で蓄積
-   行動ゲージは行動順決定にのみ使用
 ============================== */
 
 function makeUnit(id,side){
@@ -1156,37 +1325,88 @@ function makeUnit(id,side){
   };
 }
 
-/* 敵の名前・画像・ステータス */
-function makeEnemy(i){
-  const enemyIds=['goblin','zombie','ゴーレム'];
-  const id=enemyIds[i];
-  const c=byId(id);
+/*
+  敵キャラクター生成
+
+  レベル指定の場合：
+  stats()で通常の成長率を適用。
+
+  倍率指定の場合：
+  レベル1の基本ステータスに倍率を適用。
+  HP・攻撃力・スキル威力が対象。
+  素早さは既存仕様どおりレベルで成長しないため、
+  倍率による変化もさせない。
+
+  hpMultiplierがある場合：
+  HPだけに追加倍率を適用。
+*/
+function makeEnemy(i,stage){
+  const formation=STAGE_ENEMIES[stage];
+
+  if(!formation||!formation[i])return null;
+
+  const setting=formation[i];
+  const c=byId(setting.id);
 
   if(!c)return null;
 
-  const enemyLevel=Math.min(c.max,Math.max(1,selectedStage));
-  const st=stats(c,{level:enemyLevel});
+  let st;
+  let strengthLabel;
+
+  if(setting.type==='level'){
+    const level=Math.min(
+      c.max,
+      Math.max(1,setting.level||1)
+    );
+
+    st=stats(c,{level});
+    strengthLabel=`Lv.${level}`;
+
+  }else{
+    const multiplier=setting.multiplier;
+
+    const base=stats(c,{level:1});
+
+    st={
+      hp:Math.round(base.hp*multiplier),
+      atk:Math.round(base.atk*multiplier),
+      power:Math.round(base.power*multiplier),
+      speed:base.speed
+    };
+
+    strengthLabel=`${Math.round(multiplier*100)}%`;
+  }
+
+  if(setting.hpMultiplier){
+    st.hp=Math.round(st.hp*setting.hpMultiplier);
+    strengthLabel+=` / HP ${Math.round(setting.hpMultiplier*100)}%`;
+  }
 
   return {
     id:'enemy'+i,
     name:c.name,
-    imageId:id,
-    characterId:id,
+    imageId:c.id,
+    characterId:c.id,
     side:'enemy',
+
     hp:st.hp,
     maxHp:st.hp,
     atk:st.atk,
     speed:st.speed,
+
     gauge:0,
     alive:true,
     guard:false,
     evade:0,
     poison:0,
     buff:1,
+
     effectText:'',
     effectKind:'',
     effectVersion:0,
-    hit:false
+    hit:false,
+
+    strengthLabel
   };
 }
 
@@ -1196,13 +1416,17 @@ function alive(arr){
 
 function chooseRandomEnemy(){
   const enemies=alive(battle.enemies);
+
   if(!enemies.length)return null;
+
   return enemies[Math.floor(Math.random()*enemies.length)];
 }
 
 function chooseRandomAlly(){
   const allies=alive(battle.allies);
+
   if(!allies.length)return null;
+
   return allies[Math.floor(Math.random()*allies.length)];
 }
 
@@ -1220,17 +1444,16 @@ function chooseAttackTarget(actor){
   if(actor&&actor.id==='狙撃手アーチャー'){
     return chooseEnemy();
   }
+
   return chooseRandomEnemy();
 }
 
-/*
-  演出はここで再描画しない。
-  行動処理後のrenderBattle()で一度だけ表示する。
-*/
+/* 演出はここで再描画しない */
 function showUnitEffect(unit,text,kind='damage'){
   if(!unit)return;
 
   unit.effectVersion=(unit.effectVersion||0)+1;
+
   const thisVersion=unit.effectVersion;
 
   unit.effectText=text;
@@ -1252,6 +1475,7 @@ function showUnitEffect(unit,text,kind='damage'){
       if(el.dataset.unitId!==unitId)return;
 
       const effect=el.querySelector('.effect-pop');
+
       if(effect)effect.remove();
 
       el.classList.remove('hit-animation');
@@ -1272,11 +1496,22 @@ function startBattle(){
     return;
   }
 
-  const unlocked=Math.min(MAX_STAGE,state.clearedStage+1);
+  const unlocked=Math.min(
+    IMPLEMENTED_STAGE,
+    state.clearedStage+1
+  );
+
   if(selectedStage>unlocked){
     showError('そのステージはまだ解放されていません。');
     return;
   }
+
+  if(selectedStage>IMPLEMENTED_STAGE||!STAGE_ENEMIES[selectedStage]){
+    showError('このステージはまだ実装されていません。');
+    return;
+  }
+
+  const formation=STAGE_ENEMIES[selectedStage];
 
   battle={
     stage:selectedStage,
@@ -1285,15 +1520,16 @@ function startBattle(){
     over:false,
     readyActor:null,
     pendingEnemy:null,
+
     allies:state.party.map(id=>makeUnit(id,'ally')),
-    enemies:[
-      makeEnemy(0),
-      makeEnemy(1),
-      ...(selectedStage>=3||isBossStage(selectedStage)?[makeEnemy(2)]:[])
-    ].filter(Boolean)
+
+    enemies:formation
+      .map((setting,index)=>makeEnemy(index,selectedStage))
+      .filter(Boolean)
   };
 
   busy=false;
+
   showPage('battle');
   renderBattle();
   advanceBattle();
@@ -1309,12 +1545,14 @@ function chooseEnemyAttackTarget(enemy){
   ){
     return chooseAlly();
   }
+
   return chooseRandomAlly();
 }
 
 /* 敵の行動を予告してから実行 */
 function prepareEnemyAction(enemy){
   const target=chooseEnemyAttackTarget(enemy);
+
   if(!target)return;
 
   battle.pendingEnemy={
@@ -1339,6 +1577,7 @@ function prepareEnemyAction(enemy){
     }
 
     const pending=battle.pendingEnemy;
+
     if(!pending){
       busy=false;
       return;
@@ -1362,7 +1601,9 @@ function prepareEnemyAction(enemy){
       if(e.poison>0){
         e.hp=Math.max(0,e.hp-8);
         e.poison--;
+
         showUnitEffect(e,'毒 -8','damage');
+
         if(e.hp===0)e.alive=false;
       }
     }
@@ -1388,12 +1629,14 @@ function prepareEnemyAction(enemy){
 /* 味方の行動 */
 function performAlly(actor,useSkill){
   const c=byId(actor.id);
+
   if(!c)return;
 
   if(useSkill){
     if(actor.charge>0&&actor.actions<actor.charge)return;
 
     actor.actions=0;
+
     showUnitEffect(actor,'SKILL!','buff');
 
     if(actor.effect==='damage'){
@@ -1415,6 +1658,7 @@ function performAlly(actor,useSkill){
 
     }else if(actor.effect==='poison'){
       const t=chooseAttackTarget(actor);
+
       if(t){
         deal(actor,t,actor.power);
         t.poison=3;
@@ -1433,25 +1677,32 @@ function performAlly(actor,useSkill){
           :actor.power;
 
         const actual=Math.min(t.maxHp-t.hp,amount);
+
         t.hp=Math.min(t.maxHp,t.hp+amount);
+
         showUnitEffect(t,'+'+actual,'heal');
       }
 
     }else if(actor.effect==='buffSelf'){
       actor.buff+=actor.power/100;
+
       showUnitEffect(actor,'攻撃力UP','buff');
 
     }else if(actor.effect==='buffAlly'){
       const t=chooseAlly();
+
       if(t){
         t.buff+=actor.power/100;
+
         showUnitEffect(t,'攻撃力UP','buff');
       }
     }
 
   }else{
     actor.actions++;
+
     const t=chooseAttackTarget(actor);
+
     if(t){
       deal(actor,t,actor.atk*actor.buff);
     }
@@ -1459,6 +1710,7 @@ function performAlly(actor,useSkill){
 
   if(actor.passive==='ウィルパワー'){
     actor.atk+=Math.max(1,Math.round(actor.atk*.1));
+
     showUnitEffect(actor,'攻撃力上昇','buff');
   }
 
@@ -1473,7 +1725,9 @@ function deal(attacker,target,amount){
 
   if(target.evade>0){
     target.evade=0;
+
     showUnitEffect(target,'MISS!','miss');
+
     return 0;
   }
 
@@ -1485,6 +1739,7 @@ function deal(attacker,target,amount){
   }
 
   target.hp=Math.max(0,target.hp-dmg);
+
   showUnitEffect(target,'-'+dmg,'damage');
 
   if(target.hp<=0){
@@ -1503,6 +1758,7 @@ function enemyAct(e,target){
     const reflected=Math.round(dmg*2);
 
     e.hp=Math.max(0,e.hp-reflected);
+
     showUnitEffect(e,'反射 -'+reflected,'damage');
 
     if(e.hp===0)e.alive=false;
@@ -1543,15 +1799,19 @@ function advanceBattle(){
     if(!ready.length)continue;
 
     const actor=ready[0];
+
     actor.gauge-=100;
 
     if(actor.side==='ally'){
       battle.readyActor=actor.id;
+
       renderBattle();
+
       return;
     }
 
     prepareEnemyAction(actor);
+
     return;
   }
 
@@ -1562,6 +1822,7 @@ function playerAction(id,skill){
   if(!battle||battle.over||busy||battle.readyActor!==id)return;
 
   const actor=battle.allies.find(x=>x.id===id&&x.alive);
+
   if(!actor)return;
 
   if(skill&&actor.charge>0&&actor.actions<actor.charge)return;
@@ -1569,6 +1830,7 @@ function playerAction(id,skill){
   busy=true;
 
   performAlly(actor,skill);
+
   battle.readyActor=null;
 
   if(alive(battle.enemies).length===0){
@@ -1584,6 +1846,7 @@ function playerAction(id,skill){
   }
 
   busy=false;
+
   renderBattle();
   advanceBattle();
 }
@@ -1599,18 +1862,29 @@ function finishBattle(win){
   battle.over=true;
   battle.pendingEnemy=null;
   battle.resultWin=win;
+
   busy=false;
 
   if(win){
     const cleared=battle.stage;
 
-    state.clearedStage=Math.max(state.clearedStage,cleared);
-    state.stage=Math.min(MAX_STAGE,state.clearedStage+1);
+    state.clearedStage=Math.max(
+      state.clearedStage,
+      cleared
+    );
+
+    state.stage=Math.min(
+      IMPLEMENTED_STAGE,
+      state.clearedStage+1
+    );
 
     state.gold+=100;
     state.gems+=40;
 
-    selectedStage=Math.min(MAX_STAGE,state.clearedStage+1);
+    selectedStage=Math.min(
+      IMPLEMENTED_STAGE,
+      state.clearedStage+1
+    );
   }
 
   save();
@@ -1637,6 +1911,7 @@ function renderBattle(){
     const isActive=u.id===activeId;
 
     let badge='';
+
     if(isActive){
       badge=isEnemy
         ?'<div class="turn-badge">敵の行動予告</div>'
@@ -1645,13 +1920,18 @@ function renderBattle(){
 
     return `
       <div
-        class="battle-character ${isEnemy?'enemy':'ally'} ${dead?'dead':''} ${u.hit?'hit-animation':''} ${isActive?'turn-active':''}"
+        class="battle-character
+          ${isEnemy?'enemy':'ally'}
+          ${dead?'dead':''}
+          ${u.hit?'hit-animation':''}
+          ${isActive?'turn-active':''}"
         data-unit-id="${esc(u.id)}"
       >
         ${badge}
 
         <div class="battle-image">
-          <img src="${image}" alt="${esc(u.name)}"
+          <img src="${image}"
+            alt="${esc(u.name)}"
             onerror="this.style.display='none'">
         </div>
 
@@ -1662,6 +1942,10 @@ function renderBattle(){
         `:''}
 
         <div class="battle-name">${esc(u.name)}</div>
+
+        ${isEnemy&&u.strengthLabel?`
+          <div class="small">強化：${esc(u.strengthLabel)}</div>
+        `:''}
 
         <div class="battle-hp-text">
           HP ${Math.max(0,u.hp)} / ${u.maxHp}
@@ -1688,26 +1972,40 @@ function renderBattle(){
     battle.enemies.map(unitHTML).join('');
 
   const enemyHeading=document.getElementById('enemyHeading');
+
   enemyHeading.textContent=battle.isBoss
     ?'▼ 敵軍　👑 BOSS BATTLE'
     :'▼ 敵軍';
 
   const active=battle.allies.find(a=>a.id===battle.readyActor);
+
   let actionContent='';
 
   if(battle.over){
     actionContent=`
       <div class="battle-result">
         <h3>${battle.resultWin?'勝利！':'敗北……'}</h3>
+
         <p>
           ${battle.resultWin
             ?`ステージ ${battle.stage} クリア！報酬を獲得した。`
             :'旅団は敗北した。編成を見直して再挑戦しよう。'}
         </p>
+
         ${battle.resultWin?'<p>🪙100　💎40を獲得！</p>':''}
-        ${battle.resultWin&&battle.isBoss?'<p style="color:#ffcf83;font-weight:900">👑 ボスステージ突破！</p>':''}
-        <button data-action="returnMap">ステージ一覧に戻る</button>
-        <button data-action="startBattle">もう一度挑戦</button>
+
+        ${battle.resultWin&&battle.isBoss
+          ?'<p style="color:#ffcf83;font-weight:900">👑 ボスステージ突破！</p>'
+          :''
+        }
+
+        <button data-action="returnMap">
+          ステージ一覧に戻る
+        </button>
+
+        <button data-action="startBattle">
+          もう一度挑戦
+        </button>
       </div>
     `;
 
@@ -1717,11 +2015,13 @@ function renderBattle(){
     actionContent=`
       <div class="enemy-preview">
         <div class="preview-title">⚠ 敵の行動予告</div>
+
         <div class="preview-detail">
           <b>${esc(p.actorName)}</b> が行動する！<br>
           行動内容：<b>${esc(p.actionName)}</b><br>
           攻撃対象：<b>${esc(p.targetName)}</b>
         </div>
+
         <div class="preview-wait">
           敵が攻撃を準備している……（約1.1秒）
         </div>
@@ -1740,6 +2040,7 @@ function renderBattle(){
 
       <div class="action-character">
         <div class="name">${esc(active.name)}</div>
+
         <div class="small">
           攻撃力：${active.atk}<br>
           スキル：${esc(active.skill)}
@@ -1749,6 +2050,7 @@ function renderBattle(){
           <div class="small">
             スキル準備：${active.actions}/${active.charge} 回
           </div>
+
           <div class="gaugebar">
             <i style="width:${Math.min(100,active.actions/active.charge*100)}%"></i>
           </div>
@@ -1793,6 +2095,7 @@ function handleClick(e){
   }
 
   const b=e.target.closest('[data-action]');
+
   if(!b||b.disabled)return;
 
   const a=b.dataset.action;
@@ -1800,18 +2103,26 @@ function handleClick(e){
 
   if(a==='summon'){
     summon(Number(b.dataset.count));
+
   }else if(a==='toggleParty'){
     toggleParty(id);
+
   }else if(a==='selectStage'){
     selectStage(Number(b.dataset.stage));
+
   }else if(a==='startBattle'){
     startBattle();
+
   }else if(a==='returnMap'){
-    if(battle&& !battle.over)return;
+    if(battle&&!battle.over)return;
+
     showPage('battle');
+
     document.getElementById('battleArea').style.display='none';
+
   }else if(a==='attack'){
     playerAction(id,false);
+
   }else if(a==='skill'){
     playerAction(id,true);
   }
