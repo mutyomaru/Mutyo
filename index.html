@@ -7,158 +7,96 @@
 
 <style>
 :root{
---bg:#101525;
---panel:#1b2540;
---panel2:#263453;
---gold:#f4c76b;
---text:#f4f5fb;
---muted:#aab4ca;
---line:#394866;
---red:#e87979;
---green:#76d6a1;
+  --bg:#101525;
+  --panel:#1b2540;
+  --panel2:#263453;
+  --gold:#f4c76b;
+  --text:#f4f5fb;
+  --muted:#aab4ca;
+  --line:#394866;
+  --red:#e87979;
+  --green:#76d6a1;
 }
-
 *{box-sizing:border-box}
-
 body{
-margin:0;
-background:radial-gradient(ellipse at top,#202d4c 0,#101525 55%);
-color:var(--text);
-font-family:system-ui,-apple-system,"Noto Sans JP",sans-serif;
-min-height:100vh;
+  margin:0;
+  background:radial-gradient(ellipse at top,#202d4c 0,#101525 55%);
+  color:var(--text);
+  font-family:system-ui,-apple-system,"Noto Sans JP",sans-serif;
+  min-height:100vh;
 }
-
 button{
-font:inherit;
-color:inherit;
-border:1px solid #62708e;
-background:linear-gradient(180deg,#354666,#263453);
-border-radius:12px;
-padding:11px 14px;
-cursor:pointer;
+  font:inherit;
+  color:inherit;
+  border:1px solid #62708e;
+  background:linear-gradient(180deg,#354666,#263453);
+  border-radius:12px;
+  padding:11px 14px;
+  cursor:pointer;
 }
-
-button:disabled{
-opacity:.4;
-cursor:not-allowed;
-}
-
-.wrap{
-max-width:900px;
-margin:auto;
-padding:14px;
-}
-
+button:disabled{opacity:.4;cursor:not-allowed}
+.wrap{max-width:900px;margin:auto;padding:14px}
 .top{
-display:flex;
-justify-content:space-between;
-gap:12px;
-align-items:center;
-flex-wrap:wrap;
-padding:12px 4px;
+  display:flex;
+  justify-content:space-between;
+  gap:12px;
+  align-items:center;
+  flex-wrap:wrap;
+  padding:12px 4px;
 }
-
-.brand{
-font-weight:900;
-color:var(--gold);
-font-size:22px;
-}
-
-.resources{
-display:flex;
-gap:8px;
-flex-wrap:wrap;
-}
-
+.brand{font-weight:900;color:var(--gold);font-size:22px}
+.resources{display:flex;gap:8px;flex-wrap:wrap}
 .pill{
-background:#202c46;
-border:1px solid var(--line);
-padding:7px 11px;
-border-radius:999px;
-font-size:14px;
+  background:#202c46;
+  border:1px solid var(--line);
+  padding:7px 11px;
+  border-radius:999px;
+  font-size:14px;
 }
-
 .nav{
-display:grid;
-grid-template-columns:repeat(5,1fr);
-gap:8px;
-margin:8px 0 16px;
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  gap:8px;
+  margin:8px 0 16px;
 }
-
 .nav button{min-height:48px}
-
 .page{display:none}
 .page.active{display:block}
-
 .panel{
-background:linear-gradient(145deg,#1d2945,#172139);
-border:1px solid var(--line);
-border-radius:18px;
-padding:16px;
-margin-bottom:14px;
-box-shadow:0 8px 24px #0003;
+  background:linear-gradient(145deg,#1d2945,#172139);
+  border:1px solid var(--line);
+  border-radius:18px;
+  padding:16px;
+  margin-bottom:14px;
+  box-shadow:0 8px 24px #0003;
 }
-
-.hero{
-text-align:center;
-padding:28px 16px;
-}
-
-.hero h1{
-color:var(--gold);
-font-size:28px;
-margin:0 0 8px;
-}
-
+.hero{text-align:center;padding:28px 16px}
+.hero h1{color:var(--gold);font-size:28px;margin:0 0 8px}
 .muted{color:var(--muted)}
-
-.section-title{
-font-size:20px;
-color:var(--gold);
-margin:0 0 12px;
-}
-
-.row{
-display:flex;
-gap:9px;
-align-items:center;
-flex-wrap:wrap;
-}
-
+.section-title{font-size:20px;color:var(--gold);margin:0 0 12px}
+.row{display:flex;gap:9px;align-items:center;flex-wrap:wrap}
 .grid{
-display:grid;
-grid-template-columns:repeat(auto-fill,minmax(145px,1fr));
-gap:10px;
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(145px,1fr));
+  gap:10px;
 }
-
 .card{
-background:#202d49;
-border:1px solid var(--line);
-border-radius:14px;
-padding:11px;
-min-width:0;
+  background:#202d49;
+  border:1px solid var(--line);
+  border-radius:14px;
+  padding:11px;
+  min-width:0;
 }
-
-.card.selected{
-border:2px solid var(--gold);
-padding:10px;
-}
-
+.card.selected{border:2px solid var(--gold);padding:10px}
 .portrait{
-height:100px;
-display:flex;
-align-items:center;
-justify-content:center;
-font-size:52px;
-margin-bottom:6px;
+  height:100px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:52px;
+  margin-bottom:6px;
 }
-
-.portrait img{
-max-height:100%;
-max-width:100%;
-object-fit:contain;
-}
-
+.portrait img{max-height:100%;max-width:100%;object-fit:contain}
 .name{font-weight:800}
 .small{font-size:12px;color:var(--muted)}
 .stats{font-size:13px;line-height:1.7;margin:6px 0}
@@ -167,261 +105,285 @@ object-fit:contain;
 .epic{color:#d9a0ff}
 .wide{width:100%}
 .result{line-height:1.8;min-height:40px;margin-top:12px}
-
-.bar{
-height:9px;
-background:#101827;
-border-radius:9px;
-overflow:hidden;
-margin:5px 0;
-}
-
-.bar>i{
-display:block;
-height:100%;
-background:linear-gradient(90deg,#5aa5ff,#9e8cff);
-}
-
 .error{
-display:none;
-background:#542d36;
-border:1px solid #b65d6a;
-padding:10px;
-border-radius:10px;
-margin:8px 0;
-white-space:pre-wrap;
+  display:none;
+  background:#542d36;
+  border:1px solid #b65d6a;
+  padding:10px;
+  border-radius:10px;
+  margin:8px 0;
+  white-space:pre-wrap;
 }
+.footer{text-align:center;color:var(--muted);font-size:12px;padding:14px}
 
-.footer{
-text-align:center;
-color:var(--muted);
-font-size:12px;
-padding:14px;
-}
-
-/* =========================
-   戦闘画面
-========================= */
+/* ==============================
+   戦闘画面：敵が上、味方が下
+============================== */
 
 .battle-screen{
-display:flex;
-flex-direction:column;
-gap:14px;
+  display:flex;
+  flex-direction:column;
+  gap:15px;
 }
 
-.battle-side-title{
-font-size:18px;
-font-weight:900;
-margin-bottom:10px;
+.battle-side-heading{
+  font-size:19px;
+  font-weight:900;
+  margin:0 0 10px;
 }
-
-.enemy-title{color:#ff9999}
-.ally-title{color:#8bc8ff}
+.enemy-heading{color:#ffaaaa}
+.ally-heading{color:#9acbff}
 
 .battle-side{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(125px,1fr));
-gap:10px;
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:12px;
 }
 
 .battle-character{
-position:relative;
-background:linear-gradient(145deg,#263653,#18243b);
-border:1px solid var(--line);
-border-radius:15px;
-padding:10px;
-text-align:center;
-min-width:0;
-overflow:hidden;
+  position:relative;
+  min-width:0;
+  overflow:hidden;
+  text-align:center;
+  padding:10px 8px 12px;
+  border-radius:16px;
+  border:1px solid var(--line);
+  background:linear-gradient(155deg,#263653,#17233b);
 }
 
 .battle-character.enemy{
-background:linear-gradient(145deg,#49303b,#2a2031);
-border-color:#79505d;
+  background:linear-gradient(155deg,#513541,#2b2030);
+  border-color:#895767;
 }
 
 .battle-character.ally{
-background:linear-gradient(145deg,#263b5b,#192640);
-border-color:#526f9b;
+  background:linear-gradient(155deg,#294264,#192943);
+  border-color:#5476a4;
 }
 
 .battle-character.dead{
-opacity:.35;
-filter:grayscale(1);
+  opacity:.35;
+  filter:grayscale(1);
 }
 
 .battle-image{
-height:125px;
-display:flex;
-align-items:center;
-justify-content:center;
-margin-bottom:5px;
+  width:100%;
+  height:165px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  margin:0 auto 6px;
 }
 
 .battle-image img{
-width:100%;
-height:100%;
-object-fit:contain;
+  width:100%;
+  height:100%;
+  object-fit:contain;
+  filter:drop-shadow(0 5px 5px #0006);
 }
 
 .battle-name{
-font-weight:900;
-font-size:15px;
-margin-bottom:5px;
+  font-size:16px;
+  font-weight:900;
+  margin:4px 0 6px;
+  min-height:24px;
 }
 
 .battle-hp-text{
-font-size:12px;
-color:var(--muted);
+  font-size:12px;
+  color:#d8dfed;
 }
 
 .hpbar{
-height:9px;
-background:#101827;
-border-radius:10px;
-overflow:hidden;
-margin:5px 0;
+  height:10px;
+  background:#101827;
+  border-radius:10px;
+  overflow:hidden;
+  margin:6px 0;
 }
-
 .hpbar i{
-display:block;
-height:100%;
-background:linear-gradient(90deg,#42c77e,#8de5a9);
-transition:width .3s;
+  display:block;
+  height:100%;
+  background:linear-gradient(90deg,#35bd75,#9be5a9);
+  transition:width .35s;
 }
 
+.gauge-label{
+  font-size:11px;
+  color:var(--muted);
+  text-align:left;
+  margin-top:5px;
+}
 .gaugebar{
-height:6px;
-background:#101827;
-border-radius:10px;
-overflow:hidden;
-margin:6px 0;
+  height:7px;
+  background:#101827;
+  border-radius:10px;
+  overflow:hidden;
+  margin:4px 0 7px;
 }
-
 .gaugebar i{
-display:block;
-height:100%;
-background:linear-gradient(90deg,#579dff,#c09aff);
-transition:width .3s;
+  display:block;
+  height:100%;
+  background:linear-gradient(90deg,#579dff,#c09aff);
+  transition:width .25s;
 }
 
 .battle-divider{
-text-align:center;
-color:var(--gold);
-font-size:20px;
-font-weight:900;
-padding:2px;
+  display:flex;
+  align-items:center;
+  gap:12px;
+  color:var(--gold);
+  font-size:19px;
+  font-weight:900;
+  justify-content:center;
+}
+.battle-divider:before,
+.battle-divider:after{
+  content:"";
+  height:1px;
+  flex:1;
+  background:linear-gradient(90deg,transparent,#9b8150,transparent);
 }
 
 .action-panel{
-background:linear-gradient(145deg,#202e4b,#151f34);
-border:1px solid #536486;
-border-radius:16px;
-padding:14px;
+  background:linear-gradient(145deg,#202e4b,#151f34);
+  border:1px solid #536486;
+  border-radius:16px;
+  padding:14px;
+  min-height:95px;
 }
 
 .action-title{
-font-size:17px;
-font-weight:900;
-color:var(--gold);
-margin-bottom:10px;
+  font-size:18px;
+  font-weight:900;
+  color:var(--gold);
+  margin-bottom:10px;
 }
 
 .action-character{
-background:#263653;
-border:1px solid #536486;
-border-radius:12px;
-padding:12px;
-margin-bottom:8px;
+  background:#263653;
+  border:1px solid #536486;
+  border-radius:12px;
+  padding:12px;
 }
 
 .action-buttons{
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:9px;
-margin-top:10px;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  margin-top:11px;
 }
-
-.action-buttons button{
-min-height:50px;
-}
-
+.action-buttons button{min-height:52px;font-weight:800}
 .attack-button{
-background:linear-gradient(180deg,#a34d59,#713443);
-border-color:#d17a87;
+  background:linear-gradient(180deg,#a34d59,#713443);
+  border-color:#d17a87;
 }
-
 .skill-button{
-background:linear-gradient(180deg,#6950a8,#45336e);
-border-color:#a58ad8;
+  background:linear-gradient(180deg,#6950a8,#45336e);
+  border-color:#a58ad8;
 }
 
 .enemy-preview{
-background:linear-gradient(145deg,#633b48,#342536);
-border:2px solid #bd687b;
-border-radius:14px;
-padding:14px;
-animation:previewIn .25s ease-out;
+  background:linear-gradient(145deg,#633b48,#342536);
+  border:2px solid #bd687b;
+  border-radius:14px;
+  padding:15px;
+  animation:previewIn .25s ease-out;
 }
-
 .preview-title{
-color:#ffb1b1;
-font-weight:900;
-font-size:17px;
-margin-bottom:8px;
+  color:#ffb1b1;
+  font-weight:900;
+  font-size:18px;
+  margin-bottom:8px;
 }
-
-.preview-detail{
-font-size:15px;
-line-height:1.9;
-}
-
+.preview-detail{font-size:15px;line-height:1.9}
 .preview-wait{
-color:#ffd0d0;
-font-size:12px;
-margin-top:7px;
-}
-
-@keyframes previewIn{
-from{opacity:0;transform:translateY(6px)}
-to{opacity:1;transform:translateY(0)}
-}
-
-.battle-effect{
-font-size:13px;
-font-weight:900;
-color:#ffe08a;
-margin-top:5px;
-animation:effectIn .7s ease-out;
-}
-
-@keyframes effectIn{
-0%{opacity:0;transform:translateY(8px)}
-20%{opacity:1;transform:translateY(0)}
-100%{opacity:0;transform:translateY(-8px)}
+  color:#ffd0d0;
+  font-size:12px;
+  margin-top:8px;
 }
 
 .battle-result{
-text-align:center;
-padding:18px;
-background:#202d49;
-border:1px solid var(--gold);
-border-radius:14px;
+  text-align:center;
+  padding:18px;
+  background:#202d49;
+  border:1px solid var(--gold);
+  border-radius:14px;
 }
-
 .battle-result h3{
-color:var(--gold);
-font-size:23px;
-margin:0 0 12px;
+  color:var(--gold);
+  font-size:25px;
+  margin:0 0 12px;
 }
 
-@media(max-width:520px){
-.wrap{padding:10px}
-.nav{grid-template-columns:repeat(2,1fr)}
-.hero h1{font-size:24px}
-.panel{padding:13px}
-.battle-image{height:105px}
-.battle-side{grid-template-columns:repeat(2,minmax(0,1fr))}
+/* ダメージ・回復などの演出 */
+
+.effect-pop{
+  position:absolute;
+  z-index:5;
+  top:38%;
+  left:50%;
+  transform:translate(-50%,-50%);
+  pointer-events:none;
+  font-size:25px;
+  font-weight:1000;
+  white-space:nowrap;
+  text-shadow:0 2px 5px #000,0 0 8px #000;
+  animation:effectFloat .9s ease-out forwards;
+}
+
+.effect-damage{color:#ff7777}
+.effect-heal{color:#79f0a8}
+.effect-buff{color:#ffe27d}
+.effect-guard{color:#8dcaff}
+.effect-evade{color:#d0aaff}
+.effect-miss{color:#d7e4ff}
+
+@keyframes effectFloat{
+  0%{opacity:0;transform:translate(-50%,0) scale(.65)}
+  15%{opacity:1;transform:translate(-50%,-12px) scale(1.15)}
+  35%{transform:translate(-50%,-20px) scale(1)}
+  100%{opacity:0;transform:translate(-50%,-58px) scale(.95)}
+}
+
+.hit-animation{
+  animation:hitShake .35s ease-in-out;
+}
+@keyframes hitShake{
+  0%,100%{transform:translateX(0)}
+  20%{transform:translateX(-5px)}
+  40%{transform:translateX(5px)}
+  60%{transform:translateX(-3px)}
+  80%{transform:translateX(3px)}
+}
+
+.attack-flash{
+  animation:attackFlash .35s ease-out;
+}
+@keyframes attackFlash{
+  0%{filter:brightness(1)}
+  35%{filter:brightness(2.1)}
+  100%{filter:brightness(1)}
+}
+
+@keyframes previewIn{
+  from{opacity:0;transform:translateY(7px)}
+  to{opacity:1;transform:translateY(0)}
+}
+
+@media(max-width:600px){
+  .wrap{padding:10px}
+  .nav{grid-template-columns:repeat(2,1fr)}
+  .hero h1{font-size:24px}
+  .panel{padding:13px}
+  .battle-side{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .battle-image{height:145px}
+}
+
+@media(max-width:360px){
+  .battle-side{grid-template-columns:1fr 1fr}
+  .battle-image{height:120px}
+  .battle-name{font-size:14px}
 }
 </style>
 </head>
@@ -430,112 +392,107 @@ margin:0 0 12px;
 <div class="wrap">
 
 <header class="top">
-<div class="brand">✦ 星詠みの旅団</div>
-<div class="resources">
-<span class="pill">💎 <b id="gems">0</b></span>
-<span class="pill">🪙 <b id="gold">0</b></span>
-<span class="pill">到達ステージ <b id="stage">1</b></span>
-</div>
+  <div class="brand">✦ 星詠みの旅団</div>
+  <div class="resources">
+    <span class="pill">💎 <b id="gems">0</b></span>
+    <span class="pill">🪙 <b id="gold">0</b></span>
+    <span class="pill">到達ステージ <b id="stage">1</b></span>
+  </div>
 </header>
 
 <div id="errorBox" class="error"></div>
 
 <nav class="nav">
-<button data-page="home">ホーム</button>
-<button data-page="gacha">ガチャ</button>
-<button data-page="team">編成・図鑑</button>
-<button data-page="battle">戦闘</button>
-<button data-page="shop">ショップ</button>
+  <button data-page="home">ホーム</button>
+  <button data-page="gacha">ガチャ</button>
+  <button data-page="team">編成・図鑑</button>
+  <button data-page="battle">戦闘</button>
+  <button data-page="shop">ショップ</button>
 </nav>
 
 <main>
 
 <section id="home" class="page active">
-<div class="panel hero">
-<h1>星の導きが、旅の始まり</h1>
-<p class="muted">仲間を集め、育て、未知の敵に挑もう。</p>
-<div class="row" style="justify-content:center">
-<button data-page="gacha">仲間を召喚する</button>
-<button data-page="team">編成を確認する</button>
-<button data-page="battle">冒険に出る</button>
-</div>
-</div>
-
-<div class="panel">
-<h2 class="section-title">旅団の状況</h2>
-<div id="homeSummary"></div>
-</div>
+  <div class="panel hero">
+    <h1>星の導きが、旅の始まり</h1>
+    <p class="muted">仲間を集め、育て、未知の敵に挑もう。</p>
+    <div class="row" style="justify-content:center">
+      <button data-page="gacha">仲間を召喚する</button>
+      <button data-page="team">編成を確認する</button>
+      <button data-page="battle">冒険に出る</button>
+    </div>
+  </div>
+  <div class="panel">
+    <h2 class="section-title">旅団の状況</h2>
+    <div id="homeSummary"></div>
+  </div>
 </section>
 
 <section id="gacha" class="page">
-<div class="panel">
-<h2 class="section-title">星詠み召喚</h2>
-<p>ノーマル 70% / レア 25% / エピック 5%</p>
-<div class="row">
-<button data-action="summon" data-count="1">1回召喚（💎100）</button>
-<button data-action="summon" data-count="10">10回召喚（💎900）</button>
-</div>
-<div id="gachaResult" class="result muted">召喚結果がここに表示されます。</div>
-</div>
-
-<div class="panel">
-<h2 class="section-title">所持状況</h2>
-<div id="gachaOwned" class="small"></div>
-</div>
+  <div class="panel">
+    <h2 class="section-title">星詠み召喚</h2>
+    <p>ノーマル 70% / レア 25% / エピック 5%</p>
+    <div class="row">
+      <button data-action="summon" data-count="1">1回召喚（💎100）</button>
+      <button data-action="summon" data-count="10">10回召喚（💎900）</button>
+    </div>
+    <div id="gachaResult" class="result muted">召喚結果がここに表示されます。</div>
+  </div>
+  <div class="panel">
+    <h2 class="section-title">所持状況</h2>
+    <div id="gachaOwned" class="small"></div>
+  </div>
 </section>
 
 <section id="team" class="page">
-<div class="panel">
-<h2 class="section-title">パーティ編成</h2>
-<p class="muted">所持キャラクターを選択して最大3人まで編成できます。</p>
-<div id="partyView" class="grid"></div>
-</div>
-
-<div class="panel">
-<h2 class="section-title">キャラクター図鑑</h2>
-<div id="characterList" class="grid"></div>
-</div>
+  <div class="panel">
+    <h2 class="section-title">パーティ編成</h2>
+    <p class="muted">所持キャラクターを選択して最大3人まで編成できます。</p>
+    <div id="partyView" class="grid"></div>
+  </div>
+  <div class="panel">
+    <h2 class="section-title">キャラクター図鑑</h2>
+    <div id="characterList" class="grid"></div>
+  </div>
 </section>
 
 <section id="shop" class="page">
-<div class="panel">
-<h2 class="section-title">ショップ</h2>
-<p>ショップは準備中です。</p>
-</div>
+  <div class="panel">
+    <h2 class="section-title">ショップ</h2>
+    <p>ショップは準備中です。</p>
+  </div>
 </section>
 
 <section id="battle" class="page">
+  <div class="panel">
+    <h2 class="section-title">冒険・戦闘</h2>
+    <div id="battleIntro"></div>
+    <div class="row" style="margin-top:12px">
+      <button data-action="startBattle">戦闘開始</button>
+    </div>
+  </div>
 
-<div class="panel">
-<h2 class="section-title">冒険・戦闘</h2>
-<div id="battleIntro"></div>
-<div class="row" style="margin-top:12px">
-<button data-action="startBattle">戦闘開始</button>
-</div>
-</div>
+  <div id="battleArea" class="panel" style="display:none">
+    <div class="battle-screen">
 
-<div id="battleArea" class="panel" style="display:none">
-<div class="battle-screen">
+      <div>
+        <div class="battle-side-heading enemy-heading">▼ 敵軍</div>
+        <div id="enemyUnits" class="battle-side"></div>
+      </div>
 
-<div>
-<div class="battle-side-title enemy-title">▼ 敵軍</div>
-<div id="enemyUnits" class="battle-side"></div>
-</div>
+      <div class="battle-divider">✦ VS ✦</div>
 
-<div class="battle-divider">VS</div>
+      <div>
+        <div class="battle-side-heading ally-heading">▲ 旅団</div>
+        <div id="allyUnits" class="battle-side"></div>
+      </div>
 
-<div>
-<div class="battle-side-title ally-title">▲ 旅団</div>
-<div id="allyUnits" class="battle-side"></div>
-</div>
+      <div id="actionArea" class="action-panel">
+        <div class="muted">戦闘準備中...</div>
+      </div>
 
-<div id="actionArea" class="action-panel">
-<div class="muted">戦闘準備中...</div>
-</div>
-
-</div>
-</div>
-
+    </div>
+  </div>
 </section>
 
 </main>
@@ -573,53 +530,57 @@ const CHARACTERS=[
 const byId=id=>CHARACTERS.find(c=>c.id===id);
 
 function fresh(){
-return {
-gems:500,
-gold:300,
-stage:1,
-owned:{
-swordman:{level:1,dupes:0},
-archer:{level:1,dupes:0},
-spearman:{level:1,dupes:0}
-},
-party:['swordman','archer','spearman']
-};
+  return {
+    gems:500,
+    gold:300,
+    stage:1,
+    owned:{
+      swordman:{level:1,dupes:0},
+      archer:{level:1,dupes:0},
+      spearman:{level:1,dupes:0}
+    },
+    party:['swordman','archer','spearman']
+  };
 }
 
 function loadState(){
-let raw=null;
-try{raw=JSON.parse(localStorage.getItem(KEY)||'null')}catch(e){}
+  let raw=null;
+  try{
+    raw=JSON.parse(localStorage.getItem(KEY)||'null');
+  }catch(e){}
 
-const d=fresh();
-if(!raw||typeof raw!=='object')return d;
+  const d=fresh();
+  if(!raw||typeof raw!=='object')return d;
 
-const s={...d,...raw};
-s.gems=Number.isFinite(+s.gems)?Math.max(0,+s.gems):d.gems;
-s.gold=Number.isFinite(+s.gold)?Math.max(0,+s.gold):d.gold;
-s.stage=Number.isFinite(+s.stage)?Math.max(1,+s.stage):1;
+  const s={...d,...raw};
+  s.gems=Number.isFinite(+s.gems)?Math.max(0,+s.gems):d.gems;
+  s.gold=Number.isFinite(+s.gold)?Math.max(0,+s.gold):d.gold;
+  s.stage=Number.isFinite(+s.stage)?Math.max(1,+s.stage):1;
 
-s.owned=raw.owned&&typeof raw.owned==='object'?raw.owned:{};
+  s.owned=raw.owned&&typeof raw.owned==='object'?raw.owned:{};
 
-for(const [id,v] of Object.entries(s.owned)){
-if(!byId(id)||!v||typeof v!=='object'){
-delete s.owned[id];
-continue;
-}
-v.level=Math.min(byId(id).max,Math.max(1,Number(v.level)||1));
-v.dupes=Math.max(0,Number(v.dupes)||0);
-}
+  for(const [id,v] of Object.entries(s.owned)){
+    if(!byId(id)||!v||typeof v!=='object'){
+      delete s.owned[id];
+      continue;
+    }
+    v.level=Math.min(byId(id).max,Math.max(1,Number(v.level)||1));
+    v.dupes=Math.max(0,Number(v.dupes)||0);
+  }
 
-for(const id of Object.keys(d.owned)){
-if(!s.owned[id])s.owned[id]={...d.owned[id]};
-}
+  for(const id of Object.keys(d.owned)){
+    if(!s.owned[id])s.owned[id]={...d.owned[id]};
+  }
 
-s.party=Array.isArray(raw.party)
-?raw.party.filter((id,i,a)=>byId(id)&&s.owned[id]&&a.indexOf(id)===i).slice(0,3)
-:d.party.slice();
+  s.party=Array.isArray(raw.party)
+    ?raw.party.filter((id,i,a)=>byId(id)&&s.owned[id]&&a.indexOf(id)===i).slice(0,3)
+    :d.party.slice();
 
-if(!s.party.length)s.party=d.party.filter(id=>s.owned[id]);
+  if(!s.party.length){
+    s.party=d.party.filter(id=>s.owned[id]);
+  }
 
-return s;
+  return s;
 }
 
 let state=loadState();
@@ -628,755 +589,804 @@ let busy=false;
 let enemyTimer=null;
 
 function save(){
-try{
-localStorage.setItem(KEY,JSON.stringify(state));
-}catch(e){
-showError('セーブを保存できませんでした。');
-}
-renderAll();
+  try{
+    localStorage.setItem(KEY,JSON.stringify(state));
+  }catch(e){
+    showError('セーブを保存できませんでした。ブラウザの保存容量・設定を確認してください。');
+  }
+  renderAll();
 }
 
 function showError(msg){
-const el=document.getElementById('errorBox');
-if(el){
-el.textContent=msg;
-el.style.display='block';
-}
+  const el=document.getElementById('errorBox');
+  if(el){
+    el.textContent=msg;
+    el.style.display='block';
+  }
 }
 
 window.addEventListener('error',e=>{
-showError('ゲーム内でエラーが発生しました: '+e.message);
+  showError('ゲーム内でエラーが発生しました: '+e.message);
 });
 
 function esc(s){
-return String(s).replace(/[&<>"']/g,c=>({
-'&':'&amp;',
-'<':'&lt;',
-'>':'&gt;',
-'"':'&quot;',
-"'":'&#39;'
-}[c]));
+  return String(s).replace(/[&<>"']/g,c=>({
+    '&':'&amp;',
+    '<':'&lt;',
+    '>':'&gt;',
+    '"':'&quot;',
+    "'":'&#39;'
+  }[c]));
 }
 
 function imagePath(id){
-const c=byId(id);
-const file=c?.imageFile||id+'.png';
-return './images/'+encodeURIComponent(file);
+  const c=byId(id);
+  const file=c?.imageFile||id+'.png';
+  return './images/'+encodeURIComponent(file);
 }
 
 function portrait(id){
-const c=byId(id);
-return `<div class="portrait"><img src="${imagePath(id)}" alt="${esc(c?.name||id)}" onerror="this.style.display='none'"></div>`;
+  const c=byId(id);
+  return `<div class="portrait"><img src="${imagePath(id)}" alt="${esc(c?.name||id)}" onerror="this.style.display='none'"></div>`;
 }
 
 function stats(c,o){
-const lv=o?.level||1;
-const mul=Math.pow(1+c.growth,lv-1);
-return {
-hp:Math.round(c.hp*mul),
-atk:Math.round(c.atk*mul),
-power:Math.round(c.power*mul),
-speed:c.speed
-};
+  const lv=o?.level||1;
+  const mul=Math.pow(1+c.growth,lv-1);
+  return {
+    hp:Math.round(c.hp*mul),
+    atk:Math.round(c.atk*mul),
+    power:Math.round(c.power*mul),
+    speed:c.speed
+  };
 }
 
 function rarityClass(r){
-return r==='エピック'?'epic':r==='レア'?'rare':'normal';
+  return r==='エピック'?'epic':r==='レア'?'rare':'normal';
 }
 
 function cardHTML(id,selectable=false){
-const c=byId(id);
-const o=state.owned[id];
-if(!c)return '';
+  const c=byId(id);
+  const o=state.owned[id];
+  if(!c)return '';
 
-const st=stats(c,o);
-const selected=state.party.includes(id);
+  const st=stats(c,o);
+  const selected=state.party.includes(id);
 
-return `
-<article class="card ${selectable&&selected?'selected':''}">
-${portrait(id)}
-<div class="name">${esc(c.name)}</div>
-<div class="small ${rarityClass(c.rarity)}">${c.rarity} / Lv.${o?.level||1}</div>
-<div class="stats">
-HP ${st.hp}　攻撃 ${st.atk}<br>
-素早さ ${st.speed}<br>
-スキル：${esc(c.skill)}
-${c.passive?'<br>特性：'+esc(c.passive):''}
-</div>
-${selectable?`<button class="wide" data-action="toggleParty" data-id="${esc(id)}">${selected?'編成から外す':'編成に加える'}</button>`:''}
-</article>`;
+  return `
+    <article class="card ${selectable&&selected?'selected':''}">
+      ${portrait(id)}
+      <div class="name">${esc(c.name)}</div>
+      <div class="small ${rarityClass(c.rarity)}">${c.rarity} / Lv.${o?.level||1}</div>
+      <div class="stats">
+        HP ${st.hp}　攻撃 ${st.atk}<br>
+        素早さ ${st.speed}<br>
+        スキル：${esc(c.skill)}
+        ${c.passive?'<br>特性：'+esc(c.passive):''}
+      </div>
+      ${selectable?`<button class="wide" data-action="toggleParty" data-id="${esc(id)}">${selected?'編成から外す':'編成に加える'}</button>`:''}
+    </article>
+  `;
 }
 
 function renderAll(){
-document.getElementById('gems').textContent=state.gems;
-document.getElementById('gold').textContent=state.gold;
-document.getElementById('stage').textContent=state.stage;
+  document.getElementById('gems').textContent=state.gems;
+  document.getElementById('gold').textContent=state.gold;
+  document.getElementById('stage').textContent=state.stage;
 
-document.getElementById('homeSummary').innerHTML=
-`所持キャラクター：${Object.keys(state.owned).length}体<br>
-編成中：${state.party.map(id=>esc(byId(id)?.name||id)).join(' / ')||'なし'}<br>
-次の冒険：ステージ ${state.stage}`;
+  document.getElementById('homeSummary').innerHTML=
+    `所持キャラクター：${Object.keys(state.owned).length}体<br>
+    編成中：${state.party.map(id=>esc(byId(id)?.name||id)).join(' / ')||'なし'}<br>
+    次の冒険：ステージ ${state.stage}`;
 
-document.getElementById('gachaOwned').textContent=
-`${Object.keys(state.owned).length} / ${CHARACTERS.length}体を所持`;
+  document.getElementById('gachaOwned').textContent=
+    `${Object.keys(state.owned).length} / ${CHARACTERS.length}体を所持`;
 
-document.getElementById('partyView').innerHTML=
-state.party.map(id=>cardHTML(id)).join('')||
-'<p class="muted">編成がありません。</p>';
+  document.getElementById('partyView').innerHTML=
+    state.party.map(id=>cardHTML(id)).join('')||
+    '<p class="muted">編成がありません。</p>';
 
-document.getElementById('characterList').innerHTML=
-CHARACTERS.map(c=>
-state.owned[c.id]
-?cardHTML(c.id,true)
-:`<article class="card">
-<div class="portrait">🔒</div>
-<div class="name">？？？</div>
-<div class="small">${c.rarity}</div>
-<div class="stats">未獲得</div>
-</article>`
-).join('');
+  document.getElementById('characterList').innerHTML=
+    CHARACTERS.map(c=>
+      state.owned[c.id]
+        ?cardHTML(c.id,true)
+        :`<article class="card">
+            <div class="portrait">🔒</div>
+            <div class="name">？？？</div>
+            <div class="small">${c.rarity}</div>
+            <div class="stats">未獲得</div>
+          </article>`
+    ).join('');
 
-document.getElementById('battleIntro').innerHTML=
-`現在のステージ：<b>${state.stage}</b><br>
-<span class="muted">編成：${state.party.map(id=>esc(byId(id)?.name||id)).join(' / ')||'なし'}</span>`;
+  document.getElementById('battleIntro').innerHTML=
+    `現在のステージ：<b>${state.stage}</b><br>
+    <span class="muted">編成：${state.party.map(id=>esc(byId(id)?.name||id)).join(' / ')||'なし'}</span>`;
 }
 
 function showPage(name){
-document.querySelectorAll('.page').forEach(p=>{
-p.classList.toggle('active',p.id===name);
-});
-if(name==='battle')renderBattle();
-window.scrollTo(0,0);
+  document.querySelectorAll('.page').forEach(p=>{
+    p.classList.toggle('active',p.id===name);
+  });
+
+  if(name==='battle')renderBattle();
+  window.scrollTo(0,0);
 }
 
 function summon(count){
-const cost=count===10?900:100;
+  const cost=count===10?900:100;
 
-if(state.gems<cost){
-document.getElementById('gachaResult').textContent='💎が足りません。';
-return;
-}
+  if(state.gems<cost){
+    document.getElementById('gachaResult').textContent='💎が足りません。';
+    return;
+  }
 
-state.gems-=cost;
-const results=[];
+  state.gems-=cost;
+  const results=[];
 
-for(let i=0;i<count;i++){
-const roll=Math.random()*100;
+  for(let i=0;i<count;i++){
+    const roll=Math.random()*100;
 
-const pool=CHARACTERS.filter(c=>
-roll<5
-?c.rarity==='エピック'
-:roll<30
-?c.rarity==='レア'
-:c.rarity==='ノーマル'
-);
+    const pool=CHARACTERS.filter(c=>
+      roll<5
+        ?c.rarity==='エピック'
+        :roll<30
+          ?c.rarity==='レア'
+          :c.rarity==='ノーマル'
+    );
 
-const c=pool[Math.floor(Math.random()*pool.length)];
+    const c=pool[Math.floor(Math.random()*pool.length)];
 
-if(!state.owned[c.id]){
-state.owned[c.id]={level:1,dupes:0};
-results.push(`<span class="${rarityClass(c.rarity)}">${esc(c.name)}（初獲得）</span>`);
-}else{
-const o=state.owned[c.id];
-o.dupes=(o.dupes||0)+1;
+    if(!state.owned[c.id]){
+      state.owned[c.id]={level:1,dupes:0};
+      results.push(`<span class="${rarityClass(c.rarity)}">${esc(c.name)}（初獲得）</span>`);
+    }else{
+      const o=state.owned[c.id];
+      o.dupes=(o.dupes||0)+1;
 
-if(o.level<c.max&&o.dupes>=o.level){
-o.dupes=0;
-o.level++;
-results.push(`${esc(c.name)}：Lv.${o.level}に成長！`);
-}else if(o.level>=c.max){
-o.dupes=0;
-state.gold+=50;
-results.push(`${esc(c.name)}：最大Lvのため🪙50獲得`);
-}else{
-results.push(`${esc(c.name)}：重複 ${o.dupes}/${o.level}`);
-}
-}
-}
+      if(o.level<c.max&&o.dupes>=o.level){
+        o.dupes=0;
+        o.level++;
+        results.push(`${esc(c.name)}：Lv.${o.level}に成長！`);
+      }else if(o.level>=c.max){
+        o.dupes=0;
+        state.gold+=50;
+        results.push(`${esc(c.name)}：最大Lvのため🪙50獲得`);
+      }else{
+        results.push(`${esc(c.name)}：重複 ${o.dupes}/${o.level}`);
+      }
+    }
+  }
 
-document.getElementById('gachaResult').innerHTML=results.join('<br>');
-save();
+  document.getElementById('gachaResult').innerHTML=results.join('<br>');
+  save();
 }
 
 function toggleParty(id){
-if(!state.owned[id])return;
+  if(!state.owned[id])return;
 
-const i=state.party.indexOf(id);
+  const i=state.party.indexOf(id);
 
-if(i>=0){
-state.party.splice(i,1);
-}else if(state.party.length<3){
-state.party.push(id);
-}else{
-showError('編成できるのは3人までです。');
-return;
+  if(i>=0){
+    state.party.splice(i,1);
+  }else if(state.party.length<3){
+    state.party.push(id);
+  }else{
+    showError('編成できるのは3人までです。');
+    return;
+  }
+
+  save();
 }
 
-save();
-}
+/* ==============================
+   戦闘システム
+   スキルは元の仕様を維持：
+   通常攻撃の回数(actions)で蓄積
+============================== */
 
 function makeUnit(id,side){
-const c=byId(id);
-const o=state.owned[id]||{level:1};
-const st=stats(c,o);
+  const c=byId(id);
+  const o=state.owned[id]||{level:1};
+  const st=stats(c,o);
 
-return {
-id,
-side,
-name:c.name,
-hp:st.hp,
-maxHp:st.hp,
-atk:st.atk,
-speed:st.speed,
-gauge:0,
-charge:c.charge,
-skillGauge:0,
-skillNeed:c.charge===0?0:c.charge*20,
-actions:0,
-skill:c.skill,
-effect:c.effect,
-power:st.power,
-target:c.target,
-passive:c.passive,
-guard:false,
-evade:0,
-poison:0,
-buff:1,
-alive:true,
-counter:false,
-imageId:id,
-effectText:''
-};
+  return {
+    id,
+    side,
+    name:c.name,
+    hp:st.hp,
+    maxHp:st.hp,
+    atk:st.atk,
+    speed:st.speed,
+    gauge:0,
+    charge:c.charge,
+    actions:0,
+    skill:c.skill,
+    effect:c.effect,
+    power:st.power,
+    target:c.target,
+    passive:c.passive,
+    guard:false,
+    evade:0,
+    poison:0,
+    buff:1,
+    alive:true,
+    counter:false,
+    imageId:id,
+    effectText:'',
+    effectKind:'',
+    hit:false
+  };
 }
 
 function makeEnemy(i){
-const names=['ウルフ','ゴースト','オーガ'];
-const images=['goblin','zombie','ゴーレム'];
-const hp=90+state.stage*22+i*35;
+  const names=['ウルフ','ゴースト','オーガ'];
+  const images=['goblin','zombie','ゴーレム'];
+  const hp=90+state.stage*22+i*35;
 
-return {
-id:'enemy'+i,
-name:names[i],
-imageId:images[i],
-side:'enemy',
-hp,
-maxHp:hp,
-atk:12+state.stage*3+i*5,
-speed:12+i*3,
-gauge:0,
-alive:true,
-guard:false,
-evade:0,
-poison:0,
-buff:1,
-effectText:''
-};
+  return {
+    id:'enemy'+i,
+    name:names[i],
+    imageId:images[i],
+    side:'enemy',
+    hp,
+    maxHp:hp,
+    atk:12+state.stage*3+i*5,
+    speed:12+i*3,
+    gauge:0,
+    alive:true,
+    guard:false,
+    evade:0,
+    poison:0,
+    buff:1,
+    effectText:'',
+    effectKind:'',
+    hit:false
+  };
 }
 
 function alive(arr){
-return arr.filter(x=>x.alive&&x.hp>0);
+  return arr.filter(x=>x.alive&&x.hp>0);
+}
+
+function showUnitEffect(unit,text,kind='damage'){
+  if(!unit)return;
+
+  unit.effectText=text;
+  unit.effectKind=kind;
+  unit.hit=kind==='damage'||kind==='miss';
+
+  const currentBattle=battle;
+
+  setTimeout(()=>{
+    if(!currentBattle||battle!==currentBattle)return;
+
+    unit.effectText='';
+    unit.effectKind='';
+    unit.hit=false;
+    renderBattle();
+  },950);
 }
 
 function startBattle(){
-if(busy)return;
+  if(busy)return;
 
-if(enemyTimer){
-clearTimeout(enemyTimer);
-enemyTimer=null;
-}
+  if(enemyTimer){
+    clearTimeout(enemyTimer);
+    enemyTimer=null;
+  }
 
-if(!state.party.length){
-showError('先に編成を設定してください。');
-return;
-}
+  if(!state.party.length){
+    showError('先に編成を設定してください。');
+    return;
+  }
 
-battle={
-turn:0,
-over:false,
-readyActor:null,
-pendingEnemy:null,
-allies:state.party.map(id=>makeUnit(id,'ally')),
-enemies:[
-makeEnemy(0),
-makeEnemy(1),
-...(state.stage>=3?[makeEnemy(2)]:[])
-]
-};
+  battle={
+    turn:0,
+    over:false,
+    readyActor:null,
+    pendingEnemy:null,
+    allies:state.party.map(id=>makeUnit(id,'ally')),
+    enemies:[
+      makeEnemy(0),
+      makeEnemy(1),
+      ...(state.stage>=3?[makeEnemy(2)]:[])
+    ]
+  };
 
-busy=false;
-showPage('battle');
-advanceBattle();
-}
-
-function logEffect(unit,text){
-unit.effectText=text;
-}
-
-function deal(attacker,target,amount){
-if(!target||!target.alive)return 0;
-
-if(target.evade>0){
-target.evade=0;
-logEffect(target,'MISS!');
-return 0;
-}
-
-let dmg=Math.max(1,Math.round(amount));
-
-if(target.guard){
-dmg=Math.max(1,Math.round(dmg*.3));
-target.guard=false;
-}
-
-target.hp=Math.max(0,target.hp-dmg);
-logEffect(target,'-'+dmg);
-
-if(target.hp<=0){
-target.alive=false;
-logEffect(target,'DOWN');
-}
-
-if(attacker&&attacker.side==='ally'&&dmg>0){
-attacker.skillGauge=Math.min(
-attacker.skillNeed||999999,
-(attacker.skillGauge||0)+dmg
-);
-}
-
-return dmg;
+  busy=false;
+  showPage('battle');
+  advanceBattle();
 }
 
 function chooseEnemy(){
-return alive(battle.enemies).sort((a,b)=>a.hp-b.hp)[0];
+  return alive(battle.enemies).sort((a,b)=>a.hp-b.hp)[0];
 }
 
 function chooseAlly(){
-return alive(battle.allies).sort((a,b)=>a.hp/a.maxHp-b.hp/b.maxHp)[0];
+  return alive(battle.allies).sort((a,b)=>a.hp/a.maxHp-b.hp/b.maxHp)[0];
 }
 
+function deal(attacker,target,amount){
+  if(!target||!target.alive)return 0;
+
+  if(target.evade>0){
+    target.evade=0;
+    showUnitEffect(target,'MISS!','miss');
+    return 0;
+  }
+
+  let dmg=Math.max(1,Math.round(amount));
+
+  if(target.guard){
+    dmg=Math.max(1,Math.round(dmg*.3));
+    target.guard=false;
+  }
+
+  target.hp=Math.max(0,target.hp-dmg);
+  showUnitEffect(target,'-'+dmg,'damage');
+
+  if(target.hp<=0){
+    target.alive=false;
+    showUnitEffect(target,'DOWN','damage');
+  }
+
+  return dmg;
+}
+
+/* 敵の行動を先に決め、画面に予告してから実行 */
 function prepareEnemyAction(enemy){
-const target=chooseAlly();
-if(!target)return;
+  const target=chooseAlly();
+  if(!target)return;
 
-battle.pendingEnemy={
-actorId:enemy.id,
-targetId:target.id,
-actorName:enemy.name,
-targetName:target.name,
-actionName:'通常攻撃'
-};
+  battle.pendingEnemy={
+    actorId:enemy.id,
+    targetId:target.id,
+    actorName:enemy.name,
+    targetName:target.name,
+    actionName:'通常攻撃'
+  };
 
-busy=true;
-renderBattle();
+  busy=true;
+  renderBattle();
 
-enemyTimer=setTimeout(()=>{
-enemyTimer=null;
+  const currentBattle=battle;
 
-if(!battle||battle.over)return;
+  enemyTimer=setTimeout(()=>{
+    enemyTimer=null;
 
-const pending=battle.pendingEnemy;
-if(!pending){
-busy=false;
-return;
-}
+    if(!battle||battle!==currentBattle||battle.over){
+      busy=false;
+      return;
+    }
 
-const actor=battle.enemies.find(x=>
-x.id===pending.actorId&&x.alive
-);
+    const pending=battle.pendingEnemy;
+    if(!pending){
+      busy=false;
+      return;
+    }
 
-const victim=battle.allies.find(x=>
-x.id===pending.targetId&&x.alive
-);
+    const actor=battle.enemies.find(x=>
+      x.id===pending.actorId&&x.alive
+    );
 
-battle.pendingEnemy=null;
+    const victim=battle.allies.find(x=>
+      x.id===pending.targetId&&x.alive
+    );
 
-if(actor&&victim){
-enemyAct(actor,victim);
-}
+    battle.pendingEnemy=null;
 
-for(const e of alive(battle.enemies)){
-if(e.poison>0){
-e.hp=Math.max(0,e.hp-8);
-e.poison--;
-logEffect(e,'毒 -8');
-if(e.hp===0)e.alive=false;
-}
-}
+    if(actor&&victim){
+      enemyAct(actor,victim);
+    }
 
-busy=false;
+    /* 元の毒ダメージ処理を維持 */
+    for(const e of alive(battle.enemies)){
+      if(e.poison>0){
+        e.hp=Math.max(0,e.hp-8);
+        e.poison--;
+        showUnitEffect(e,'毒 -8','damage');
 
-if(alive(battle.enemies).length===0){
-finishBattle(true);
-return;
-}
+        if(e.hp===0)e.alive=false;
+      }
+    }
 
-if(alive(battle.allies).length===0){
-finishBattle(false);
-return;
-}
+    busy=false;
 
-renderBattle();
-advanceBattle();
+    if(alive(battle.enemies).length===0){
+      finishBattle(true);
+      return;
+    }
 
-},600);
+    if(alive(battle.allies).length===0){
+      finishBattle(false);
+      return;
+    }
+
+    renderBattle();
+    advanceBattle();
+
+  },600);
 }
 
 function performAlly(actor,useSkill){
-if(useSkill){
-if(actor.charge>0&&actor.skillGauge<actor.skillNeed)return;
+  const c=byId(actor.id);
+  if(!c)return;
 
-actor.skillGauge=0;
-actor.actions=0;
-logEffect(actor,'SKILL!');
+  if(useSkill){
+    /* charge回数分の通常攻撃が必要。元の仕様を維持 */
+    if(actor.charge>0&&actor.actions<actor.charge)return;
 
-if(actor.effect==='damage'){
-const targets=actor.target==='all'
-?alive(battle.enemies)
-:[chooseEnemy()];
+    actor.actions=0;
+    showUnitEffect(actor,'SKILL!','buff');
 
-targets.forEach(t=>{
-if(t)deal(actor,t,actor.power);
-});
+    if(actor.effect==='damage'){
+      const targets=actor.target==='all'
+        ?alive(battle.enemies)
+        :[chooseEnemy()];
 
-}else if(actor.effect==='evade'||actor.effect==='evadeSure'){
-actor.evade=1;
-logEffect(actor,'回避態勢');
+      targets.forEach(t=>{
+        if(t)deal(actor,t,actor.power);
+      });
 
-}else if(actor.effect==='guard'){
-actor.guard=true;
-logEffect(actor,'GUARD');
+    }else if(actor.effect==='evade'||actor.effect==='evadeSure'){
+      actor.evade=1;
+      showUnitEffect(actor,'回避態勢','evade');
 
-}else if(actor.effect==='poison'){
-const t=chooseEnemy();
-if(t){
-deal(actor,t,actor.power);
-t.poison=3;
+    }else if(actor.effect==='guard'){
+      actor.guard=true;
+      showUnitEffect(actor,'GUARD','guard');
+
+    }else if(actor.effect==='poison'){
+      const t=chooseEnemy();
+
+      if(t){
+        deal(actor,t,actor.power);
+        t.poison=3;
+      }
+
+    }else if(actor.effect==='heal'||actor.effect==='healPercent'){
+      const allies=alive(battle.allies);
+
+      const t=actor.effect==='heal'
+        ?allies[Math.floor(Math.random()*allies.length)]
+        :chooseAlly();
+
+      if(t){
+        const amount=actor.effect==='healPercent'
+          ?Math.round(t.maxHp*actor.power/100)
+          :actor.power;
+
+        const actual=Math.min(t.maxHp-t.hp,amount);
+        t.hp=Math.min(t.maxHp,t.hp+amount);
+        showUnitEffect(t,'+'+actual,'heal');
+      }
+
+    }else if(actor.effect==='buffSelf'){
+      actor.buff+=actor.power/100;
+      showUnitEffect(actor,'攻撃力UP','buff');
+
+    }else if(actor.effect==='buffAlly'){
+      const t=chooseAlly();
+
+      if(t){
+        t.buff+=actor.power/100;
+        showUnitEffect(t,'攻撃力UP','buff');
+      }
+    }
+
+  }else{
+    /* 通常攻撃をした回数だけactionsが増える */
+    actor.actions++;
+
+    const t=chooseEnemy();
+
+    if(t){
+      deal(actor,t,actor.atk*actor.buff);
+    }
+  }
+
+  if(actor.passive==='ウィルパワー'){
+    actor.atk+=Math.max(1,Math.round(actor.atk*.1));
+    showUnitEffect(actor,'攻撃力上昇','buff');
+  }
+
+  if(actor.passive==='アルティメットカウンター'){
+    actor.counter=true;
+  }
 }
-}else if(actor.effect==='heal'||actor.effect==='healPercent'){
-const allies=alive(battle.allies);
 
-const t=actor.effect==='heal'
-?allies[Math.floor(Math.random()*allies.length)]
-:chooseAlly();
-
-if(t){
-const amount=actor.effect==='healPercent'
-?Math.round(t.maxHp*actor.power/100)
-:actor.power;
-
-const actual=Math.min(t.maxHp-t.hp,amount);
-t.hp=Math.min(t.maxHp,t.hp+amount);
-logEffect(t,'+'+actual+' HP');
-}
-}else if(actor.effect==='buffSelf'){
-actor.buff+=actor.power/100;
-logEffect(actor,'攻撃力UP');
-}else if(actor.effect==='buffAlly'){
-const t=chooseAlly();
-if(t){
-t.buff+=actor.power/100;
-logEffect(t,'攻撃力UP');
-}
-}
-
-}else{
-actor.actions++;
-const t=chooseEnemy();
-
-if(t){
-deal(actor,t,actor.atk*actor.buff);
-}
-}
-
-if(actor.passive==='ウィルパワー'){
-actor.atk+=Math.max(1,Math.round(actor.atk*.1));
-}
-
-if(actor.passive==='アルティメットカウンター'){
-actor.counter=true;
-}
-}
-
+/* 予告に表示した対象へ攻撃 */
 function enemyAct(e,target){
-if(!target||!target.alive)return;
+  if(!target||!target.alive)return;
 
-const dmg=deal(e,target,e.atk*e.buff);
+  const dmg=deal(e,target,e.atk*e.buff);
 
-if(target.counter&&Math.random()<.2){
-const reflected=Math.round(dmg*2);
-e.hp=Math.max(0,e.hp-reflected);
-logEffect(e,'反射 -'+reflected);
-if(e.hp===0)e.alive=false;
-}
+  if(target.passive==='アルティメットカウンター'&&Math.random()<.2){
+    const reflected=Math.round(dmg*2);
+
+    e.hp=Math.max(0,e.hp-reflected);
+    showUnitEffect(e,'反射 -'+reflected,'damage');
+
+    if(e.hp===0)e.alive=false;
+  }
 }
 
 function advanceBattle(){
-if(!battle||battle.over||busy)return;
+  if(!battle||battle.over||busy)return;
 
-let guard=0;
+  let guard=0;
 
-while(!battle.readyActor&&guard++<100){
+  while(!battle.readyActor&&guard++<100){
 
-if(alive(battle.enemies).length===0){
-finishBattle(true);
-return;
-}
+    if(alive(battle.enemies).length===0){
+      finishBattle(true);
+      return;
+    }
 
-if(alive(battle.allies).length===0){
-finishBattle(false);
-return;
-}
+    if(alive(battle.allies).length===0){
+      finishBattle(false);
+      return;
+    }
 
-const units=[
-...alive(battle.allies),
-...alive(battle.enemies)
-];
+    const units=[
+      ...alive(battle.allies),
+      ...alive(battle.enemies)
+    ];
 
-units.forEach(u=>u.gauge+=u.speed);
+    units.forEach(u=>u.gauge+=u.speed);
 
-const ready=units
-.filter(u=>u.gauge>=100)
-.sort((a,b)=>
-b.gauge-a.gauge||
-(a.side===b.side?0:(a.side==='ally'?-1:1))
-);
+    const ready=units
+      .filter(u=>u.gauge>=100)
+      .sort((a,b)=>
+        b.gauge-a.gauge||
+        (a.side===b.side?0:(a.side==='ally'?-1:1))
+      );
 
-if(!ready.length)continue;
+    if(!ready.length)continue;
 
-const actor=ready[0];
-actor.gauge-=100;
+    const actor=ready[0];
+    actor.gauge-=100;
 
-if(actor.side==='ally'){
-battle.readyActor=actor.id;
-renderBattle();
-return;
-}
+    if(actor.side==='ally'){
+      battle.readyActor=actor.id;
+      renderBattle();
+      return;
+    }
 
-prepareEnemyAction(actor);
-return;
-}
+    prepareEnemyAction(actor);
+    return;
+  }
 
-renderBattle();
+  renderBattle();
 }
 
 function playerAction(id,skill){
-if(!battle||battle.over||busy||battle.readyActor!==id)return;
+  if(!battle||battle.over||busy||battle.readyActor!==id)return;
 
-const actor=battle.allies.find(x=>x.id===id&&x.alive);
-if(!actor)return;
+  const actor=battle.allies.find(x=>x.id===id&&x.alive);
+  if(!actor)return;
 
-if(skill&&actor.charge>0&&actor.skillGauge<actor.skillNeed)return;
+  if(skill&&actor.charge>0&&actor.actions<actor.charge)return;
 
-busy=true;
-performAlly(actor,skill);
-battle.readyActor=null;
+  busy=true;
 
-if(alive(battle.enemies).length===0){
-busy=false;
-finishBattle(true);
-return;
-}
+  performAlly(actor,skill);
+  battle.readyActor=null;
 
-if(alive(battle.allies).length===0){
-busy=false;
-finishBattle(false);
-return;
-}
+  if(alive(battle.enemies).length===0){
+    busy=false;
+    finishBattle(true);
+    return;
+  }
 
-busy=false;
-renderBattle();
-advanceBattle();
+  if(alive(battle.allies).length===0){
+    busy=false;
+    finishBattle(false);
+    return;
+  }
+
+  busy=false;
+  renderBattle();
+  advanceBattle();
 }
 
 function finishBattle(win){
-if(!battle||battle.over)return;
+  if(!battle||battle.over)return;
 
-if(enemyTimer){
-clearTimeout(enemyTimer);
-enemyTimer=null;
-}
+  if(enemyTimer){
+    clearTimeout(enemyTimer);
+    enemyTimer=null;
+  }
 
-battle.over=true;
-battle.pendingEnemy=null;
-busy=false;
+  battle.over=true;
+  battle.pendingEnemy=null;
+  battle.resultWin=win;
+  busy=false;
 
-if(win){
-state.gold+=100;
-state.gems+=40;
-state.stage++;
-}else{
-}
+  if(win){
+    state.gold+=100;
+    state.gems+=40;
+    state.stage++;
+  }
 
-save();
-renderBattle();
+  save();
+  renderBattle();
 }
 
 function renderBattle(){
-const area=document.getElementById('battleArea');
+  const area=document.getElementById('battleArea');
 
-if(!battle){
-area.style.display='none';
-return;
-}
+  if(!battle){
+    area.style.display='none';
+    return;
+  }
 
-area.style.display='block';
+  area.style.display='block';
 
-const unitHTML=u=>{
-const isEnemy=u.side==='enemy';
-const dead=!u.alive||u.hp<=0;
-const image=imagePath(u.imageId);
+  const unitHTML=u=>{
+    const isEnemy=u.side==='enemy';
+    const dead=!u.alive||u.hp<=0;
+    const image=imagePath(u.imageId);
 
-return `
-<div class="battle-character ${isEnemy?'enemy':'ally'} ${dead?'dead':''}">
-<div class="battle-image">
-<img src="${image}" alt="${esc(u.name)}" onerror="this.style.display='none'">
-</div>
+    return `
+      <div class="battle-character ${isEnemy?'enemy':'ally'} ${dead?'dead':''} ${u.hit?'hit-animation':''}">
+        <div class="battle-image">
+          <img src="${image}" alt="${esc(u.name)}"
+            onerror="this.style.display='none'">
+        </div>
 
-<div class="battle-name">${esc(u.name)}</div>
+        ${u.effectText?`
+          <div class="effect-pop effect-${esc(u.effectKind)}">
+            ${esc(u.effectText)}
+          </div>
+        `:''}
 
-<div class="battle-hp-text">HP ${Math.max(0,u.hp)} / ${u.maxHp}</div>
+        <div class="battle-name">${esc(u.name)}</div>
 
-<div class="hpbar">
-<i style="width:${Math.max(0,u.hp/u.maxHp*100)}%"></i>
-</div>
+        <div class="battle-hp-text">
+          HP ${Math.max(0,u.hp)} / ${u.maxHp}
+        </div>
 
-${!isEnemy?`
-<div class="small">素早さ ${u.speed}</div>
-<div class="small">行動ゲージ</div>
-<div class="gaugebar">
-<i style="width:${Math.min(100,u.gauge)}%"></i>
-</div>
-<div class="small">
-スキルゲージ ${u.skillGauge}/${u.skillNeed||'即時'}
-</div>
-<div class="gaugebar">
-<i style="width:${u.skillNeed?Math.min(100,u.skillGauge/u.skillNeed*100):100}%"></i>
-</div>
-`:`
-<div class="small">素早さ ${u.speed}</div>
-<div class="gaugebar">
-<i style="width:${Math.min(100,u.gauge)}%"></i>
-</div>
-`}
+        <div class="hpbar">
+          <i style="width:${Math.max(0,u.hp/u.maxHp*100)}%"></i>
+        </div>
 
-${u.effectText?`<div class="battle-effect">${esc(u.effectText)}</div>`:''}
-</div>
-`;
-};
+        <div class="gauge-label">行動ゲージ　${Math.min(100,Math.round(u.gauge))}%</div>
+        <div class="gaugebar">
+          <i style="width:${Math.min(100,u.gauge)}%"></i>
+        </div>
 
-document.getElementById('allyUnits').innerHTML=
-battle.allies.map(unitHTML).join('');
+        ${!isEnemy?`
+          <div class="small">
+            通常攻撃回数：${u.actions}/${u.charge||'—'}
+          </div>
+          ${u.charge===0?'<div class="small">スキル使用可能</div>':''}
+        `:''}
+      </div>
+    `;
+  };
 
-document.getElementById('enemyUnits').innerHTML=
-battle.enemies.map(unitHTML).join('');
+  document.getElementById('allyUnits').innerHTML=
+    battle.allies.map(unitHTML).join('');
 
-const active=battle.allies.find(a=>a.id===battle.readyActor);
+  document.getElementById('enemyUnits').innerHTML=
+    battle.enemies.map(unitHTML).join('');
 
-let actionContent='';
+  const active=battle.allies.find(a=>a.id===battle.readyActor);
+  let actionContent='';
 
-if(battle.over){
-const won=alive(battle.enemies).length===0;
+  if(battle.over){
+    actionContent=`
+      <div class="battle-result">
+        <h3>${battle.resultWin?'勝利！':'敗北……'}</h3>
+        <p>
+          ${battle.resultWin
+            ?'ステージクリア！報酬を獲得した。'
+            :'旅団は敗北した。編成を見直して再挑戦しよう。'}
+        </p>
+        ${battle.resultWin?'<p>🪙100　💎40を獲得！</p>':''}
+        <button data-action="startBattle">もう一度挑戦</button>
+      </div>
+    `;
 
-actionContent=`
-<div class="battle-result">
-<h3>${won?'勝利！':'敗北……'}</h3>
-<p>${won?'ステージクリア！報酬を獲得した。':'旅団は敗北した。編成を見直して再挑戦しよう。'}</p>
-${won?'<p>🪙100　💎40を獲得！</p>':''}
-<button data-action="startBattle">もう一度挑戦</button>
-</div>
-`;
+  }else if(battle.pendingEnemy){
+    const p=battle.pendingEnemy;
 
-}else if(battle.pendingEnemy){
-const p=battle.pendingEnemy;
+    actionContent=`
+      <div class="enemy-preview">
+        <div class="preview-title">⚠ 敵の行動予告</div>
+        <div class="preview-detail">
+          <b>${esc(p.actorName)}</b> が行動する！<br>
+          行動内容：<b>${esc(p.actionName)}</b><br>
+          攻撃対象：<b>${esc(p.targetName)}</b>
+        </div>
+        <div class="preview-wait">
+          敵が攻撃を準備している……（約0.6秒）
+        </div>
+      </div>
+    `;
 
-actionContent=`
-<div class="enemy-preview">
-<div class="preview-title">⚠ 敵の行動予告</div>
-<div class="preview-detail">
-<b>${esc(p.actorName)}</b> が行動する！<br>
-行動内容：<b>${esc(p.actionName)}</b><br>
-攻撃対象：<b>${esc(p.targetName)}</b>
-</div>
-<div class="preview-wait">敵が攻撃を準備している……</div>
-</div>
-`;
+  }else if(active){
+    const skillReady=
+      active.charge===0||
+      active.actions>=active.charge;
 
-}else if(active){
-const skillReady=
-active.charge===0||
-active.skillGauge>=active.skillNeed;
+    actionContent=`
+      <div class="action-title">
+        ⚔ ${esc(active.name)} の行動
+      </div>
 
-actionContent=`
-<div class="action-title">⚔ ${esc(active.name)} の行動</div>
+      <div class="action-character">
+        <div class="name">${esc(active.name)}</div>
+        <div class="small">
+          攻撃力：${active.atk}<br>
+          スキル：${esc(active.skill)}
+        </div>
 
-<div class="action-character">
-<div class="name">${esc(active.name)}</div>
-<div class="small">
-通常攻撃：攻撃力 ${active.atk}<br>
-スキル：${esc(active.skill)}
-</div>
+        ${active.charge>0?`
+          <div class="small">
+            スキル準備：${active.actions}/${active.charge} 回
+          </div>
+          <div class="gaugebar">
+            <i style="width:${Math.min(100,active.actions/active.charge*100)}%"></i>
+          </div>
+        `:`
+          <div class="small">スキルはいつでも使用可能</div>
+        `}
+      </div>
 
-${active.charge>0?`
-<div class="small">
-スキルゲージ：${active.skillGauge}/${active.skillNeed}
-</div>
-<div class="gaugebar">
-<i style="width:${Math.min(100,active.skillGauge/active.skillNeed*100)}%"></i>
-</div>
-`:`
-<div class="small">スキルはいつでも使用可能</div>
-`}
-</div>
+      <div class="action-buttons">
+        <button class="attack-button"
+          data-action="attack"
+          data-id="${esc(active.id)}">
+          通常攻撃
+        </button>
 
-<div class="action-buttons">
-<button class="attack-button" data-action="attack" data-id="${esc(active.id)}">
-通常攻撃
-</button>
+        <button class="skill-button"
+          data-action="skill"
+          data-id="${esc(active.id)}"
+          ${!skillReady?'disabled':''}>
+          ${esc(active.skill)}
+          ${!skillReady
+            ?'（あと'+(active.charge-active.actions)+'回）'
+            :''
+          }
+        </button>
+      </div>
+    `;
 
-<button class="skill-button" data-action="skill" data-id="${esc(active.id)}" ${!skillReady?'disabled':''}>
-${esc(active.skill)}
-${!skillReady?'（ゲージ不足）':''}
-</button>
-</div>
-`;
+  }else{
+    actionContent='<div class="muted">次の行動順を計算中...</div>';
+  }
 
-}else{
-actionContent='<div class="muted">次の行動順を計算中...</div>';
-}
-
-document.getElementById('actionArea').innerHTML=actionContent;
-
-/* 演出は一度表示したら消す */
-battle.allies.concat(battle.enemies).forEach(u=>{
-u.effectText='';
-});
+  document.getElementById('actionArea').innerHTML=actionContent;
 }
 
 function handleClick(e){
-const page=e.target.closest('[data-page]');
+  const page=e.target.closest('[data-page]');
 
-if(page){
-showPage(page.dataset.page);
-return;
-}
+  if(page){
+    showPage(page.dataset.page);
+    return;
+  }
 
-const b=e.target.closest('[data-action]');
-if(!b||b.disabled)return;
+  const b=e.target.closest('[data-action]');
+  if(!b||b.disabled)return;
 
-const a=b.dataset.action;
-const id=b.dataset.id;
+  const a=b.dataset.action;
+  const id=b.dataset.id;
 
-if(a==='summon'){
-summon(Number(b.dataset.count));
-}else if(a==='toggleParty'){
-toggleParty(id);
-}else if(a==='startBattle'){
-startBattle();
-}else if(a==='attack'){
-playerAction(id,false);
-}else if(a==='skill'){
-playerAction(id,true);
-}
+  if(a==='summon'){
+    summon(Number(b.dataset.count));
+  }else if(a==='toggleParty'){
+    toggleParty(id);
+  }else if(a==='startBattle'){
+    startBattle();
+  }else if(a==='attack'){
+    playerAction(id,false);
+  }else if(a==='skill'){
+    playerAction(id,true);
+  }
 }
 
 document.addEventListener('click',handleClick);
