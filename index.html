@@ -4,125 +4,62 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>星詠みの旅団</title>
-
 <style>
 :root{
-  --bg:#101525;
-  --panel:#1b2540;
-  --panel2:#263453;
-  --gold:#f4c76b;
-  --text:#f4f5fb;
-  --muted:#aab4ca;
-  --line:#394866;
-  --red:#e87979;
-  --green:#76d6a1;
+  --bg:#101525;--panel:#1b2540;--panel2:#263453;
+  --gold:#f4c76b;--text:#f4f5fb;--muted:#aab4ca;
+  --line:#394866;--red:#e87979;--green:#76d6a1;
 }
 *{box-sizing:border-box}
 body{
-  margin:0;
-  background:radial-gradient(ellipse at top,#202d4c 0,#101525 55%);
-  color:var(--text);
-  font-family:system-ui,-apple-system,"Noto Sans JP",sans-serif;
-  min-height:100vh;
+  margin:0;background:radial-gradient(ellipse at top,#202d4c 0,#101525 55%);
+  color:var(--text);font-family:system-ui,-apple-system,"Noto Sans JP",sans-serif;min-height:100vh;
 }
 button{
-  font:inherit;
-  color:inherit;
-  border:1px solid #62708e;
+  font:inherit;color:inherit;border:1px solid #62708e;
   background:linear-gradient(180deg,#354666,#263453);
-  border-radius:12px;
-  padding:11px 14px;
-  cursor:pointer;
+  border-radius:12px;padding:11px 14px;cursor:pointer;
 }
 button:disabled{opacity:.4;cursor:not-allowed}
 .wrap{max-width:900px;margin:auto;padding:14px}
-.top{
-  display:flex;
-  justify-content:space-between;
-  gap:12px;
-  align-items:center;
-  flex-wrap:wrap;
-  padding:12px 4px;
-}
+.top{display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap;padding:12px 4px}
 .brand{font-weight:900;color:var(--gold);font-size:22px}
 .resources{display:flex;gap:8px;flex-wrap:wrap}
-.pill{
-  background:#202c46;
-  border:1px solid var(--line);
-  padding:7px 11px;
-  border-radius:999px;
-  font-size:14px;
-}
-.nav{
-  display:grid;
-  grid-template-columns:repeat(5,1fr);
-  gap:8px;
-  margin:8px 0 16px;
-}
+.pill{background:#202c46;border:1px solid var(--line);padding:7px 11px;border-radius:999px;font-size:14px}
+.nav{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin:8px 0 16px}
 .nav button{min-height:48px}
 .page{display:none}
 .page.active{display:block}
 .panel{
   background:linear-gradient(145deg,#1d2945,#172139);
-  border:1px solid var(--line);
-  border-radius:18px;
-  padding:16px;
-  margin-bottom:14px;
-  box-shadow:0 8px 24px #0003;
+  border:1px solid var(--line);border-radius:18px;padding:16px;
+  margin-bottom:14px;box-shadow:0 8px 24px #0003;
 }
 .hero{text-align:center;padding:28px 16px}
 .hero h1{color:var(--gold);font-size:28px;margin:0 0 8px}
 .muted{color:var(--muted)}
 .section-title{font-size:20px;color:var(--gold);margin:0 0 12px}
 .row{display:flex;gap:9px;align-items:center;flex-wrap:wrap}
-.grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(145px,1fr));
-  gap:10px;
-}
-.card{
-  background:#202d49;
-  border:1px solid var(--line);
-  border-radius:14px;
-  padding:11px;
-  min-width:0;
-}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(145px,1fr));gap:10px}
+.card{background:#202d49;border:1px solid var(--line);border-radius:14px;padding:11px;min-width:0}
 .card.selected{border:2px solid var(--gold);padding:10px}
-.portrait{
-  height:100px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:52px;
-  margin-bottom:6px;
-}
+.portrait{height:100px;display:flex;align-items:center;justify-content:center;font-size:52px;margin-bottom:6px}
 .portrait img{max-height:100%;max-width:100%;object-fit:contain}
 .name{font-weight:800}
 .small{font-size:12px;color:var(--muted)}
 .stats{font-size:13px;line-height:1.7;margin:6px 0}
-.normal{color:#cbd5e1}
-.rare{color:#74b8ff}
-.epic{color:#d9a0ff}
+.normal{color:#cbd5e1}.rare{color:#74b8ff}.epic{color:#d9a0ff}
 .wide{width:100%}
 .result{line-height:1.8;min-height:40px;margin-top:12px}
 .error{
-  display:none;
-  background:#542d36;
-  border:1px solid #b65d6a;
-  padding:10px;
-  border-radius:10px;
-  margin:8px 0;
-  white-space:pre-wrap;
+  display:none;background:#542d36;border:1px solid #b65d6a;
+  padding:10px;border-radius:10px;margin:8px 0;white-space:pre-wrap;
 }
 .footer{text-align:center;color:var(--muted);font-size:12px;padding:14px}
 
 /* 草原ステージマップ */
-
 .stage-map{
-  position:relative;
-  overflow:hidden;
-  padding:16px;
-  border:2px solid #58794e;
+  position:relative;overflow:hidden;padding:16px;border:2px solid #58794e;
   border-radius:18px;
   background:
     radial-gradient(ellipse at 15% 20%,#729d58 0,transparent 28%),
@@ -130,414 +67,109 @@ button:disabled{opacity:.4;cursor:not-allowed}
     linear-gradient(145deg,#456c43,#31543b 55%,#426a40);
 }
 .stage-map:before{
-  content:"";
-  position:absolute;
-  inset:0;
-  pointer-events:none;
-  opacity:.18;
+  content:"";position:absolute;inset:0;pointer-events:none;opacity:.18;
   background-image:radial-gradient(#d5e9a0 1px,transparent 1px);
   background-size:22px 22px;
 }
 .map-heading{
-  position:relative;
-  z-index:1;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  flex-wrap:wrap;
-  gap:8px;
-  margin-bottom:14px;
+  position:relative;z-index:1;display:flex;justify-content:space-between;
+  align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:14px;
 }
-.map-heading h3{
-  color:#fff3bd;
-  margin:0;
-  font-size:19px;
-  text-shadow:0 2px 4px #172b18;
-}
-.map-progress{
-  color:#fff;
-  background:#203c2dcc;
-  border:1px solid #a4c27c;
-  padding:6px 10px;
-  border-radius:20px;
-  font-size:12px;
-}
-.map-grid{
-  position:relative;
-  z-index:1;
-  display:grid;
-  grid-template-columns:repeat(4,minmax(0,1fr));
-  gap:12px;
-}
+.map-heading h3{color:#fff3bd;margin:0;font-size:19px;text-shadow:0 2px 4px #172b18}
+.map-progress{color:#fff;background:#203c2dcc;border:1px solid #a4c27c;padding:6px 10px;border-radius:20px;font-size:12px}
+.map-grid{position:relative;z-index:1;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
 .stage-node{
-  position:relative;
-  min-width:0;
-  min-height:91px;
-  padding:8px 4px;
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-  align-items:center;
-  gap:3px;
-  border-radius:14px;
-  border:2px solid #b4c98b;
-  background:linear-gradient(180deg,#e1e9b7,#a9c27b);
-  color:#263b26;
-  box-shadow:0 4px 0 #345534,0 5px 9px #152a1b88;
-  text-align:center;
+  position:relative;min-width:0;min-height:91px;padding:8px 4px;
+  display:flex;flex-direction:column;justify-content:center;align-items:center;
+  gap:3px;border-radius:14px;border:2px solid #b4c98b;
+  background:linear-gradient(180deg,#e1e9b7,#a9c27b);color:#263b26;
+  box-shadow:0 4px 0 #345534,0 5px 9px #152a1b88;text-align:center;
 }
-.stage-node .stage-number{
-  font-size:23px;
-  font-weight:1000;
-  line-height:1.1;
-}
-.stage-node .stage-label{
-  font-size:11px;
-  font-weight:900;
-}
-.stage-node .stage-status{
-  font-size:10px;
-  font-weight:800;
-}
-.stage-node.completed{
-  background:linear-gradient(180deg,#c5e9bb,#76b879);
-  border-color:#e2f6c9;
-}
-.stage-node.current{
-  background:linear-gradient(180deg,#fff0a8,#e9b94e);
-  border-color:#fff0a8;
-  box-shadow:0 0 0 3px #f4c76b66,0 4px 0 #87632b;
-}
-.stage-node.selected{
-  outline:3px solid #fff;
-  outline-offset:2px;
-  transform:translateY(-2px);
-}
-.stage-node.boss{
-  background:linear-gradient(180deg,#f1b2a3,#bd625b);
-  color:#451e25;
-  border-color:#ffd0bd;
-}
-.stage-node.boss.completed{
-  background:linear-gradient(180deg,#e8b5a5,#b86d62);
-}
-.stage-node.boss.current{
-  box-shadow:0 0 0 3px #ffb0a266,0 4px 0 #713b37;
-}
-.stage-node.locked{
-  background:linear-gradient(180deg,#9ba58d,#697568);
-  border-color:#a6b19c;
-  color:#344236;
-  box-shadow:0 4px 0 #354337;
-}
-.stage-node.unimplemented{
-  background:linear-gradient(180deg,#737c72,#4d574e);
-  border-color:#899387;
-  color:#d1d7ce;
-  box-shadow:0 4px 0 #343c35;
-  opacity:.65;
-}
+.stage-node .stage-number{font-size:23px;font-weight:1000;line-height:1.1}
+.stage-node .stage-label{font-size:11px;font-weight:900}
+.stage-node .stage-status{font-size:10px;font-weight:800}
+.stage-node.completed{background:linear-gradient(180deg,#c5e9bb,#76b879);border-color:#e2f6c9}
+.stage-node.current{background:linear-gradient(180deg,#fff0a8,#e9b94e);border-color:#fff0a8;box-shadow:0 0 0 3px #f4c76b66,0 4px 0 #87632b}
+.stage-node.selected{outline:3px solid #fff;outline-offset:2px;transform:translateY(-2px)}
+.stage-node.boss{background:linear-gradient(180deg,#f1b2a3,#bd625b);color:#451e25;border-color:#ffd0bd}
+.stage-node.boss.completed{background:linear-gradient(180deg,#e8b5a5,#b86d62)}
+.stage-node.boss.current{box-shadow:0 0 0 3px #ffb0a266,0 4px 0 #713b37}
+.stage-node.locked{background:linear-gradient(180deg,#9ba58d,#697568);border-color:#a6b19c;color:#344236;box-shadow:0 4px 0 #354337}
+.stage-node.unimplemented{background:linear-gradient(180deg,#737c72,#4d574e);border-color:#899387;color:#d1d7ce;box-shadow:0 4px 0 #343c35;opacity:.65}
 .stage-node:disabled{cursor:not-allowed}
-.map-legend{
-  position:relative;
-  z-index:1;
-  display:flex;
-  gap:12px;
-  flex-wrap:wrap;
-  margin-top:16px;
-  font-size:11px;
-  color:#fff;
-  text-shadow:0 1px 3px #172b18;
-}
+.map-legend{position:relative;z-index:1;display:flex;gap:12px;flex-wrap:wrap;margin-top:16px;font-size:11px;color:#fff;text-shadow:0 1px 3px #172b18}
 .map-legend span{display:flex;align-items:center;gap:4px}
-.legend-dot{
-  display:inline-block;
-  width:11px;
-  height:11px;
-  border-radius:4px;
-  border:1px solid #fff8;
-}
-.legend-normal{background:#c9d99c}
-.legend-clear{background:#83c987}
-.legend-boss{background:#d77d70}
-.legend-locked{background:#788477}
-.selected-stage-info{
-  margin-top:13px;
-  padding:12px;
-  background:#203c2dcc;
-  border:1px solid #a4c27c;
-  border-radius:12px;
-  color:#fff;
-  position:relative;
-  z-index:1;
-}
+.legend-dot{display:inline-block;width:11px;height:11px;border-radius:4px;border:1px solid #fff8}
+.legend-normal{background:#c9d99c}.legend-clear{background:#83c987}.legend-boss{background:#d77d70}.legend-locked{background:#788477}
+.selected-stage-info{margin-top:13px;padding:12px;background:#203c2dcc;border:1px solid #a4c27c;border-radius:12px;color:#fff;position:relative;z-index:1}
 .selected-stage-info strong{color:#ffe69a}
-.map-start-button{
-  width:100%;
-  margin-top:10px;
-  background:linear-gradient(180deg,#e6c16a,#a77c32);
-  border-color:#ffe4a1;
-  color:#30230e;
-  font-weight:1000;
-}
-.enemy-formation-info{
-  margin-top:8px;
-  font-size:12px;
-  line-height:1.7;
-  color:#e3eddb;
-}
+.map-start-button{width:100%;margin-top:10px;background:linear-gradient(180deg,#e6c16a,#a77c32);border-color:#ffe4a1;color:#30230e;font-weight:1000}
+.enemy-formation-info{margin-top:8px;font-size:12px;line-height:1.7;color:#e3eddb}
 
 /* 戦闘画面 */
-
-.battle-screen{
-  display:flex;
-  flex-direction:column;
-  gap:15px;
-}
-.battle-side-heading{
-  font-size:19px;
-  font-weight:900;
-  margin:0 0 10px;
-}
-.enemy-heading{color:#ffaaaa}
-.ally-heading{color:#9acbff}
-.battle-side{
-  display:grid;
-  grid-template-columns:repeat(3,minmax(0,1fr));
-  gap:12px;
-}
+.battle-screen{display:flex;flex-direction:column;gap:15px}
+.battle-side-heading{font-size:19px;font-weight:900;margin:0 0 10px}
+.enemy-heading{color:#ffaaaa}.ally-heading{color:#9acbff}
+.battle-side{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
 .battle-character{
-  position:relative;
-  min-width:0;
-  overflow:hidden;
-  text-align:center;
-  padding:10px 8px 12px;
-  border-radius:16px;
-  border:1px solid var(--line);
+  position:relative;min-width:0;overflow:hidden;text-align:center;
+  padding:10px 8px 12px;border-radius:16px;border:1px solid var(--line);
   background:linear-gradient(155deg,#263653,#17233b);
 }
-.battle-character.enemy{
-  background:linear-gradient(155deg,#513541,#2b2030);
-  border-color:#895767;
-}
-.battle-character.ally{
-  background:linear-gradient(155deg,#294264,#192943);
-  border-color:#5476a4;
-}
-.battle-character.dead{
-  opacity:.35;
-  filter:grayscale(1);
-}
+.battle-character.enemy{background:linear-gradient(155deg,#513541,#2b2030);border-color:#895767}
+.battle-character.ally{background:linear-gradient(155deg,#294264,#192943);border-color:#5476a4}
+.battle-character.dead{opacity:.35;filter:grayscale(1)}
 .battle-character.turn-active{
-  border:3px solid #ffe17c;
-  padding:8px 6px 10px;
-  box-shadow:
-    0 0 0 3px #f4c76b55,
-    0 0 20px #f4c76b99,
-    inset 0 0 16px #f4c76b22;
+  border:3px solid #ffe17c;padding:8px 6px 10px;
+  box-shadow:0 0 0 3px #f4c76b55,0 0 20px #f4c76b99,inset 0 0 16px #f4c76b22;
   animation:turnPulse 1.2s ease-in-out infinite alternate;
 }
-.battle-character.enemy.turn-active{
-  border-color:#ff8585;
-  box-shadow:
-    0 0 0 3px #ff858555,
-    0 0 20px #ff858599,
-    inset 0 0 16px #ff858522;
-}
+.battle-character.enemy.turn-active{border-color:#ff8585;box-shadow:0 0 0 3px #ff858555,0 0 20px #ff858599,inset 0 0 16px #ff858522}
 .turn-badge{
-  position:absolute;
-  z-index:7;
-  top:5px;
-  left:50%;
-  transform:translateX(-50%);
-  white-space:nowrap;
-  padding:4px 10px;
-  border-radius:20px;
-  background:linear-gradient(180deg,#ffe99c,#e9b94e);
-  color:#35250a;
-  font-size:12px;
-  font-weight:1000;
-  box-shadow:0 2px 7px #0008;
+  position:absolute;z-index:7;top:5px;left:50%;transform:translateX(-50%);
+  white-space:nowrap;padding:4px 10px;border-radius:20px;
+  background:linear-gradient(180deg,#ffe99c,#e9b94e);color:#35250a;
+  font-size:12px;font-weight:1000;box-shadow:0 2px 7px #0008;
 }
-.enemy .turn-badge{
-  background:linear-gradient(180deg,#ffc1c1,#e87979);
-  color:#501b25;
-}
-@keyframes turnPulse{
-  from{filter:brightness(1)}
-  to{filter:brightness(1.35)}
-}
-.battle-image{
-  width:100%;
-  height:165px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  margin:0 auto 6px;
-}
-.battle-image img{
-  width:100%;
-  height:100%;
-  object-fit:contain;
-  filter:drop-shadow(0 5px 5px #0006);
-}
-.battle-name{
-  font-size:16px;
-  font-weight:900;
-  margin:4px 0 6px;
-  min-height:24px;
-}
-.battle-hp-text{
-  font-size:12px;
-  color:#d8dfed;
-}
-.hpbar{
-  height:10px;
-  background:#101827;
-  border-radius:10px;
-  overflow:hidden;
-  margin:6px 0;
-}
-.hpbar i{
-  display:block;
-  height:100%;
-  background:linear-gradient(90deg,#35bd75,#9be5a9);
-  transition:width .35s;
-}
-.gaugebar{
-  height:7px;
-  background:#101827;
-  border-radius:10px;
-  overflow:hidden;
-  margin:4px 0 7px;
-}
-.gaugebar i{
-  display:block;
-  height:100%;
-  background:linear-gradient(90deg,#579dff,#c09aff);
-  transition:width .25s;
-}
-.battle-divider{
-  display:flex;
-  align-items:center;
-  gap:12px;
-  color:var(--gold);
-  font-size:19px;
-  font-weight:900;
-  justify-content:center;
-}
-.battle-divider:before,
-.battle-divider:after{
-  content:"";
-  height:1px;
-  flex:1;
-  background:linear-gradient(90deg,transparent,#9b8150,transparent);
-}
-.action-panel{
-  background:linear-gradient(145deg,#202e4b,#151f34);
-  border:1px solid #536486;
-  border-radius:16px;
-  padding:14px;
-  min-height:95px;
-}
-.action-title{
-  font-size:18px;
-  font-weight:900;
-  color:var(--gold);
-  margin-bottom:10px;
-}
-.action-character{
-  background:#263653;
-  border:1px solid #536486;
-  border-radius:12px;
-  padding:12px;
-}
-.action-buttons{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:10px;
-  margin-top:11px;
-}
+.enemy .turn-badge{background:linear-gradient(180deg,#ffc1c1,#e87979);color:#501b25}
+@keyframes turnPulse{from{filter:brightness(1)}to{filter:brightness(1.35)}}
+.battle-image{width:100%;height:165px;display:flex;align-items:center;justify-content:center;margin:0 auto 6px}
+.battle-image img{width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 5px 5px #0006)}
+.battle-name{font-size:16px;font-weight:900;margin:4px 0 6px;min-height:24px}
+.battle-hp-text{font-size:12px;color:#d8dfed}
+.hpbar{height:10px;background:#101827;border-radius:10px;overflow:hidden;margin:6px 0}
+.hpbar i{display:block;height:100%;background:linear-gradient(90deg,#35bd75,#9be5a9);transition:width .35s}
+.gaugebar{height:7px;background:#101827;border-radius:10px;overflow:hidden;margin:4px 0 7px}
+.gaugebar i{display:block;height:100%;background:linear-gradient(90deg,#579dff,#c09aff);transition:width .25s}
+.battle-divider{display:flex;align-items:center;gap:12px;color:var(--gold);font-size:19px;font-weight:900;justify-content:center}
+.battle-divider:before,.battle-divider:after{content:"";height:1px;flex:1;background:linear-gradient(90deg,transparent,#9b8150,transparent)}
+.action-panel{background:linear-gradient(145deg,#202e4b,#151f34);border:1px solid #536486;border-radius:16px;padding:14px;min-height:95px}
+.action-title{font-size:18px;font-weight:900;color:var(--gold);margin-bottom:10px}
+.action-character{background:#263653;border:1px solid #536486;border-radius:12px;padding:12px}
+.action-buttons{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:11px}
 .action-buttons button{min-height:52px;font-weight:800}
-.attack-button{
-  background:linear-gradient(180deg,#a34d59,#713443);
-  border-color:#d17a87;
-}
-.skill-button{
-  background:linear-gradient(180deg,#6950a8,#45336e);
-  border-color:#a58ad8;
-}
-.enemy-preview{
-  background:linear-gradient(145deg,#633b48,#342536);
-  border:2px solid #bd687b;
-  border-radius:14px;
-  padding:15px;
-  animation:previewIn .25s ease-out;
-}
-.preview-title{
-  color:#ffb1b1;
-  font-weight:900;
-  font-size:18px;
-  margin-bottom:8px;
-}
+.attack-button{background:linear-gradient(180deg,#a34d59,#713443);border-color:#d17a87}
+.skill-button{background:linear-gradient(180deg,#6950a8,#45336e);border-color:#a58ad8}
+.enemy-preview{background:linear-gradient(145deg,#633b48,#342536);border:2px solid #bd687b;border-radius:14px;padding:15px;animation:previewIn .25s ease-out}
+.preview-title{color:#ffb1b1;font-weight:900;font-size:18px;margin-bottom:8px}
 .preview-detail{font-size:15px;line-height:1.9}
-.preview-wait{
-  color:#ffd0d0;
-  font-size:12px;
-  margin-top:8px;
-}
-.battle-result{
-  text-align:center;
-  padding:18px;
-  background:#202d49;
-  border:1px solid var(--gold);
-  border-radius:14px;
-}
-.battle-result h3{
-  color:var(--gold);
-  font-size:25px;
-  margin:0 0 12px;
-}
+.preview-wait{color:#ffd0d0;font-size:12px;margin-top:8px}
+.battle-result{text-align:center;padding:18px;background:#202d49;border:1px solid var(--gold);border-radius:14px}
+.battle-result h3{color:var(--gold);font-size:25px;margin:0 0 12px}
 
 /* ダメージ・回復などの演出 */
-
 .effect-pop{
-  position:absolute;
-  z-index:5;
-  top:38%;
-  left:50%;
-  transform:translate(-50%,-50%);
-  pointer-events:none;
-  font-size:34px;
-  font-weight:1000;
-  white-space:nowrap;
+  position:absolute;z-index:5;top:38%;left:50%;transform:translate(-50%,-50%);
+  pointer-events:none;font-size:34px;font-weight:1000;white-space:nowrap;
   text-shadow:0 3px 6px #000,0 0 10px #000,0 0 16px #000;
   animation:effectFloat 1.2s ease-out forwards;
 }
-.effect-damage{
-  color:#ff7777;
-  -webkit-text-stroke:1px #571d29;
-}
-.effect-heal{
-  color:#79f0a8;
-  -webkit-text-stroke:1px #14552e;
-}
-.effect-buff{
-  color:#ffe27d;
-  -webkit-text-stroke:1px #604b14;
-}
-.effect-guard{
-  color:#8dcaff;
-  -webkit-text-stroke:1px #17436a;
-}
-.effect-evade{
-  color:#d0aaff;
-  -webkit-text-stroke:1px #44276b;
-}
-.effect-miss{
-  color:#d7e4ff;
-  -webkit-text-stroke:1px #283d60;
-}
+.effect-damage{color:#ff7777;-webkit-text-stroke:1px #571d29}
+.effect-heal{color:#79f0a8;-webkit-text-stroke:1px #14552e}
+.effect-buff{color:#ffe27d;-webkit-text-stroke:1px #604b14}
+.effect-guard{color:#8dcaff;-webkit-text-stroke:1px #17436a}
+.effect-evade{color:#d0aaff;-webkit-text-stroke:1px #44276b}
+.effect-miss{color:#d7e4ff;-webkit-text-stroke:1px #283d60}
 @keyframes effectFloat{
   0%{opacity:0;transform:translate(-50%,0) scale(.65)}
   15%{opacity:1;transform:translate(-50%,-12px) scale(1.15)}
@@ -545,34 +177,19 @@ button:disabled{opacity:.4;cursor:not-allowed}
   100%{opacity:0;transform:translate(-50%,-58px) scale(.95)}
 }
 .hit-animation{animation:hitShake .35s ease-in-out}
-@keyframes hitShake{
-  0%,100%{transform:translateX(0)}
-  20%{transform:translateX(-5px)}
-  40%{transform:translateX(5px)}
-  60%{transform:translateX(-3px)}
-  80%{transform:translateX(3px)}
-}
-@keyframes previewIn{
-  from{opacity:0;transform:translateY(7px)}
-  to{opacity:1;transform:translateY(0)}
-}
+@keyframes hitShake{0%,100%{transform:translateX(0)}20%{transform:translateX(-5px)}40%{transform:translateX(5px)}60%{transform:translateX(-3px)}80%{transform:translateX(3px)}}
+@keyframes previewIn{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:translateY(0)}}
 @media(max-width:600px){
-  .wrap{padding:10px}
-  .nav{grid-template-columns:repeat(2,1fr)}
-  .hero h1{font-size:24px}
-  .panel{padding:13px}
+  .wrap{padding:10px}.nav{grid-template-columns:repeat(2,1fr)}
+  .hero h1{font-size:24px}.panel{padding:13px}
   .battle-side{grid-template-columns:repeat(2,minmax(0,1fr))}
-  .battle-image{height:145px}
-  .effect-pop{font-size:31px}
-  .map-grid{gap:9px}
-  .stage-node{min-height:82px}
+  .battle-image{height:145px}.effect-pop{font-size:31px}
+  .map-grid{gap:9px}.stage-node{min-height:82px}
 }
 @media(max-width:360px){
   .battle-side{grid-template-columns:1fr 1fr}
-  .battle-image{height:120px}
-  .battle-name{font-size:14px}
-  .effect-pop{font-size:28px}
-  .stage-node .stage-number{font-size:20px}
+  .battle-image{height:120px}.battle-name{font-size:14px}
+  .effect-pop{font-size:28px}.stage-node .stage-number{font-size:20px}
   .stage-node .stage-label{font-size:10px}
 }
 </style>
@@ -580,7 +197,6 @@ button:disabled{opacity:.4;cursor:not-allowed}
 
 <body>
 <div class="wrap">
-
 <header class="top">
   <div class="brand">✦ 星詠みの旅団</div>
   <div class="resources">
@@ -601,7 +217,6 @@ button:disabled{opacity:.4;cursor:not-allowed}
 </nav>
 
 <main>
-
 <section id="home" class="page active">
   <div class="panel hero">
     <h1>星の導きが、旅の始まり</h1>
@@ -657,19 +272,14 @@ button:disabled{opacity:.4;cursor:not-allowed}
 <section id="battle" class="page">
   <div class="panel">
     <h2 class="section-title">草原マップ</h2>
-    <p class="muted">
-      ステージを選択して冒険に出よう。クリア済みのステージにも再挑戦できる。
-    </p>
+    <p class="muted">ステージを選択して冒険に出よう。クリア済みのステージにも再挑戦できる。</p>
     <div id="stageMap"></div>
   </div>
-
   <div class="panel">
     <h2 class="section-title">冒険準備</h2>
     <div id="battleIntro"></div>
     <div class="row" style="margin-top:12px">
-      <button id="startBattleButton" class="map-start-button" data-action="startBattle">
-        選択したステージに挑戦
-      </button>
+      <button id="startBattleButton" class="map-start-button" data-action="startBattle">選択したステージに挑戦</button>
     </div>
   </div>
 </section>
@@ -681,21 +291,17 @@ button:disabled{opacity:.4;cursor:not-allowed}
       <h2 class="section-title" style="margin:0">戦闘</h2>
       <button data-action="returnMap">ステージ選択に戻る</button>
     </div>
-
     <div id="battleArea">
       <div class="battle-screen">
         <div>
           <div class="battle-side-heading enemy-heading" id="enemyHeading">▼ 敵軍</div>
           <div id="enemyUnits" class="battle-side"></div>
         </div>
-
         <div class="battle-divider">✦ VS ✦</div>
-
         <div>
           <div class="battle-side-heading ally-heading">▲ 旅団</div>
           <div id="allyUnits" class="battle-side"></div>
         </div>
-
         <div id="actionArea" class="action-panel">
           <div class="muted">戦闘準備中...</div>
         </div>
@@ -703,7 +309,6 @@ button:disabled{opacity:.4;cursor:not-allowed}
     </div>
   </div>
 </section>
-
 </main>
 
 <div class="footer">星詠みの旅団</div>
@@ -747,9 +352,7 @@ function isBossStage(stage){
 }
 
 const STAGE_ENEMIES={
-  1:[
-    {id:'goblin',type:'multiplier',multiplier:.50}
-  ],
+  1:[{id:'goblin',type:'multiplier',multiplier:.50}],
   2:[
     {id:'goblin',type:'multiplier',multiplier:.50},
     {id:'goblin',type:'multiplier',multiplier:.50}
@@ -758,9 +361,7 @@ const STAGE_ENEMIES={
     {id:'zombie',type:'level',level:1},
     {id:'goblin',type:'multiplier',multiplier:.50}
   ],
-  4:[
-    {id:'swordman',type:'level',level:1}
-  ],
+  4:[{id:'swordman',type:'level',level:1}],
   5:[
     {id:'swordman',type:'multiplier',multiplier:.75},
     {id:'spearman',type:'multiplier',multiplier:.75}
@@ -769,9 +370,7 @@ const STAGE_ENEMIES={
     {id:'miner',type:'multiplier',multiplier:.75},
     {id:'miner',type:'multiplier',multiplier:.75}
   ],
-  7:[
-    {id:'axeman',type:'multiplier',multiplier:1.00}
-  ],
+  7:[{id:'axeman',type:'multiplier',multiplier:1.00}],
   8:[
     {id:'farmer',type:'multiplier',multiplier:1.00},
     {id:'miner',type:'multiplier',multiplier:.75}
@@ -781,9 +380,7 @@ const STAGE_ENEMIES={
     {id:'archer',type:'multiplier',multiplier:.75},
     {id:'spearman',type:'multiplier',multiplier:.75}
   ],
-  10:[
-    {id:'ゴーレム',type:'level',level:1,hpMultiplier:2.00}
-  ]
+  10:[{id:'ゴーレム',type:'level',level:1}]
 };
 
 function fresh(){
@@ -803,16 +400,12 @@ function fresh(){
 
 function loadState(){
   let raw=null;
-
-  try{
-    raw=JSON.parse(localStorage.getItem(KEY)||'null');
-  }catch(e){}
+  try{raw=JSON.parse(localStorage.getItem(KEY)||'null')}catch(e){}
 
   const d=fresh();
   if(!raw||typeof raw!=='object')return d;
 
   const s={...d,...raw};
-
   s.gems=Number.isFinite(+s.gems)?Math.max(0,+s.gems):d.gems;
   s.gold=Number.isFinite(+s.gold)?Math.max(0,+s.gold):d.gold;
 
@@ -821,13 +414,11 @@ function loadState(){
     :1;
 
   const oldCleared=s.stage-1;
-
   s.clearedStage=Number.isFinite(+raw.clearedStage)
     ?Math.min(IMPLEMENTED_STAGE,Math.max(oldCleared,Math.floor(+raw.clearedStage)))
     :oldCleared;
 
   s.stage=Math.min(IMPLEMENTED_STAGE,s.clearedStage+1);
-
   s.owned=raw.owned&&typeof raw.owned==='object'?raw.owned:{};
 
   for(const [id,v] of Object.entries(s.owned)){
@@ -835,7 +426,6 @@ function loadState(){
       delete s.owned[id];
       continue;
     }
-
     v.level=Math.min(byId(id).max,Math.max(1,Number(v.level)||1));
     v.dupes=Math.max(0,Number(v.dupes)||0);
   }
@@ -848,10 +438,7 @@ function loadState(){
     ?raw.party.filter((id,i,a)=>byId(id)&&s.owned[id]&&a.indexOf(id)===i).slice(0,3)
     :d.party.slice();
 
-  if(!s.party.length){
-    s.party=d.party.filter(id=>s.owned[id]);
-  }
-
+  if(!s.party.length)s.party=d.party.filter(id=>s.owned[id]);
   return s;
 }
 
@@ -860,28 +447,17 @@ let battle=null;
 let busy=false;
 let enemyTimer=null;
 
-let selectedStage=Math.min(
-  IMPLEMENTED_STAGE,
-  state.clearedStage+1
-);
+let selectedStage=Math.min(IMPLEMENTED_STAGE,state.clearedStage+1);
 
 function save(){
-  try{
-    localStorage.setItem(KEY,JSON.stringify(state));
-  }catch(e){
-    showError('セーブを保存できませんでした。ブラウザの保存容量・設定を確認してください。');
-  }
-
+  try{localStorage.setItem(KEY,JSON.stringify(state))}
+  catch(e){showError('セーブを保存できませんでした。ブラウザの保存容量・設定を確認してください。')}
   renderAll();
 }
 
 function showError(msg){
   const el=document.getElementById('errorBox');
-
-  if(el){
-    el.textContent=msg;
-    el.style.display='block';
-  }
+  if(el){el.textContent=msg;el.style.display='block'}
 }
 
 window.addEventListener('error',e=>{
@@ -890,32 +466,29 @@ window.addEventListener('error',e=>{
 
 function esc(s){
   return String(s).replace(/[&<>"']/g,c=>({
-    '&':'&amp;',
-    '<':'&lt;',
-    '>':'&gt;',
-    '"':'&quot;',
-    "'":'&#39;'
+    '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
   }[c]));
 }
 
+/*
+  画像ファイルの読み込み。
+  ゴーレムは images/ゴーレム.png を使用する。
+  encodeURIComponentで日本語ファイル名をURL用に変換する。
+*/
 function imagePath(id){
   const c=byId(id);
   const file=c?.imageFile||id+'.png';
-
   return './images/'+encodeURIComponent(file);
 }
 
-/* ユニットに設定された画像ファイルを優先して読み込む */
 function unitImagePath(unit){
   const c=byId(unit.characterId||unit.imageId);
   const file=unit.imageFile||c?.imageFile||(unit.imageId||unit.characterId)+'.png';
-
   return './images/'+encodeURIComponent(file);
 }
 
 function portrait(id){
   const c=byId(id);
-
   return `
     <div class="portrait">
       <img src="${imagePath(id)}"
@@ -928,7 +501,6 @@ function portrait(id){
 function stats(c,o){
   const lv=o?.level||1;
   const mul=Math.pow(1+c.growth,lv-1);
-
   return {
     hp:Math.round(c.hp*mul),
     atk:Math.round(c.atk*mul),
@@ -938,17 +510,12 @@ function stats(c,o){
 }
 
 function rarityClass(r){
-  return r==='エピック'
-    ?'epic'
-    :r==='レア'
-      ?'rare'
-      :'normal';
+  return r==='エピック'?'epic':r==='レア'?'rare':'normal';
 }
 
 function cardHTML(id,selectable=false){
   const c=byId(id);
   const o=state.owned[id];
-
   if(!c)return '';
 
   const st=stats(c,o);
@@ -957,24 +524,16 @@ function cardHTML(id,selectable=false){
   return `
     <article class="card ${selectable&&selected?'selected':''}">
       ${portrait(id)}
-
       <div class="name">${esc(c.name)}</div>
-
-      <div class="small ${rarityClass(c.rarity)}">
-        ${c.rarity} / Lv.${o?.level||1}
-      </div>
-
+      <div class="small ${rarityClass(c.rarity)}">${c.rarity} / Lv.${o?.level||1}</div>
       <div class="stats">
         HP ${st.hp}　攻撃 ${st.atk}<br>
         素早さ ${st.speed}<br>
         スキル：${esc(c.skill)}
         ${c.passive?'<br>特性：'+esc(c.passive):''}
       </div>
-
       ${selectable?`
-        <button class="wide"
-          data-action="toggleParty"
-          data-id="${esc(id)}">
+        <button class="wide" data-action="toggleParty" data-id="${esc(id)}">
           ${selected?'編成から外す':'編成に加える'}
         </button>
       `:''}
@@ -984,7 +543,6 @@ function cardHTML(id,selectable=false){
 
 function getFormationText(stage){
   const formation=STAGE_ENEMIES[stage];
-
   if(!formation)return '未実装';
 
   return formation.map(enemy=>{
@@ -992,13 +550,10 @@ function getFormationText(stage){
     if(!c)return '不明な敵';
 
     if(stage===10&&enemy.id==='ゴーレム'){
-      return `${c.name} ×1（HP 200%）`;
+      return `${c.name} ×1（HP 700 / 素早さ12 / 溜め3）`;
     }
 
-    if(enemy.type==='level'){
-      return `${c.name} Lv.${enemy.level||1}`;
-    }
-
+    if(enemy.type==='level')return `${c.name} Lv.${enemy.level||1}`;
     return `${c.name} ${Math.round(enemy.multiplier*100)}%`;
   }).join(' / ');
 }
@@ -1007,16 +562,8 @@ function renderStageMap(){
   const map=document.getElementById('stageMap');
   if(!map)return;
 
-  const unlocked=Math.min(
-    IMPLEMENTED_STAGE,
-    state.clearedStage+1
-  );
-
-  const cleared=Math.min(
-    IMPLEMENTED_STAGE,
-    state.clearedStage
-  );
-
+  const unlocked=Math.min(IMPLEMENTED_STAGE,state.clearedStage+1);
+  const cleared=Math.min(IMPLEMENTED_STAGE,state.clearedStage);
   let nodes='';
 
   for(let i=1;i<=MAX_STAGE;i++){
@@ -1028,7 +575,6 @@ function renderStageMap(){
     const isSelected=i===selectedStage;
 
     let classes='stage-node';
-
     if(boss)classes+=' boss';
     if(isCleared)classes+=' completed';
     if(isCurrent)classes+=' current';
@@ -1037,23 +583,13 @@ function renderStageMap(){
     else if(!isUnlocked)classes+=' locked';
 
     let status='🔒 未解放';
-
-    if(!implemented){
-      status='未実装';
-    }else if(isCleared){
-      status='✓ クリア済み';
-    }else if(isCurrent){
-      status='挑戦可能';
-    }
+    if(!implemented)status='未実装';
+    else if(isCleared)status='✓ クリア済み';
+    else if(isCurrent)status='挑戦可能';
 
     nodes+=`
-      <button
-        class="${classes}"
-        data-action="selectStage"
-        data-stage="${i}"
-        ${!isUnlocked?'disabled':''}
-        aria-label="ステージ${i}${boss?' ボス':''}"
-      >
+      <button class="${classes}" data-action="selectStage" data-stage="${i}"
+        ${!isUnlocked?'disabled':''} aria-label="ステージ${i}${boss?' ボス':''}">
         <span class="stage-number">${boss?'👑 ':''}${i}</span>
         <span class="stage-label">${boss?'BOSS STAGE':'STAGE'}</span>
         <span class="stage-status">${status}</span>
@@ -1061,56 +597,32 @@ function renderStageMap(){
     `;
   }
 
-  const bossText=isBossStage(selectedStage)
-    ?' <strong>👑 ボスステージ</strong>'
-    :'';
-
-  const replayText=selectedStage<=cleared
-    ?'クリア済みステージへの再挑戦'
-    :'新しいステージへの挑戦';
-
+  const bossText=isBossStage(selectedStage)?' <strong>👑 ボスステージ</strong>':'';
+  const replayText=selectedStage<=cleared?'クリア済みステージへの再挑戦':'新しいステージへの挑戦';
   const formationText=getFormationText(selectedStage);
 
   map.innerHTML=`
     <div class="stage-map">
-
       <div class="map-heading">
         <h3>🌿 緑風の草原</h3>
-        <div class="map-progress">
-          クリア ${cleared} / ${IMPLEMENTED_STAGE}
-        </div>
+        <div class="map-progress">クリア ${cleared} / ${IMPLEMENTED_STAGE}</div>
       </div>
-
-      <div class="map-grid">
-        ${nodes}
-      </div>
-
+      <div class="map-grid">${nodes}</div>
       <div class="map-legend">
         <span><i class="legend-dot legend-normal"></i>通常</span>
         <span><i class="legend-dot legend-clear"></i>クリア済み</span>
         <span><i class="legend-dot legend-boss"></i>ボス</span>
         <span><i class="legend-dot legend-locked"></i>未解放・未実装</span>
       </div>
-
       <div class="selected-stage-info">
         選択中：<strong>ステージ ${selectedStage}</strong>${bossText}<br>
         <span class="small">${replayText}</span>
-        <div class="enemy-formation-info">
-          敵編成：${esc(formationText)}
-        </div>
-        <div class="enemy-formation-info">
-          ステージ11～20は今後実装予定です。
-        </div>
+        <div class="enemy-formation-info">敵編成：${esc(formationText)}</div>
+        <div class="enemy-formation-info">ステージ11～20は今後実装予定です。</div>
       </div>
-
-      <button
-        class="map-start-button"
-        data-action="startBattle"
-        ${!state.party.length?'disabled':''}
-      >
+      <button class="map-start-button" data-action="startBattle" ${!state.party.length?'disabled':''}>
         ステージ ${selectedStage} に挑戦する
       </button>
-
     </div>
   `;
 }
@@ -1122,45 +634,32 @@ function renderAll(){
 
   document.getElementById('homeSummary').innerHTML=`
     所持キャラクター：${Object.keys(state.owned).length}体<br>
-    編成中：
-    ${state.party.map(id=>esc(byId(id)?.name||id)).join(' / ')||'なし'}<br>
+    編成中：${state.party.map(id=>esc(byId(id)?.name||id)).join(' / ')||'なし'}<br>
     クリア済み：${state.clearedStage} / ${IMPLEMENTED_STAGE}<br>
-    次の冒険：
-    ${
-      state.clearedStage>=IMPLEMENTED_STAGE
-        ?'草原ステージはすべてクリア！'
-        :'ステージ '+Math.min(IMPLEMENTED_STAGE,state.clearedStage+1)
-    }
+    次の冒険：${state.clearedStage>=IMPLEMENTED_STAGE?'草原ステージはすべてクリア！':'ステージ '+Math.min(IMPLEMENTED_STAGE,state.clearedStage+1)}
   `;
 
   document.getElementById('gachaOwned').textContent=
     `${Object.keys(state.owned).length} / ${CHARACTERS.length}体を所持`;
 
   document.getElementById('partyView').innerHTML=
-    state.party.map(id=>cardHTML(id)).join('')||
-    '<p class="muted">編成がありません。</p>';
+    state.party.map(id=>cardHTML(id)).join('')||'<p class="muted">編成がありません。</p>';
 
   document.getElementById('characterList').innerHTML=
     CHARACTERS.map(c=>
-      state.owned[c.id]
-        ?cardHTML(c.id,true)
-        :`
-          <article class="card">
-            <div class="portrait">🔒</div>
-            <div class="name">？？？</div>
-            <div class="small">${c.rarity}</div>
-            <div class="stats">未獲得</div>
-          </article>
-        `
+      state.owned[c.id]?cardHTML(c.id,true):`
+        <article class="card">
+          <div class="portrait">🔒</div>
+          <div class="name">？？？</div>
+          <div class="small">${c.rarity}</div>
+          <div class="stats">未獲得</div>
+        </article>
+      `
     ).join('');
 
   renderStageMap();
 
-  const unlocked=Math.min(
-    IMPLEMENTED_STAGE,
-    state.clearedStage+1
-  );
-
+  const unlocked=Math.min(IMPLEMENTED_STAGE,state.clearedStage+1);
   const boss=isBossStage(selectedStage);
 
   document.getElementById('battleIntro').innerHTML=`
@@ -1173,13 +672,11 @@ function renderAll(){
       実装済み：ステージ1～${IMPLEMENTED_STAGE}
     </span><br>
     <span class="muted">
-      編成：
-      ${state.party.map(id=>esc(byId(id)?.name||id)).join(' / ')||'なし'}
+      編成：${state.party.map(id=>esc(byId(id)?.name||id)).join(' / ')||'なし'}
     </span>
   `;
 
   const startButton=document.getElementById('startBattleButton');
-
   if(startButton){
     startButton.textContent=`ステージ ${selectedStage} に挑戦`;
     startButton.disabled=!state.party.length;
@@ -1192,24 +689,15 @@ function showPage(name){
     p.classList.toggle('active',p.id===name);
   });
 
-  if(name==='battle'){
-    renderStageMap();
-  }
-
-  if(name==='battleFight'){
-    renderBattle();
-  }
+  if(name==='battle')renderStageMap();
+  if(name==='battleFight')renderBattle();
 
   window.scrollTo(0,0);
 }
 
 function selectStage(stage){
   stage=Number(stage);
-
-  const unlocked=Math.min(
-    IMPLEMENTED_STAGE,
-    state.clearedStage+1
-  );
+  const unlocked=Math.min(IMPLEMENTED_STAGE,state.clearedStage+1);
 
   if(!Number.isInteger(stage)||stage<1||stage>unlocked)return;
 
@@ -1235,65 +723,46 @@ function summon(count){
 
   for(let i=0;i<count;i++){
     const roll=Math.random()*100;
-
     const pool=CHARACTERS.filter(c=>
-      roll<5
-        ?c.rarity==='エピック'
-        :roll<30
-          ?c.rarity==='レア'
-          :c.rarity==='ノーマル'
+      roll<5?c.rarity==='エピック':
+      roll<30?c.rarity==='レア':
+      c.rarity==='ノーマル'
     );
 
     const c=pool[Math.floor(Math.random()*pool.length)];
 
     if(!state.owned[c.id]){
       state.owned[c.id]={level:1,dupes:0};
-
-      results.push(
-        `<span class="${rarityClass(c.rarity)}">${esc(c.name)}（初獲得）</span>`
-      );
-
+      results.push(`<span class="${rarityClass(c.rarity)}">${esc(c.name)}（初獲得）</span>`);
     }else{
       const o=state.owned[c.id];
-
       o.dupes=(o.dupes||0)+1;
 
       if(o.level<c.max&&o.dupes>=o.level){
         o.dupes=0;
         o.level++;
-
         results.push(`${esc(c.name)}：Lv.${o.level}に成長！`);
-
       }else if(o.level>=c.max){
         o.dupes=0;
         state.gold+=50;
-
         results.push(`${esc(c.name)}：最大Lvのため🪙50獲得`);
-
       }else{
         results.push(`${esc(c.name)}：重複 ${o.dupes}/${o.level}`);
       }
     }
   }
 
-  document.getElementById('gachaResult').innerHTML=
-    results.join('<br>');
-
+  document.getElementById('gachaResult').innerHTML=results.join('<br>');
   save();
 }
 
 function toggleParty(id){
   if(!state.owned[id])return;
-
   const i=state.party.indexOf(id);
 
-  if(i>=0){
-    state.party.splice(i,1);
-
-  }else if(state.party.length<3){
-    state.party.push(id);
-
-  }else{
+  if(i>=0)state.party.splice(i,1);
+  else if(state.party.length<3)state.party.push(id);
+  else{
     showError('編成できるのは3人までです。');
     return;
   }
@@ -1311,81 +780,47 @@ function makeUnit(id,side){
   const st=stats(c,o);
 
   return {
-    id,
-    side,
-    name:c.name,
-    hp:st.hp,
-    maxHp:st.hp,
-    atk:st.atk,
-    speed:st.speed,
-    gauge:0,
-    charge:c.charge,
-    actions:0,
-    skill:c.skill,
-    effect:c.effect,
-    power:st.power,
-    target:c.target,
-    passive:c.passive,
-    guard:false,
-    evade:0,
-    poison:0,
-    buff:1,
-    alive:true,
-    counter:false,
-    imageId:id,
-    characterId:id,
-    imageFile:c.imageFile,
-    effectText:'',
-    effectKind:'',
-    effectVersion:0,
-    hit:false
+    id,side,name:c.name,
+    hp:st.hp,maxHp:st.hp,atk:st.atk,speed:st.speed,
+    gauge:0,charge:c.charge,actions:0,
+    skill:c.skill,effect:c.effect,power:st.power,target:c.target,
+    passive:c.passive,guard:false,evade:0,poison:0,buff:1,
+    alive:true,counter:false,imageId:id,characterId:id,
+    imageFile:c.imageFile,effectText:'',effectKind:'',
+    effectVersion:0,hit:false
   };
 }
 
 /*
-  敵キャラクター生成
-
-  通常の敵：
-  元キャラクターの設定をそのまま使用。
-
-  ステージ10のボスゴーレム：
-  HPは基本HPの200%。
-  素早さ14、溜め2に個別設定する。
-  ここでの変更はステージ10の敵個体だけに適用する。
+  敵キャラクター生成。
+  ステージ10の敵ゴーレムだけ、
+  HP700・素早さ12・溜め3に個別設定する。
+  所持キャラクターのゴーレムには影響しない。
 */
 function makeEnemy(i,stage){
   const formation=STAGE_ENEMIES[stage];
-
   if(!formation||!formation[i])return null;
 
   const setting=formation[i];
   const c=byId(setting.id);
-
   if(!c)return null;
 
   let st;
   let strengthLabel;
 
   if(setting.type==='level'){
-    const level=Math.min(
-      c.max,
-      Math.max(1,setting.level||1)
-    );
-
+    const level=Math.min(c.max,Math.max(1,setting.level||1));
     st=stats(c,{level});
     strengthLabel=`Lv.${level}`;
-
   }else{
     const multiplier=setting.multiplier;
     const base=stats(c,{level:1});
-
     st={
       hp:Math.round(base.hp*multiplier),
       atk:Math.round(base.atk*multiplier),
       power:Math.round(base.power*multiplier),
       speed:base.speed
     };
-
     strengthLabel=`${Math.round(multiplier*100)}%`;
   }
 
@@ -1394,11 +829,13 @@ function makeEnemy(i,stage){
     strengthLabel+=` / HP ${Math.round(setting.hpMultiplier*100)}%`;
   }
 
-  /* ステージ10のボスゴーレムだけの個別調整 */
-  const isStage10Golem=stage===10&&setting.id==='ゴーレム';
+  /* ステージ10の敵ゴーレムだけに適用 */
+  const isStage10Golem=Number(stage)===10&&c.id==='ゴーレム';
 
   if(isStage10Golem){
-    st.speed=14;
+    st.hp=700;
+    st.speed=12;
+    strengthLabel='ボス専用ステータス';
   }
 
   return {
@@ -1408,32 +845,27 @@ function makeEnemy(i,stage){
     characterId:c.id,
     imageFile:c.imageFile,
     side:'enemy',
-
     hp:st.hp,
     maxHp:st.hp,
     atk:st.atk,
     speed:st.speed,
-
     gauge:0,
-    charge:isStage10Golem?2:c.charge,
+    charge:isStage10Golem?3:c.charge,
     actions:0,
     skill:c.skill,
     effect:c.effect,
     power:st.power,
     target:c.target,
     passive:c.passive,
-
     alive:true,
     guard:false,
     evade:0,
     poison:0,
     buff:1,
-
     effectText:'',
     effectKind:'',
     effectVersion:0,
     hit:false,
-
     strengthLabel
   };
 }
@@ -1444,35 +876,26 @@ function alive(arr){
 
 function chooseRandomEnemy(){
   const enemies=alive(battle.enemies);
-
   if(!enemies.length)return null;
-
   return enemies[Math.floor(Math.random()*enemies.length)];
 }
 
 function chooseRandomAlly(){
   const allies=alive(battle.allies);
-
   if(!allies.length)return null;
-
   return allies[Math.floor(Math.random()*allies.length)];
 }
 
 function chooseEnemy(){
-  return alive(battle.enemies)
-    .sort((a,b)=>a.hp-b.hp)[0]||null;
+  return alive(battle.enemies).sort((a,b)=>a.hp-b.hp)[0]||null;
 }
 
 function chooseAlly(){
-  return alive(battle.allies)
-    .sort((a,b)=>a.hp-b.hp)[0]||null;
+  return alive(battle.allies).sort((a,b)=>a.hp-b.hp)[0]||null;
 }
 
 function chooseAttackTarget(actor){
-  if(actor&&actor.id==='狙撃手アーチャー'){
-    return chooseEnemy();
-  }
-
+  if(actor&&actor.id==='狙撃手アーチャー')return chooseEnemy();
   return chooseRandomEnemy();
 }
 
@@ -1480,9 +903,7 @@ function showUnitEffect(unit,text,kind='damage'){
   if(!unit)return;
 
   unit.effectVersion=(unit.effectVersion||0)+1;
-
   const thisVersion=unit.effectVersion;
-
   unit.effectText=text;
   unit.effectKind=kind;
   unit.hit=kind==='damage'||kind==='miss';
@@ -1500,11 +921,8 @@ function showUnitEffect(unit,text,kind='damage'){
 
     document.querySelectorAll('.battle-character').forEach(el=>{
       if(el.dataset.unitId!==unitId)return;
-
       const effect=el.querySelector('.effect-pop');
-
       if(effect)effect.remove();
-
       el.classList.remove('hit-animation');
     });
   },1250);
@@ -1512,6 +930,11 @@ function showUnitEffect(unit,text,kind='damage'){
 
 function startBattle(){
   if(busy)return;
+
+  if(battle&&!battle.over){
+    showPage('battleFight');
+    return;
+  }
 
   if(enemyTimer){
     clearTimeout(enemyTimer);
@@ -1523,10 +946,7 @@ function startBattle(){
     return;
   }
 
-  const unlocked=Math.min(
-    IMPLEMENTED_STAGE,
-    state.clearedStage+1
-  );
+  const unlocked=Math.min(IMPLEMENTED_STAGE,state.clearedStage+1);
 
   if(selectedStage>unlocked){
     showError('そのステージはまだ解放されていません。');
@@ -1547,39 +967,25 @@ function startBattle(){
     over:false,
     readyActor:null,
     pendingEnemy:null,
-
     allies:state.party.map(id=>makeUnit(id,'ally')),
-
-    enemies:formation
-      .map((setting,index)=>makeEnemy(index,selectedStage))
-      .filter(Boolean)
+    enemies:formation.map((setting,index)=>makeEnemy(index,selectedStage)).filter(Boolean)
   };
 
   busy=false;
-
-  /* 戦闘専用ページに切り替える */
   showPage('battleFight');
   renderBattle();
   advanceBattle();
 }
 
 function chooseEnemyAttackTarget(enemy){
-  if(
-    enemy&&
-    (
-      enemy.characterId==='狙撃手アーチャー'||
-      enemy.id==='狙撃手アーチャー'
-    )
-  ){
+  if(enemy&&(enemy.characterId==='狙撃手アーチャー'||enemy.id==='狙撃手アーチャー')){
     return chooseAlly();
   }
-
   return chooseRandomAlly();
 }
 
 function prepareEnemyAction(enemy){
   const target=chooseEnemyAttackTarget(enemy);
-
   if(!target)return;
 
   battle.pendingEnemy={
@@ -1592,7 +998,6 @@ function prepareEnemyAction(enemy){
 
   busy=true;
   renderBattle();
-
   const currentBattle=battle;
 
   enemyTimer=setTimeout(()=>{
@@ -1604,75 +1009,45 @@ function prepareEnemyAction(enemy){
     }
 
     const pending=battle.pendingEnemy;
+    if(!pending){busy=false;return}
 
-    if(!pending){
-      busy=false;
-      return;
-    }
-
-    const actor=battle.enemies.find(x=>
-      x.id===pending.actorId&&x.alive
-    );
-
-    const victim=battle.allies.find(x=>
-      x.id===pending.targetId&&x.alive
-    );
+    const actor=battle.enemies.find(x=>x.id===pending.actorId&&x.alive);
+    const victim=battle.allies.find(x=>x.id===pending.targetId&&x.alive);
 
     battle.pendingEnemy=null;
-
-    if(actor&&victim){
-      enemyAct(actor,victim);
-    }
+    if(actor&&victim)enemyAct(actor,victim);
 
     for(const e of alive(battle.enemies)){
       if(e.poison>0){
         e.hp=Math.max(0,e.hp-8);
         e.poison--;
-
         showUnitEffect(e,'毒 -8','damage');
-
         if(e.hp===0)e.alive=false;
       }
     }
 
     busy=false;
 
-    if(alive(battle.enemies).length===0){
-      finishBattle(true);
-      return;
-    }
-
-    if(alive(battle.allies).length===0){
-      finishBattle(false);
-      return;
-    }
+    if(alive(battle.enemies).length===0){finishBattle(true);return}
+    if(alive(battle.allies).length===0){finishBattle(false);return}
 
     renderBattle();
     advanceBattle();
-
   },1100);
 }
 
 function performAlly(actor,useSkill){
   const c=byId(actor.id);
-
   if(!c)return;
 
   if(useSkill){
     if(actor.charge>0&&actor.actions<actor.charge)return;
-
     actor.actions=0;
-
     showUnitEffect(actor,'SKILL!','buff');
 
     if(actor.effect==='damage'){
-      const targets=actor.target==='all'
-        ?alive(battle.enemies)
-        :[chooseAttackTarget(actor)];
-
-      targets.forEach(t=>{
-        if(t)deal(actor,t,actor.power);
-      });
+      const targets=actor.target==='all'?alive(battle.enemies):[chooseAttackTarget(actor)];
+      targets.forEach(t=>{if(t)deal(actor,t,actor.power)});
 
     }else if(actor.effect==='evade'||actor.effect==='evadeSure'){
       actor.evade=1;
@@ -1684,65 +1059,42 @@ function performAlly(actor,useSkill){
 
     }else if(actor.effect==='poison'){
       const t=chooseAttackTarget(actor);
-
-      if(t){
-        deal(actor,t,actor.power);
-        t.poison=3;
-      }
+      if(t){deal(actor,t,actor.power);t.poison=3}
 
     }else if(actor.effect==='heal'||actor.effect==='healPercent'){
       const allies=alive(battle.allies);
-
-      const t=actor.effect==='heal'
-        ?allies[Math.floor(Math.random()*allies.length)]
-        :chooseAlly();
+      const t=actor.effect==='heal'?allies[Math.floor(Math.random()*allies.length)]:chooseAlly();
 
       if(t){
         const amount=actor.effect==='healPercent'
           ?Math.round(t.maxHp*actor.power/100)
           :actor.power;
-
         const actual=Math.min(t.maxHp-t.hp,amount);
-
         t.hp=Math.min(t.maxHp,t.hp+amount);
-
         showUnitEffect(t,'+'+actual,'heal');
       }
 
     }else if(actor.effect==='buffSelf'){
       actor.buff+=actor.power/100;
-
       showUnitEffect(actor,'攻撃力UP','buff');
 
     }else if(actor.effect==='buffAlly'){
       const t=chooseAlly();
-
-      if(t){
-        t.buff+=actor.power/100;
-
-        showUnitEffect(t,'攻撃力UP','buff');
-      }
+      if(t){t.buff+=actor.power/100;showUnitEffect(t,'攻撃力UP','buff')}
     }
 
   }else{
     actor.actions++;
-
     const t=chooseAttackTarget(actor);
-
-    if(t){
-      deal(actor,t,actor.atk*actor.buff);
-    }
+    if(t)deal(actor,t,actor.atk*actor.buff);
   }
 
   if(actor.passive==='ウィルパワー'){
     actor.atk+=Math.max(1,Math.round(actor.atk*.1));
-
     showUnitEffect(actor,'攻撃力上昇','buff');
   }
 
-  if(actor.passive==='アルティメットカウンター'){
-    actor.counter=true;
-  }
+  if(actor.passive==='アルティメットカウンター')actor.counter=true;
 }
 
 function deal(attacker,target,amount){
@@ -1750,9 +1102,7 @@ function deal(attacker,target,amount){
 
   if(target.evade>0){
     target.evade=0;
-
     showUnitEffect(target,'MISS!','miss');
-
     return 0;
   }
 
@@ -1764,13 +1114,9 @@ function deal(attacker,target,amount){
   }
 
   target.hp=Math.max(0,target.hp-dmg);
-
   showUnitEffect(target,'-'+dmg,'damage');
 
-  if(target.hp<=0){
-    target.alive=false;
-  }
-
+  if(target.hp<=0)target.alive=false;
   return dmg;
 }
 
@@ -1781,11 +1127,8 @@ function enemyAct(e,target){
 
   if(target.passive==='アルティメットカウンター'&&Math.random()<.2){
     const reflected=Math.round(dmg*2);
-
     e.hp=Math.max(0,e.hp-reflected);
-
     showUnitEffect(e,'反射 -'+reflected,'damage');
-
     if(e.hp===0)e.alive=false;
   }
 }
@@ -1796,47 +1139,28 @@ function advanceBattle(){
   let guard=0;
 
   while(!battle.readyActor&&guard++<100){
+    if(alive(battle.enemies).length===0){finishBattle(true);return}
+    if(alive(battle.allies).length===0){finishBattle(false);return}
 
-    if(alive(battle.enemies).length===0){
-      finishBattle(true);
-      return;
-    }
-
-    if(alive(battle.allies).length===0){
-      finishBattle(false);
-      return;
-    }
-
-    const units=[
-      ...alive(battle.allies),
-      ...alive(battle.enemies)
-    ];
-
+    const units=[...alive(battle.allies),...alive(battle.enemies)];
     units.forEach(u=>u.gauge+=u.speed);
 
-    const ready=units
-      .filter(u=>u.gauge>=100)
-      .sort((a,b)=>
-        b.gauge-a.gauge||
-        (a.side===b.side?0:(a.side==='ally'?-1:1))
-      );
+    const ready=units.filter(u=>u.gauge>=100).sort((a,b)=>
+      b.gauge-a.gauge||(a.side===b.side?0:(a.side==='ally'?-1:1))
+    );
 
     if(!ready.length)continue;
 
     const actor=ready[0];
-
     actor.gauge-=100;
 
     if(actor.side==='ally'){
       battle.readyActor=actor.id;
-
       renderBattle();
-
       return;
     }
 
     prepareEnemyAction(actor);
-
     return;
   }
 
@@ -1847,31 +1171,17 @@ function playerAction(id,skill){
   if(!battle||battle.over||busy||battle.readyActor!==id)return;
 
   const actor=battle.allies.find(x=>x.id===id&&x.alive);
-
   if(!actor)return;
-
   if(skill&&actor.charge>0&&actor.actions<actor.charge)return;
 
   busy=true;
-
   performAlly(actor,skill);
-
   battle.readyActor=null;
 
-  if(alive(battle.enemies).length===0){
-    busy=false;
-    finishBattle(true);
-    return;
-  }
-
-  if(alive(battle.allies).length===0){
-    busy=false;
-    finishBattle(false);
-    return;
-  }
+  if(alive(battle.enemies).length===0){busy=false;finishBattle(true);return}
+  if(alive(battle.allies).length===0){busy=false;finishBattle(false);return}
 
   busy=false;
-
   renderBattle();
   advanceBattle();
 }
@@ -1879,37 +1189,20 @@ function playerAction(id,skill){
 function finishBattle(win){
   if(!battle||battle.over)return;
 
-  if(enemyTimer){
-    clearTimeout(enemyTimer);
-    enemyTimer=null;
-  }
+  if(enemyTimer){clearTimeout(enemyTimer);enemyTimer=null}
 
   battle.over=true;
   battle.pendingEnemy=null;
   battle.resultWin=win;
-
   busy=false;
 
   if(win){
     const cleared=battle.stage;
-
-    state.clearedStage=Math.max(
-      state.clearedStage,
-      cleared
-    );
-
-    state.stage=Math.min(
-      IMPLEMENTED_STAGE,
-      state.clearedStage+1
-    );
-
+    state.clearedStage=Math.max(state.clearedStage,cleared);
+    state.stage=Math.min(IMPLEMENTED_STAGE,state.clearedStage+1);
     state.gold+=100;
     state.gems+=40;
-
-    selectedStage=Math.min(
-      IMPLEMENTED_STAGE,
-      state.clearedStage+1
-    );
+    selectedStage=Math.min(IMPLEMENTED_STAGE,state.clearedStage+1);
   }
 
   save();
@@ -1926,8 +1219,7 @@ function renderBattle(){
 
   area.style.display='block';
 
-  const activeId=battle.readyActor||
-    (battle.pendingEnemy?battle.pendingEnemy.actorId:null);
+  const activeId=battle.readyActor||(battle.pendingEnemy?battle.pendingEnemy.actorId:null);
 
   const unitHTML=u=>{
     const isEnemy=u.side==='enemy';
@@ -1936,7 +1228,6 @@ function renderBattle(){
     const isActive=u.id===activeId;
 
     let badge='';
-
     if(isActive){
       badge=isEnemy
         ?'<div class="turn-badge">敵の行動予告</div>'
@@ -1944,170 +1235,97 @@ function renderBattle(){
     }
 
     return `
-      <div
-        class="battle-character
-          ${isEnemy?'enemy':'ally'}
-          ${dead?'dead':''}
-          ${u.hit?'hit-animation':''}
-          ${isActive?'turn-active':''}"
-        data-unit-id="${esc(u.id)}"
-      >
+      <div class="battle-character ${isEnemy?'enemy':'ally'} ${dead?'dead':''} ${u.hit?'hit-animation':''} ${isActive?'turn-active':''}"
+        data-unit-id="${esc(u.id)}">
         ${badge}
-
         <div class="battle-image">
-          <img src="${image}"
-            alt="${esc(u.name)}"
-            onerror="this.style.display='none'">
+          <img src="${image}" alt="${esc(u.name)}" onerror="this.style.display='none'">
         </div>
-
         ${u.effectText?`
-          <div class="effect-pop effect-${esc(u.effectKind)}">
-            ${esc(u.effectText)}
-          </div>
+          <div class="effect-pop effect-${esc(u.effectKind)}">${esc(u.effectText)}</div>
         `:''}
-
         <div class="battle-name">${esc(u.name)}</div>
-
         ${isEnemy&&u.strengthLabel?`
           <div class="small">強化：${esc(u.strengthLabel)}</div>
         `:''}
-
-        ${isEnemy&&u.side==='enemy'&&u.charge!==undefined?`
+        ${isEnemy&&u.charge!==undefined?`
           <div class="small">素早さ：${u.speed} / 溜め：${u.charge}</div>
         `:''}
-
-        <div class="battle-hp-text">
-          HP ${Math.max(0,u.hp)} / ${u.maxHp}
-        </div>
-
-        <div class="hpbar">
-          <i style="width:${Math.max(0,u.hp/u.maxHp*100)}%"></i>
-        </div>
-
+        <div class="battle-hp-text">HP ${Math.max(0,u.hp)} / ${u.maxHp}</div>
+        <div class="hpbar"><i style="width:${Math.max(0,u.hp/u.maxHp*100)}%"></i></div>
         ${!isEnemy?`
-          <div class="small">
-            通常攻撃回数：${u.actions}/${u.charge||'—'}
-          </div>
+          <div class="small">通常攻撃回数：${u.actions}/${u.charge||'—'}</div>
           ${u.charge===0?'<div class="small">スキル使用可能</div>':''}
         `:''}
       </div>
     `;
   };
 
-  document.getElementById('allyUnits').innerHTML=
-    battle.allies.map(unitHTML).join('');
-
-  document.getElementById('enemyUnits').innerHTML=
-    battle.enemies.map(unitHTML).join('');
+  document.getElementById('allyUnits').innerHTML=battle.allies.map(unitHTML).join('');
+  document.getElementById('enemyUnits').innerHTML=battle.enemies.map(unitHTML).join('');
 
   const enemyHeading=document.getElementById('enemyHeading');
-
-  enemyHeading.textContent=battle.isBoss
-    ?'▼ 敵軍　👑 BOSS BATTLE'
-    :'▼ 敵軍';
+  enemyHeading.textContent=battle.isBoss?'▼ 敵軍　👑 BOSS BATTLE':'▼ 敵軍';
 
   const active=battle.allies.find(a=>a.id===battle.readyActor);
-
   let actionContent='';
 
   if(battle.over){
     actionContent=`
       <div class="battle-result">
         <h3>${battle.resultWin?'勝利！':'敗北……'}</h3>
-
         <p>
           ${battle.resultWin
             ?`ステージ ${battle.stage} クリア！報酬を獲得した。`
             :'旅団は敗北した。編成を見直して再挑戦しよう。'}
         </p>
-
         ${battle.resultWin?'<p>🪙100　💎40を獲得！</p>':''}
-
-        ${battle.resultWin&&battle.isBoss
-          ?'<p style="color:#ffcf83;font-weight:900">👑 ボスステージ突破！</p>'
-          :''
-        }
-
-        <button data-action="returnMap">
-          ステージ一覧に戻る
-        </button>
-
-        <button data-action="startBattle">
-          もう一度挑戦
-        </button>
+        ${battle.resultWin&&battle.isBoss?'<p style="color:#ffcf83;font-weight:900">👑 ボスステージ突破！</p>':''}
+        <button data-action="returnMap">ステージ一覧に戻る</button>
+        <button data-action="startBattle">もう一度挑戦</button>
       </div>
     `;
 
   }else if(battle.pendingEnemy){
     const p=battle.pendingEnemy;
-
     actionContent=`
       <div class="enemy-preview">
         <div class="preview-title">⚠ 敵の行動予告</div>
-
         <div class="preview-detail">
           <b>${esc(p.actorName)}</b> が行動する！<br>
           行動内容：<b>${esc(p.actionName)}</b><br>
           攻撃対象：<b>${esc(p.targetName)}</b>
         </div>
-
-        <div class="preview-wait">
-          敵が攻撃を準備している……（約1.1秒）
-        </div>
+        <div class="preview-wait">敵が攻撃を準備している……（約1.1秒）</div>
       </div>
     `;
 
   }else if(active){
-    const skillReady=
-      active.charge===0||
-      active.actions>=active.charge;
+    const skillReady=active.charge===0||active.actions>=active.charge;
 
     actionContent=`
-      <div class="action-title">
-        ★ ${esc(active.name)} が行動権を獲得！
-      </div>
-
+      <div class="action-title">★ ${esc(active.name)} が行動権を獲得！</div>
       <div class="action-character">
         <div class="name">${esc(active.name)}</div>
-
         <div class="small">
           攻撃力：${active.atk}<br>
           スキル：${esc(active.skill)}
         </div>
-
         ${active.charge>0?`
-          <div class="small">
-            スキル準備：${active.actions}/${active.charge} 回
-          </div>
-
+          <div class="small">スキル準備：${active.actions}/${active.charge} 回</div>
           <div class="gaugebar">
             <i style="width:${Math.min(100,active.actions/active.charge*100)}%"></i>
           </div>
-        `:`
-          <div class="small">スキルはいつでも使用可能</div>
-        `}
+        `:'<div class="small">スキルはいつでも使用可能</div>'}
       </div>
-
       <div class="action-buttons">
-        <button class="attack-button"
-          data-action="attack"
-          data-id="${esc(active.id)}">
-          通常攻撃
-        </button>
-
-        <button class="skill-button"
-          data-action="skill"
-          data-id="${esc(active.id)}"
-          ${!skillReady?'disabled':''}>
+        <button class="attack-button" data-action="attack" data-id="${esc(active.id)}">通常攻撃</button>
+        <button class="skill-button" data-action="skill" data-id="${esc(active.id)}" ${!skillReady?'disabled':''}>
           ${esc(active.skill)}
-          ${!skillReady
-            ?'（あと'+(active.charge-active.actions)+'回）'
-            :''
-          }
+          ${!skillReady?'（あと'+(active.charge-active.actions)+'回）':''}
         </button>
       </div>
     `;
-
   }else{
     actionContent='<div class="muted">次の行動順を計算中...</div>';
   }
@@ -2117,14 +1335,12 @@ function renderBattle(){
 
 function handleClick(e){
   const page=e.target.closest('[data-page]');
-
   if(page){
     showPage(page.dataset.page);
     return;
   }
 
   const b=e.target.closest('[data-action]');
-
   if(!b||b.disabled)return;
 
   const a=b.dataset.action;
@@ -2132,31 +1348,23 @@ function handleClick(e){
 
   if(a==='summon'){
     summon(Number(b.dataset.count));
-
   }else if(a==='toggleParty'){
     toggleParty(id);
-
   }else if(a==='selectStage'){
     selectStage(Number(b.dataset.stage));
-
   }else if(a==='startBattle'){
     startBattle();
-
   }else if(a==='returnMap'){
     if(battle&&!battle.over)return;
-
     showPage('battle');
-
   }else if(a==='attack'){
     playerAction(id,false);
-
   }else if(a==='skill'){
     playerAction(id,true);
   }
 }
 
 document.addEventListener('click',handleClick);
-
 renderAll();
 </script>
 </body>
