@@ -57,6 +57,260 @@ button:disabled{opacity:.4;cursor:not-allowed}
 }
 .footer{text-align:center;color:var(--muted);font-size:12px;padding:14px}
 
+/* ==============================
+   ガチャ召喚演出
+============================== */
+.summon-overlay{
+  display:none;position:fixed;inset:0;z-index:1000;
+  background:radial-gradient(ellipse at center,#26345b 0%,#11172b 55%,#080c18 100%);
+  align-items:center;justify-content:center;
+  padding:16px;overflow-y:auto;
+}
+.summon-overlay.active{display:flex}
+.summon-content{
+  width:100%;max-width:520px;text-align:center;
+  position:relative;padding:20px 12px;
+}
+.summon-title{
+  color:#b9d9ff;font-size:22px;font-weight:1000;
+  text-shadow:0 0 12px #6daaff;margin-bottom:14px;
+}
+.summon-overlay.epic-mode{
+  background:radial-gradient(ellipse at center,#583c70 0%,#241c42 48%,#090b19 100%);
+}
+.epic-mode .summon-title{
+  color:#ffe7a0;text-shadow:0 0 12px #ffbf4a,0 0 25px #d58aff;
+}
+.magic-stage{
+  height:300px;position:relative;display:flex;
+  align-items:center;justify-content:center;
+  overflow:hidden;
+}
+.magic-circle{
+  width:230px;height:230px;border-radius:50%;
+  position:absolute;
+  border:3px solid #7ecbff;
+  box-shadow:0 0 12px #54aaff,0 0 30px #398cff,inset 0 0 22px #398cff;
+  background:
+    radial-gradient(circle,transparent 43%,#4b9bff22 44%,transparent 46%),
+    repeating-conic-gradient(from 0deg,#6fcaff 0deg 1deg,transparent 1deg 15deg);
+  animation:magicRotate 8s linear infinite,magicPulse 1.5s ease-in-out infinite alternate;
+}
+.magic-circle:before{
+  content:"";position:absolute;inset:17px;border-radius:50%;
+  border:2px dashed #b5e7ff;
+  box-shadow:0 0 12px #64caff;
+}
+.magic-circle:after{
+  content:"✦　ᚷ　✧　ᚨ　✦　ᚱ　✧　ᚷ　✦";
+  position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  color:#d5f3ff;font-size:17px;letter-spacing:2px;
+  text-shadow:0 0 9px #48aaff;
+}
+.magic-inner{
+  width:125px;height:125px;border-radius:50%;
+  position:absolute;border:2px solid #a7ddff;
+  box-shadow:0 0 15px #56baff,inset 0 0 20px #56baff;
+  background:radial-gradient(circle,#8bdcff44,transparent 70%);
+  animation:magicRotateReverse 5s linear infinite;
+}
+.magic-inner:after{
+  content:"✦";position:absolute;inset:0;
+  display:flex;align-items:center;justify-content:center;
+  color:#fff;font-size:55px;text-shadow:0 0 20px #54baff;
+}
+.magic-rune{
+  position:absolute;width:280px;height:280px;border-radius:50%;
+  border:1px solid #77caff88;
+  box-shadow:0 0 25px #4aaaff55;
+  animation:magicRotateReverse 13s linear infinite;
+}
+.magic-rune:before,.magic-rune:after{
+  content:"";position:absolute;inset:25px;border-radius:50%;
+  border:1px solid #a5e1ff88;
+}
+.magic-rune:after{inset:45px;border-style:dashed}
+.summon-beam{
+  position:absolute;bottom:10px;left:50%;transform:translateX(-50%);
+  width:110px;height:0;opacity:0;
+  background:linear-gradient(0deg,#fff, #9bdcffaa,transparent);
+  filter:blur(5px);
+}
+.summon-overlay.revealing .summon-beam{
+  animation:beamRise 1.1s ease-out forwards;
+}
+.summon-overlay.epic-mode .magic-circle{
+  border-color:#ffe08b;
+  box-shadow:0 0 18px #ffc34b,0 0 45px #d58aff,inset 0 0 30px #f4b84b;
+  background:
+    radial-gradient(circle,transparent 43%,#d59aff33 44%,transparent 46%),
+    repeating-conic-gradient(from 0deg,#ffe08b 0deg 1deg,transparent 1deg 12deg);
+}
+.epic-mode .magic-circle:before{border-color:#fff0b3;box-shadow:0 0 15px #ffcc62}
+.epic-mode .magic-circle:after{color:#fff0bd;text-shadow:0 0 12px #ffc34b}
+.epic-mode .magic-inner{
+  border-color:#ffe4a1;box-shadow:0 0 22px #ffc34b,inset 0 0 25px #d58aff;
+}
+.epic-mode .magic-inner:after{
+  color:#fff2bd;text-shadow:0 0 25px #ffb52e;
+}
+.epic-mode .magic-rune{border-color:#ffe18c;box-shadow:0 0 35px #d58aff99}
+.epic-mode .magic-rune:before,.epic-mode .magic-rune:after{border-color:#ffe8a6}
+.epic-mode .summon-beam{
+  background:linear-gradient(0deg,#fff,#ffe08b,#d58affaa,transparent);
+  filter:blur(7px);
+}
+@keyframes magicRotate{to{transform:rotate(360deg)}}
+@keyframes magicRotateReverse{to{transform:rotate(-360deg)}}
+@keyframes magicPulse{
+  from{filter:brightness(.8);transform:scale(.96)}
+  to{filter:brightness(1.5);transform:scale(1.04)}
+}
+@keyframes beamRise{
+  0%{height:0;width:20px;opacity:0}
+  35%{height:270px;width:65px;opacity:1}
+  75%{height:300px;width:120px;opacity:.85}
+  100%{height:320px;width:180px;opacity:0}
+}
+.summon-character{
+  display:none;position:relative;z-index:2;
+  width:190px;height:190px;align-items:center;justify-content:center;
+  animation:characterAppear .65s cubic-bezier(.15,.8,.2,1) both;
+}
+.summon-character img{
+  max-width:100%;max-height:100%;object-fit:contain;
+  filter:drop-shadow(0 0 15px #8bdcff) drop-shadow(0 8px 8px #0008);
+}
+.epic-mode .summon-character img{
+  filter:drop-shadow(0 0 18px #ffe08b) drop-shadow(0 0 35px #c17cff) drop-shadow(0 8px 8px #0008);
+}
+.summon-overlay.revealed .magic-circle{opacity:.2;transition:opacity .5s}
+.summon-overlay.revealed .magic-inner{opacity:.15;transition:opacity .5s}
+.summon-overlay.revealed .summon-character{display:flex}
+@keyframes characterAppear{
+  0%{opacity:0;transform:translateY(35px) scale(.35)}
+  65%{opacity:1;transform:translateY(-8px) scale(1.12)}
+  100%{opacity:1;transform:translateY(0) scale(1)}
+}
+.summon-flash{
+  position:absolute;inset:0;z-index:3;pointer-events:none;
+  background:#fff;opacity:0;
+}
+.summon-overlay.flash .summon-flash{animation:summonFlash .65s ease-out}
+.epic-mode.flash .summon-flash{animation:epicFlash .9s ease-out}
+@keyframes summonFlash{
+  0%{opacity:0}
+  15%{opacity:.85}
+  100%{opacity:0}
+}
+@keyframes epicFlash{
+  0%{opacity:0;background:#fff}
+  12%{opacity:1;background:#fff4c4}
+  35%{opacity:.8;background:#d9a1ff}
+  100%{opacity:0}
+}
+.summon-stars{
+  position:absolute;inset:0;pointer-events:none;overflow:hidden;
+}
+.summon-stars i{
+  position:absolute;color:#bdeaff;font-style:normal;
+  font-size:18px;animation:starFloat 2.2s ease-out infinite;
+  text-shadow:0 0 10px #8bdcff;
+}
+.epic-mode .summon-stars i{
+  color:#ffe6a1;text-shadow:0 0 12px #ffb52e,0 0 20px #c17cff;
+}
+.summon-stars i:nth-child(1){left:12%;top:20%;animation-delay:0s}
+.summon-stars i:nth-child(2){left:80%;top:25%;animation-delay:.3s}
+.summon-stars i:nth-child(3){left:20%;top:70%;animation-delay:.6s}
+.summon-stars i:nth-child(4){left:75%;top:72%;animation-delay:.9s}
+.summon-stars i:nth-child(5){left:50%;top:12%;animation-delay:1.2s}
+@keyframes starFloat{
+  0%{opacity:0;transform:translateY(15px) scale(.5) rotate(0)}
+  30%{opacity:1}
+  100%{opacity:0;transform:translateY(-35px) scale(1.4) rotate(90deg)}
+}
+.summon-result-name{
+  position:relative;z-index:4;min-height:75px;
+  margin-top:-4px;opacity:0;transform:translateY(10px);
+}
+.summon-overlay.revealed .summon-result-name{
+  animation:resultTextIn .5s .25s ease-out forwards;
+}
+@keyframes resultTextIn{to{opacity:1;transform:translateY(0)}}
+.summon-rarity{
+  font-size:15px;font-weight:1000;letter-spacing:4px;
+  color:#a9ddff;text-shadow:0 0 10px #5bbaff;
+}
+.epic-mode .summon-rarity{
+  color:#ffe49a;text-shadow:0 0 12px #ffb52e,0 0 20px #c17cff;
+}
+.summon-result-name h2{
+  font-size:25px;margin:5px 0;color:#fff;
+  text-shadow:0 2px 8px #000,0 0 15px #7ccfff;
+}
+.epic-mode .summon-result-name h2{
+  color:#fff1c5;text-shadow:0 2px 8px #000,0 0 18px #ffbd49,0 0 28px #c17cff;
+}
+.summon-message{font-size:13px;color:#dcecff;min-height:22px}
+.epic-mode .summon-message{color:#ffe7bb}
+.summon-progress{font-size:12px;color:#c5d4ed;margin:8px 0}
+.summon-controls{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin-top:12px;position:relative;z-index:5}
+.summon-controls button{min-width:130px}
+.summon-skip{background:linear-gradient(180deg,#53627d,#303d57)}
+.summon-finish{display:none;margin-top:14px;position:relative;z-index:5}
+.summon-finish button{width:100%;font-weight:900}
+.summon-summary{
+  display:none;position:relative;z-index:5;
+  margin-top:12px;text-align:left;
+  background:#111a2dcc;border:1px solid #7185a8;border-radius:13px;
+  padding:12px;max-height:210px;overflow-y:auto;
+}
+.summon-summary-row{
+  display:flex;justify-content:space-between;gap:8px;
+  padding:6px 2px;border-bottom:1px solid #52617c66;font-size:13px;
+}
+.summon-summary-row:last-child{border-bottom:0}
+.summon-summary-row.epic-result{color:#ffe09a;font-weight:900}
+.summon-overlay.complete .magic-stage,
+.summon-overlay.complete .summon-title,
+.summon-overlay.complete .summon-result-name,
+.summon-overlay.complete .summon-progress,
+.summon-overlay.complete .summon-stars{display:none}
+.summon-overlay.complete .summon-summary{display:block}
+.summon-overlay.complete .summon-finish{display:block}
+.summon-overlay.complete .summon-controls{display:none}
+.summon-overlay.complete .summon-content{max-width:600px}
+.summon-overlay.complete .summon-summary-heading{
+  text-align:center;color:var(--gold);font-size:22px;font-weight:1000;margin:5px 0 12px;
+}
+.summon-overlay.complete .summon-summary-grid{
+  display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;
+}
+.summon-mini-card{
+  background:#202d49;border:1px solid #536486;border-radius:10px;
+  padding:8px;text-align:center;min-width:0;
+}
+.summon-mini-card.epic-result{
+  border-color:#e8bd69;background:linear-gradient(145deg,#59436d,#292342);
+  box-shadow:0 0 12px #d69aff44;
+}
+.summon-mini-card img{
+  width:100%;height:85px;object-fit:contain;
+  filter:drop-shadow(0 3px 5px #0008);
+}
+.summon-mini-card .mini-name{font-size:12px;font-weight:900;overflow-wrap:anywhere}
+.summon-mini-card .mini-rarity{font-size:11px;color:#cbd5e1}
+.summon-mini-card.epic-result .mini-rarity{color:#ffe09a}
+@media(max-width:600px){
+  .summon-content{padding:12px 5px}
+  .magic-stage{height:270px}
+  .magic-circle{width:205px;height:205px}
+  .magic-rune{width:250px;height:250px}
+  .summon-character{width:165px;height:165px}
+  .summon-result-name h2{font-size:22px}
+}
+
 /* 草原ステージマップ */
 .stage-map{
   position:relative;overflow:hidden;padding:16px;border:2px solid #58794e;
@@ -314,6 +568,45 @@ button:disabled{opacity:.4;cursor:not-allowed}
 <div class="footer">星詠みの旅団</div>
 </div>
 
+<!-- ガチャ演出画面 -->
+<div id="summonOverlay" class="summon-overlay" aria-live="polite">
+  <div class="summon-content">
+    <div class="summon-title" id="summonTitle">✦ 星詠み召喚 ✦</div>
+
+    <div class="magic-stage">
+      <div class="magic-rune"></div>
+      <div class="magic-circle"></div>
+      <div class="magic-inner"></div>
+      <div class="summon-beam"></div>
+      <div class="summon-character" id="summonCharacter">
+        <img id="summonCharacterImage" src="" alt="召喚されたキャラクター">
+      </div>
+      <div class="summon-flash"></div>
+      <div class="summon-stars">
+        <i>✦</i><i>✧</i><i>✦</i><i>✧</i><i>✦</i>
+      </div>
+    </div>
+
+    <div class="summon-result-name" id="summonResultName">
+      <div class="summon-rarity" id="summonRarity"></div>
+      <h2 id="summonCharacterName"></h2>
+      <div class="summon-message" id="summonMessage"></div>
+    </div>
+
+    <div class="summon-progress" id="summonProgress"></div>
+
+    <div class="summon-controls" id="summonControls">
+      <button class="summon-skip" data-action="skipSummon">演出をスキップ</button>
+    </div>
+
+    <div class="summon-summary" id="summonSummary"></div>
+
+    <div class="summon-finish" id="summonFinish">
+      <button data-action="closeSummon">召喚結果を確認して戻る</button>
+    </div>
+  </div>
+</div>
+
 <script>
 'use strict';
 
@@ -447,6 +740,12 @@ let battle=null;
 let busy=false;
 let enemyTimer=null;
 
+/* ガチャ演出用の状態 */
+let summonBusy=false;
+let summonTimer=null;
+let summonResults=[];
+let summonIndex=0;
+
 let selectedStage=Math.min(IMPLEMENTED_STAGE,state.clearedStage+1);
 
 function save(){
@@ -472,8 +771,7 @@ function esc(s){
 
 /*
   画像ファイルの読み込み。
-  ゴーレムは images/ゴーレム.png を使用する。
-  encodeURIComponentで日本語ファイル名をURL用に変換する。
+  画像は images フォルダ内から読み込む。
 */
 function imagePath(id){
   const c=byId(id);
@@ -685,6 +983,8 @@ function renderAll(){
 
 /* ページ切り替え */
 function showPage(name){
+  if(summonBusy)return;
+
   document.querySelectorAll('.page').forEach(p=>{
     p.classList.toggle('active',p.id===name);
   });
@@ -710,7 +1010,41 @@ function selectStage(stage){
   renderAll();
 }
 
+/* ==============================
+   ガチャ召喚・結果処理
+============================== */
+
+/* 召喚結果を作成する。演出の前に結果を確定する */
+function createSummonResult(c){
+  let message='';
+
+  if(!state.owned[c.id]){
+    state.owned[c.id]={level:1,dupes:0};
+    message='新しい仲間が旅団に加わった！';
+  }else{
+    const o=state.owned[c.id];
+    o.dupes=(o.dupes||0)+1;
+
+    if(o.level<c.max&&o.dupes>=o.level){
+      o.dupes=0;
+      o.level++;
+      message=`重複によって Lv.${o.level} に成長！`;
+    }else if(o.level>=c.max){
+      o.dupes=0;
+      state.gold+=50;
+      message='最大レベルのため、🪙50を獲得！';
+    }else{
+      message=`重複 ${o.dupes}/${o.level}`;
+    }
+  }
+
+  return {character:c,message,epic:c.rarity==='エピック'};
+}
+
+/* ガチャを引く */
 function summon(count){
+  if(summonBusy)return;
+
   const cost=count===10?900:100;
 
   if(state.gems<cost){
@@ -719,7 +1053,7 @@ function summon(count){
   }
 
   state.gems-=cost;
-  const results=[];
+  summonResults=[];
 
   for(let i=0;i<count;i++){
     const roll=Math.random()*100;
@@ -730,30 +1064,171 @@ function summon(count){
     );
 
     const c=pool[Math.floor(Math.random()*pool.length)];
-
-    if(!state.owned[c.id]){
-      state.owned[c.id]={level:1,dupes:0};
-      results.push(`<span class="${rarityClass(c.rarity)}">${esc(c.name)}（初獲得）</span>`);
-    }else{
-      const o=state.owned[c.id];
-      o.dupes=(o.dupes||0)+1;
-
-      if(o.level<c.max&&o.dupes>=o.level){
-        o.dupes=0;
-        o.level++;
-        results.push(`${esc(c.name)}：Lv.${o.level}に成長！`);
-      }else if(o.level>=c.max){
-        o.dupes=0;
-        state.gold+=50;
-        results.push(`${esc(c.name)}：最大Lvのため🪙50獲得`);
-      }else{
-        results.push(`${esc(c.name)}：重複 ${o.dupes}/${o.level}`);
-      }
-    }
+    summonResults.push(createSummonResult(c));
   }
 
-  document.getElementById('gachaResult').innerHTML=results.join('<br>');
+  summonIndex=0;
+  summonBusy=true;
+
   save();
+
+  document.getElementById('gachaResult').textContent=
+    count===10?'10回召喚中……':'召喚中……';
+
+  startSummonAnimation();
+}
+
+/* 演出画面を初期化 */
+function startSummonAnimation(){
+  const overlay=document.getElementById('summonOverlay');
+
+  overlay.className='summon-overlay active';
+  document.getElementById('summonSummary').innerHTML='';
+  document.getElementById('summonFinish').style.display='none';
+  document.getElementById('summonControls').style.display='flex';
+  document.getElementById('summonProgress').style.display='block';
+
+  showNextSummon();
+}
+
+/* 次のキャラクターを召喚 */
+function showNextSummon(){
+  if(!summonBusy)return;
+
+  if(summonIndex>=summonResults.length){
+    finishSummonAnimation();
+    return;
+  }
+
+  const result=summonResults[summonIndex];
+  const c=result.character;
+  const epic=result.epic;
+  const overlay=document.getElementById('summonOverlay');
+
+  overlay.className='summon-overlay active revealing'+(epic?' epic-mode':'');
+  overlay.classList.remove('revealed','complete','flash');
+
+  document.getElementById('summonTitle').textContent=
+    epic?'★ EPIC SUMMON ★':'✦ 星詠み召喚 ✦';
+
+  document.getElementById('summonCharacterImage').src=imagePath(c.id);
+  document.getElementById('summonCharacterImage').alt=c.name;
+  document.getElementById('summonCharacterName').textContent='';
+  document.getElementById('summonRarity').textContent='';
+  document.getElementById('summonMessage').textContent='';
+
+  document.getElementById('summonProgress').textContent=
+    `${summonIndex+1} / ${summonResults.length} 体目`;
+
+  /* 魔法陣が光り、キャラクターを出現させる */
+  summonTimer=setTimeout(()=>{
+    summonTimer=null;
+    if(!summonBusy)return;
+
+    overlay.classList.add('flash');
+
+    summonTimer=setTimeout(()=>{
+      summonTimer=null;
+      if(!summonBusy)return;
+
+      overlay.classList.remove('revealing');
+      overlay.classList.add('revealed');
+
+      document.getElementById('summonRarity').textContent=
+        epic?'✦ EPIC ✦':c.rarity==='レア'?'✧ RARE ✧':'NORMAL';
+
+      document.getElementById('summonCharacterName').textContent=c.name;
+      document.getElementById('summonMessage').textContent=result.message;
+
+      summonTimer=setTimeout(()=>{
+        summonTimer=null;
+        if(!summonBusy)return;
+
+        summonIndex++;
+        showNextSummon();
+      },1450);
+
+    },450);
+  },1050);
+}
+
+/* 演出をスキップ */
+function skipSummonAnimation(){
+  if(!summonBusy)return;
+
+  if(summonTimer){
+    clearTimeout(summonTimer);
+    summonTimer=null;
+  }
+
+  summonIndex=summonResults.length;
+  finishSummonAnimation();
+}
+
+/* 召喚結果一覧 */
+function finishSummonAnimation(){
+  if(summonTimer){
+    clearTimeout(summonTimer);
+    summonTimer=null;
+  }
+
+  const overlay=document.getElementById('summonOverlay');
+  overlay.className='summon-overlay active complete';
+
+  const epicCount=summonResults.filter(r=>r.epic).length;
+  const rareCount=summonResults.filter(r=>r.character.rarity==='レア').length;
+  const normalCount=summonResults.filter(r=>r.character.rarity==='ノーマル').length;
+
+  const cards=summonResults.map(result=>{
+    const c=result.character;
+    return `
+      <div class="summon-mini-card ${result.epic?'epic-result':''}">
+        <img src="${imagePath(c.id)}" alt="${esc(c.name)}"
+          onerror="this.style.display='none'">
+        <div class="mini-name">${esc(c.name)}</div>
+        <div class="mini-rarity">${esc(c.rarity)}</div>
+      </div>
+    `;
+  }).join('');
+
+  document.getElementById('summonSummary').innerHTML=`
+    <div class="summon-summary-heading">✦ 召喚結果 ✦</div>
+    <div style="text-align:center;font-size:13px;margin-bottom:12px;line-height:1.8">
+      エピック：<b style="color:#ffe09a">${epicCount}体</b>　
+      レア：<b style="color:#74b8ff">${rareCount}体</b>　
+      ノーマル：<b>${normalCount}体</b>
+    </div>
+    <div class="summon-summary-grid">${cards}</div>
+  `;
+
+  document.getElementById('summonFinish').style.display='block';
+  document.getElementById('summonControls').style.display='none';
+  document.getElementById('summonProgress').style.display='none';
+
+  document.getElementById('gachaResult').innerHTML=
+    summonResults.map(r=>
+      `<span class="${rarityClass(r.character.rarity)}">${esc(r.character.name)}（${esc(r.message)}）</span>`
+    ).join('<br>');
+}
+
+/* 演出を閉じる */
+function closeSummon(){
+  if(summonTimer){
+    clearTimeout(summonTimer);
+    summonTimer=null;
+  }
+
+  summonBusy=false;
+  summonResults=[];
+  summonIndex=0;
+
+  const overlay=document.getElementById('summonOverlay');
+  overlay.className='summon-overlay';
+
+  document.getElementById('summonCharacterImage').src='';
+  document.getElementById('summonSummary').innerHTML='';
+
+  renderAll();
 }
 
 function toggleParty(id){
@@ -929,7 +1404,7 @@ function showUnitEffect(unit,text,kind='damage'){
 }
 
 function startBattle(){
-  if(busy)return;
+  if(busy||summonBusy)return;
 
   if(battle&&!battle.over){
     showPage('battleFight');
@@ -1348,6 +1823,10 @@ function handleClick(e){
 
   if(a==='summon'){
     summon(Number(b.dataset.count));
+  }else if(a==='skipSummon'){
+    skipSummonAnimation();
+  }else if(a==='closeSummon'){
+    closeSummon();
   }else if(a==='toggleParty'){
     toggleParty(id);
   }else if(a==='selectStage'){
