@@ -41,8 +41,11 @@ button:disabled{opacity:.4;cursor:not-allowed}
 .section-title{font-size:20px;color:var(--gold);margin:0 0 12px}
 .row{display:flex;gap:9px;align-items:center;flex-wrap:wrap}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(145px,1fr));gap:10px}
-.card{background:#202d49;border:1px solid var(--line);border-radius:14px;padding:11px;min-width:0}
-.card.selected{border:2px solid var(--gold);padding:10px}
+.card{
+  position:relative;background:#202d49;border:1px solid var(--line);
+  border-radius:14px;padding:11px 11px 43px;min-width:0;
+}
+.card.selected{border:2px solid var(--gold);padding:10px 10px 42px}
 .portrait{height:100px;display:flex;align-items:center;justify-content:center;font-size:52px;margin-bottom:6px}
 .portrait img{max-height:100%;max-width:100%;object-fit:contain}
 .name{font-weight:800}
@@ -57,55 +60,89 @@ button:disabled{opacity:.4;cursor:not-allowed}
 }
 .footer{text-align:center;color:var(--muted);font-size:12px;padding:14px}
 
-/* 装備画面 */
-.equipment-summary{
-  background:#202d49;border:1px solid var(--line);border-radius:13px;
-  padding:10px;margin-bottom:12px;line-height:1.8;
+/* 図鑑の指輪ボタン */
+.character-ring-plus{
+  position:absolute;right:9px;bottom:9px;
+  width:32px;height:32px;min-height:32px;
+  padding:0;border-radius:9px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:23px;font-weight:900;line-height:1;
+  color:#ffe5a0;border:1px solid #b99550;
+  background:linear-gradient(145deg,#6e5934,#3c3021);
+  box-shadow:0 2px 5px #0006;
 }
-.equipment-card{
-  background:linear-gradient(145deg,#202d49,#19243c);
-  border:1px solid #485a7a;border-radius:13px;padding:10px;
-  margin-bottom:10px;
+.character-ring-plus:active{transform:scale(.92)}
+
+/* 指輪一覧画面 */
+.character-ring-modal{
+  display:none;position:fixed;inset:0;z-index:1100;
+  background:#050914e8;align-items:center;justify-content:center;
+  padding:14px;
 }
-.equipment-character{
-  display:flex;align-items:center;gap:10px;margin-bottom:8px;
+.character-ring-modal.active{display:flex}
+.character-ring-box{
+  width:100%;max-width:460px;max-height:88vh;overflow-y:auto;
+  background:linear-gradient(145deg,#263653,#151f34);
+  border:1px solid #7185a8;border-radius:18px;padding:15px;
+  box-shadow:0 15px 50px #000b;
 }
-.equipment-character .portrait{
-  width:54px;height:54px;flex-shrink:0;margin:0;font-size:30px;
+.character-ring-heading{
+  color:var(--gold);font-size:20px;font-weight:900;
+  margin-bottom:4px;
 }
-.equipment-character .portrait img{max-width:100%;max-height:100%}
-.equipment-slots{
-  display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;
+.character-ring-subtitle{
+  color:var(--muted);font-size:12px;margin-bottom:13px;
 }
-.equipment-slot{
-  min-width:0;background:#111b30;border:1px solid #465779;
-  border-radius:9px;padding:7px;min-height:67px;
+.character-ring-profile{
+  display:flex;align-items:center;gap:10px;
+  background:#111b30;border:1px solid #465779;
+  border-radius:12px;padding:9px;margin-bottom:12px;
 }
-.equipment-slot.empty{border-style:dashed;color:var(--muted)}
-.slot-title{font-size:10px;color:#c4d0e5;margin-bottom:4px}
-.equipped-name{font-size:12px;font-weight:900;margin-bottom:3px}
-.ring-power{color:#ffbd70}
-.ring-heart{color:#ff858f}
-.ring-skill{color:#83e2a5}
-.ring-button{
-  width:100%;font-size:11px;padding:6px 4px;margin-top:4px;
+.character-ring-profile .portrait{
+  width:55px;height:55px;flex-shrink:0;margin:0;font-size:30px;
 }
-.ring-button.power{border-color:#bd8248;background:linear-gradient(180deg,#78502f,#50351f)}
-.ring-button.heart{border-color:#b65d6a;background:linear-gradient(180deg,#873c50,#542c3e)}
-.ring-button.skill{border-color:#4c9c75;background:linear-gradient(180deg,#28664d,#1d4639)}
-.ring-button.remove{background:linear-gradient(180deg,#59657b,#354158);border-color:#7888a7}
-.ring-stock{display:flex;gap:6px;flex-wrap:wrap;margin-top:7px}
-.ring-stock-item{
-  flex:1;min-width:90px;background:#111b30;border:1px solid var(--line);
-  border-radius:9px;padding:7px;font-size:12px;
+.character-ring-profile .portrait img{max-width:100%;max-height:100%}
+.character-ring-inventory{
+  background:#111b30;border:1px solid #465779;
+  border-radius:12px;padding:10px;margin-bottom:13px;
 }
-.equipment-bonus{font-size:11px;color:#c5d4e8;line-height:1.6;margin:6px 0}
-.no-slots{font-size:11px;color:var(--muted);padding:6px}
+.character-ring-inventory-title{
+  font-size:13px;font-weight:900;color:#e6d5a7;margin-bottom:8px;
+}
+.character-ring-stock{
+  display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;
+}
+.character-ring-stock-item{
+  min-width:0;text-align:center;padding:7px 3px;
+  border-radius:9px;background:#202d49;border:1px solid #394866;
+  font-size:11px;line-height:1.6;
+}
+.character-ring-stock-item .ring-icon{font-size:19px}
+.character-ring-slots-title{
+  color:#e6d5a7;font-weight:900;font-size:14px;margin:12px 0 8px;
+}
+.character-ring-slots{
+  display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;
+}
+.character-ring-slot{
+  min-width:0;min-height:58px;padding:7px 5px;
+  border-radius:10px;background:#111b30;
+  border:1px solid #465779;text-align:center;
+}
+.character-ring-slot.empty{border-style:dashed;color:var(--muted)}
+.character-ring-slot .slot-title{font-size:10px;color:#c4d0e5;margin-bottom:3px}
+.character-ring-slot .equipped-name{font-size:11px;font-weight:900;margin-bottom:2px}
+.character-ring-slot .slot-hint{font-size:10px;color:#f4c76b;margin-top:3px}
+.character-ring-bonus{
+  background:#111b30;border-radius:10px;padding:9px;
+  margin-top:10px;font-size:11px;line-height:1.8;color:#c5d4e8;
+}
+.character-ring-close{width:100%;margin-top:13px}
 
 /* 指輪選択画面 */
 .equipment-modal{
   display:none;position:fixed;inset:0;z-index:1200;
-  background:#050914d9;align-items:center;justify-content:center;
+  background:#050914e8;align-items:center;justify-content:center;
   padding:16px;
 }
 .equipment-modal.active{display:flex}
@@ -133,6 +170,16 @@ button:disabled{opacity:.4;cursor:not-allowed}
   background:#111b30;border-radius:12px;font-size:13px;line-height:1.8;
 }
 .equipment-modal-close{width:100%;margin-top:12px}
+.ring-power{color:#ffbd70}
+.ring-heart{color:#ff858f}
+.ring-skill{color:#83e2a5}
+.ring-button{
+  width:100%;font-size:11px;padding:6px 4px;margin-top:4px;
+}
+.ring-button.power{border-color:#bd8248;background:linear-gradient(180deg,#78502f,#50351f)}
+.ring-button.heart{border-color:#b65d6a;background:linear-gradient(180deg,#873c50,#542c3e)}
+.ring-button.skill{border-color:#4c9c75;background:linear-gradient(180deg,#28664d,#1d4639)}
+.ring-button.remove{background:linear-gradient(180deg,#59657b,#354158);border-color:#7888a7}
 
 /* ガチャ召喚演出 */
 .summon-overlay{
@@ -321,6 +368,7 @@ button:disabled{opacity:.4;cursor:not-allowed}
 .hit-animation{animation:hitShake .35s ease-in-out}
 @keyframes hitShake{0%,100%{transform:translateX(0)}20%{transform:translateX(-5px)}40%{transform:translateX(5px)}60%{transform:translateX(-3px)}80%{transform:translateX(3px)}}
 @keyframes previewIn{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:translateY(0)}}
+
 @media(max-width:600px){
   .wrap{padding:10px}.nav{grid-template-columns:repeat(2,1fr)}
   .hero h1{font-size:24px}.panel{padding:13px}
@@ -332,7 +380,9 @@ button:disabled{opacity:.4;cursor:not-allowed}
   .summon-character{width:165px;height:165px}.summon-result-name h2{font-size:22px}
 }
 @media(max-width:400px){
-  .equipment-slots{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .character-ring-stock{grid-template-columns:1fr 1fr 1fr}
+  .character-ring-slots{gap:5px}
+  .character-ring-slot{padding:6px 3px}
 }
 @media(max-width:360px){
   .battle-side{grid-template-columns:1fr 1fr}
@@ -405,16 +455,8 @@ button:disabled{opacity:.4;cursor:not-allowed}
   </div>
 
   <div class="panel">
-    <h2 class="section-title">アクセサリー装備</h2>
-    <p class="muted">
-      空いている装備枠をタップして指輪を選択できます。装備中の指輪は他のキャラクターには装備できません。
-    </p>
-    <div id="equipmentInventory"></div>
-    <div id="equipmentList"></div>
-  </div>
-
-  <div class="panel">
     <h2 class="section-title">キャラクター図鑑</h2>
+    <p class="muted">キャラクター右下の「＋」から、そのキャラクターの指輪を確認・装備できます。</p>
     <div id="characterList" class="grid"></div>
   </div>
 </section>
@@ -470,13 +512,23 @@ button:disabled{opacity:.4;cursor:not-allowed}
 <div class="footer">星詠みの旅団</div>
 </div>
 
+<!-- キャラクター別の指輪一覧 -->
+<div id="characterRingModal" class="character-ring-modal">
+  <div class="character-ring-box">
+    <div class="character-ring-heading">アクセサリー一覧</div>
+    <div class="character-ring-subtitle">このキャラクターの装備状況</div>
+    <div id="characterRingContent"></div>
+    <button class="character-ring-close" data-action="closeCharacterRingModal">図鑑に戻る</button>
+  </div>
+</div>
+
 <!-- 指輪選択モーダル -->
 <div id="equipmentModal" class="equipment-modal">
   <div class="equipment-modal-box">
     <div class="equipment-modal-title">指輪を選択</div>
     <div id="equipmentModalCharacter" class="equipment-modal-character"></div>
     <div id="equipmentModalChoices"></div>
-    <button class="equipment-modal-close" data-action="closeEquipmentModal">閉じる</button>
+    <button class="equipment-modal-close" data-action="closeEquipmentModal">戻る</button>
   </div>
 </div>
 
@@ -758,6 +810,7 @@ let summonIndex=0;
 
 /* 指輪選択画面の対象 */
 let equipmentModalTarget=null;
+let characterRingTarget=null;
 
 let selectedStage=Math.min(IMPLEMENTED_STAGE,state.clearedStage+1);
 
@@ -901,6 +954,117 @@ function unequipRing(id,index){
   save();
 }
 
+/* キャラクターごとの指輪一覧を開く */
+function openCharacterRingList(id){
+  if(!state.owned[id])return;
+
+  characterRingTarget=id;
+  renderCharacterRingList();
+
+  document.getElementById('characterRingModal').classList.add('active');
+}
+
+function renderCharacterRingList(){
+  const id=characterRingTarget;
+  const content=document.getElementById('characterRingContent');
+  if(!content||!id||!state.owned[id])return;
+
+  const c=byId(id);
+  const slots=getSlotCount(id);
+  const equipped=state.equipment[id]||[];
+  const st=getCharacterEquipmentStats(id);
+
+  let slotHTML='';
+
+  if(slots===0){
+    slotHTML=`
+      <div class="equipment-empty-message">
+        このキャラクターには指輪を装備できません。
+      </div>
+    `;
+  }else{
+    for(let i=0;i<slots;i++){
+      const type=equipped[i];
+
+      if(type){
+        const ring=RINGS[type];
+        slotHTML+=`
+          <button class="character-ring-slot"
+            data-action="openRingList"
+            data-id="${esc(id)}"
+            data-index="${i}">
+            <div class="slot-title">装備枠 ${i+1}</div>
+            <div class="equipped-name ring-${type}">${ring.icon} ${ring.name}</div>
+            <div class="small">${ring.description}</div>
+            <div class="slot-hint">タップして変更・解除</div>
+          </button>
+        `;
+      }else{
+        slotHTML+=`
+          <button class="character-ring-slot empty"
+            data-action="openRingList"
+            data-id="${esc(id)}"
+            data-index="${i}">
+            <div class="slot-title">装備枠 ${i+1}</div>
+            <div style="font-size:19px;margin:1px 0">＋</div>
+            <div class="small">空きスロット</div>
+          </button>
+        `;
+      }
+    }
+  }
+
+  const inventoryHTML=RING_IDS.map(type=>{
+    const ring=RINGS[type];
+    return `
+      <div class="character-ring-stock-item">
+        <div class="ring-icon">${ring.icon}</div>
+        <div class="ring-${type}">${ring.name}</div>
+        <b>${getRingAvailable(type)}個</b>
+        <div class="small">未装備</div>
+      </div>
+    `;
+  }).join('');
+
+  const powerCount=getEquipped(id,'power');
+  const heartCount=getEquipped(id,'heart');
+  const skillCount=getEquipped(id,'skill');
+
+  content.innerHTML=`
+    <div class="character-ring-profile">
+      ${portrait(id)}
+      <div>
+        <div class="name">${esc(c.name)}</div>
+        <div class="small">${esc(c.rarity)} / Lv.${state.owned[id].level}</div>
+        <div class="small">装備枠：${slots}個</div>
+      </div>
+    </div>
+
+    <div class="character-ring-inventory">
+      <div class="character-ring-inventory-title">指輪の未装備所持数</div>
+      <div class="character-ring-stock">${inventoryHTML}</div>
+    </div>
+
+    <div class="character-ring-slots-title">このキャラクターの装備枠</div>
+    <div class="character-ring-slots">${slotHTML}</div>
+
+    ${st?`
+      <div class="character-ring-bonus">
+        <b>現在の装備効果</b><br>
+        HP：${st.hp}（ハートの指輪 +${heartCount*10}%）<br>
+        攻撃力：${st.atk}（チカラの指輪 +${powerCount*10}%）<br>
+        スキル効果：+${skillCount*10}%
+      </div>
+    `:''}
+  `;
+}
+
+function closeCharacterRingModal(){
+  characterRingTarget=null;
+  document.getElementById('characterRingModal').classList.remove('active');
+}
+
+/* 指輪の選択 */
 function openEquipmentModal(id,index){
   if(!state.owned[id])return;
 
@@ -981,122 +1145,18 @@ function closeEquipmentModal(){
   document.getElementById('equipmentModal').classList.remove('active');
 }
 
-function renderEquipment(){
-  const inventory=document.getElementById('equipmentInventory');
-  const list=document.getElementById('equipmentList');
-  if(!inventory||!list)return;
-
-  inventory.innerHTML=`
-    <div class="equipment-summary">
-      <b>指輪の所持状況</b>
-      <div class="ring-stock">
-        ${RING_IDS.map(type=>{
-          const ring=RINGS[type];
-          return `
-            <div class="ring-stock-item">
-              <span class="ring-${type}">${ring.icon} ${ring.name}</span><br>
-              所持：<b>${getRingInventoryCount(type)}個</b><br>
-              装備中：${getRingEquippedCount(type)}個<br>
-              未装備：${getRingAvailable(type)}個
-            </div>
-          `;
-        }).join('')}
-      </div>
-      <p class="small" style="margin:8px 0 0">
-        同じ種類の指輪は効果が加算されます。2個装備すると効果は+20%になります。
-      </p>
-    </div>
-  `;
-
-  const ownedIds=CHARACTERS.filter(c=>state.owned[c.id]).map(c=>c.id);
-
-  if(!ownedIds.length){
-    list.innerHTML='<p class="muted">所持キャラクターがいません。</p>';
-    return;
+/* 装備変更後、開いている指輪一覧も更新 */
+function refreshCharacterRingList(){
+  if(characterRingTarget&&document.getElementById('characterRingModal').classList.contains('active')){
+    renderCharacterRingList();
   }
-
-  list.innerHTML=ownedIds.map(id=>{
-    const c=byId(id);
-    const slots=getSlotCount(id);
-    const equipped=state.equipment[id]||[];
-    const st=getCharacterEquipmentStats(id);
-
-    if(slots===0){
-      return `
-        <div class="equipment-card">
-          <div class="equipment-character">
-            ${portrait(id)}
-            <div>
-              <div class="name">${esc(c.name)}</div>
-              <div class="small">${c.rarity} / Lv.${state.owned[id].level}</div>
-              <div class="small">装備枠：0個</div>
-            </div>
-          </div>
-          <div class="no-slots">このキャラクターは指輪を装備できません。</div>
-        </div>
-      `;
-    }
-
-    let slotHTML='';
-
-    for(let i=0;i<slots;i++){
-      const type=equipped[i];
-
-      if(type){
-        const ring=RINGS[type];
-        slotHTML+=`
-          <button class="equipment-slot" data-action="openRingList"
-            data-id="${esc(id)}" data-index="${i}">
-            <div class="slot-title">装備枠 ${i+1}</div>
-            <div class="equipped-name ring-${type}">${ring.icon} ${ring.name}</div>
-            <div class="small">${ring.description}</div>
-            <div class="small" style="color:#f4c76b;margin-top:3px">タップして変更・解除</div>
-          </button>
-        `;
-      }else{
-        slotHTML+=`
-          <button class="equipment-slot empty" data-action="openRingList"
-            data-id="${esc(id)}" data-index="${i}">
-            <div class="slot-title">装備枠 ${i+1}</div>
-            <div style="font-size:20px;margin:3px 0">＋</div>
-            <div class="small">空きスロット</div>
-          </button>
-        `;
-      }
-    }
-
-    const powerCount=getEquipped(id,'power');
-    const heartCount=getEquipped(id,'heart');
-    const skillCount=getEquipped(id,'skill');
-
-    return `
-      <div class="equipment-card">
-        <div class="equipment-character">
-          ${portrait(id)}
-          <div>
-            <div class="name">${esc(c.name)}</div>
-            <div class="small">${c.rarity} / Lv.${state.owned[id].level}</div>
-            <div class="small">装備枠：${slots}個</div>
-          </div>
-        </div>
-
-        <div class="equipment-bonus">
-          HP：${st.hp}（ハート +${heartCount*10}%）　
-          攻撃：${st.atk}（チカラ +${powerCount*10}%）<br>
-          スキル効果：+${skillCount*10}%
-        </div>
-
-        <div class="equipment-slots">${slotHTML}</div>
-      </div>
-    `;
-  }).join('');
 }
 
 function rarityClass(r){
   return r==='エピック'?'epic':r==='レア'?'rare':'normal';
 }
 
-/* 図鑑・キャラクターカードは旧形式に戻す */
+/* キャラクターカード */
 function cardHTML(id,selectable=false){
   const c=byId(id);
   const o=state.owned[id];
@@ -1120,6 +1180,11 @@ function cardHTML(id,selectable=false){
         <button class="wide" data-action="toggleParty" data-id="${esc(id)}">
           ${selected?'編成から外す':'編成に加える'}
         </button>
+        <button class="character-ring-plus"
+          data-action="openCharacterRingList"
+          data-id="${esc(id)}"
+          aria-label="${esc(c.name)}の指輪一覧"
+          title="指輪一覧">＋</button>
       `:''}
     </article>
   `;
@@ -1241,7 +1306,6 @@ function renderAll(){
       `
     ).join('');
 
-  renderEquipment();
   renderStageMap();
 
   const unlocked=Math.min(IMPLEMENTED_STAGE,state.clearedStage+1);
@@ -1266,6 +1330,8 @@ function renderAll(){
     startButton.textContent=`ステージ ${selectedStage} に挑戦`;
     startButton.disabled=!state.party.length;
   }
+
+  refreshCharacterRingList();
 }
 
 /* ページ切り替え */
@@ -2216,6 +2282,10 @@ function handleClick(e){
     closeSummon();
   }else if(a==='toggleParty'){
     toggleParty(id);
+  }else if(a==='openCharacterRingList'){
+    openCharacterRingList(id);
+  }else if(a==='closeCharacterRingModal'){
+    closeCharacterRingModal();
   }else if(a==='openRingList'){
     openEquipmentModal(id,Number(b.dataset.index));
   }else if(a==='equipRing'){
@@ -2244,6 +2314,10 @@ document.addEventListener('click',handleClick);
 /* モーダルの背景部分をタップして閉じる */
 document.getElementById('equipmentModal').addEventListener('click',e=>{
   if(e.target.id==='equipmentModal')closeEquipmentModal();
+});
+
+document.getElementById('characterRingModal').addEventListener('click',e=>{
+  if(e.target.id==='characterRingModal')closeCharacterRingModal();
 });
 
 renderAll();
