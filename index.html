@@ -1,4 +1,5 @@
 
+
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -7,52 +8,162 @@
 <title>星詠みの旅団</title>
 <style>
 :root{--bg:#101525;--panel:#1b2540;--panel2:#263453;--gold:#f4c76b;--text:#f4f5fb;--muted:#aeb9d0;--line:#3a4969;--red:#ef7777;--green:#75d5a3;--blue:#80baff}
-*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at top,#26365c 0,#101525 55%);color:var(--text);font-family:system-ui,-apple-system,"Hiragino Kaku Gothic ProN",Meiryo,sans-serif;min-height:100vh}
+*{box-sizing:border-box}
+body{margin:0;background:radial-gradient(circle at top,#26365c 0,#101525 55%);color:var(--text);font-family:system-ui,-apple-system,"Hiragino Kaku Gothic ProN",Meiryo,sans-serif;min-height:100vh}
 button{font:inherit;color:inherit;border:1px solid var(--line);background:linear-gradient(180deg,#344665,#253451);border-radius:12px;padding:11px 14px;cursor:pointer}
-button:disabled{opacity:.4;cursor:not-allowed}.primary{background:linear-gradient(180deg,#d9a94e,#93652c);color:#1b1720;border:1px solid #f5d38c;font-weight:800}.danger{background:linear-gradient(180deg,#934d5a,#5e303d)}.ghost{background:#1b2943}.small{padding:7px 10px;font-size:13px}
+button:disabled{opacity:.4;cursor:not-allowed}
+.primary{background:linear-gradient(180deg,#d9a94e,#93652c);color:#1b1720;border:1px solid #f5d38c;font-weight:800}
+.danger{background:linear-gradient(180deg,#934d5a,#5e303d)}
+.ghost{background:#1b2943}
+.small{padding:7px 10px;font-size:13px}
 header{position:sticky;top:0;z-index:5;background:#111a2deF;border-bottom:1px solid var(--line);backdrop-filter:blur(10px);padding:12px 16px}
-.top{max-width:1100px;margin:auto;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}.logo{font-weight:900;letter-spacing:.08em;color:var(--gold);font-size:20px}.wallet{display:flex;gap:8px;flex-wrap:wrap}.pill{background:#263653;border:1px solid var(--line);border-radius:999px;padding:6px 11px;font-size:13px}
-main{max-width:1100px;margin:20px auto;padding:0 14px 40px}.page{display:none}.page.active{display:block}.hero{padding:28px 20px;border:1px solid #59617c;border-radius:20px;background:linear-gradient(135deg,#263a61,#1b2540 60%,#3b2c50);text-align:center;margin-bottom:18px}.hero h1{font-size:clamp(25px,5vw,42px);margin:0 0 8px;color:#ffe2a0}.hero p{color:#d6dced;margin:0}
-.nav{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:14px 0 20px}.nav button{min-height:68px;font-weight:800}.section-title{font-size:21px;color:var(--gold);margin:8px 0 14px}.muted{color:var(--muted)}.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:12px}.card{background:linear-gradient(160deg,#253452,#19243b);border:1px solid var(--line);border-radius:16px;padding:13px;min-width:0}.card h3{margin:0 0 5px;font-size:17px}.char-head{display:flex;gap:12px;align-items:center}.portrait{width:76px;height:92px;object-fit:contain;border-radius:10px;background:#10192b;border:1px solid #465573;flex-shrink:0}.portrait.big{width:110px;height:132px}.rarity{font-size:11px;border-radius:99px;padding:3px 8px;display:inline-block;margin-bottom:5px;background:#5b6376}.rarity.レア{background:#315c91}.rarity.エピック{background:#71449c}.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:4px;margin:10px 0;font-size:13px;color:#d9e1f2}.stats span{background:#111c30;padding:5px 7px;border-radius:7px}.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.bar{height:9px;background:#0e1728;border-radius:99px;overflow:hidden;margin:5px 0}.bar>i{display:block;height:100%;background:linear-gradient(90deg,#69d49b,#c3ed9b)}.enemybar>i{background:linear-gradient(90deg,#e66a75,#ffb16b)}
-.notice{background:#17243a;border:1px solid var(--line);padding:12px;border-radius:12px;margin:10px 0;color:#dce5f5}.battle-layout{display:grid;grid-template-columns:1fr 1fr;gap:14px}.unit{background:#1a2740;border:1px solid var(--line);border-radius:14px;padding:10px;margin:7px 0}.unit.selected{outline:2px solid var(--gold)}.unit button{margin-top:6px}.log{background:#0c1424;border:1px solid var(--line);border-radius:12px;padding:12px;height:160px;overflow:auto;font-size:13px;line-height:1.65}.team-slot{min-height:54px;border:1px dashed #657391;border-radius:10px;padding:8px;margin:6px 0}.hidden{display:none!important}.center{text-align:center}.big-number{font-size:28px;color:var(--gold);font-weight:900}.footer{margin-top:24px;text-align:center;color:#8492ad;font-size:12px}
-@media(max-width:650px){.nav{grid-template-columns:repeat(2,1fr)}.battle-layout{grid-template-columns:1fr}.portrait{width:65px;height:80px}.hero{padding:22px 12px}}
+.top{max-width:1100px;margin:auto;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.logo{font-weight:900;letter-spacing:.08em;color:var(--gold);font-size:20px}
+.wallet{display:flex;gap:8px;flex-wrap:wrap}
+.pill{background:#263653;border:1px solid var(--line);border-radius:999px;padding:6px 11px;font-size:13px}
+main{max-width:1100px;margin:20px auto;padding:0 14px 40px}
+.page{display:none}
+.page.active{display:block}
+.hero{padding:28px 20px;border:1px solid #59617c;border-radius:20px;background:linear-gradient(135deg,#263a61,#1b2540 60%,#3b2c50);text-align:center;margin-bottom:18px}
+.hero h1{font-size:clamp(25px,5vw,42px);margin:0 0 8px;color:#ffe2a0}
+.hero p{color:#d6dced;margin:0}
+.nav{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:14px 0 20px}
+.nav button{min-height:68px;font-weight:800}
+.section-title{font-size:21px;color:var(--gold);margin:8px 0 14px}
+.muted{color:var(--muted)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:12px}
+.card{background:linear-gradient(160deg,#253452,#19243b);border:1px solid var(--line);border-radius:16px;padding:13px;min-width:0}
+.card h3{margin:0 0 5px;font-size:17px}
+.char-head{display:flex;gap:12px;align-items:center}
+.portrait{width:76px;height:92px;object-fit:contain;border-radius:10px;background:#10192b;border:1px solid #465573;flex-shrink:0}
+.portrait.big{width:110px;height:132px}
+.rarity{font-size:11px;border-radius:99px;padding:3px 8px;display:inline-block;margin-bottom:5px;background:#5b6376}
+.rarity.レア{background:#315c91}
+.rarity.エピック{background:#71449c}
+.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:4px;margin:10px 0;font-size:13px;color:#d9e1f2}
+.stats span{background:#111c30;padding:5px 7px;border-radius:7px}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.bar{height:9px;background:#0e1728;border-radius:99px;overflow:hidden;margin:5px 0}
+.bar>i{display:block;height:100%;background:linear-gradient(90deg,#69d49b,#c3ed9b)}
+.enemybar>i{background:linear-gradient(90deg,#e66a75,#ffb16b)}
+.notice{background:#17243a;border:1px solid var(--line);padding:12px;border-radius:12px;margin:10px 0;color:#dce5f5}
+.battle-layout{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.unit{background:#1a2740;border:1px solid var(--line);border-radius:14px;padding:10px;margin:7px 0}
+.unit.selected{outline:2px solid var(--gold)}
+.unit button{margin-top:6px}
+.enemy-head{display:flex;align-items:center;gap:12px}
+.enemy-portrait{width:76px;height:76px;display:flex;align-items:center;justify-content:center;flex-shrink:0;border-radius:10px;background:#10192b;border:1px solid #465573;font-size:38px}
+.log{background:#0c1424;border:1px solid var(--line);border-radius:12px;padding:12px;height:160px;overflow:auto;font-size:13px;line-height:1.65}
+.team-slot{min-height:100px;border:1px dashed #657391;border-radius:10px;padding:8px;margin:6px 0}
+.hidden{display:none!important}
+.center{text-align:center}
+.big-number{font-size:28px;color:var(--gold);font-weight:900}
+.footer{margin-top:24px;text-align:center;color:#8492ad;font-size:12px}
+@media(max-width:650px){
+ .nav{grid-template-columns:repeat(2,1fr)}
+ .battle-layout{grid-template-columns:1fr}
+ .portrait{width:65px;height:80px}
+ .enemy-portrait{width:65px;height:65px;font-size:32px}
+ .hero{padding:22px 12px}
+}
 </style>
 </head>
 <body>
-<header><div class="top"><div class="logo">✦ 星詠みの旅団 ✦</div><div class="wallet"><span class="pill">💎 <b id="gems">500</b></span><span class="pill">🪙 <b id="gold">300</b></span><span class="pill">到達ステージ <b id="stage">1</b></span></div></div></header>
+<header>
+ <div class="top">
+  <div class="logo">✦ 星詠みの旅団 ✦</div>
+  <div class="wallet">
+   <span class="pill">💎 <b id="gems">500</b></span>
+   <span class="pill">🪙 <b id="gold">300</b></span>
+   <span class="pill">到達ステージ <b id="stage">1</b></span>
+  </div>
+ </div>
+</header>
+
 <main>
 <section id="home" class="page active">
- <div class="hero"><h1>星詠みの旅団</h1><p>仲間を集め、育て、星の導きとともに戦おう。</p></div>
- <div class="nav"><button onclick="showPage('gacha')">✧ ガチャ</button><button onclick="showPage('team')">⚔ 編成・図鑑</button><button onclick="showPage('shop')">◆ ショップ</button><button class="primary" onclick="startBattle()">▶ 戦闘開始</button></div>
- <div class="card"><h3>旅団の記録</h3><p id="homeSummary" class="muted"></p><p class="muted">仲間を集めて編成し、戦闘でステージを進めよう。</p></div>
+ <div class="hero">
+  <h1>星詠みの旅団</h1>
+  <p>仲間を集め、育て、星の導きとともに戦おう。</p>
+ </div>
+ <div class="nav">
+  <button onclick="showPage('gacha')">✧ ガチャ</button>
+  <button onclick="showPage('team')">⚔ 編成・図鑑</button>
+  <button onclick="showPage('shop')">◆ ショップ</button>
+  <button class="primary" onclick="startBattle()">▶ 戦闘開始</button>
+ </div>
+ <div class="card">
+  <h3>旅団の記録</h3>
+  <p id="homeSummary" class="muted"></p>
+  <p class="muted">仲間を集めて編成し、戦闘でステージを進めよう。</p>
+ </div>
 </section>
 
 <section id="gacha" class="page">
- <button class="ghost small" onclick="showPage('home')">← ホーム</button><h2 class="section-title">仲間召喚</h2>
- <div class="hero"><div class="big-number">✦ 星詠み召喚 ✦</div><p>ノーマル 70% / レア 25% / エピック 5%</p><p>1回：💎100　10回：💎900</p><div class="actions" style="justify-content:center"><button class="primary" onclick="summon(1)">1回召喚</button><button class="primary" onclick="summon(10)">10回召喚</button></div></div>
+ <button class="ghost small" onclick="showPage('home')">← ホーム</button>
+ <h2 class="section-title">仲間召喚</h2>
+ <div class="hero">
+  <div class="big-number">✦ 星詠み召喚 ✦</div>
+  <p>ノーマル 70% / レア 25% / エピック 5%</p>
+  <p>1回：💎100　10回：💎900</p>
+  <div class="actions" style="justify-content:center">
+   <button class="primary" onclick="summon(1)">1回召喚</button>
+   <button class="primary" onclick="summon(10)">10回召喚</button>
+  </div>
+ </div>
  <div id="gachaResult" class="grid"></div>
 </section>
 
 <section id="team" class="page">
- <button class="ghost small" onclick="showPage('home')">← ホーム</button><h2 class="section-title">編成・キャラクター図鑑</h2>
- <div class="card"><h3>現在の編成（最大3人）</h3><div id="partyView"></div><p class="muted">下の所持キャラクターから選択。選択中のキャラをもう一度押すと解除。</p></div>
- <h3 class="section-title">所持キャラクター</h3><div id="roster" class="grid"></div>
- <h3 class="section-title">図鑑</h3><div id="dex" class="grid"></div>
+ <button class="ghost small" onclick="showPage('home')">← ホーム</button>
+ <h2 class="section-title">編成・キャラクター図鑑</h2>
+ <div class="card">
+  <h3>現在の編成（最大3人）</h3>
+  <div id="partyView"></div>
+  <p class="muted">下の所持キャラクターから選択。選択中のキャラをもう一度押すと解除。</p>
+ </div>
+ <h3 class="section-title">所持キャラクター</h3>
+ <div id="roster" class="grid"></div>
+ <h3 class="section-title">図鑑</h3>
+ <div id="dex" class="grid"></div>
 </section>
 
 <section id="shop" class="page">
- <button class="ghost small" onclick="showPage('home')">← ホーム</button><h2 class="section-title">ショップ</h2>
- <div class="card"><h3>準備中</h3><p class="muted">ショップの交換アイテムは、内容が決まったら追加できるようにしてあります。</p></div>
+ <button class="ghost small" onclick="showPage('home')">← ホーム</button>
+ <h2 class="section-title">ショップ</h2>
+ <div class="card">
+  <h3>準備中</h3>
+  <p class="muted">ショップの交換アイテムは、内容が決まったら追加できるようにしてあります。</p>
+ </div>
 </section>
 
 <section id="battle" class="page">
- <button class="ghost small" onclick="showPage('home')">← ホーム</button><h2 class="section-title">ステージ <span id="battleStage">1</span></h2>
+ <button class="ghost small" onclick="showPage('home')">← ホーム</button>
+ <h2 class="section-title">ステージ <span id="battleStage">1</span></h2>
  <div class="notice" id="battleNotice">戦闘準備中</div>
- <div class="battle-layout"><div><h3>敵</h3><div id="enemies"></div></div><div><h3>旅団</h3><div id="allies"></div></div></div>
- <div class="card"><h3>行動</h3><div id="actionArea" class="actions"></div><p class="muted" id="targetHint">行動する味方の順番になるとボタンが表示されます。</p></div>
- <h3 class="section-title">戦闘ログ</h3><div id="battleLog" class="log"></div>
- <div class="actions"><button class="primary" id="nextBattle" onclick="startBattle()" disabled>次のステージへ</button><button class="ghost" onclick="showPage('home')">ホームへ戻る</button></div>
+ <div class="battle-layout">
+  <div>
+   <h3>敵</h3>
+   <div id="enemies"></div>
+  </div>
+  <div>
+   <h3>旅団</h3>
+   <div id="allies"></div>
+  </div>
+ </div>
+ <div class="card">
+  <h3>行動</h3>
+  <div id="actionArea" class="actions"></div>
+  <p class="muted" id="targetHint">行動する味方の順番になるとボタンが表示されます。</p>
+ </div>
+ <h3 class="section-title">戦闘ログ</h3>
+ <div id="battleLog" class="log"></div>
+ <div class="actions">
+  <button class="primary" id="nextBattle" onclick="startBattle()" disabled>次のステージへ</button>
+  <button class="ghost" onclick="showPage('home')">ホームへ戻る</button>
+ </div>
 </section>
+
 <div class="footer">星詠みの旅団 / セーブデータはこの端末のブラウザに保存されます。</div>
 </main>
 
@@ -126,7 +237,9 @@ function imagePath(id){
 }
 
 function portrait(id,big=false){
- return `<img class="portrait ${big?'big':''}" src="${imagePath(id)}" alt="${byId(id).name}" onerror="this.style.display='none'">`;
+ const c=byId(id);
+ if(!c)return '';
+ return `<img class="portrait ${big?'big':''}" src="${imagePath(id)}" alt="${c.name}" onerror="this.style.display='none'">`;
 }
 
 function showPage(id){
@@ -172,9 +285,43 @@ function renderGachaResult(){
 }
 
 function renderTeam(){
- document.getElementById('partyView').innerHTML=state.party.map((id,i)=>`<div class="team-slot">${i+1}. ${byId(id).name}　Lv.${stats(id).level}</div>`).join('')||'<p class="muted">編成なし</p>';
- document.getElementById('roster').innerHTML=Object.keys(state.owned).map(id=>cardHTML(id)).join('');
- document.getElementById('dex').innerHTML=CHARACTERS.map(c=>state.owned[c.id]?`<div class="card"><b>✓ ${c.name}</b><div class="muted">${c.rarity} / 入手済み</div></div>`:`<div class="card"><b>？？？</b><div class="muted">${c.rarity} / 未入手</div></div>`).join('');
+ // 現在の編成：キャラクター画像・名前・レベルを表示
+ document.getElementById('partyView').innerHTML=
+  state.party.map((id,i)=>{
+   const c=byId(id);
+   if(!c)return '';
+   return `<div class="team-slot">
+    <div class="char-head">
+     ${portrait(id)}
+     <div>
+      <b>${i+1}. ${c.name}</b>
+      <div class="muted">Lv.${stats(id).level}</div>
+     </div>
+    </div>
+   </div>`;
+  }).join('')||'<p class="muted">編成なし</p>';
+
+ // 所持キャラクター
+ document.getElementById('roster').innerHTML=
+  Object.keys(state.owned).filter(id=>byId(id)).map(id=>cardHTML(id)).join('');
+
+ // 図鑑：入手済みキャラクターには画像を表示
+ document.getElementById('dex').innerHTML=
+  CHARACTERS.map(c=>state.owned[c.id]
+   ? `<div class="card">
+      <div class="char-head">
+       ${portrait(c.id)}
+       <div>
+        <b>✓ ${c.name}</b>
+        <div class="muted">${c.rarity} / 入手済み</div>
+       </div>
+      </div>
+     </div>`
+   : `<div class="card">
+      <b>？？？</b>
+      <div class="muted">${c.rarity} / 未入手</div>
+     </div>`
+  ).join('');
 }
 
 function toggleParty(id){
@@ -223,7 +370,14 @@ function summon(n){
   results.push({id:c.id,msg});
  }
  save();
- document.getElementById('gachaResult').innerHTML=results.map(x=>`<div class="card">${portrait(x.id)}<h3>${byId(x.id).name}</h3><span class="rarity ${byId(x.id).rarity}">${byId(x.id).rarity}</span><p class="muted">${x.msg}</p></div>`).join('');
+ document.getElementById('gachaResult').innerHTML=results.map(x=>`
+  <div class="card">
+   ${portrait(x.id)}
+   <h3>${byId(x.id).name}</h3>
+   <span class="rarity ${byId(x.id).rarity}">${byId(x.id).rarity}</span>
+   <p class="muted">${x.msg}</p>
+  </div>
+ `).join('');
 }
 
 function buyGems(){
@@ -247,6 +401,7 @@ function makeEnemy(i){
  return {
   id:'e'+i,
   name:['星喰いの獣','迷いの亡霊','深森の魔物'][i],
+  icon:['🐺','👻','👹'][i],
   hp,
   maxHp:hp,
   atk:Math.floor(12+state.stage*4),
@@ -475,7 +630,7 @@ function playerSkill(targetId){
   }
  }
 
- if(c.effect==='evade'){
+ if(c.effect==='evade){
   a.evade=1;
   log('次に受ける単体攻撃を80%で回避する！');
  }
@@ -524,22 +679,39 @@ function renderBattle(){
 
  document.getElementById('battleStage').textContent=battle.stage;
 
- document.getElementById('enemies').innerHTML=battle.enemies.map(e=>`<div class="unit ${e.alive?'':'muted'}">
- <b>${e.name}</b> ${e.alive?'':'（撃破）'}
- <div class="bar enemybar"><i style="width:${Math.max(0,e.hp/e.maxHp*100)}%"></i></div>
- <small>${Math.max(0,e.hp)}/${e.maxHp} HP</small>
- </div>`).join('');
+ // 敵：専用画像がないため仮のアイコンを表示
+ document.getElementById('enemies').innerHTML=battle.enemies.map(e=>`
+  <div class="unit ${e.alive?'':'muted'}">
+   <div class="enemy-head">
+    <div class="enemy-portrait">${e.icon}</div>
+    <div style="flex:1;min-width:0">
+     <b>${e.name}</b> ${e.alive?'':'（撃破）'}
+     <div class="bar enemybar">
+      <i style="width:${Math.max(0,e.hp/e.maxHp*100)}%"></i>
+     </div>
+     <small>${Math.max(0,e.hp)}/${e.maxHp} HP</small>
+    </div>
+   </div>
+  </div>
+ `).join('');
 
+ // 味方：アップロードしたキャラクター画像を表示
  document.getElementById('allies').innerHTML=battle.allies.map(a=>{
   const c=byId(a.id);
-  return `<div class="unit ${battle.turn===a?'selected':''}">
-  <div class="char-head">${portrait(a.id)}<div>
-  <b>${c.name}</b>
-  <div class="muted">HP ${a.hp}/${a.maxHp}</div>
-  <div class="bar"><i style="width:${Math.max(0,a.hp/a.maxHp*100)}%"></i></div>
-  <small>行動ゲージ ${Math.min(100,Math.floor(a.gauge))}% / スキル ${a.ready?'使用可能':`${a.actions}/${c.charge}回`}</small>
-  ${a.buff?`<div class="muted">攻撃上昇 +${a.buff}%</div>`:''}
-  </div></div></div>`;
+  return `<div class="unit ${battle.turn===a?'selected':''} ${a.alive?'':'muted'}">
+   <div class="char-head">
+    ${portrait(a.id)}
+    <div style="flex:1;min-width:0">
+     <b>${c.name}</b> ${a.alive?'':'（戦闘不能）'}
+     <div class="muted">HP ${Math.max(0,a.hp)}/${a.maxHp}</div>
+     <div class="bar">
+      <i style="width:${Math.max(0,a.hp/a.maxHp*100)}%"></i>
+     </div>
+     <small>行動ゲージ ${Math.min(100,Math.floor(a.gauge))}% / スキル ${a.ready?'使用可能':`${a.actions}/${c.charge}回`}</small>
+     ${a.buff?`<div class="muted">攻撃上昇 +${a.buff}%</div>`:''}
+    </div>
+   </div>
+  </div>`;
  }).join('');
 
  const area=document.getElementById('actionArea');
