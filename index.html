@@ -116,16 +116,13 @@ button:disabled{opacity:.4;cursor:not-allowed}
 }
 .footer{text-align:center;color:var(--muted);font-size:12px;padding:14px}
 
-/* ==============================
-   戦闘画面：敵が上、味方が下
-============================== */
+/* 戦闘画面 */
 
 .battle-screen{
   display:flex;
   flex-direction:column;
   gap:15px;
 }
-
 .battle-side-heading{
   font-size:19px;
   font-weight:900;
@@ -133,13 +130,11 @@ button:disabled{opacity:.4;cursor:not-allowed}
 }
 .enemy-heading{color:#ffaaaa}
 .ally-heading{color:#9acbff}
-
 .battle-side{
   display:grid;
   grid-template-columns:repeat(3,minmax(0,1fr));
   gap:12px;
 }
-
 .battle-character{
   position:relative;
   min-width:0;
@@ -150,22 +145,18 @@ button:disabled{opacity:.4;cursor:not-allowed}
   border:1px solid var(--line);
   background:linear-gradient(155deg,#263653,#17233b);
 }
-
 .battle-character.enemy{
   background:linear-gradient(155deg,#513541,#2b2030);
   border-color:#895767;
 }
-
 .battle-character.ally{
   background:linear-gradient(155deg,#294264,#192943);
   border-color:#5476a4;
 }
-
 .battle-character.dead{
   opacity:.35;
   filter:grayscale(1);
 }
-
 .battle-image{
   width:100%;
   height:165px;
@@ -174,26 +165,22 @@ button:disabled{opacity:.4;cursor:not-allowed}
   justify-content:center;
   margin:0 auto 6px;
 }
-
 .battle-image img{
   width:100%;
   height:100%;
   object-fit:contain;
   filter:drop-shadow(0 5px 5px #0006);
 }
-
 .battle-name{
   font-size:16px;
   font-weight:900;
   margin:4px 0 6px;
   min-height:24px;
 }
-
 .battle-hp-text{
   font-size:12px;
   color:#d8dfed;
 }
-
 .hpbar{
   height:10px;
   background:#101827;
@@ -207,8 +194,6 @@ button:disabled{opacity:.4;cursor:not-allowed}
   background:linear-gradient(90deg,#35bd75,#9be5a9);
   transition:width .35s;
 }
-
-/* スキルの溜め表示用。行動ゲージには使用しない */
 .gaugebar{
   height:7px;
   background:#101827;
@@ -222,7 +207,6 @@ button:disabled{opacity:.4;cursor:not-allowed}
   background:linear-gradient(90deg,#579dff,#c09aff);
   transition:width .25s;
 }
-
 .battle-divider{
   display:flex;
   align-items:center;
@@ -239,7 +223,6 @@ button:disabled{opacity:.4;cursor:not-allowed}
   flex:1;
   background:linear-gradient(90deg,transparent,#9b8150,transparent);
 }
-
 .action-panel{
   background:linear-gradient(145deg,#202e4b,#151f34);
   border:1px solid #536486;
@@ -247,21 +230,18 @@ button:disabled{opacity:.4;cursor:not-allowed}
   padding:14px;
   min-height:95px;
 }
-
 .action-title{
   font-size:18px;
   font-weight:900;
   color:var(--gold);
   margin-bottom:10px;
 }
-
 .action-character{
   background:#263653;
   border:1px solid #536486;
   border-radius:12px;
   padding:12px;
 }
-
 .action-buttons{
   display:grid;
   grid-template-columns:1fr 1fr;
@@ -277,7 +257,6 @@ button:disabled{opacity:.4;cursor:not-allowed}
   background:linear-gradient(180deg,#6950a8,#45336e);
   border-color:#a58ad8;
 }
-
 .enemy-preview{
   background:linear-gradient(145deg,#633b48,#342536);
   border:2px solid #bd687b;
@@ -297,7 +276,6 @@ button:disabled{opacity:.4;cursor:not-allowed}
   font-size:12px;
   margin-top:8px;
 }
-
 .battle-result{
   text-align:center;
   padding:18px;
@@ -326,21 +304,18 @@ button:disabled{opacity:.4;cursor:not-allowed}
   text-shadow:0 2px 5px #000,0 0 8px #000;
   animation:effectFloat .9s ease-out forwards;
 }
-
 .effect-damage{color:#ff7777}
 .effect-heal{color:#79f0a8}
 .effect-buff{color:#ffe27d}
 .effect-guard{color:#8dcaff}
 .effect-evade{color:#d0aaff}
 .effect-miss{color:#d7e4ff}
-
 @keyframes effectFloat{
   0%{opacity:0;transform:translate(-50%,0) scale(.65)}
   15%{opacity:1;transform:translate(-50%,-12px) scale(1.15)}
   35%{transform:translate(-50%,-20px) scale(1)}
   100%{opacity:0;transform:translate(-50%,-58px) scale(.95)}
 }
-
 .hit-animation{
   animation:hitShake .35s ease-in-out;
 }
@@ -351,7 +326,6 @@ button:disabled{opacity:.4;cursor:not-allowed}
   60%{transform:translateX(-3px)}
   80%{transform:translateX(3px)}
 }
-
 .attack-flash{
   animation:attackFlash .35s ease-out;
 }
@@ -360,12 +334,10 @@ button:disabled{opacity:.4;cursor:not-allowed}
   35%{filter:brightness(2.1)}
   100%{filter:brightness(1)}
 }
-
 @keyframes previewIn{
   from{opacity:0;transform:translateY(7px)}
   to{opacity:1;transform:translateY(0)}
 }
-
 @media(max-width:600px){
   .wrap{padding:10px}
   .nav{grid-template-columns:repeat(2,1fr)}
@@ -374,7 +346,6 @@ button:disabled{opacity:.4;cursor:not-allowed}
   .battle-side{grid-template-columns:repeat(2,minmax(0,1fr))}
   .battle-image{height:145px}
 }
-
 @media(max-width:360px){
   .battle-side{grid-template-columns:1fr 1fr}
   .battle-image{height:120px}
@@ -469,7 +440,6 @@ button:disabled{opacity:.4;cursor:not-allowed}
 
   <div id="battleArea" class="panel" style="display:none">
     <div class="battle-screen">
-
       <div>
         <div class="battle-side-heading enemy-heading">▼ 敵軍</div>
         <div id="enemyUnits" class="battle-side"></div>
@@ -485,7 +455,6 @@ button:disabled{opacity:.4;cursor:not-allowed}
       <div id="actionArea" class="action-panel">
         <div class="muted">戦闘準備中...</div>
       </div>
-
     </div>
   </div>
 </section>
@@ -775,9 +744,8 @@ function toggleParty(id){
 
 /* ==============================
    戦闘システム
-   スキルは元の仕様を維持：
-   通常攻撃の回数(actions)で蓄積
-   行動ゲージは内部の行動順決定にのみ使用
+   スキルは通常攻撃回数(actions)で蓄積
+   行動ゲージは行動順決定にのみ使用
 ============================== */
 
 function makeUnit(id,side){
@@ -814,7 +782,7 @@ function makeUnit(id,side){
   };
 }
 
-/* 敵の名前・画像・ステータスを対応するキャラクターに統一 */
+/* 敵の名前・画像・ステータス */
 function makeEnemy(i){
   const enemyIds=['goblin','zombie','ゴーレム'];
   const id=enemyIds[i];
@@ -822,7 +790,6 @@ function makeEnemy(i){
 
   if(!c)return null;
 
-  /* ステージに応じて敵レベルを上昇させる */
   const enemyLevel=Math.min(c.max,Math.max(1,state.stage));
   const st=stats(c,{level:enemyLevel});
 
@@ -852,7 +819,7 @@ function alive(arr){
   return arr.filter(x=>x.alive&&x.hp>0);
 }
 
-/* ランダムな敵を攻撃対象にする */
+/* 生存している敵からランダムに選ぶ */
 function chooseRandomEnemy(){
   const enemies=alive(battle.enemies);
   if(!enemies.length)return null;
@@ -860,7 +827,29 @@ function chooseRandomEnemy(){
   return enemies[Math.floor(Math.random()*enemies.length)];
 }
 
-/* 狙撃手アーチャーは従来どおりHPが最も低い敵を選ぶ */
+/* 生存している味方からランダムに選ぶ */
+function chooseRandomAlly(){
+  const allies=alive(battle.allies);
+  if(!allies.length)return null;
+
+  return allies[Math.floor(Math.random()*allies.length)];
+}
+
+/* 現在HPが最も低い敵を選ぶ */
+function chooseEnemy(){
+  return alive(battle.enemies)
+    .sort((a,b)=>a.hp-b.hp)[0]||null;
+}
+
+/* 現在HPが最も低い味方を選ぶ */
+function chooseAlly(){
+  return alive(battle.allies)
+    .sort((a,b)=>a.hp-b.hp)[0]||null;
+}
+
+/* 味方側の攻撃対象
+   狙撃手アーチャーだけ最低HPの敵を狙う
+   それ以外はランダム */
 function chooseAttackTarget(actor){
   if(actor&&actor.id==='狙撃手アーチャー'){
     return chooseEnemy();
@@ -869,6 +858,7 @@ function chooseAttackTarget(actor){
   return chooseRandomEnemy();
 }
 
+/* ダメージ・回復などの表示 */
 function showUnitEffect(unit,text,kind='damage'){
   if(!unit)return;
 
@@ -919,44 +909,26 @@ function startBattle(){
   advanceBattle();
 }
 
-function chooseEnemy(){
-  return alive(battle.enemies).sort((a,b)=>a.hp-b.hp)[0];
-}
-
-function chooseAlly(){
-  return alive(battle.allies).sort((a,b)=>a.hp/a.maxHp-b.hp/b.maxHp)[0];
-}
-
-function deal(attacker,target,amount){
-  if(!target||!target.alive)return 0;
-
-  if(target.evade>0){
-    target.evade=0;
-    showUnitEffect(target,'MISS!','miss');
-    return 0;
+/* 敵の攻撃対象を決定
+   敵の狙撃手アーチャーだけ最低HPの味方を狙う
+   それ以外はランダム */
+function chooseEnemyAttackTarget(enemy){
+  if(
+    enemy&&
+    (
+      enemy.characterId==='狙撃手アーチャー'||
+      enemy.id==='狙撃手アーチャー'
+    )
+  ){
+    return chooseAlly();
   }
 
-  let dmg=Math.max(1,Math.round(amount));
-
-  if(target.guard){
-    dmg=Math.max(1,Math.round(dmg*.3));
-    target.guard=false;
-  }
-
-  target.hp=Math.max(0,target.hp-dmg);
-  showUnitEffect(target,'-'+dmg,'damage');
-
-  if(target.hp<=0){
-    target.alive=false;
-    showUnitEffect(target,'DOWN','damage');
-  }
-
-  return dmg;
+  return chooseRandomAlly();
 }
 
 /* 敵の行動を先に決め、画面に予告してから実行 */
 function prepareEnemyAction(enemy){
-  const target=chooseAlly();
+  const target=chooseEnemyAttackTarget(enemy);
   if(!target)return;
 
   battle.pendingEnemy={
@@ -1000,7 +972,7 @@ function prepareEnemyAction(enemy){
       enemyAct(actor,victim);
     }
 
-    /* 元の毒ダメージ処理を維持 */
+    /* 敵側の毒ダメージ処理 */
     for(const e of alive(battle.enemies)){
       if(e.poison>0){
         e.hp=Math.max(0,e.hp-8);
@@ -1029,12 +1001,12 @@ function prepareEnemyAction(enemy){
   },600);
 }
 
+/* 味方の行動 */
 function performAlly(actor,useSkill){
   const c=byId(actor.id);
   if(!c)return;
 
   if(useSkill){
-    /* charge回数分の通常攻撃が必要。元の仕様を維持 */
     if(actor.charge>0&&actor.actions<actor.charge)return;
 
     actor.actions=0;
@@ -1096,7 +1068,7 @@ function performAlly(actor,useSkill){
     }
 
   }else{
-    /* 通常攻撃をした回数だけactionsが増える */
+    /* 通常攻撃回数を加算 */
     actor.actions++;
 
     const t=chooseAttackTarget(actor);
@@ -1114,6 +1086,36 @@ function performAlly(actor,useSkill){
   if(actor.passive==='アルティメットカウンター'){
     actor.counter=true;
   }
+}
+
+/* ダメージ処理
+   戦闘不能時もDOWN演出を重ねず、ダメージ表記を1回だけ表示 */
+function deal(attacker,target,amount){
+  if(!target||!target.alive)return 0;
+
+  if(target.evade>0){
+    target.evade=0;
+    showUnitEffect(target,'MISS!','miss');
+    return 0;
+  }
+
+  let dmg=Math.max(1,Math.round(amount));
+
+  if(target.guard){
+    dmg=Math.max(1,Math.round(dmg*.3));
+    target.guard=false;
+  }
+
+  target.hp=Math.max(0,target.hp-dmg);
+
+  /* ダメージ演出はここで1回だけ */
+  showUnitEffect(target,'-'+dmg,'damage');
+
+  if(target.hp<=0){
+    target.alive=false;
+  }
+
+  return dmg;
 }
 
 /* 予告に表示した対象へ攻撃 */
@@ -1154,7 +1156,6 @@ function advanceBattle(){
       ...alive(battle.enemies)
     ];
 
-    /* 行動ゲージは内部処理として従来どおり使用 */
     units.forEach(u=>u.gauge+=u.speed);
 
     const ready=units
