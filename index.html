@@ -1155,6 +1155,192 @@ window.addEventListener('error',event=>{
   showError('ゲーム内エラー：'+(event.message||'不明なエラー'));
 });
 renderAll();
+/* =====================================
+   戦闘表示の修正
+   HPバーだけ残す
+   ダメージ数字を安定して表示
+===================================== */
+
+// 行動ゲージを非表示
+const battleDisplayStyle = document.createElement('style');
+
+battleDisplayStyle.textContent = `
+  .unit .gaugebar,
+  .unit .action-gauge,
+  .unit .turn-gauge,
+  .unit .speed-gauge,
+  .unit .gauge-label {
+    display: none !important;
+  }
+
+  .unit .effect {
+    position: absolute;
+    top: 25%;
+    left: 0;
+    width: 100%;
+    z-index: 20;
+    pointer-events: none;
+    font-size: 30px;
+    font-weight: 900;
+    text-align: center;
+    color: #ff8585;
+    text-shadow: 0 2px 6px #000;
+    animation: damageFloat .9s ease-out forwards;
+  }
+
+  .unit .effect.heal {
+    color: #86f3ad;
+  }
+
+  .unit .effect.buff {
+    color: #ffe17c;
+  }
+
+  @keyframes damageFloat {
+    0% {
+      transform: translateY(12px) scale(.65);
+      opacity: 0;
+    }
+    20% {
+      transform: translateY(0) scale(1.2);
+      opacity: 1;
+    }
+    70% {
+      opacity: 1;
+    }
+    100% {
+      transform: translateY(-40px) scale(1);
+      opacity: 0;
+    }
+  }
+`;
+
+document.head.appendChild(battleDisplayStyle);
+
+// 描画し直してもダメージ演出を維持する
+const originalRenderBattle = renderBattle;
+
+renderBattle = function(){
+  if(!battle)return;
+
+  const effects = [];
+
+  for(const side of ['enemy','ally']){
+    const parent = $(side === 'enemy'
+      ? 'enemyUnits'
+      : 'allyUnits');
+
+    if(!parent)continue;
+
+    for(const card of parent.children){
+      const effect = card.querySelector('.effect');
+
+      if(effect){
+        const index = Array.prototype.indexOf.call(
+          parent.children,card
+        );
+
+        effects.push({
+          side,
+          index,
+          text:effect.textContent,
+          kind:effect.classList.contains('heal')
+            ? 'heal'
+            : effect.classList.contains('buff')
+              ? 'buff'
+              : '',
+          remaining:Math.max(
+            0,
+            900 - (
+              performance.now() -
+              Number(effect.dataset.started || performance.now())
+            )
+          )
+        });
+      }
+    }
+  }
+
+  originalRenderBattle();
+
+  for(const item of effects){
+    if(item.remaining <= 0)continue;
+
+    const parent = $(item.side === 'enemy'
+      ? 'enemyUnits'
+      : 'allyUnits');
+
+    const card = parent?.children[item.index];
+    if(!card)continue;
+
+    const effect = card.querySelector('.effect');
+
+    if(effect){
+      effect.textContent = item.text;
+      effect.className = 'effect ' + item.kind;
+      effect.style.animationDuration = item.remaining + 'ms';
+      effect.dataset.started = String(
+        performance.now() - (900 - item.remaining)
+      );
+    }
+  }
+
+  // HPバー以外のゲージを削除
+  document.querySelectorAll(
+    '#battleFight .gaugebar,' +
+    '#battleFight .action-gauge,' +
+    '#battleFight .turn-gauge,' +
+    '#battleFight .speed-gauge'
+  ).forEach(el => el.remove());
+};
+
+// ダメージ演出は数字だけを1回表示
+showEffect = function(target,text,kind=''){
+  if(!battle || !target)return;
+
+  const parent = $(target.side === 'enemy'
+    ? 'enemyUnits'
+    : 'allyUnits');
+
+  const units = target.side === 'enemy'
+    ? battle.enemies
+    : battle.allies;
+
+  const index = units.indexOf(target);
+  const card = parent?.children[index];
+
+  if(!card)return;
+
+  // 同じキャラの古い演出を削除
+  card.querySelectorAll('.effect').forEach(el=>el.remove());
+
+  const effect = document.createElement('div');
+  effect.className = 'effect ' + kind;
+  effect.textContent = String(text);
+  effect.dataset.started = String(performance.now());
+
+  card.appendChild(effect);
+
+  const token = battle.token;
+
+  setTimeout(()=>{
+    if(!battle || battle.token !== token)return;
+
+    const currentParent = $(target.side === 'enemy'
+      ? 'enemyUnits'
+      : 'allyUnits');
+
+    const currentCard = currentParent?.children[index];
+
+    currentCard?.querySelectorAll('.effect')
+      .forEach(el=>{
+        if(el.textContent === String(text)){
+          el.remove();
+        }
+      });
+  },900);
+};
+
 </script>
 </body>
 </html>
