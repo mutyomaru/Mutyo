@@ -1394,6 +1394,212 @@ showEffect = function(target, text, kind = '') {
   }, 950);
 };
 
+/* ===== 図鑑のコンパクト表示・詳細ポップアップ ===== */
+const encyclopediaStyle = document.createElement('style');
+encyclopediaStyle.textContent = `
+  #characterList {
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:10px;
+  }
+  @media(min-width:650px){
+    #characterList {
+      grid-template-columns:repeat(4,minmax(0,1fr));
+    }
+  }
+  .encyclopedia-card {
+    position:relative;
+    min-width:0;
+    padding:9px 9px 45px;
+    background:#202d49;
+    border:1px solid #394866;
+    border-radius:13px;
+    text-align:center;
+  }
+  .encyclopedia-image {
+    display:block;
+    width:100%;
+    padding:5px;
+    border:0;
+    background:transparent;
+  }
+  .encyclopedia-image .portrait {
+    height:145px;
+  }
+  .encyclopedia-image img {
+    max-width:100%;
+    max-height:100%;
+    object-fit:contain;
+  }
+  .encyclopedia-card .name {
+    font-size:13px;
+    overflow-wrap:anywhere;
+  }
+  .encyclopedia-level {
+    margin-top:5px;
+    color:#f4c76b;
+    font-weight:bold;
+  }
+  .encyclopedia-equipment {
+    margin-top:6px;
+    font-size:12px;
+    color:#aab4ca;
+  }
+  .encyclopedia-card .plus {
+    bottom:8px;
+    right:8px;
+  }
+  .encyclopedia-locked {
+    opacity:.65;
+  }
+  .encyclopedia-detail-image .portrait {
+    height:180px;
+    margin:8px 0;
+  }
+  .encyclopedia-detail-stats {
+    line-height:2;
+    padding:12px;
+    margin:12px 0;
+    background:#111b30;
+    border-radius:12px;
+  }
+`;
+document.head.appendChild(encyclopediaStyle);
+
+// 詳細表示用ポップアップを作成
+const encyclopediaModal = document.createElement('div');
+encyclopediaModal.id = 'encyclopediaModal';
+encyclopediaModal.className = 'modal';
+encyclopediaModal.innerHTML = `
+  <div class="modal-box">
+    <div id="encyclopediaDetail"></div>
+    <button class="wide" data-action="closeEncyclopedia">
+      図鑑に戻る
+    </button>
+  </div>
+`;
+document.body.appendChild(encyclopediaModal);
+
+// 図鑑用の小型カード
+function encyclopediaCardHTML(id) {
+  const c = byId(id);
+  const o = state.owned[id];
+
+  if (!o) {
+    return `
+      <article class="encyclopedia-card encyclopedia-locked">
+        <div class="portrait" style="height:145px">🔒</div>
+        <div class="name">？？？</div>
+        <div class="small">${esc(c.rarity)}</div>
+        <div class="small">未獲得</div>
+      </article>
+    `;
+  }
+
+  const equipment = state.equipment[id] || [];
+  const icons = equipment.filter(Boolean)
+    .map(type => RINGS[type]?.icon || '')
+    .join('');
+
+  return `
+    <article class="encyclopedia-card">
+      <button class="encyclopedia-image"
+        data-action="openEncyclopedia"
+        data-id="${esc(id)}">
+        ${portrait(id)}
+      </button>
+      <div class="name ${rarityClass(c.rarity)}">
+        ${esc(c.name)}
+      </div>
+      <div class="encyclopedia-level">
+        Lv.${o.level}/${c.max}
+      </div>
+      <div class="encyclopedia-equipment">
+        装備 ${icons || 'なし'}（${c.slot ?? 0}枠）
+      </div>
+      <button class="plus"
+        data-action="openRing"
+        data-id="${esc(id)}">＋</button>
+    </article>
+  `;
+}
+
+// 元の描画処理は残し、図鑑部分だけ変更
+const originalEncyclopediaRenderAll = renderAll;
+renderAll = function() {
+  originalEncyclopediaRenderAll();
+
+  $('characterList').innerHTML = CHARACTERS
+    .map(c => encyclopediaCardHTML(c.id))
+    .join('');
+};
+
+// 詳細ポップアップ
+function openEncyclopedia(id) {
+  const c = byId(id);
+  const o = state.owned[id];
+  if (!c || !o) return;
+
+  const s = getStats(id);
+  const inParty = state.party.includes(id);
+
+  $('encyclopediaDetail').innerHTML = `
+    <h2 class="section-title ${rarityClass(c.rarity)}">
+      ${esc(c.name)}
+    </h2>
+    <div class="encyclopedia-detail-image">
+      ${portrait(id)}
+    </div>
+    <div style="text-align:center">
+      <b>${esc(c.rarity)}</b><br>
+      Lv.${o.level}/${c.max}
+    </div>
+    <div class="encyclopedia-detail-stats">
+      ❤️ HP：${s.hp}<br>
+      ⚔️ 攻撃力：${s.atk}<br>
+      💨 素早さ：${s.speed}<br>
+      ✨ スキル：${esc(c.skill)}<br>
+      ⏳ スキル溜め：${c.charge}<br>
+      📈 成長率：${Math.round(c.growth * 100)}%<br>
+      💍 装備スロット：${c.slot ?? 0}枠
+      ${c.passive
+        ? `<br>🌟 パッシブ：${esc(c.passive)}`
+        : ''}
+    </div>
+    <button class="wide"
+      data-action="togglePartyFromDetail"
+      data-id="${esc(id)}">
+      ${inParty ? '編成から外す' : '編成する'}
+    </button>
+  `;
+
+  $('encyclopediaModal').classList.add('active');
+}
+
+// 新しいボタン操作
+document.addEventListener('click', event => {
+  const button = event.target.closest('button');
+  if (!button || button.disabled) return;
+
+  const action = button.dataset.action;
+
+  if (action === 'openEncyclopedia') {
+    openEncyclopedia(button.dataset.id);
+  }
+
+  if (action === 'closeEncyclopedia') {
+    $('encyclopediaModal').classList.remove('active');
+  }
+
+  if (action === 'togglePartyFromDetail') {
+    toggleParty(button.dataset.id);
+    openEncyclopedia(button.dataset.id);
+  }
+});
+
+// 初回表示を更新
+renderAll();
+/* ===== 図鑑変更ここまで ===== */
+
 
 </script>
 </body>
