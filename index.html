@@ -306,13 +306,7 @@ const STAGE_GOLD={
   16:700,17:700,18:700,19:700,20:2000
 };
 const DROP_RATES={'ノーマル':7,'レア':2,'エピック':.3};
-const EQUIPMENT_SLOTS={
-  swordman:1,archer:1,spearman:1,axeman:1,farmer:1,
-  zombie:0,goblin:2,miner:2,
-  '魔導士':2,'将軍':2,'ゴーレム':1,'ドワーフ':2,
-  'エルフ':2,'アサシン':1,
-  '鍛錬剣士':2,'狙撃手アーチャー':2,'一閃スピアドン':2
-};
+
 const RINGS={
   power:{name:'チカラの指輪',icon:'🟠',description:'攻撃力 +10%'},
   heart:{name:'ハートの指輪',icon:'🔴',description:'最大HP +10%'},
@@ -327,9 +321,11 @@ const CHARACTERS=[
   {id:'archer',imageFile:'Archer.png',name:'アーチャー',rarity:'ノーマル',
    hp:70,atk:10,speed:16,charge:2,skill:'乱射',effect:'damage',
    power:10,target:'all',growth:.07,max:20,slot:1},
-　{id:'skeleton',imageFile:'スケルトン.png',name:'スケルトン',rarity:'ノーマル',
+
+  {id:'skeleton',imageFile:'スケルトン.png',name:'スケルトン',rarity:'ノーマル',
    hp:90,atk:30,speed:18,charge:2,skill:'乱舞',effect:'damage',
-　　power:20,target:'all',growth:.07,max:20,slot:1},
+   power:20,target:'all',growth:.07,max:20,slot:1},
+
   {id:'axeman',imageFile:'Axeman.png',name:'アックスマン',rarity:'ノーマル',
    hp:130,atk:30,speed:9,charge:4,skill:'叩き割り',effect:'damage',
    power:70,target:'one',growth:.06,max:20,slot:1},
@@ -514,7 +510,9 @@ function getStats(id){
 function cardHTML(id,encyclopedia=false){
   const c=byId(id),o=state.owned[id],s=getStats(id);
   const inParty=state.party.includes(id);
-  const slots=EQUIPMENT_SLOTS[id]||0;
+  
+const slots=c.slot ?? 0;
+
   const icons=(state.equipment[id]||[]).filter(Boolean).map(t=>RINGS[t]?.icon||'').join('');
   return `<article class="card ${inParty?'selected':''}">
     ${portrait(id)}
@@ -550,7 +548,9 @@ function openRing(id){
 }
 function renderRingModal(){
   if(!ringTarget)return;
-  const id=ringTarget,c=byId(id),slots=EQUIPMENT_SLOTS[id]||0;
+  
+const id=ringTarget,c=byId(id),slots=c.slot ?? 0;
+
   const equipment=state.equipment[id]||[];
   let html=`<b>${esc(c.name)}</b><h4>指輪の所持数（未装備）</h4><div class="stock">`;
   for(const type of RING_IDS){
@@ -570,7 +570,9 @@ function renderRingModal(){
   $('characterRingContent').innerHTML=html;
 }
 function openSlot(id,index){
-  if(index<0||index>=(EQUIPMENT_SLOTS[id]||0))return;
+  
+if(index<0||index>=(byId(id)?.slot ?? 0))return;
+
   slotTarget={id,index};
   $('equipmentModalCharacter').textContent=byId(id).name+' / 装備枠 '+(index+1);
   renderSlotModal();
