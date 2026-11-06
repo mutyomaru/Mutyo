@@ -471,7 +471,14 @@ function showPage(page){
 function portrait(id){
   const c=byId(id);
   if(!c)return '<div class="portrait">？</div>';
-  const path='images/'+encodeURIComponent(c.imageFile);
+  
+const fileName = c.imageFile;
+const path = 'images/' + encodeURIComponent(
+  /[ガ-ゴザ-ゾダ-ドバ-ボパ-ポヴが-ござ-ぞだ-どば-ぼぱ-ぽ]/.test(fileName)
+    ? fileName.normalize('NFD')
+    : fileName
+);
+
   return `<div class="portrait"><img src="${path}" alt="${esc(c.name)}"
     onerror="this.style.display='none';this.parentElement.append('⚔️')"></div>`;
 }
