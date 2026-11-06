@@ -1595,6 +1595,259 @@ renderAll();
 /* ===== 図鑑変更ここまで ===== */
 
 
+/* ===== 毎日ログイン報酬・ルーレット ===== */
+const DAILY_KEY='hoshiyomi_daily_v1';
+const DAILY_PRIZES=[
+  {label:'🪙 100金貨',type:'gold',amount:100,rate:30},
+  {label:'🪙 300金貨',type:'gold',amount:300,rate:25},
+  {label:'🪙 500金貨',type:'gold',amount:500,rate:15},
+  {label:'💎 50ジェム',type:'gems',amount:50,rate:15},
+  {label:'💎 100ジェム',type:'gems',amount:100,rate:10},
+  {label:'💎 300ジェム',type:'gems',amount:300,rate:5}
+];
+const DAILY_COLORS=[
+  '#bf823c','#d4a84b','#8d6945',
+  '#477bc2','#6e5cc1','#b35a9c'
+];
+
+function dailyDate(){
+  return new Intl.DateTimeFormat('en-CA',{
+    timeZone:'Asia/Tokyo',
+    year:'numeric',month:'2-digit',day:'2-digit'
+  }).format(new Date());
+}
+function readDaily(){
+  try{
+    return JSON.parse(localStorage.getItem(DAILY_KEY))||{};
+  }catch(e){return {}}
+}
+let dailyData=readDaily();
+let dailySpinning=false;
+let dailyRotation=0;
+function saveDaily(){
+  localStorage.setItem(DAILY_KEY,JSON.stringify(dailyData));
+}
+function dailyAvailable(kind){
+  return dailyData[kind]!==dailyDate();
+}
+
+const dailyCSS=document.createElement('style');
+dailyCSS.textContent=`
+.daily-panel{text-align:center}
+.daily-panel h2{color:#f4c76b}
+.daily-wheel-wrap{
+  position:relative;width:min(76vw,310px);
+  aspect-ratio:1;margin:20px auto;
+}
+.daily-wheel{
+  width:100%;height:100%;border-radius:50%;
+  border:7px solid #f4c76b;
+  box-shadow:0 0 22px #f4c76b66;
+  transition:transform 4.5s cubic-bezier(.12,.75,.12,1);
+}
+.daily-wheel-label{
+  position:absolute;left:50%;top:50%;
+  transform-origin:center;
+  color:white;font-size:12px;font-weight:900;
+  text-shadow:0 1px 3px black;
+  pointer-events:none;
+}
+.daily-pointer{
+  position:absolute;top:-15px;left:50%;
+  transform:translateX(-50%);
+  z-index:5;color:#ff7777;font-size:36px;
+  text-shadow:0 2px 3px black;
+}
+.daily-center{
+  position:absolute;top:50%;left:50%;
+  transform:translate(-50%,-50%);
+  width:54px;height:54px;border-radius:50%;
+  display:grid;place-items:center;
+  background:#f4c76b;color:#34240a;
+  border:4px solid white;font-weight:900;
+}
+.daily-buttons{
+  display:flex;gap:10px;justify-content:center;
+  flex-wrap:wrap;margin-top:12px;
+}
+.daily-buttons button{min-width:145px}
+`;
+document.head.appendChild(dailyCSS);
+
+// ホーム画面にボタンを追加
+const dailyHome=document.createElement('div');
+dailyHome.className='panel daily-panel';
+dailyHome.innerHTML=`
+  <h2>🎁 デイリー特典</h2>
+  <p>毎日0時（日本時間）に更新！</p>
+  <div class="daily-buttons">
+    <button data-action="dailyBonusOpen">🎁 ログインボーナス</button>
+    <button data-action="dailyWheelOpen">🎰 ログインルーレット</button>
+  </div>
+  <p id="dailyStatus" class="small"></p>
+`;
+$('home').appendChild(dailyHome);
+
+// ポップアップ
+const dailyModal=document.createElement('div');
+dailyModal.className='modal';
+dailyModal.id='dailyModal';
+dailyModal.innerHTML=`
+  <div class="modal-box daily-panel">
+    <div id="dailyContent"></div>
+    <button class="wide" id="dailyClose"
+      data-action="dailyClose">閉じる</button>
+  </div>
+`;
+document.body.appendChild(dailyModal);
+
+function updateDailyStatus(){
+  $('dailyStatus').textContent=
+    'ボーナス：'+(dailyAvailable('bonus')?'受取可能':'受取済み')+
+    ' ／ ルーレット：'+(dailyAvailable('wheel')?'挑戦可能':'挑戦済み');
+}
+function openDailyModal(){
+  $('dailyModal').classList.add('active');
+}
+function closeDailyModal(){
+  if(dailySpinning)return;
+  $('dailyModal').classList.remove('active');
+}
+function showDailyBonus(){
+  $('dailyContent').innerHTML=`
+    <h2>🎁 ログインボーナス</h2>
+    <p style="font-size:25px">💎 50ジェム</p>
+    <p style="font-size:25px">🪙 200金貨</p>
+    <button class="wide" data-action="dailyClaim"
+      ${dailyAvailable('bonus')?'':'disabled'}>
+      ${dailyAvailable('bonus')?'受け取る':'本日は受取済み'}
+    </button>
+  `;
+  openDailyModal();
+}
+function claimDailyBonus(){
+  if(!dailyAvailable('bonus'))return;
+  dailyData.bonus=dailyDate();
+  saveDaily();
+  state.gems+=50;
+  state.gold+=200;
+  save();
+  renderAll();
+  updateDailyStatus();
+  $('dailyContent').innerHTML=`
+    <h2>🎉 受け取り完了！</h2>
+    <p>💎 50ジェム</p>
+    <p>🪙 200金貨</p>
+    <p>明日もログインしよう！</p>
+  `;
+}
+
+// ルーレットの円を描画
+function wheelGradient(){
+  return 'conic-gradient('+
+    DAILY_COLORS.map((color,i)=>
+      `${color} ${i*60}deg ${(i+1)*60}deg`
+    ).join(',')+')';
+}
+function showDailyWheel(){
+  $('dailyContent').innerHTML=`
+    <h2>🎰 ログインルーレット</h2>
+    <p>毎日1回無料！</p>
+    <div class="daily-wheel-wrap">
+      <div class="daily-pointer">▼</div>
+      <div id="dailyWheel" class="daily-wheel"
+        style="background:${wheelGradient()}"></div>
+      <div class="daily-center">✦</div>
+    </div>
+    <div id="dailyWheelResult">
+      ${dailyAvailable('wheel')?'本日の運試し！':'本日は挑戦済み'}
+    </div>
+    <button class="wide" id="dailySpinButton"
+      data-action="dailySpin"
+      ${dailyAvailable('wheel')?'':'disabled'}>
+      ${dailyAvailable('wheel')?'無料で回す':'本日は挑戦済み'}
+    </button>
+    <p class="small">
+      100金貨30% / 300金貨25% / 500金貨15%<br>
+      50ジェム15% / 100ジェム10% / 300ジェム5%
+    </p>
+  `;
+  const wrap=document.querySelector('.daily-wheel-wrap');
+  DAILY_PRIZES.forEach((prize,i)=>{
+    const a=(i*60+30)*Math.PI/180;
+    const label=document.createElement('div');
+    label.className='daily-wheel-label';
+    label.textContent=prize.label;
+    label.style.left=(50+32*Math.sin(a))+'%';
+    label.style.top=(50-32*Math.cos(a))+'%';
+    label.style.transform='translate(-50%,-50%)';
+    wrap.appendChild(label);
+  });
+  dailyRotation=0;
+  openDailyModal();
+}
+function chooseDailyPrize(){
+  let r=Math.random()*100;
+  for(let i=0;i<DAILY_PRIZES.length;i++){
+    r-=DAILY_PRIZES[i].rate;
+    if(r<0)return i;
+  }
+  return DAILY_PRIZES.length-1;
+}
+function spinDailyWheel(){
+  if(dailySpinning||!dailyAvailable('wheel'))return;
+  const index=chooseDailyPrize();
+  const prize=DAILY_PRIZES[index];
+  dailySpinning=true;
+  dailyData.wheel=dailyDate();
+  saveDaily();
+  const button=$('dailySpinButton');
+  button.disabled=true;
+  $('dailyClose').disabled=true;
+  $('dailyWheelResult').textContent='抽選中…';
+
+  // 当選した区画の中央が上の矢印に来る
+  const target=(360-(index*60+30))%360;
+  dailyRotation=360*6+target;
+  const wheel=$('dailyWheel');
+  requestAnimationFrame(()=>{
+    requestAnimationFrame(()=>{
+      wheel.style.transform=`rotate(${dailyRotation}deg)`;
+    });
+  });
+
+  setTimeout(()=>{
+    state[prize.type]+=prize.amount;
+    save();
+    renderAll();
+    updateDailyStatus();
+    $('dailyWheelResult').innerHTML=
+      `<h2>🎉 ${prize.label} 獲得！</h2>`;
+    dailySpinning=false;
+    $('dailyClose').disabled=false;
+  },4700);
+}
+
+// ボタン操作
+document.addEventListener('click',event=>{
+  const button=event.target.closest('button');
+  if(!button||button.disabled)return;
+  switch(button.dataset.action){
+    case 'dailyBonusOpen':showDailyBonus();break;
+    case 'dailyClaim':claimDailyBonus();break;
+    case 'dailyWheelOpen':showDailyWheel();break;
+    case 'dailySpin':spinDailyWheel();break;
+    case 'dailyClose':closeDailyModal();break;
+  }
+});
+
+// 初回起動時に未受取なら表示
+updateDailyStatus();
+if(dailyAvailable('bonus')){
+  showDailyBonus();
+}
+/* ===== デイリー機能ここまで ===== */
+
 </script>
 </body>
 </html>
