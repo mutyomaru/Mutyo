@@ -172,6 +172,157 @@ button:disabled{opacity:.4}
   .unit .portrait{height:115px}
   .map-grid{gap:7px}.stage-node{min-height:78px}.wrap{padding:9px}
 }
+  
+/* ===== スマホ画面最適化 ===== */
+@media (max-width:600px) {
+  html,body {
+    width:100%;
+    min-height:100%;
+    margin:0;
+    overflow-x:hidden;
+  }
+  .wrap {
+    width:100%;
+    max-width:100%;
+    padding:5px 7px;
+  }
+  .top {
+    padding:3px 0;
+    gap:4px;
+  }
+  .brand {font-size:15px}
+  .top .row {gap:4px}
+  .pill {
+    padding:3px 6px;
+    font-size:11px;
+  }
+  .nav {
+    grid-template-columns:repeat(5,minmax(0,1fr));
+    gap:3px;
+    margin:5px 0 7px;
+  }
+  .nav button {
+    padding:9px 1px;
+    font-size:10px;
+    border-radius:7px;
+  }
+  .panel {
+    padding:8px;
+    margin-bottom:6px;
+    border-radius:10px;
+  }
+  .section-title {
+    font-size:15px;
+    margin-bottom:5px;
+  }
+  .panel p {margin:5px 0}
+  .hero {padding:10px 6px}
+  .hero h1 {
+    font-size:19px;
+    margin:5px 0;
+  }
+  button {padding:7px 8px}
+  .grid {
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:5px;
+  }
+  .card {
+    min-width:0;
+    padding:5px 4px 30px;
+    border-radius:8px;
+  }
+  .card .portrait {height:55px}
+  .card .name {
+    font-size:11px;
+    overflow-wrap:anywhere;
+  }
+  .card .stats {
+    font-size:10px;
+    line-height:1.4;
+  }
+  .plus {
+    width:25px;
+    height:25px;
+    font-size:18px;
+    bottom:3px;
+    right:3px;
+  }
+
+  /* 戦闘画面 */
+  #battleFight .panel {
+    padding:6px;
+  }
+  #battleFight .battle-side {
+    display:grid;
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:5px;
+  }
+  #battleFight .unit {
+    padding:4px 2px;
+    border-radius:8px;
+  }
+  #battleFight .unit .portrait {
+    height:clamp(45px,12vh,85px);
+  }
+  #battleFight .unit .name {
+    font-size:10px;
+    overflow-wrap:anywhere;
+  }
+  #battleFight .unit .small {
+    font-size:10px;
+  }
+  #battleFight h3 {
+    font-size:12px;
+    margin:5px 0;
+  }
+  .hpbar {
+    height:6px;
+    margin:3px 0;
+  }
+  .battle-divider {
+    margin:4px;
+    font-size:14px;
+  }
+  .action-panel {
+    margin-top:6px;
+    padding:7px;
+  }
+  .action-buttons {
+    gap:5px;
+    margin-top:5px;
+  }
+  .action-buttons button {
+    min-height:38px;
+    padding:5px;
+    font-size:12px;
+  }
+  .effect {font-size:21px}
+
+  /* ステージ選択 */
+  .stage-map {padding:7px}
+  .map-grid {gap:4px}
+  .stage-node {
+    min-height:48px;
+    padding:3px 1px;
+  }
+  .stage-node .num {font-size:15px}
+  .stage-node .small {font-size:9px}
+  .stage-info {
+    padding:6px;
+    margin-top:6px;
+    font-size:12px;
+  }
+  .map-start {margin-top:5px}
+  .footer {display:none}
+
+  /* ポップアップ */
+  .modal {padding:7px}
+  .modal-box {
+    max-height:90dvh;
+    padding:10px;
+  }
+}
+
 </style>
 </head>
 <body>
