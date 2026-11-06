@@ -670,12 +670,9 @@ function renderAll(){
     草原クリア状況：${state.clearedStage} / 20`;
   $('gachaOwned').textContent=Object.keys(state.owned).length+' / '+CHARACTERS.length+'体を所持';
   $('partyView').innerHTML=state.party.map(id=>cardHTML(id)).join('')||'<p>編成がありません。</p>';
-  $('characterList').innerHTML=CHARACTERS.map(c=>
-    state.owned[c.id]?cardHTML(c.id,true):
-    `<article class="card"><div class="portrait">🔒</div>
-    <div class="name">？？？</div><div class="small">${c.rarity}</div>
-    <div class="stats">未獲得</div></article>`
-  ).join('');
+  
+$('characterList').innerHTML=CHARACTERS.map(c=>encyclopediaCardHTML(c.id)).join('');
+
   renderStageMap();
   $('battleIntro').innerHTML=`
     選択中：ステージ ${selectedStage}<br>
@@ -1524,14 +1521,7 @@ function encyclopediaCardHTML(id) {
 }
 
 // 元の描画処理は残し、図鑑部分だけ変更
-const originalEncyclopediaRenderAll = renderAll;
-renderAll = function() {
-  originalEncyclopediaRenderAll();
 
-  $('characterList').innerHTML = CHARACTERS
-    .map(c => encyclopediaCardHTML(c.id))
-    .join('');
-};
 
 // 詳細ポップアップ
 function openEncyclopedia(id) {
