@@ -323,6 +323,71 @@ button:disabled{opacity:.4}
   }
 }
 
+/* ===== 図鑑のレア度・ページ表示 ===== */
+.dex-tabs {
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:5px;
+  margin-bottom:8px;
+}
+
+.dex-tabs button {
+  padding:8px 2px;
+  font-size:12px;
+}
+
+.dex-tabs button.selected {
+  border:2px solid #f4c76b;
+  background:#354666;
+  color:#f4c76b;
+}
+
+.dex-pages {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:8px;
+  margin-bottom:10px;
+}
+
+.dex-pages span {
+  font-weight:bold;
+  color:#f4c76b;
+}
+
+@media(max-width:600px) {
+  #characterList {
+    grid-template-columns:repeat(3,minmax(0,1fr)) !important;
+    gap:5px !important;
+  }
+
+  #characterList .card {
+    min-width:0;
+    padding:4px 3px 29px;
+  }
+
+  #characterList .portrait {
+    height:65px !important;
+  }
+
+  #characterList .name {
+    font-size:10px;
+    line-height:1.3;
+  }
+
+  #characterList .small {
+    font-size:9px;
+  }
+
+  #characterList .plus {
+    width:23px;
+    height:23px;
+    right:4px;
+    bottom:4px;
+    font-size:17px;
+  }
+}
+
 </style>
 </head>
 <body>
@@ -811,6 +876,36 @@ function renderStageMap(){
     </button>
   </div>`;
 }
+  
+/* ===== 図鑑のページ管理 ===== */
+let dexRarity = 'ノーマル';
+let dexPage = 0;
+
+function changeDexRarity(rarity) {
+  if (!['ノーマル', 'レア', 'エピック'].includes(rarity)) {
+    return;
+  }
+
+  dexRarity = rarity;
+  dexPage = 0;
+  renderAll();
+}
+
+function changeDexPage(direction) {
+  const count = CHARACTERS.filter(
+    c => c.rarity === dexRarity
+  ).length;
+
+  const maxPage = Math.max(1, Math.ceil(count / 9));
+
+  dexPage = Math.max(
+    0,
+    Math.min(dexPage + direction, maxPage - 1)
+  );
+
+  renderAll();
+}
+
 function renderAll(){
   $('gems').textContent=state.gems;
   $('gold').textContent=state.gold;
@@ -822,7 +917,55 @@ function renderAll(){
   $('gachaOwned').textContent=Object.keys(state.owned).length+' / '+CHARACTERS.length+'体を所持';
   $('partyView').innerHTML=state.party.map(id=>cardHTML(id)).join('')||'<p>編成がありません。</p>';
   
-$('characterList').innerHTML=CHARACTERS.map(c=>encyclopediaCardHTML(c.id)).join('');
+
+/* ===== レア度別・ページ式図鑑 ===== */
+const dexCharacters = CHARACTERS.filter(
+  c => c.rarity === dexRarity
+);
+
+const dexTotal = Math.max(
+  1,
+  Math.ceil(dexCharacters.length / 9)
+);
+
+dexPage = Math.min(dexPage, dexTotal - 1);
+
+$('characterList').innerHTML = dexCharacters
+  .slice(dexPage * 9, (dexPage + 1) * 9)
+  .map(c => encyclopediaCardHTML(c.id))
+  .join('');
+
+let dexControls = $('dexControls');
+
+if (!dexControls) {
+  dexControls = document.createElement('div');
+  dexControls.id = 'dexControls';
+  $('characterList').before(dexControls);
+}
+
+dexControls.innerHTML = `
+  <div class="dex-tabs">
+    ${['ノーマル','レア','エピック'].map(r => `
+      <button
+        class="${dexRarity === r ? 'selected' : ''}"
+        onclick="changeDexRarity('${r}')">
+        ${r}
+      </button>
+    `).join('')}
+  </div>
+  <div class="dex-pages">
+    <button onclick="changeDexPage(-1)"
+      ${dexPage === 0 ? 'disabled' : ''}>
+      ◀ 前へ
+    </button>
+    <span>${dexPage + 1} / ${dexTotal}</span>
+    <button onclick="changeDexPage(1)"
+      ${dexPage >= dexTotal - 1 ? 'disabled' : ''}>
+      次へ ▶
+    </button>
+  </div>
+`;
+
 
   renderStageMap();
   $('battleIntro').innerHTML=`
