@@ -1772,17 +1772,19 @@ function showDailyWheel(){
       50ジェム15% / 100ジェム10% / 300ジェム5%
     </p>
   `;
-  const wrap=document.querySelector('.daily-wheel-wrap');
-  DAILY_PRIZES.forEach((prize,i)=>{
-    const a=(i*60+30)*Math.PI/180;
-    const label=document.createElement('div');
-    label.className='daily-wheel-label';
-    label.textContent=prize.label;
-    label.style.left=(50+32*Math.sin(a))+'%';
-    label.style.top=(50-32*Math.cos(a))+'%';
-    label.style.transform='translate(-50%,-50%)';
-    wrap.appendChild(label);
-  });
+  
+const wheel=$('dailyWheel');
+DAILY_PRIZES.forEach((prize,i)=>{
+  const a=(i*60+30)*Math.PI/180;
+  const label=document.createElement('div');
+  label.className='daily-wheel-label';
+  label.textContent=prize.label;
+  label.style.left=(50+32*Math.sin(a))+'%';
+  label.style.top=(50-32*Math.cos(a))+'%';
+  label.style.transform='translate(-50%,-50%)';
+  wheel.appendChild(label);
+});
+
   dailyRotation=0;
   openDailyModal();
 }
