@@ -1701,6 +1701,9 @@ encyclopediaStyle.textContent = `
     position:relative;
     min-width:0;
     padding:3px 3px 25px;
+    
+padding-top:25px;
+
     background:#202d49;
     border:1px solid #394866;
     border-radius:13px;
@@ -1830,9 +1833,7 @@ function encyclopediaCardHTML(id) {
       <div class="encyclopedia-level">
         Lv.${o.level}/${c.max}
       </div>
-      <div class="encyclopedia-equipment">
-        装備 ${icons || 'なし'}（${c.slot ?? 0}枠）
-      </div>
+      
       <button class="plus"
         data-action="openRing"
         data-id="${esc(id)}">＋</button>
