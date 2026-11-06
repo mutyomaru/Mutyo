@@ -1700,7 +1700,7 @@ encyclopediaStyle.textContent = `
   .encyclopedia-card {
     position:relative;
     min-width:0;
-    padding:5px 4px 30px;
+    padding:3px 3px 25px;
     background:#202d49;
     border:1px solid #394866;
     border-radius:13px;
@@ -1716,7 +1716,7 @@ encyclopediaStyle.textContent = `
  
 
 .encyclopedia-image .portrait {
-  height: clamp(75px, 12vh, 120px);
+  height: clamp(55px, 9vh, 90px);
 }
 
 .encyclopedia-image img {
@@ -1727,24 +1727,30 @@ encyclopediaStyle.textContent = `
   object-fit:contain;
 }
 
-  .encyclopedia-card .name {
-    font-size:13px;
-    overflow-wrap:anywhere;
-  }
+.encyclopedia-card .name {
+  font-size:11px;
+  line-height:1.2;
+  overflow-wrap:anywhere;
+}
   .encyclopedia-level {
-    margin-top:5px;
-    color:#f4c76b;
-    font-weight:bold;
-  }
+  margin-top:2px;
+  font-size:12px;
+  color:#f4c76b;
+  font-weight:bold;
+}
   .encyclopedia-equipment {
-    margin-top:6px;
-    font-size:12px;
-    color:#aab4ca;
-  }
-  .encyclopedia-card .plus {
-    bottom:8px;
-    right:8px;
-  }
+  margin-top:2px;
+  font-size:10px;
+  line-height:1.2;
+  color:#aab4ca;
+}
+.encyclopedia-card .plus {
+  bottom:3px;
+  right:3px;
+  width:23px;
+  height:23px;
+  font-size:17px;
+}
   .encyclopedia-locked {
     opacity:.65;
   }
