@@ -606,13 +606,21 @@ function unequip(id,index){
   state.equipment[id][index]=null;
   save();renderSlotModal();renderRingModal();renderAll();
 }
+
 function formationText(stage){
-  return (STAGE_ENEMIES[stage]||[]).map(([id,m,hpMul])=>{
-    if(stage===10&&id==='ゴーレム')return 'ゴーレム（HP700・素早さ12・溜め3）';
-    return byId(id).name+' '+Math.round(m*100)+'%'+
-      (hpMul?'（HP '+Math.round(m*hpMul*100)+'%）':'');
-  }).join(' / ');
+  const cleared =
+    (Number(state.stageClearCounts[stage]) || 0) > 0
+    || stage <= state.clearedStage;
+
+  if(!cleared){
+    return '？？？（初回クリア後に公開）';
+  }
+
+  return (STAGE_ENEMIES[stage] || [])
+    .map(([id]) => byId(id)?.name || '不明')
+    .join(' / ');
 }
+
 function renderStageMap(){
   let nodes='';
   const unlocked=Math.min(20,state.clearedStage+1);
