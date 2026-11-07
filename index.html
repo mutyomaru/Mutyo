@@ -966,6 +966,506 @@ if(dailyAvailable('bonus'))showDailyBonus();
 })();
 </script>
 
+<script>
+/* ===== 期間限定イベントシステム ===== */
+(() => {
+  // イベント内容はここに保存する
+  const EVENT_DATA = {
+    undead: {
+      name: '☠️ アンデッド襲来',
+      type: 'sub',
+      stages: [
+        {
+          enemies: [
+            ['zombie', 1],
+            ['zombie', 1],
+            ['zombie', 1]
+          ],
+          gold: 1000,
+          gems: 25
+        },
+        {
+          enemies: [
+            ['skeleton', 1.5],
+            ['skeleton', 1.5],
+            ['skeleton', 1.5]
+          ],
+          gold: 1500,
+          gems: 50
+        },
+        {
+          enemies: [
+            ['zombie', 2.5],
+            ['skeleton', 2.5],
+            ['skeleton', 2.5]
+          ],
+          gold: 2500,
+          gems: 100,
+          characterDrop: ['zombie', 'skeleton']
+        }
+      ]
+    }
+  };
+
+  let eventStage = 1;
+
+  // 第1・第3月曜日から7日間開催
+  function activeEventPeriod() {
+    const now = Date.now();
+    const jst = new Date(now + 9 * 3600000);
+    const y = jst.getUTCFullYear();
+    const m = jst.getUTCMonth();
+
+    const firstDay = new Date(
+      Date.UTC(y, m, 1)
+    ).getUTCDay();
+
+    const firstMonday = 1 + (8 - firstDay) % 7;
+
+    for (const [round, day] of [
+      [1, firstMonday],
+      [3, firstMonday + 14]
+    ]) {
+      const start =
+        Date.UTC(y, m, day) - 9 * 3600000;
+      const end = start + 7 * 86400000;
+
+      if (now >= start && now < end) {
+        return {
+          key: `${y}-${m + 1}-${round}`,
+          start,
+          end
+        };
+      }
+    }
+    return null;
+  }
+
+  // 開催回ごとに進捗を保存
+  function eventProgress(periodKey) {
+    if (!state.eventProgress) {
+      state.eventProgress = {};
+    }
+
+    const key = 'undead:' + periodKey;
+
+    if (!state.eventProgress[key]) {
+      state.eventProgress[key] = {
+        cleared: []
+      };
+      save();
+    }
+
+    return state.eventProgress[key];
+  }
+
+  function renderEventList() {
+    const list = $('subEventList');
+    if (!list) return;
+
+    const period = activeEventPeriod();
+
+    if (!period) {
+      list.innerHTML = `
+        <p class="muted">
+          現在開催中のサブイベントはありません。
+        </p>
+        <p class="small">
+          ☠️ アンデッド襲来は毎月
+          第1・第3月曜日から7日間開催！
+        </p>
+      `;
+      return;
+    }
+
+    const progress = eventProgress(period.key);
+    const cleared = progress.cleared.length;
+
+    const end = new Date(
+      period.end - 1 + 9 * 3600000
+    );
+    const endDate =
+      `${end.getUTCMonth() + 1}月${end.getUTCDate()}日`;
+
+    list.innerHTML = `
+      <div class="panel">
+        <h3>☠️ アンデッド襲来</h3>
+        <p class="small">
+          開催中！ ${endDate}23:59まで
+        </p>
+        <p>クリア進捗：${cleared} / 3</p>
+        <button class="wide"
+          data-action="openUndeadEvent">
+          イベントに挑戦！
+        </button>
+      </div>
+    `;
+  }
+
+  // イベント専用画面
+  const eventPage = document.createElement('section');
+  eventPage.id = 'undeadEvent';
+  eventPage.className = 'page';
+  document.querySelector('main').appendChild(eventPage);
+
+  function renderEventMap() {
+    const period = activeEventPeriod();
+
+    if (!period) {
+      showPage('events');
+      renderEventList();
+      return;
+    }
+
+    const data = EVENT_DATA.undead;
+    const progress = eventProgress(period.key);
+
+    if (
+      eventStage > 1 &&
+      !progress.cleared.includes(eventStage - 1)
+    ) {
+      eventStage = 1;
+    }
+
+    const nodes = data.stages.map((s, i) => {
+      const n = i + 1;
+      const cleared = progress.cleared.includes(n);
+      const unlocked =
+        n === 1 || progress.cleared.includes(n - 1);
+
+      return `
+        <button
+          class="stage-node
+          ${cleared ? 'completed' : ''}
+          ${eventStage === n ? 'selected' : ''}
+          ${unlocked ? '' : 'locked'}"
+          data-action="selectEventStage"
+          data-stage="${n}"
+          ${unlocked ? '' : 'disabled'}>
+          <span class="num">${n === 3 ? '👑 ' : ''}${n}</span>
+          <span class="small">
+            ${cleared ? '✓ クリア' :
+              unlocked ? '挑戦可能' : '🔒 未解放'}
+          </span>
+        </button>
+      `;
+    }).join('');
+
+    const stage = data.stages[eventStage - 1];
+    const cleared = progress.cleared.includes(eventStage);
+
+    const enemies = stage.enemies.map(([id, m]) =>
+      `${byId(id).name}（${Math.round(m * 100)}%）`
+    ).join(' / ');
+
+    eventPage.innerHTML = `
+      <div class="panel">
+        <h2 class="section-title">
+          ☠️ アンデッド襲来
+        </h2>
+        <p>全3ステージ・期間限定</p>
+        <button data-page="events">
+          ← イベント一覧へ
+        </button>
+        <div class="stage-map" style="
+          margin-top:12px;
+          background:linear-gradient(145deg,#473451,#241d38);
+          border-color:#9874ad;
+        ">
+          <div class="map-grid">
+            ${nodes}
+          </div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h3>ステージ ${eventStage}</h3>
+        <p class="small">敵編成：${esc(enemies)}</p>
+        <h4>🎁 初回クリア報酬</h4>
+        <p>🪙 ${stage.gold}金貨</p>
+        <p>💎 ${stage.gems}ジェム</p>
+        ${stage.characterDrop ?
+          '<p>ゾンビかスケルトンを1体確定入手</p>' : ''}
+        <p class="small">
+          ${cleared ?
+            '✓ 報酬獲得済み（再挑戦可能）' :
+            '初回クリアで報酬確定'}
+        </p>
+        <button class="wide"
+          data-action="startEventBattle">
+          ⚔️ 挑戦する
+        </button>
+      </div>
+    `;
+  }
+
+  // イベント戦闘を開始
+  function startEventBattle() {
+    const period = activeEventPeriod();
+
+    if (!period) {
+      showError('開催期間外です');
+      return;
+    }
+
+    if (battle?.running) return;
+
+    const progress = eventProgress(period.key);
+
+    if (
+      eventStage > 1 &&
+      !progress.cleared.includes(eventStage - 1)
+    ) {
+      showError('前のステージをクリアしてください');
+      return;
+    }
+
+    if (!state.party.length) {
+      showError('キャラクターを編成してください');
+      return;
+    }
+
+    const stageData =
+      EVENT_DATA.undead.stages[eventStage - 1];
+
+    const allies = state.party.map(id =>
+      makeUnit(id, 'ally')
+    );
+
+    const enemies = stageData.enemies.map(([id, m]) => {
+      const u = makeUnit(id, 'enemy', {
+        multiplier: m
+      });
+
+      // 倍率をかけない能力
+      u.speed = byId(id).speed;
+      u.charge = byId(id).charge;
+
+      // 固定威力系スキルだけ倍率を適用
+      const effect = byId(id).effect;
+      if (['damage', 'poison', 'heal'].includes(effect)) {
+        u.skillMultiplier = m;
+      } else {
+        u.skillMultiplier = 1;
+      }
+
+      return u;
+    });
+
+    battle = {
+      eventId: 'undead',
+      eventPeriod: period.key,
+      stage: eventStage,
+      allies,
+      enemies,
+      running: true,
+      busy: false,
+      current: null,
+      awaitingAction: false,
+      result: null,
+      token: ++battleSerial,
+      message: '☠️ アンデッド襲来！'
+    };
+
+    showPage('battleFight');
+    renderBattle();
+    advanceTurn();
+  }
+
+  // 元の戦闘処理を保持
+  const normalFinishBattle = finishBattle;
+  const normalRenderResult = renderBattleResult;
+  const normalReturnMap = returnMap;
+  const normalRenderBattle = renderBattle;
+
+  // イベント専用の勝敗・報酬処理
+  finishBattle = function(victory) {
+    if (!battle?.eventId) {
+      return normalFinishBattle(victory);
+    }
+
+    if (!battle.running) return;
+
+    battle.running = false;
+    battle.busy = false;
+    battle.awaitingAction = false;
+    clearActing();
+
+    const result = {
+      victory,
+      rewards: null
+    };
+
+    if (victory) {
+      const progress = eventProgress(
+        battle.eventPeriod
+      );
+
+      const firstClear =
+        !progress.cleared.includes(battle.stage);
+
+      const rewards = {
+        firstClear,
+        gold: 0,
+        gems: 0,
+        character: null
+      };
+
+      if (firstClear) {
+        const stageData =
+          EVENT_DATA.undead.stages[battle.stage - 1];
+
+        rewards.gold = stageData.gold;
+        rewards.gems = stageData.gems;
+
+        state.gold += stageData.gold;
+        state.gems += stageData.gems;
+
+        if (stageData.characterDrop) {
+          const id = random(
+            stageData.characterDrop
+          );
+
+          rewards.character = {
+            name: byId(id).name,
+            message: addCharacter(id)
+          };
+        }
+
+        progress.cleared.push(battle.stage);
+        save();
+      }
+
+      result.rewards = rewards;
+    }
+
+    battle.result = result;
+    renderBattle();
+    renderAll();
+  };
+
+  // イベント専用の結果表示
+  renderBattleResult = function() {
+    if (!battle?.eventId) {
+      return normalRenderResult();
+    }
+
+    const {victory, rewards} = battle.result;
+
+    let html = '';
+
+    if (!victory) {
+      html = `
+        <h2>敗北…</h2>
+        <p>編成を見直して再挑戦しよう。</p>
+      `;
+    } else if (rewards?.firstClear) {
+      html = `
+        <h2>🎉 初回クリア！</h2>
+        <p>🪙 金貨 +${rewards.gold}</p>
+        <p>💎 ジェム +${rewards.gems}</p>
+      `;
+
+      if (rewards.character) {
+        html += `
+          <p>🎁 ${esc(rewards.character.name)} ×1</p>
+          <p class="small">
+            ${esc(rewards.character.message)}
+          </p>
+        `;
+      }
+    } else {
+      html = `
+        <h2>🎉 ステージクリア！</h2>
+        <p>初回報酬は獲得済みです。</p>
+      `;
+    }
+
+    $('actionArea').innerHTML = `
+      <div class="result">
+        ${html}
+        <button data-action="returnMap">
+          イベントマップへ戻る
+        </button>
+      </div>
+    `;
+  };
+
+  // 戦闘中のステージ表示
+  renderBattle = function() {
+    normalRenderBattle();
+
+    if (battle?.eventId) {
+      $('bossLabel').textContent =
+        '☠️ EVENT ' + battle.stage;
+    }
+  };
+
+  // イベントマップへ戻る
+  returnMap = function() {
+    if (!battle?.eventId) {
+      return normalReturnMap();
+    }
+
+    battle.running = false;
+    battle.token = -1;
+    battle = null;
+
+    if (activeEventPeriod()) {
+      showPage('undeadEvent');
+      renderEventMap();
+    } else {
+      showPage('events');
+      renderEventList();
+    }
+  };
+
+  // ボタン操作
+  document.addEventListener('click', e => {
+    const button = e.target.closest('button');
+    if (!button || button.disabled) return;
+
+    const action = button.dataset.action;
+
+    if (button.dataset.page === 'events') {
+      renderEventList();
+    }
+
+    if (action === 'openUndeadEvent') {
+      eventStage = 1;
+      showPage('undeadEvent');
+      renderEventMap();
+    }
+
+    if (action === 'selectEventStage') {
+      eventStage = Number(button.dataset.stage);
+      renderEventMap();
+    }
+
+    if (action === 'startEventBattle') {
+      startEventBattle();
+    }
+  });
+
+  // 開催状況の自動更新
+  setInterval(() => {
+    if ($('events')?.classList.contains('active')) {
+      renderEventList();
+    }
+
+    if (
+      $('undeadEvent')?.classList.contains('active') &&
+      !activeEventPeriod()
+    ) {
+      showPage('events');
+      renderEventList();
+    }
+  }, 30000);
+
+  renderEventList();
+})();
+</script>
+
 
 
 
