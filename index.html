@@ -279,5 +279,258 @@ window.addEventListener('error',event=>{console.error(event.error||event.message
 renderAll();
 if(dailyAvailable('bonus'))showDailyBonus();
 </script>
+
+ 
+<script>
+/* ===== 日替わりショップ ===== */
+(() => {
+  const shopElement = document.getElementById('shop');
+  const shopRings = ['power', 'heart', 'skill'];
+  const shopCharacters = CHARACTERS.filter(c =>
+    c.rarity === 'ノーマル' || c.rarity === 'レア'
+  );
+  const shopPrice = c => c.rarity === 'レア' ? 5000 : 1500;
+
+  function updateShopStock() {
+    const date = dailyDate();
+    const old = state.dailyShop;
+
+    if (
+      old &&
+      old.date === date &&
+      shopRings.includes(old.ring) &&
+      Array.isArray(old.characters) &&
+      old.characters.length === 2 &&
+      old.characters[0] !== old.characters[1] &&
+      old.characters.every(id => shopCharacters.some(c => c.id === id)) &&
+      old.purchased
+    ) return;
+
+    const available = [...shopCharacters];
+    const first = available.splice(
+      Math.floor(Math.random() * available.length), 1
+    )[0];
+    const second = available.splice(
+      Math.floor(Math.random() * available.length), 1
+    )[0];
+
+    state.dailyShop = {
+      date,
+      ring: shopRings[Math.floor(Math.random() * shopRings.length)],
+      characters: [first.id, second.id],
+      purchased: {
+        ring: false,
+        character0: false,
+        character1: false,
+        gems: false
+      }
+    };
+    save();
+  }
+
+  function shopItem(key, image, name, detail, price) {
+    const sold = state.dailyShop.purchased[key];
+    const affordable = state.gold >= price;
+
+    return `
+      <div class="shop-product">
+        <div class="shop-product-image">${image}</div>
+        <b>${esc(name)}</b>
+        <div class="small">${esc(detail)}</div>
+        <div class="shop-product-price">
+          🪙 ${price.toLocaleString('ja-JP')}
+        </div>
+        <button class="wide"
+          data-action="shopPurchase"
+          data-shop-key="${key}"
+          ${sold || !affordable ? 'disabled' : ''}>
+          ${sold ? '✓ 売り切れ' :
+            affordable ? '購入する' : '金貨不足'}
+        </button>
+      </div>
+    `;
+  }
+
+  function renderShop() {
+    updateShopStock();
+    const stock = state.dailyShop;
+    const ring = RINGS[stock.ring];
+
+    let html = shopItem(
+      'ring',
+      `<span class="shop-ring-icon">${ring.icon}</span>`,
+      ring.name,
+      ring.description,
+      5000
+    );
+
+    stock.characters.forEach((id, i) => {
+      const c = byId(id);
+      html += shopItem(
+        'character' + i,
+        portrait(id),
+        c.name,
+        c.rarity + (state.owned[id] ? ' / 所持済み' : ' / 未所持'),
+        shopPrice(c)
+      );
+    });
+
+    html += shopItem(
+      'gems',
+      '<span class="shop-ring-icon">💎</span>',
+      '100ジェム',
+      'ジェム ×100',
+      5000
+    );
+
+    shopElement.innerHTML = `
+      <div class="panel">
+        <h2 class="section-title">🛍️ 日替わりショップ</h2>
+        <p class="small">
+          毎日0時（日本時間）に商品と購入回数を更新！
+        </p>
+        <p>🪙 所持金貨：
+          <b>${state.gold.toLocaleString('ja-JP')}</b>
+        </p>
+        <div id="shopMessage" role="status"></div>
+        <div class="shop-product-grid">${html}</div>
+        <p class="small">
+          ※各商品は1日1回限り購入できます。
+        </p>
+      </div>
+    `;
+  }
+
+  function purchaseShopItem(key) {
+    updateShopStock();
+    const stock = state.dailyShop;
+
+    if (!['ring','character0','character1','gems'].includes(key)) return;
+    if (stock.purchased[key]) return;
+
+    let price = 5000;
+    let message = '';
+
+    if (key === 'ring') {
+      message = RINGS[stock.ring].name + 'を獲得！';
+    } else if (key === 'character0' || key === 'character1') {
+      const i = key === 'character0' ? 0 : 1;
+      const c = byId(stock.characters[i]);
+      if (!c || !shopCharacters.some(x => x.id === c.id)) return;
+      price = shopPrice(c);
+      message = c.name + 'を購入！';
+    } else {
+      message = '100ジェムを獲得！';
+    }
+
+    if (state.gold < price) {
+      showError('金貨が足りません');
+      renderShop();
+      return;
+    }
+
+    state.gold -= price;
+
+    if (key === 'ring') {
+      const type = stock.ring;
+      state.ringInventory[type] =
+        (Number(state.ringInventory[type]) || 0) + 1;
+    } else if (key === 'character0' || key === 'character1') {
+      const i = key === 'character0' ? 0 : 1;
+      const id = stock.characters[i];
+      message = byId(id).name + '：' + addCharacter(id);
+    } else {
+      state.gems += 100;
+    }
+
+    stock.purchased[key] = true;
+    save();
+    renderAll();
+    renderShop();
+
+    document.getElementById('shopMessage').textContent =
+      '✅ ' + message;
+  }
+
+  const css = document.createElement('style');
+  css.textContent = `
+    .shop-product-grid {
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:8px;
+      margin:12px 0;
+    }
+    .shop-product {
+      min-width:0;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      text-align:center;
+      gap:6px;
+      background:#202d49;
+      border:1px solid #394866;
+      border-radius:12px;
+      padding:9px 6px;
+    }
+    .shop-product-image {
+      width:100%;
+      height:110px;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+    }
+    .shop-product-image .portrait {
+      width:100%;
+      height:100%;
+    }
+    .shop-product b {
+      font-size:13px;
+      overflow-wrap:anywhere;
+    }
+    .shop-ring-icon {
+      font-size:58px;
+    }
+    .shop-product-price {
+      margin-top:auto;
+      color:#f4c76b;
+      font-weight:900;
+    }
+    .shop-product button {
+      font-size:12px;
+      padding:9px 3px;
+    }
+    #shopMessage:not(:empty) {
+      color:#86efac;
+      padding:8px;
+    }
+  `;
+  document.head.appendChild(css);
+
+  document.addEventListener('click', event => {
+    const button = event.target.closest('button');
+    if (!button || button.disabled) return;
+
+    if (button.dataset.action === 'shopPurchase') {
+      purchaseShopItem(button.dataset.shopKey);
+    }
+
+    if (button.dataset.page === 'shop') {
+      renderShop();
+    }
+  });
+
+  setInterval(() => {
+    if (state.dailyShop?.date !== dailyDate()) {
+      updateShopStock();
+      if (shopElement.classList.contains('active')) {
+        renderShop();
+      }
+    }
+  }, 15000);
+
+  renderShop();
+})();
+</script>
+
 </body>
 </html>
