@@ -912,5 +912,73 @@ if(dailyAvailable('bonus'))showDailyBonus();
 })();
 </script>
 
+<script>
+/* ===== イベントステージ基本画面 ===== */
+(() => {
+  // 戦闘画面にイベント入口を追加
+  const battlePage = document.getElementById('battle');
+
+  const entrance = document.createElement('div');
+  entrance.className = 'panel';
+  entrance.innerHTML = `
+    <h2 class="section-title">⚔️ イベントステージ</h2>
+    <p class="small">
+      期間限定の特別なステージに挑戦！
+    </p>
+    <button class="wide" data-page="events">
+      ✨ イベント一覧を見る
+    </button>
+  `;
+  battlePage.prepend(entrance);
+
+  // イベント一覧画面
+  const page = document.createElement('section');
+  page.id = 'events';
+  page.className = 'page';
+
+  page.innerHTML = `
+    <div class="panel">
+      <h2 class="section-title">⚔️ イベント一覧</h2>
+      <p class="small">
+        開催中のイベントに挑戦しよう！
+      </p>
+      <button data-page="battle">
+        ← 戦闘画面に戻る
+      </button>
+    </div>
+
+    <div class="panel">
+      <h2 class="section-title">👑 メインイベント</h2>
+      <div id="mainEventList">
+        <p class="muted">開催中のイベントはありません。</p>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2 class="section-title">⚔️ サブイベント</h2>
+      <div id="subEventList">
+        <p class="muted">開催中のイベントはありません。</p>
+      </div>
+    </div>
+  `;
+
+  document.querySelector('main').appendChild(page);
+})();
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
 </body>
 </html>
