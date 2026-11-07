@@ -966,14 +966,18 @@ if(dailyAvailable('bonus'))showDailyBonus();
 })();
 </script>
 
+
 <script>
 /* ===== 期間限定イベントシステム ===== */
 (() => {
-  // イベント内容はここに保存する
+  'use strict';
+
+  // ===== イベントデータ =====
   const EVENT_DATA = {
     undead: {
       name: '☠️ アンデッド襲来',
       type: 'sub',
+      schedule: '第1・第3月曜日から7日間',
       stages: [
         {
           enemies: [
@@ -1004,15 +1008,67 @@ if(dailyAvailable('bonus'))showDailyBonus();
           characterDrop: ['zombie', 'skeleton']
         }
       ]
+    },
+
+    general: {
+      name: '⚔️ 将軍の進軍',
+      type: 'sub',
+      schedule: '毎週土曜日・日曜日',
+      stages: [
+        {
+          enemies: [
+            ['spearman', 1],
+            ['swordman', 1],
+            ['将軍', 1]
+          ],
+          gold: 1000,
+          gems: 25
+        },
+        {
+          enemies: [
+            ['archer', 1.5],
+            ['farmer', 2],
+            ['将軍', 1.5]
+          ],
+          gold: 1500,
+          gems: 50
+        },
+        {
+          enemies: [
+            ['spearman', 2],
+            ['swordman', 2],
+            ['将軍', 2]
+          ],
+          gold: 2500,
+          gems: 100
+        },
+        {
+          enemies: [
+            ['将軍', 2, 4]
+          ],
+          gold: 0,
+          gems: 200,
+          characterDrop: ['将軍']
+        }
+      ]
     }
   };
 
+  let selectedEvent = 'undead';
   let eventStage = 1;
 
-  // 第1・第3月曜日から7日間開催
-  function activeEventPeriod() {
+  const DAY_MS = 86400000;
+  const JST_MS = 9 * 3600000;
+
+  // ===== 日本時間で開催判定 =====
+  function getJST() {
+    return new Date(Date.now() + JST_MS);
+  }
+
+  // アンデッド襲来：第1・第3月曜日から7日間
+  function undeadPeriod() {
     const now = Date.now();
-    const jst = new Date(now + 9 * 3600000);
+    const jst = getJST();
     const y = jst.getUTCFullYear();
     const m = jst.getUTCMonth();
 
@@ -1027,8 +1083,8 @@ if(dailyAvailable('bonus'))showDailyBonus();
       [3, firstMonday + 14]
     ]) {
       const start =
-        Date.UTC(y, m, day) - 9 * 3600000;
-      const end = start + 7 * 86400000;
+        Date.UTC(y, m, day) - JST_MS;
+      const end = start + 7 * DAY_MS;
 
       if (now >= start && now < end) {
         return {
@@ -1041,13 +1097,54 @@ if(dailyAvailable('bonus'))showDailyBonus();
     return null;
   }
 
-  // 開催回ごとに進捗を保存
-  function eventProgress(periodKey) {
-    if (!state.eventProgress) {
+  // 将軍の進軍：毎週土日
+  function generalPeriod() {
+    const now = Date.now();
+    const jst = getJST();
+
+    const day = jst.getUTCDay();
+    if (day !== 0 && day !== 6) return null;
+
+    const today = Date.UTC(
+      jst.getUTCFullYear(),
+      jst.getUTCMonth(),
+      jst.getUTCDate()
+    );
+
+    const saturday =
+      today - (day === 0 ? 1 : 0) * DAY_MS;
+
+    const start = saturday - JST_MS;
+    const end = start + 2 * DAY_MS;
+
+    const d = new Date(saturday);
+    const key = [
+      d.getUTCFullYear(),
+      String(d.getUTCMonth() + 1).padStart(2, '0'),
+      String(d.getUTCDate()).padStart(2, '0')
+    ].join('-');
+
+    return {
+      key,
+      start,
+      end
+    };
+  }
+
+  function activeEventPeriod(id) {
+    if (id === 'undead') return undeadPeriod();
+    if (id === 'general') return generalPeriod();
+    return null;
+  }
+
+  // ===== イベント進捗保存 =====
+  function eventProgress(id, periodKey) {
+    if (!state.eventProgress ||
+        typeof state.eventProgress !== 'object') {
       state.eventProgress = {};
     }
 
-    const key = 'undead:' + periodKey;
+    const key = id + ':' + periodKey;
 
     if (!state.eventProgress[key]) {
       state.eventProgress[key] = {
@@ -1056,93 +1153,128 @@ if(dailyAvailable('bonus'))showDailyBonus();
       save();
     }
 
-    return state.eventProgress[key];
+    const progress = state.eventProgress[key];
+
+    if (!Array.isArray(progress.cleared)) {
+      progress.cleared = [];
+    }
+
+    return progress;
   }
 
+  function formatEnd(end) {
+    const d = new Date(end - 1 + JST_MS);
+    return `${d.getUTCMonth() + 1}月${d.getUTCDate()}日23:59`;
+  }
+
+  // ===== イベント一覧表示 =====
   function renderEventList() {
     const list = $('subEventList');
     if (!list) return;
 
-    const period = activeEventPeriod();
+    let html = '';
+    let activeCount = 0;
 
-    if (!period) {
-      list.innerHTML = `
+    for (const [id, data] of Object.entries(EVENT_DATA)) {
+      const period = activeEventPeriod(id);
+
+      if (!period) continue;
+
+      activeCount++;
+
+      const progress = eventProgress(id, period.key);
+      const cleared = progress.cleared.length;
+
+      html += `
+        <div class="panel">
+          <h3>${esc(data.name)}</h3>
+          <p class="small">
+            🟢 開催中！ ${formatEnd(period.end)}まで
+          </p>
+          <p>
+            クリア進捗：
+            ${cleared} / ${data.stages.length}
+          </p>
+          <button class="wide"
+            data-action="openSubEvent"
+            data-event="${id}">
+            ⚔️ イベントに挑戦！
+          </button>
+        </div>
+      `;
+    }
+
+    if (!activeCount) {
+      html += `
         <p class="muted">
           現在開催中のサブイベントはありません。
         </p>
-        <p class="small">
-          ☠️ アンデッド襲来は毎月
-          第1・第3月曜日から7日間開催！
-        </p>
       `;
-      return;
     }
 
-    const progress = eventProgress(period.key);
-    const cleared = progress.cleared.length;
-
-    const end = new Date(
-      period.end - 1 + 9 * 3600000
-    );
-    const endDate =
-      `${end.getUTCMonth() + 1}月${end.getUTCDate()}日`;
-
-    list.innerHTML = `
+    html += `
       <div class="panel">
-        <h3>☠️ アンデッド襲来</h3>
-        <p class="small">
-          開催中！ ${endDate}23:59まで
-        </p>
-        <p>クリア進捗：${cleared} / 3</p>
-        <button class="wide"
-          data-action="openUndeadEvent">
-          イベントに挑戦！
-        </button>
+        <h3>📅 イベント開催予定</h3>
+        ${Object.values(EVENT_DATA).map(data => `
+          <p class="small">
+            ${esc(data.name)}：
+            ${esc(data.schedule)}
+          </p>
+        `).join('')}
       </div>
     `;
+
+    list.innerHTML = html;
   }
 
-  // イベント専用画面
+  // ===== イベント専用マップ =====
   const eventPage = document.createElement('section');
-  eventPage.id = 'undeadEvent';
+  eventPage.id = 'subEventMap';
   eventPage.className = 'page';
   document.querySelector('main').appendChild(eventPage);
 
   function renderEventMap() {
-    const period = activeEventPeriod();
+    const id = selectedEvent;
+    const data = EVENT_DATA[id];
+    const period = activeEventPeriod(id);
 
-    if (!period) {
+    if (!data || !period) {
       showPage('events');
       renderEventList();
       return;
     }
 
-    const data = EVENT_DATA.undead;
-    const progress = eventProgress(period.key);
+    const progress = eventProgress(id, period.key);
 
     if (
-      eventStage > 1 &&
-      !progress.cleared.includes(eventStage - 1)
+      eventStage < 1 ||
+      eventStage > data.stages.length ||
+      (eventStage > 1 &&
+       !progress.cleared.includes(eventStage - 1))
     ) {
       eventStage = 1;
     }
 
-    const nodes = data.stages.map((s, i) => {
+    const nodes = data.stages.map((stage, i) => {
       const n = i + 1;
       const cleared = progress.cleared.includes(n);
       const unlocked =
         n === 1 || progress.cleared.includes(n - 1);
+      const boss = n === data.stages.length;
 
       return `
         <button
           class="stage-node
           ${cleared ? 'completed' : ''}
+          ${boss ? 'boss' : ''}
           ${eventStage === n ? 'selected' : ''}
           ${unlocked ? '' : 'locked'}"
           data-action="selectEventStage"
           data-stage="${n}"
           ${unlocked ? '' : 'disabled'}>
-          <span class="num">${n === 3 ? '👑 ' : ''}${n}</span>
+          <span class="num">
+            ${boss ? '👑 ' : ''}${n}
+          </span>
           <span class="small">
             ${cleared ? '✓ クリア' :
               unlocked ? '挑戦可能' : '🔒 未解放'}
@@ -1154,23 +1286,59 @@ if(dailyAvailable('bonus'))showDailyBonus();
     const stage = data.stages[eventStage - 1];
     const cleared = progress.cleared.includes(eventStage);
 
-    const enemies = stage.enemies.map(([id, m]) =>
-      `${byId(id).name}（${Math.round(m * 100)}%）`
-    ).join(' / ');
+    const enemies = stage.enemies.map(([id, m, hpMul]) => {
+      const c = byId(id);
+      if (!c) return '不明な敵';
+
+      const hpRate = m * (hpMul || 1);
+      const extra = hpRate !== m
+        ? `・HP ${Math.round(hpRate * 100)}%`
+        : '';
+
+      return `${c.name}（${Math.round(m * 100)}%${extra}）`;
+    }).join(' / ');
+
+    let rewardHTML = '';
+
+    if (stage.gold) {
+      rewardHTML += `<p>🪙 ${stage.gold}金貨</p>`;
+    }
+    if (stage.gems) {
+      rewardHTML += `<p>💎 ${stage.gems}ジェム</p>`;
+    }
+    if (stage.characterDrop) {
+      const names = stage.characterDrop
+        .map(id => byId(id)?.name || id);
+
+      rewardHTML += `
+        <p>🎁 ${names.join(' または ')} ×1 確定</p>
+      `;
+    }
 
     eventPage.innerHTML = `
       <div class="panel">
         <h2 class="section-title">
-          ☠️ アンデッド襲来
+          ${esc(data.name)}
         </h2>
-        <p>全3ステージ・期間限定</p>
+        <p class="small">
+          全${data.stages.length}ステージ
+          ・${esc(data.schedule)}
+        </p>
+        <p class="small">
+          開催終了：${formatEnd(period.end)}
+        </p>
+
         <button data-page="events">
           ← イベント一覧へ
         </button>
+
         <div class="stage-map" style="
           margin-top:12px;
-          background:linear-gradient(145deg,#473451,#241d38);
-          border-color:#9874ad;
+          background:linear-gradient(
+            145deg,
+            ${id === 'general' ? '#65452e,#34251e' : '#473451,#241d38'}
+          );
+          border-color:${id === 'general' ? '#b99765' : '#9874ad'};
         ">
           <div class="map-grid">
             ${nodes}
@@ -1179,18 +1347,23 @@ if(dailyAvailable('bonus'))showDailyBonus();
       </div>
 
       <div class="panel">
-        <h3>ステージ ${eventStage}</h3>
-        <p class="small">敵編成：${esc(enemies)}</p>
-        <h4>🎁 初回クリア報酬</h4>
-        <p>🪙 ${stage.gold}金貨</p>
-        <p>💎 ${stage.gems}ジェム</p>
-        ${stage.characterDrop ?
-          '<p>ゾンビかスケルトンを1体確定入手</p>' : ''}
+        <h3>
+          ${eventStage === data.stages.length ? '👑 ' : ''}
+          ステージ ${eventStage}
+        </h3>
         <p class="small">
-          ${cleared ?
-            '✓ 報酬獲得済み（再挑戦可能）' :
-            '初回クリアで報酬確定'}
+          敵編成：${esc(enemies)}
         </p>
+
+        <h4>🎁 今回の初回クリア報酬</h4>
+        ${rewardHTML}
+
+        <p class="small">
+          ${cleared
+            ? '✓ 報酬獲得済み（再挑戦可能）'
+            : '初回クリアで報酬確定'}
+        </p>
+
         <button class="wide"
           data-action="startEventBattle">
           ⚔️ 挑戦する
@@ -1199,18 +1372,20 @@ if(dailyAvailable('bonus'))showDailyBonus();
     `;
   }
 
-  // イベント戦闘を開始
+  // ===== イベント戦闘開始 =====
   function startEventBattle() {
-    const period = activeEventPeriod();
+    const id = selectedEvent;
+    const data = EVENT_DATA[id];
+    const period = activeEventPeriod(id);
 
-    if (!period) {
+    if (!period || !data) {
       showError('開催期間外です');
       return;
     }
 
     if (battle?.running) return;
 
-    const progress = eventProgress(period.key);
+    const progress = eventProgress(id, period.key);
 
     if (
       eventStage > 1 &&
@@ -1225,35 +1400,39 @@ if(dailyAvailable('bonus'))showDailyBonus();
       return;
     }
 
-    const stageData =
-      EVENT_DATA.undead.stages[eventStage - 1];
+    const stageData = data.stages[eventStage - 1];
+    if (!stageData) return;
 
     const allies = state.party.map(id =>
       makeUnit(id, 'ally')
     );
 
-    const enemies = stageData.enemies.map(([id, m]) => {
-      const u = makeUnit(id, 'enemy', {
-        multiplier: m
-      });
+    const enemies = stageData.enemies.map(
+      ([enemyId, m, hpMul]) => {
+        const u = makeUnit(enemyId, 'enemy', {
+          multiplier: m,
+          hpMultiplier: hpMul || 1
+        });
 
-      // 倍率をかけない能力
-      u.speed = byId(id).speed;
-      u.charge = byId(id).charge;
+        const c = byId(enemyId);
 
-      // 固定威力系スキルだけ倍率を適用
-      const effect = byId(id).effect;
-      if (['damage', 'poison', 'heal'].includes(effect)) {
-        u.skillMultiplier = m;
-      } else {
-        u.skillMultiplier = 1;
+        // 素早さ・スキル溜めは倍率を適用しない
+        u.speed = c.speed;
+        u.charge = c.charge;
+
+        // 固定威力の攻撃・毒・回復のみ倍率適用
+        if (['damage', 'poison', 'heal'].includes(c.effect)) {
+          u.skillMultiplier = m;
+        } else {
+          u.skillMultiplier = 1;
+        }
+
+        return u;
       }
-
-      return u;
-    });
+    );
 
     battle = {
-      eventId: 'undead',
+      eventId: id,
       eventPeriod: period.key,
       stage: eventStage,
       allies,
@@ -1264,7 +1443,7 @@ if(dailyAvailable('bonus'))showDailyBonus();
       awaitingAction: false,
       result: null,
       token: ++battleSerial,
-      message: '☠️ アンデッド襲来！'
+      message: data.name + '！'
     };
 
     showPage('battleFight');
@@ -1272,13 +1451,13 @@ if(dailyAvailable('bonus'))showDailyBonus();
     advanceTurn();
   }
 
-  // 元の戦闘処理を保持
+  // ===== 通常戦闘の機能を保持 =====
   const normalFinishBattle = finishBattle;
   const normalRenderResult = renderBattleResult;
   const normalReturnMap = returnMap;
   const normalRenderBattle = renderBattle;
 
-  // イベント専用の勝敗・報酬処理
+  // ===== 勝敗・報酬処理 =====
   finishBattle = function(victory) {
     if (!battle?.eventId) {
       return normalFinishBattle(victory);
@@ -1297,7 +1476,9 @@ if(dailyAvailable('bonus'))showDailyBonus();
     };
 
     if (victory) {
+      const id = battle.eventId;
       const progress = eventProgress(
+        id,
         battle.eventPeriod
       );
 
@@ -1313,22 +1494,21 @@ if(dailyAvailable('bonus'))showDailyBonus();
 
       if (firstClear) {
         const stageData =
-          EVENT_DATA.undead.stages[battle.stage - 1];
+          EVENT_DATA[id].stages[battle.stage - 1];
 
-        rewards.gold = stageData.gold;
-        rewards.gems = stageData.gems;
+        rewards.gold = stageData.gold || 0;
+        rewards.gems = stageData.gems || 0;
 
-        state.gold += stageData.gold;
-        state.gems += stageData.gems;
+        state.gold += rewards.gold;
+        state.gems += rewards.gems;
 
-        if (stageData.characterDrop) {
-          const id = random(
-            stageData.characterDrop
-          );
+        if (stageData.characterDrop?.length) {
+          const characterId =
+            random(stageData.characterDrop);
 
           rewards.character = {
-            name: byId(id).name,
-            message: addCharacter(id)
+            name: byId(characterId).name,
+            message: addCharacter(characterId)
           };
         }
 
@@ -1344,7 +1524,7 @@ if(dailyAvailable('bonus'))showDailyBonus();
     renderAll();
   };
 
-  // イベント専用の結果表示
+  // ===== 戦闘結果表示 =====
   renderBattleResult = function() {
     if (!battle?.eventId) {
       return normalRenderResult();
@@ -1360,11 +1540,19 @@ if(dailyAvailable('bonus'))showDailyBonus();
         <p>編成を見直して再挑戦しよう。</p>
       `;
     } else if (rewards?.firstClear) {
-      html = `
-        <h2>🎉 初回クリア！</h2>
-        <p>🪙 金貨 +${rewards.gold}</p>
-        <p>💎 ジェム +${rewards.gems}</p>
-      `;
+      html = `<h2>🎉 初回クリア！</h2>`;
+
+      if (rewards.gold) {
+        html += `
+          <p>🪙 金貨 +${rewards.gold}</p>
+        `;
+      }
+
+      if (rewards.gems) {
+        html += `
+          <p>💎 ジェム +${rewards.gems}</p>
+        `;
+      }
 
       if (rewards.character) {
         html += `
@@ -1391,28 +1579,34 @@ if(dailyAvailable('bonus'))showDailyBonus();
     `;
   };
 
-  // 戦闘中のステージ表示
+  // ===== 戦闘画面のイベント表示 =====
   renderBattle = function() {
     normalRenderBattle();
 
     if (battle?.eventId) {
-      $('bossLabel').textContent =
-        '☠️ EVENT ' + battle.stage;
+      const data = EVENT_DATA[battle.eventId];
+      if (data && $('bossLabel')) {
+        $('bossLabel').textContent =
+          data.name + ' STAGE ' + battle.stage;
+      }
     }
   };
 
-  // イベントマップへ戻る
+  // ===== イベントマップに戻る =====
   returnMap = function() {
     if (!battle?.eventId) {
       return normalReturnMap();
     }
 
+    const id = battle.eventId;
+
     battle.running = false;
     battle.token = -1;
     battle = null;
 
-    if (activeEventPeriod()) {
-      showPage('undeadEvent');
+    if (activeEventPeriod(id)) {
+      selectedEvent = id;
+      showPage('subEventMap');
       renderEventMap();
     } else {
       showPage('events');
@@ -1420,7 +1614,7 @@ if(dailyAvailable('bonus'))showDailyBonus();
     }
   };
 
-  // ボタン操作
+  // ===== ボタン操作 =====
   document.addEventListener('click', e => {
     const button = e.target.closest('button');
     if (!button || button.disabled) return;
@@ -1431,9 +1625,18 @@ if(dailyAvailable('bonus'))showDailyBonus();
       renderEventList();
     }
 
-    if (action === 'openUndeadEvent') {
+    if (action === 'openSubEvent') {
+      const id = button.dataset.event;
+
+      if (!EVENT_DATA[id] || !activeEventPeriod(id)) {
+        showError('開催期間外です');
+        return;
+      }
+
+      selectedEvent = id;
       eventStage = 1;
-      showPage('undeadEvent');
+
+      showPage('subEventMap');
       renderEventMap();
     }
 
@@ -1447,15 +1650,15 @@ if(dailyAvailable('bonus'))showDailyBonus();
     }
   });
 
-  // 開催状況の自動更新
+  // ===== 開催状況の自動更新 =====
   setInterval(() => {
     if ($('events')?.classList.contains('active')) {
       renderEventList();
     }
 
     if (
-      $('undeadEvent')?.classList.contains('active') &&
-      !activeEventPeriod()
+      $('subEventMap')?.classList.contains('active') &&
+      !activeEventPeriod(selectedEvent)
     ) {
       showPage('events');
       renderEventList();
