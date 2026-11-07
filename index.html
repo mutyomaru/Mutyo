@@ -660,5 +660,257 @@ if(dailyAvailable('bonus'))showDailyBonus();
 })();
 </script>
 
+<style>
+/* ===== 豪華な召喚演出 ===== */
+#summonOverlay {
+  --summon-color:#64c8ff;
+  --summon-glow:#1684ff;
+  background:radial-gradient(circle,#15345a,#030612 80%);
+  overflow:hidden;
+}
+#summonOverlay.epic-mode {
+  --summon-color:#ffe18a;
+  --summon-glow:#ffb700;
+  background:radial-gradient(circle,#463210,#05040b 80%);
+}
+#summonOverlay .summon-box {
+  position:relative;
+  z-index:2;
+}
+.summon-cinema {
+  position:relative;
+  height:min(52dvh,370px);
+  min-height:270px;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  isolation:isolate;
+}
+.summon-magic {
+  position:absolute;
+  width:min(65vw,260px);
+  aspect-ratio:1;
+  border:3px solid var(--summon-color);
+  border-radius:50%;
+  box-shadow:0 0 30px var(--summon-glow),
+             inset 0 0 35px var(--summon-glow);
+  animation:summonRotate 4s linear infinite,
+            summonAppear 1s ease-out both;
+}
+.summon-magic::before {
+  content:"✦ ✧ ✦ ✧ ✦ ✧";
+  position:absolute;
+  inset:15px;
+  border:2px dashed var(--summon-color);
+  border-radius:50%;
+  display:grid;
+  place-items:center;
+  color:var(--summon-color);
+  letter-spacing:5px;
+}
+.summon-magic::after {
+  content:"";
+  position:absolute;
+  inset:43px;
+  border:2px solid var(--summon-color);
+  border-radius:50%;
+  box-shadow:0 0 20px var(--summon-glow);
+}
+.summon-particle {
+  position:absolute;
+  left:50%;
+  top:50%;
+  width:var(--size);
+  height:var(--size);
+  border-radius:50%;
+  background:var(--summon-color);
+  box-shadow:0 0 12px var(--summon-color);
+  animation:summonParticle var(--duration) ease-in-out infinite;
+  animation-delay:var(--delay);
+}
+.summon-character {
+  position:relative;
+  z-index:3;
+  opacity:0;
+  transform:scale(.3);
+  filter:brightness(4);
+}
+.summon-character.visible {
+  animation:summonReveal .85s ease-out forwards;
+}
+.summon-character img {
+  width:min(55vw,190px);
+  height:210px;
+  object-fit:contain;
+  filter:drop-shadow(0 0 20px var(--summon-glow));
+}
+.summon-information {
+  opacity:0;
+  transform:translateY(15px);
+}
+.summon-information.visible {
+  animation:summonText .5s ease-out forwards;
+}
+.summon-information h2 {
+  color:var(--summon-color);
+  text-shadow:0 0 18px var(--summon-glow);
+}
+.summon-flash {
+  position:fixed;
+  inset:0;
+  background:white;
+  opacity:0;
+  pointer-events:none;
+  z-index:5;
+}
+.summon-flash.play {
+  animation:summonFlash .8s ease-out;
+}
+.summon-lightning {
+  position:absolute;
+  inset:0;
+  opacity:0;
+  pointer-events:none;
+  background:linear-gradient(
+    115deg,
+    transparent 43%,
+    #fff7c7 47%,
+    #ffcf49 50%,
+    transparent 54%
+  );
+}
+.epic-mode .summon-lightning {
+  animation:summonLightning .55s steps(2) infinite;
+}
+.epic-mode .summon-magic {
+  animation:summonRotate 2s linear infinite,
+            summonAppear 1s ease-out both,
+            summonPulse .7s ease-in-out infinite alternate;
+}
+@keyframes summonRotate {
+  to {transform:rotate(360deg)}
+}
+@keyframes summonAppear {
+  from {opacity:0;scale:.1}
+  to {opacity:1;scale:1}
+}
+@keyframes summonPulse {
+  to {box-shadow:0 0 75px var(--summon-glow),
+    inset 0 0 50px var(--summon-glow)}
+}
+@keyframes summonParticle {
+  0% {opacity:0;transform:rotate(var(--angle)) translateX(145px)}
+  50% {opacity:1}
+  100% {opacity:0;transform:rotate(var(--angle)) translateX(10px)}
+}
+@keyframes summonReveal {
+  from {opacity:0;transform:scale(.3);filter:brightness(4)}
+  to {opacity:1;transform:scale(1);filter:brightness(1)}
+}
+@keyframes summonText {
+  to {opacity:1;transform:translateY(0)}
+}
+@keyframes summonFlash {
+  0% {opacity:0}
+  30% {opacity:.95}
+  100% {opacity:0}
+}
+@keyframes summonLightning {
+  0%,100% {opacity:0}
+  50% {opacity:.8}
+}
+</style>
+
+<script>
+/* ===== 新召喚アニメーション ===== */
+(() => {
+  let animationToken = 0;
+
+  showSummon = function() {
+    const item = summonQueue[summonIndex];
+
+    if (!item) {
+      finishSummon();
+      return;
+    }
+
+    const token = ++animationToken;
+    const index = summonIndex;
+    const c = item.c;
+    const overlay = $('summonOverlay');
+    const epic = c.rarity === 'エピック';
+    const duration = epic ? 4000 : 1500;
+
+    overlay.classList.toggle('epic-mode', epic);
+
+    const particles = Array.from({length:32},(_,i)=>`
+      <span class="summon-particle" style="
+        --angle:${i*137.5}deg;
+        --size:${3+i%5}px;
+        --duration:${1.2+i%4*.3}s;
+        --delay:${-(i%9)*.2}s;
+      "></span>
+    `).join('');
+
+    $('summonVisual').innerHTML = `
+      <div class="summon-cinema">
+        <div class="summon-magic"></div>
+        <div class="summon-lightning"></div>
+        ${particles}
+        <div id="summonCharacter" class="summon-character">
+          <img src="${imagePath(c.imageFile)}"
+               alt="${esc(c.name)}"
+               onerror="this.style.display='none';this.parentElement.append('⚔️')">
+        </div>
+      </div>
+
+      <div id="summonInformation" class="summon-information">
+        <h2>${esc(c.name)}</h2>
+        <p class="${rarityClass(c.rarity)}">
+          ✦ ${esc(c.rarity)} ✦
+        </p>
+        <p>${esc(item.message)}</p>
+      </div>
+
+      <div id="summonFlash" class="summon-flash"></div>
+    `;
+
+    $('summonProgress').textContent =
+      (index+1)+' / '+summonQueue.length;
+
+    $('summonControls').innerHTML = `
+      <button id="summonNextButton"
+              data-action="nextSummon" disabled>
+        召喚中…
+      </button>
+      <button data-action="skipSummon">
+        スキップ
+      </button>
+    `;
+
+    setTimeout(()=>{
+      if (
+        token !== animationToken ||
+        summonIndex !== index ||
+        !overlay.classList.contains('active')
+      ) return;
+
+      $('summonFlash')?.classList.add('play');
+      $('summonCharacter')?.classList.add('visible');
+      $('summonInformation')?.classList.add('visible');
+
+      const button = $('summonNextButton');
+      if (button) {
+        button.disabled = false;
+        button.textContent =
+          index === summonQueue.length-1
+            ? '結果を見る'
+            : '次へ';
+      }
+    },duration);
+  };
+})();
+</script>
+
 </body>
 </html>
