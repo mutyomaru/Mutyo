@@ -1052,6 +1052,23 @@ if(dailyAvailable('bonus'))showDailyBonus();
         }
       ]
     }
+   
+,
+golem: {
+  name: '🗿 ゴーレムの目覚め',
+  type: 'sub',
+  schedule: '毎月25日から月末まで',
+  stages: [
+    {
+      enemies: [
+        ['ゴーレム', 10]
+      ],
+      gold: 3000,
+      gems: 300
+    }
+  ]
+}
+
   };
 
   let selectedEvent = 'undead';
@@ -1064,6 +1081,27 @@ if(dailyAvailable('bonus'))showDailyBonus();
   function getJST() {
     return new Date(Date.now() + JST_MS);
   }
+
+  // ゴーレムの目覚め：毎月25日〜月末
+  
+function golemPeriod() {
+  const jst = getJST();
+  const y = jst.getUTCFullYear();
+  const m = jst.getUTCMonth();
+  const day = jst.getUTCDate();
+
+  if (day < 25) return null;
+
+  const start = Date.UTC(y, m, 25) - JST_MS;
+  const end = Date.UTC(y, m + 1, 1) - JST_MS;
+
+  return {
+    key: `${y}-${String(m + 1).padStart(2, '0')}`,
+    start,
+    end
+  };
+}
+
 
   // アンデッド襲来：第1・第3月曜日から7日間
   function undeadPeriod() {
@@ -1134,6 +1172,9 @@ if(dailyAvailable('bonus'))showDailyBonus();
   function activeEventPeriod(id) {
     if (id === 'undead') return undeadPeriod();
     if (id === 'general') return generalPeriod();
+   
+  if (id === 'golem') return golemPeriod();
+
     return null;
   }
 
