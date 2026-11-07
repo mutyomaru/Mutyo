@@ -1,97 +1,42 @@
 <!doctype html>
-<html lang="ja">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>星詠みの旅団</title>
+<html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>星詠みの旅団</title>
 <style>
-:root{--bg:#101525;--panel:#1b2540;--gold:#f4c76b;--text:#f4f5fb;--muted:#aab4ca;--line:#394866}
-*{box-sizing:border-box}
-html{scroll-behavior:smooth}
-body{margin:0;min-height:100dvh;color:var(--text);background:radial-gradient(ellipse at top,#202d4c,#101525 60%);font-family:system-ui,-apple-system,"Noto Sans JP",sans-serif}
-button{font:inherit;color:inherit;border:1px solid #62708e;background:linear-gradient(#354666,#263453);border-radius:11px;padding:10px 12px;cursor:pointer;touch-action:manipulation}
-button:disabled{opacity:.4;cursor:default}
-.wrap{max-width:900px;margin:auto;padding:10px}.row,.top{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.top{justify-content:space-between;padding:8px 0}
-.brand,.section-title{color:var(--gold);font-weight:900}.brand{font-size:21px}.pill{background:#202c46;border:1px solid var(--line);padding:5px 9px;border-radius:25px}
-.nav{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px;margin:8px 0 12px}.nav button{padding:10px 2px;font-size:clamp(10px,2.5vw,14px)}
-.page{display:none}.page.active{display:block}.panel{background:linear-gradient(145deg,#1d2945,#172139);border:1px solid var(--line);border-radius:15px;padding:13px;margin-bottom:10px}
-.hero{text-align:center;padding:20px}.hero h1{font-size:clamp(20px,5vw,30px);color:var(--gold)}.section-title{font-size:19px;margin:0 0 9px}.muted,.small{color:var(--muted)}.small{font-size:12px}
-.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.card{position:relative;min-width:0;background:#202d49;border:1px solid var(--line);border-radius:12px;padding:8px 7px 39px}.card.selected{outline:2px solid var(--gold)}
-.portrait{height:100px;display:flex;align-items:center;justify-content:center;font-size:42px}.portrait img{display:block;max-width:100%;max-height:100%;object-fit:contain}.name{font-weight:900;overflow-wrap:anywhere}.stats{font-size:12px;line-height:1.6;margin:5px 0}
-.normal{color:#cbd5e1}.rare{color:#74b8ff}.epic{color:#d9a0ff}.wide{width:100%}
-.plus{position:absolute;bottom:5px;right:5px;width:28px;height:28px;padding:0;border-radius:8px;color:#ffe5a0;border-color:#b99550;background:#58472d;font-size:20px}
-.modal{display:none;position:fixed;inset:0;z-index:1000;background:#050914ed;align-items:center;justify-content:center;padding:12px}.modal.active{display:flex}
-.modal-box{width:100%;max-width:460px;max-height:90dvh;overflow:auto;background:linear-gradient(#263653,#151f34);border:1px solid #7185a8;border-radius:16px;padding:15px}
-.slots,.stock{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}.slot{min-height:65px;background:#111b30;border:1px solid #465779;border-radius:10px;padding:8px;text-align:center}.slot.empty{border-style:dashed}
-.stock{grid-template-columns:repeat(3,1fr);margin:10px 0}.stock>div{background:#111b30;border-radius:9px;padding:8px 3px;text-align:center;font-size:12px}.choice{display:flex;width:100%;justify-content:space-between;align-items:center;text-align:left;margin:8px 0}
-/* 図鑑：各レア度9体、画像を最優先にした一貫したCSS */
-.dex-tabs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:5px;margin-bottom:8px}.dex-tabs button{padding:8px 2px;font-size:12px}.dex-tabs .selected{border:2px solid var(--gold);color:var(--gold);background:#354666}
-.dex-pages{display:flex;justify-content:space-between;align-items:center;gap:8px;margin:9px 0}.dex-pages span{font-weight:900;color:var(--gold)}
-#characterList{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;align-items:stretch}
-.encyclopedia-card{position:relative;min-width:0;display:flex;flex-direction:column;align-items:center;text-align:center;background:#202d49;border:1px solid var(--line);border-radius:10px;padding:4px 3px 32px;overflow:hidden}
-.encyclopedia-image{width:100%;display:block;flex:0 0 auto;margin:0;padding:0;border:0;background:transparent}
-.encyclopedia-image .portrait{height:clamp(130px,19vh,185px);width:100%;padding:0;margin:0;overflow:hidden;display:flex;align-items:flex-end;justify-content:center}
-.encyclopedia-image img{display:block;width:100%;height:100%;max-width:100%;max-height:100%;object-fit:contain;object-position:center bottom;transform:none}
-.encyclopedia-card .name{margin-top:3px;font-size:clamp(10px,2.6vw,13px);line-height:1.25;overflow-wrap:anywhere}
-.encyclopedia-level{margin-top:3px;color:var(--gold);font-weight:800;font-size:12px;line-height:1.2}
-.encyclopedia-card .plus{bottom:4px;right:4px;width:25px;height:25px;font-size:17px}
-.encyclopedia-locked{opacity:1}.encyclopedia-locked .encyclopedia-image{cursor:default}.encyclopedia-locked .name{color:var(--muted)}
-.encyclopedia-detail-image .portrait{height:220px}.encyclopedia-detail-stats{line-height:1.9;padding:12px;margin:10px 0;background:#111b30;border-radius:12px}
-/* ステージ */
-.stage-map{padding:12px;border:2px solid #58794e;border-radius:16px;background:linear-gradient(145deg,#456c43,#31543b 55%,#426a40)}
-.map-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}.stage-node{min-height:70px;padding:5px 2px;background:linear-gradient(#e1e9b7,#a9c27b);color:#263b26;border:2px solid #b4c98b;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px}.stage-node .num{font-size:20px;font-weight:900}.stage-node .small{color:inherit;font-size:10px}
-.stage-node.completed{background:linear-gradient(#c5e9bb,#76b879)}.stage-node.current{background:linear-gradient(#fff0a8,#e9b94e)}.stage-node.boss{background:linear-gradient(#f1b2a3,#bd625b);color:#451e25}.stage-node.locked{background:#788477;color:#344236}.stage-node.selected{outline:3px solid white}
-.stage-info{margin-top:10px;background:#203c2dcc;padding:10px;border-radius:10px;line-height:1.7}.map-start{width:100%;margin-top:10px;background:linear-gradient(#e6c16a,#a77c32);color:#30230e;font-weight:900}
-/* 戦闘 */
-.battle-side{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}.unit{position:relative;min-width:0;background:#263653;border:1px solid #5476a4;border-radius:10px;text-align:center;padding:5px 3px}.unit.enemy{background:#513541;border-color:#895767}.unit.dead{opacity:.35;filter:grayscale(1)}.unit.active{outline:2px solid #ffe17c;box-shadow:0 0 12px #f4c76b99}.unit.enemy.active{outline-color:#ff8585}
-.unit .portrait{height:clamp(80px,16vh,145px)}.unit .name{font-size:12px}.unit .small{font-size:10px}.unit h3{margin:3px}
-.hpbar{height:8px;background:#101827;border-radius:10px;overflow:hidden;margin:5px 0}.hpbar i{display:block;height:100%;background:#76d6a1}
-.battle-divider{text-align:center;font-size:18px;color:var(--gold);font-weight:900;margin:7px}.action-panel{margin-top:9px;background:#202e4b;border:1px solid #536486;border-radius:11px;padding:10px}.action-buttons{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:7px}.action-buttons button{min-height:42px}.attack{background:#853c49}.skill{background:#5b4694}
-.enemy-preview{background:#633b48;border:2px solid #bd687b;padding:10px;border-radius:10px;line-height:1.6}.result{text-align:center;line-height:1.7}.result h2{color:var(--gold)}
-.effect{position:absolute;top:26%;left:0;width:100%;z-index:4;font-size:25px;font-weight:900;color:#ff8585;text-shadow:0 2px 5px black;pointer-events:none;animation:effectPop .85s ease-out forwards}.effect.heal{color:#86f3ad}.effect.buff{color:#ffe17c}
-@keyframes effectPop{0%{transform:translateY(15px) scale(.6);opacity:0}25%{transform:translateY(-4px) scale(1.2);opacity:1}65%{opacity:1}100%{transform:translateY(-38px);opacity:0}}
-.error{display:none;background:#542d36;border:1px solid #b65d6a;padding:10px;border-radius:10px;margin-bottom:10px}
-.summon{display:none;position:fixed;inset:0;z-index:1100;background:radial-gradient(ellipse,#26345b,#080c18);align-items:center;justify-content:center;padding:15px}.summon.active{display:flex}.summon-box{text-align:center;max-width:520px;width:100%}
-.magic{position:relative;margin:15px auto;width:210px;height:210px;border-radius:50%;border:3px solid #7ecbff;box-shadow:0 0 20px #398cff,inset 0 0 30px #398cff;display:flex;align-items:center;justify-content:center;animation:rotate 6s linear infinite}.magic img{position:relative;z-index:1;width:150px;height:150px;object-fit:contain;animation:counterrotate 6s linear infinite}.summon.epic-mode .magic{border-color:#ffe08b;box-shadow:0 0 28px #ffc34b,0 0 42px #d58aff}.summon-name{font-size:23px;font-weight:900;color:var(--gold)}@keyframes rotate{to{transform:rotate(360deg)}}@keyframes counterrotate{to{transform:rotate(-360deg)}}
-/* デイリー */
-.daily-panel{text-align:center}.daily-panel h2{color:var(--gold)}.daily-wheel-wrap{position:relative;width:min(76vw,290px);aspect-ratio:1;margin:15px auto}.daily-wheel{width:100%;height:100%;border-radius:50%;border:7px solid var(--gold);box-shadow:0 0 22px #f4c76b66;transition:transform 4.5s cubic-bezier(.12,.75,.12,1)}.daily-wheel-label{position:absolute;left:50%;top:50%;transform-origin:center;color:white;font-size:11px;font-weight:900;text-shadow:0 1px 3px black;pointer-events:none}.daily-pointer{position:absolute;top:-15px;left:50%;transform:translateX(-50%);z-index:5;color:#ff7777;font-size:36px;text-shadow:0 2px 3px black}.daily-center{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:54px;height:54px;border-radius:50%;display:grid;place-items:center;background:var(--gold);color:#34240a;border:4px solid white;font-weight:900}.daily-buttons{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:10px}.daily-buttons button{min-width:135px}
-.footer{text-align:center;color:var(--muted);font-size:11px;padding:9px}
-@media(max-width:600px){
- html,body{width:100%;overflow-x:hidden}.wrap{max-width:100%;padding:5px 6px}.top{padding:3px 0;gap:4px}.brand{font-size:15px}.top .row{gap:4px}.pill{padding:3px 6px;font-size:11px}.nav{gap:3px;margin:5px 0 7px}.nav button{padding:9px 1px;font-size:10px;border-radius:7px}.panel{padding:7px;margin-bottom:6px;border-radius:10px}.section-title{font-size:15px;margin-bottom:5px}.panel p{margin:5px 0}.hero{padding:10px 6px}.hero h1{font-size:19px;margin:5px 0}.grid{gap:5px}.card{padding:4px 3px 32px}.card .portrait{height:60px}.card .name{font-size:11px}.card .stats{font-size:10px}.card button.wide{font-size:10px;padding:5px 1px}
- #characterList{grid-template-columns:repeat(3,minmax(0,1fr));gap:4px}.encyclopedia-card{padding:3px 2px 29px}.encyclopedia-image .portrait{height:clamp(110px,16vh,155px)}.encyclopedia-card .name{font-size:11px}.encyclopedia-level{font-size:11px}
- .battle-side{gap:4px}.unit{padding:3px 2px}.unit .portrait{height:clamp(65px,12vh,100px)}.unit .name,.unit .small{font-size:10px}.hpbar{height:6px;margin:3px 0}.battle-divider{margin:4px}.action-panel{margin-top:5px;padding:7px}.action-buttons button{min-height:38px;padding:5px;font-size:12px}
- .stage-map{padding:6px}.map-grid{gap:4px}.stage-node{min-height:47px;padding:3px 1px}.stage-node .num{font-size:15px}.stage-node .small{font-size:9px}.stage-info{padding:6px;margin-top:6px;font-size:12px}.modal{padding:7px}.modal-box{max-height:91dvh;padding:10px}.footer{display:none}
-}
-</style>
-</head>
-<body>
-<div class="wrap">
-<header class="top"><div class="brand">✦ 星詠みの旅団</div><div class="row"><span class="pill">💎 <b id="gems">0</b></span><span class="pill">🪙 <b id="gold">0</b></span><span class="pill">到達 <b id="stage">1</b></span></div></header>
-<div id="errorBox" class="error"></div>
-<nav class="nav"><button data-page="home">ホーム</button><button data-page="gacha">ガチャ</button><button data-page="team">編成・図鑑</button><button data-page="battle">戦闘</button><button data-page="shop">ショップ</button></nav>
+:root{--bg:#101525;--gold:#f4c76b;--text:#f4f5fb;--muted:#aab4ca;--line:#394866}*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;min-height:100dvh;color:var(--text);background:radial-gradient(ellipse at top,#202d4c,#101525 60%);font-family:system-ui,-apple-system,"Noto Sans JP",sans-serif}button{font:inherit;color:inherit;border:1px solid #62708e;background:linear-gradient(#354666,#263453);border-radius:11px;padding:10px 12px;cursor:pointer;touch-action:manipulation}button:disabled{opacity:.4;cursor:default}.wrap{max-width:900px;margin:auto;padding:10px}.row,.top{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.top{justify-content:space-between;padding:8px 0}.brand,.section-title{color:var(--gold);font-weight:900}.brand{font-size:21px}.pill{background:#202c46;border:1px solid var(--line);padding:5px 9px;border-radius:25px}.nav{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px;margin:8px 0 12px}.nav button{padding:10px 2px;font-size:clamp(10px,2.5vw,14px)}.page{display:none}.page.active{display:block}.panel{background:linear-gradient(145deg,#1d2945,#172139);border:1px solid var(--line);border-radius:15px;padding:13px;margin-bottom:10px}.hero{text-align:center;padding:20px}.hero h1{font-size:clamp(20px,5vw,30px);color:var(--gold)}.section-title{font-size:19px;margin:0 0 9px}.muted,.small{color:var(--muted)}.small{font-size:12px}.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.card{position:relative;min-width:0;background:#202d49;border:1px solid var(--line);border-radius:12px;padding:8px 7px 39px}.card.selected{outline:2px solid var(--gold)}.portrait{height:100px;display:flex;align-items:center;justify-content:center;font-size:42px}.portrait img{display:block;max-width:100%;max-height:100%;object-fit:contain}.name{font-weight:900;overflow-wrap:anywhere}.stats{font-size:12px;line-height:1.6;margin:5px 0}.normal{color:#cbd5e1}.rare{color:#74b8ff}.epic{color:#d9a0ff}.wide{width:100%}.plus{position:absolute;bottom:5px;right:5px;width:28px;height:28px;padding:0;border-radius:8px;color:#ffe5a0;border-color:#b99550;background:#58472d;font-size:20px}.modal{display:none;position:fixed;inset:0;z-index:1000;background:#050914ed;align-items:center;justify-content:center;padding:12px}.modal.active{display:flex}.modal-box{width:100%;max-width:460px;max-height:90dvh;overflow:auto;background:linear-gradient(#263653,#151f34);border:1px solid #7185a8;border-radius:16px;padding:15px}.slots,.stock{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}.slot{min-height:65px;background:#111b30;border:1px solid #465779;border-radius:10px;padding:8px;text-align:center}.slot.empty{border-style:dashed}.stock{grid-template-columns:repeat(3,1fr);margin:10px 0}.stock>div{background:#111b30;border-radius:9px;padding:8px 3px;text-align:center;font-size:12px}.choice{display:flex;width:100%;justify-content:space-between;align-items:center;text-align:left;margin:8px 0}
+/* 図鑑 */
+.dex-tabs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:5px;margin-bottom:8px}.dex-tabs button{padding:8px 2px;font-size:12px}.dex-tabs .selected{border:2px solid var(--gold);color:var(--gold);background:#354666}.dex-pages{display:flex;justify-content:space-between;align-items:center;gap:8px;margin:9px 0}.dex-pages span{font-weight:900;color:var(--gold)}#characterList{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;align-items:stretch}.encyclopedia-card{position:relative;min-width:0;display:flex;flex-direction:column;align-items:center;text-align:center;background:#202d49;border:1px solid var(--line);border-radius:10px;padding:4px 3px 32px;overflow:hidden}.encyclopedia-image{width:100%;display:block;flex:0 0 auto;margin:0;padding:0;border:0;background:transparent}.encyclopedia-image .portrait{height:clamp(130px,19vh,185px);width:100%;padding:0;margin:0;overflow:hidden;display:flex;align-items:flex-end;justify-content:center}.encyclopedia-image img{display:block;width:100%;height:100%;max-width:100%;max-height:100%;object-fit:contain;object-position:center bottom}.encyclopedia-card .name{margin-top:3px;font-size:clamp(10px,2.6vw,13px);line-height:1.25;overflow-wrap:anywhere}.encyclopedia-level{margin-top:3px;color:var(--gold);font-weight:800;font-size:12px}.encyclopedia-card .plus{bottom:4px;right:4px;width:25px;height:25px;font-size:17px}.encyclopedia-locked .name{color:var(--muted)}.encyclopedia-detail-image .portrait{height:220px}.encyclopedia-detail-stats{line-height:1.9;padding:12px;margin:10px 0;background:#111b30;border-radius:12px}
+/* ステージ・戦闘 */
+.stage-map{padding:12px;border:2px solid #58794e;border-radius:16px;background:linear-gradient(145deg,#456c43,#31543b 55%,#426a40)}.map-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}.stage-node{min-height:70px;padding:5px 2px;background:linear-gradient(#e1e9b7,#a9c27b);color:#263b26;border:2px solid #b4c98b;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px}.stage-node .num{font-size:20px;font-weight:900}.stage-node .small{color:inherit;font-size:10px}.stage-node.completed{background:linear-gradient(#c5e9bb,#76b879)}.stage-node.current{background:linear-gradient(#fff0a8,#e9b94e)}.stage-node.boss{background:linear-gradient(#f1b2a3,#bd625b);color:#451e25}.stage-node.locked{background:#788477;color:#344236}.stage-node.selected{outline:3px solid white}.stage-info{margin-top:10px;background:#203c2dcc;padding:10px;border-radius:10px;line-height:1.7}.map-start{width:100%;margin-top:10px;background:linear-gradient(#e6c16a,#a77c32);color:#30230e;font-weight:900}.battle-side{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}.unit{position:relative;min-width:0;background:#263653;border:1px solid #5476a4;border-radius:10px;text-align:center;padding:5px 3px}.unit.enemy{background:#513541;border-color:#895767}.unit.dead{opacity:.35;filter:grayscale(1)}.unit.active{outline:2px solid #ffe17c;box-shadow:0 0 12px #f4c76b99}.unit.enemy.active{outline-color:#ff8585}.unit .portrait{height:clamp(80px,16vh,145px)}.unit .name{font-size:12px}.unit .small{font-size:10px}.hpbar{height:8px;background:#101827;border-radius:10px;overflow:hidden;margin:5px 0}.hpbar i{display:block;height:100%;background:#76d6a1}.battle-divider{text-align:center;font-size:18px;color:var(--gold);font-weight:900;margin:7px}.action-panel{margin-top:9px;background:#202e4b;border:1px solid #536486;border-radius:11px;padding:10px}.action-buttons{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:7px}.action-buttons button{min-height:42px}.attack{background:#853c49}.skill{background:#5b4694}.enemy-preview{background:#633b48;border:2px solid #bd687b;padding:10px;border-radius:10px;line-height:1.6}.result{text-align:center;line-height:1.7}.result h2{color:var(--gold)}.error{display:none;background:#542d36;border:1px solid #b65d6a;padding:10px;border-radius:10px;margin-bottom:10px}
+/* デイリー・ショップ */
+.daily-panel{text-align:center}.daily-panel h2{color:var(--gold)}.daily-wheel-wrap{position:relative;width:min(76vw,290px);aspect-ratio:1;margin:15px auto}.daily-wheel{width:100%;height:100%;border-radius:50%;border:7px solid var(--gold);box-shadow:0 0 22px #f4c76b66;transition:transform 4.5s cubic-bezier(.12,.75,.12,1)}.daily-wheel-label{position:absolute;left:50%;top:50%;transform-origin:center;color:white;font-size:11px;font-weight:900;text-shadow:0 1px 3px black;pointer-events:none}.daily-pointer{position:absolute;top:-15px;left:50%;transform:translateX(-50%);z-index:5;color:#ff7777;font-size:36px;text-shadow:0 2px 3px black}.daily-center{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:54px;height:54px;border-radius:50%;display:grid;place-items:center;background:var(--gold);color:#34240a;border:4px solid white;font-weight:900}.daily-buttons{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:10px}.daily-buttons button{min-width:135px}.shop-product-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:12px 0}.shop-product{min-width:0;display:flex;flex-direction:column;align-items:center;text-align:center;gap:6px;background:#202d49;border:1px solid #394866;border-radius:12px;padding:9px 6px}.shop-product-image{width:100%;height:110px;display:flex;justify-content:center;align-items:center}.shop-product-image .portrait{width:100%;height:100%}.shop-product b{font-size:13px;overflow-wrap:anywhere}.shop-ring-icon{font-size:58px}.shop-product-price{margin-top:auto;color:#f4c76b;font-weight:900}.shop-product button{font-size:12px;padding:9px 3px}#shopMessage:not(:empty){color:#86efac;padding:8px}
+/* 召喚演出 */
+.summon{display:none;position:fixed;inset:0;z-index:1100;background:radial-gradient(circle,#15345a,#030612 80%);align-items:center;justify-content:center;padding:15px;overflow:hidden;--summon-color:#64c8ff;--summon-glow:#1684ff}.summon.active{display:flex}.summon.epic-mode{--summon-color:#ffe18a;--summon-glow:#ffb700;background:radial-gradient(circle,#463210,#05040b 80%)}.summon-box{text-align:center;max-width:520px;width:100%;position:relative;z-index:2}.summon-cinema{position:relative;height:min(52dvh,370px);min-height:270px;display:flex;justify-content:center;align-items:center;isolation:isolate}.summon-magic{position:absolute;width:min(65vw,260px);aspect-ratio:1;border:3px solid var(--summon-color);border-radius:50%;box-shadow:0 0 30px var(--summon-glow),inset 0 0 35px var(--summon-glow);animation:summonRotate 4s linear infinite,summonAppear 1s ease-out both}.summon-magic:before{content:"✦ ✧ ✦ ✧ ✦ ✧";position:absolute;inset:15px;border:2px dashed var(--summon-color);border-radius:50%;display:grid;place-items:center;color:var(--summon-color);letter-spacing:5px}.summon-magic:after{content:"";position:absolute;inset:43px;border:2px solid var(--summon-color);border-radius:50%;box-shadow:0 0 20px var(--summon-glow)}.summon-particle{position:absolute;left:50%;top:50%;width:var(--size);height:var(--size);border-radius:50%;background:var(--summon-color);box-shadow:0 0 12px var(--summon-color);animation:summonParticle var(--duration) ease-in-out infinite;animation-delay:var(--delay)}.summon-character{position:relative;z-index:3;opacity:0;transform:scale(.3);filter:brightness(4)}.summon-character.visible{animation:summonReveal .85s ease-out forwards}.summon-character img{width:min(55vw,190px);height:210px;object-fit:contain;filter:drop-shadow(0 0 20px var(--summon-glow))}.summon-information{opacity:0;transform:translateY(15px)}.summon-information.visible{animation:summonText .5s ease-out forwards}.summon-information h2{color:var(--summon-color);text-shadow:0 0 18px var(--summon-glow)}.summon-flash{position:fixed;inset:0;background:white;opacity:0;pointer-events:none;z-index:5}.summon-flash.play{animation:summonFlash .8s ease-out}.summon-lightning{position:absolute;inset:0;opacity:0;pointer-events:none;background:linear-gradient(115deg,transparent 43%,#fff7c7 47%,#ffcf49 50%,transparent 54%)}.epic-mode .summon-lightning{animation:summonLightning .55s steps(2) infinite}.epic-mode .summon-magic{animation:summonRotate 2s linear infinite,summonAppear 1s ease-out both,summonPulse .7s ease-in-out infinite alternate}@keyframes summonRotate{to{transform:rotate(360deg)}}@keyframes summonAppear{from{opacity:0;scale:.1}to{opacity:1;scale:1}}@keyframes summonPulse{to{box-shadow:0 0 75px var(--summon-glow),inset 0 0 50px var(--summon-glow)}}@keyframes summonParticle{0%{opacity:0;transform:rotate(var(--angle)) translateX(145px)}50%{opacity:1}100%{opacity:0;transform:rotate(var(--angle)) translateX(10px)}}@keyframes summonReveal{from{opacity:0;transform:scale(.3);filter:brightness(4)}to{opacity:1;transform:scale(1);filter:brightness(1)}}@keyframes summonText{to{opacity:1;transform:translateY(0)}}@keyframes summonFlash{0%{opacity:0}30%{opacity:.95}100%{opacity:0}}@keyframes summonLightning{0%,100%{opacity:0}50%{opacity:.8}}
+.footer{text-align:center;color:var(--muted);font-size:11px;padding:9px}@media(max-width:600px){html,body{width:100%;overflow-x:hidden}.wrap{max-width:100%;padding:5px 6px}.top{padding:3px 0;gap:4px}.brand{font-size:15px}.top .row{gap:4px}.pill{padding:3px 6px;font-size:11px}.nav{gap:3px;margin:5px 0 7px}.nav button{padding:9px 1px;font-size:10px;border-radius:7px}.panel{padding:7px;margin-bottom:6px;border-radius:10px}.section-title{font-size:15px;margin-bottom:5px}.panel p{margin:5px 0}.hero{padding:10px 6px}.hero h1{font-size:19px;margin:5px 0}.grid{gap:5px}.card{padding:4px 3px 32px}.card .portrait{height:60px}.card .name{font-size:11px}.card .stats{font-size:10px}.card button.wide{font-size:10px;padding:5px 1px}#characterList{gap:4px}.encyclopedia-card{padding:3px 2px 29px}.encyclopedia-image .portrait{height:clamp(110px,16vh,155px)}.encyclopedia-card .name,.encyclopedia-level{font-size:11px}.battle-side{gap:4px}.unit{padding:3px 2px}.unit .portrait{height:clamp(65px,12vh,100px)}.unit .name,.unit .small{font-size:10px}.hpbar{height:6px;margin:3px 0}.battle-divider{margin:4px}.action-panel{margin-top:5px;padding:7px}.action-buttons button{min-height:38px;padding:5px;font-size:12px}.stage-map{padding:6px}.map-grid{gap:4px}.stage-node{min-height:47px;padding:3px 1px}.stage-node .num{font-size:15px}.stage-node .small{font-size:9px}.stage-info{padding:6px;margin-top:6px;font-size:12px}.modal{padding:7px}.modal-box{max-height:91dvh;padding:10px}.footer{display:none}}
+</style></head><body>
+<div class="wrap"><header class="top"><div class="brand">✦ 星詠みの旅団</div><div class="row"><span class="pill">💎 <b id="gems">0</b></span><span class="pill">🪙 <b id="gold">0</b></span><span class="pill">到達 <b id="stage">1</b></span></div></header><div id="errorBox" class="error"></div><nav class="nav"><button data-page="home">ホーム</button><button data-page="gacha">ガチャ</button><button data-page="team">編成・図鑑</button><button data-page="battle">戦闘</button><button data-page="shop">ショップ</button></nav>
 <main>
 <section id="home" class="page active"><div class="panel hero"><h1>星の導きが、旅の始まり</h1><p class="muted">仲間を集め、育て、未知の敵に挑もう。</p><div class="row" style="justify-content:center"><button data-page="gacha">仲間を召喚する</button><button data-page="team">編成を確認する</button><button data-page="battle">冒険に出る</button></div></div><div class="panel"><h2 class="section-title">旅団の状況</h2><div id="homeSummary"></div></div><div class="panel daily-panel"><h2 class="section-title">🎁 デイリー特典</h2><p class="small">毎日0時（日本時間）に更新！</p><div class="daily-buttons"><button data-action="dailyBonusOpen">🎁 ログインボーナス</button><button data-action="dailyWheelOpen">🎰 ログインルーレット</button></div><p id="dailyStatus" class="small"></p></div></section>
 <section id="gacha" class="page"><div class="panel"><h2 class="section-title">星詠み召喚</h2><p>ノーマル 70% / レア 25% / エピック 5%</p><div class="row"><button data-action="summon" data-count="1">1回召喚（💎100）</button><button data-action="summon" data-count="10">10回召喚（💎900）</button></div><div id="gachaResult" style="margin-top:12px">召喚結果が表示されます。</div></div><div class="panel"><h2 class="section-title">所持状況</h2><div id="gachaOwned"></div></div></section>
 <section id="team" class="page"><div class="panel"><h2 class="section-title">パーティ編成</h2><p class="muted">最大3体まで編成できます。</p><div id="partyView" class="grid"></div></div><div class="panel"><h2 class="section-title">キャラクター図鑑</h2><div id="dexControls"></div><div id="characterList"></div></div></section>
-<section id="shop" class="page"><div class="panel"><h2 class="section-title">ショップ</h2><p>ショップは準備中です。</p></div></section>
-<section id="battle" class="page"><div class="panel"><h2 class="section-title">草原マップ</h2><p class="muted">クリア済みのステージにも再挑戦できます。</p><div id="stageMap"></div></div><div class="panel"><h2 class="section-title">冒険準備</h2><div id="battleIntro"></div><button id="startBattleButton" class="map-start" data-action="startBattle">挑戦する</button></div></section>
+<section id="shop" class="page"></section>
+<section id="battle" class="page"><div class="panel"><h2 class="section-title">⚔️ イベントステージ</h2><p class="small">期間限定の特別なステージに挑戦！</p><button class="wide" data-page="events">✨ イベント一覧を見る</button></div><div class="panel"><h2 class="section-title">草原マップ</h2><p class="muted">クリア済みのステージにも再挑戦できます。</p><div id="stageMap"></div></div><div class="panel"><h2 class="section-title">冒険準備</h2><div id="battleIntro"></div><button id="startBattleButton" class="map-start" data-action="startBattle">挑戦する</button></div></section>
 <section id="battleFight" class="page"><div class="panel"><div class="row" style="justify-content:space-between"><h2 class="section-title">戦闘</h2><button data-action="returnMap">ステージ選択に戻る</button></div><h3 style="color:#ffaaaa;margin:5px 0">▼ 敵軍 <span id="bossLabel"></span></h3><div id="enemyUnits" class="battle-side"></div><div class="battle-divider">✦ VS ✦</div><h3 style="color:#9acbff;margin:5px 0">▲ 旅団</h3><div id="allyUnits" class="battle-side"></div><div id="actionArea" class="action-panel"></div></div></section>
+<section id="events" class="page"><div class="panel"><h2 class="section-title">⚔️ イベント一覧</h2><p class="small">開催中のイベントに挑戦しよう！</p><button data-page="battle">← 戦闘画面に戻る</button></div><div class="panel"><h2 class="section-title">👑 メインイベント</h2><div id="mainEventList"><p class="muted">開催中のイベントはありません。</p></div></div><div class="panel"><h2 class="section-title">⚔️ サブイベント</h2><div id="subEventList"></div></div></section>
+<section id="subEventMap" class="page"></section>
 </main><div class="footer">星詠みの旅団</div></div>
-<div id="characterRingModal" class="modal"><div class="modal-box"><h2 class="section-title">アクセサリー一覧</h2><div id="characterRingContent"></div><button class="wide" data-action="closeCharacterRingModal">図鑑に戻る</button></div></div>
-<div id="equipmentModal" class="modal"><div class="modal-box"><h2 class="section-title">指輪を選択</h2><div id="equipmentModalCharacter" class="small"></div><div id="equipmentModalChoices"></div><button class="wide" data-action="closeEquipmentModal">戻る</button></div></div>
-<div id="encyclopediaModal" class="modal"><div class="modal-box"><div id="encyclopediaDetail"></div><button class="wide" data-action="closeEncyclopedia">図鑑に戻る</button></div></div>
-<div id="dailyModal" class="modal"><div class="modal-box daily-panel"><div id="dailyContent"></div><button class="wide" id="dailyClose" data-action="dailyClose">閉じる</button></div></div>
-<div id="summonOverlay" class="summon"><div class="summon-box"><h2 class="section-title">星詠み召喚</h2><div id="summonVisual"></div><div id="summonProgress" class="small"></div><div id="summonControls"></div></div></div>
+<div id="characterRingModal" class="modal"><div class="modal-box"><h2 class="section-title">アクセサリー一覧</h2><div id="characterRingContent"></div><button class="wide" data-action="closeCharacterRingModal">図鑑に戻る</button></div></div><div id="equipmentModal" class="modal"><div class="modal-box"><h2 class="section-title">指輪を選択</h2><div id="equipmentModalCharacter" class="small"></div><div id="equipmentModalChoices"></div><button class="wide" data-action="closeEquipmentModal">戻る</button></div></div><div id="encyclopediaModal" class="modal"><div class="modal-box"><div id="encyclopediaDetail"></div><button class="wide" data-action="closeEncyclopedia">図鑑に戻る</button></div></div><div id="dailyModal" class="modal"><div class="modal-box daily-panel"><div id="dailyContent"></div><button class="wide" id="dailyClose" data-action="dailyClose">閉じる</button></div></div><div id="summonOverlay" class="summon"><div class="summon-box"><h2 class="section-title">星詠み召喚</h2><div id="summonVisual"></div><div id="summonProgress" class="small"></div><div id="summonControls"></div></div></div>
 <script>
 'use strict';
-const KEY='hoshiyomi_save_v2';
-const DAILY_KEY='hoshiyomi_daily_v1';
-const MAX_STAGE=20;
+/* ===========================================================
+   1. ゲーム設定・データ定義：今後の追加・変更は主にここで行う
+   =========================================================== */
+const KEY='hoshiyomi_save_v2',DAILY_KEY='hoshiyomi_daily_v1',MAX_STAGE=20;
 const BOSS_STAGES=[10,20];
 const STAGE_GOLD={1:200,2:200,3:200,4:200,5:200,6:300,7:300,8:300,9:300,10:1000,11:500,12:500,13:500,14:500,15:500,16:700,17:700,18:700,19:700,20:2000};
 const DROP_RATES={'ノーマル':7,'レア':2,'エピック':.3};
-const RINGS={power:{name:'チカラの指輪',icon:'🟠',description:'攻撃力 +10%'},heart:{name:'ハートの指輪',icon:'🔴',description:'最大HP +10%'},skill:{name:'スキルの指輪',icon:'🟢',description:'スキル効果 +10%'}};
+// 指輪追加時はこの表へ追加。効果の個別処理は「4. 指輪」にまとめてある。
+const RINGS={power:{name:'チカラの指輪',icon:'🟠',description:'攻撃力 +10%'},heart:{name:'ハートの指輪',icon:'🔴',description:'最大HP +10%'},skill:{name:'スキルの指輪',icon:'🟢',description:'スキル効果 +10%'},dodge:{name:'回避の指輪',icon:'🟣',description:'攻撃を3%の確率で回避'},speed:{name:'素早さの指輪',icon:'🔵',description:'素早さ +2'},heal:{name:'癒しの指輪',icon:'🩷',description:'自分の行動時にHP10回復'},charge:{name:'溜めの指輪',icon:'🟡',description:'溜めを1軽減（最低4）'}};
 const RING_IDS=Object.keys(RINGS);
+// effect: damage=固定威力攻撃, heal=固定値回復。これらだけがレベル成長する。
 const CHARACTERS=[
 {id:'swordman',imageFile:'Swordman.png',name:'剣士',rarity:'ノーマル',hp:100,atk:20,speed:20,charge:3,skill:'強撃',effect:'damage',power:50,target:'one',growth:.07,max:20,slot:1},
 {id:'archer',imageFile:'Archer.png',name:'アーチャー',rarity:'ノーマル',hp:70,atk:10,speed:16,charge:2,skill:'乱射',effect:'damage',power:10,target:'all',growth:.07,max:20,slot:1},
@@ -112,103 +57,99 @@ const CHARACTERS=[
 {id:'狙撃手アーチャー',imageFile:'狙撃手アーチャー.png',name:'戦場の狙撃手アーチャー',rarity:'エピック',hp:160,atk:80,speed:19,charge:4,skill:'正射必中',effect:'damage',power:160,target:'one',growth:.30,max:6,slot:2,passive:'アタックセレクト'},
 {id:'一閃スピアドン',imageFile:'一閃スピアドン.png',name:'紫電一閃スピアドン',rarity:'エピック',hp:200,atk:30,speed:24,charge:5,skill:'致命のひと突き',effect:'damage',power:300,target:'one',growth:.30,max:6,slot:2,passive:'ウィルパワー'}
 ];
-const STAGE_ENEMIES={
-1:[['goblin',.5]],2:[['goblin',.5],['goblin',.5]],3:[['zombie',1],['goblin',.5]],4:[['swordman',1]],5:[['swordman',.75],['spearman',.75]],6:[['miner',.75],['miner',.75]],7:[['axeman',1]],8:[['farmer',1],['miner',.75]],9:[['swordman',.75],['archer',.75],['spearman',.75]],10:[['ゴーレム',1]],11:[['axeman',1],['farmer',1]],12:[['アサシン',1],['miner',1]],13:[['swordman',1],['ドワーフ',1]],14:[['エルフ',1],['miner',1]],15:[['将軍',1],['spearman',1]],16:[['ゴーレム',1],['goblin',1],['zombie',1]],17:[['アサシン',1],['アサシン',1]],18:[['エルフ',1],['ドワーフ',1]],19:[['魔導士',1],['axeman',1],['archer',1]],20:[['spearman',1],['swordman',1],['将軍',1,5]]
-};
+// 草原ステージ。敵指定 [キャラID,倍率,HP追加倍率（省略可）]
+const STAGE_ENEMIES={1:[['goblin',.5]],2:[['goblin',.5],['goblin',.5]],3:[['zombie',1],['goblin',.5]],4:[['swordman',1]],5:[['swordman',.75],['spearman',.75]],6:[['miner',.75],['miner',.75]],7:[['axeman',1]],8:[['farmer',1],['miner',.75]],9:[['swordman',.75],['archer',.75],['spearman',.75]],10:[['ゴーレム',1]],11:[['axeman',1],['farmer',1]],12:[['アサシン',1],['miner',1]],13:[['swordman',1],['ドワーフ',1]],14:[['エルフ',1],['miner',1]],15:[['将軍',1],['spearman',1]],16:[['ゴーレム',1],['goblin',1],['zombie',1]],17:[['アサシン',1],['アサシン',1]],18:[['エルフ',1],['ドワーフ',1]],19:[['魔導士',1],['axeman',1],['archer',1]],20:[['spearman',1],['swordman',1],['将軍',1,5]]};
 const DAILY_PRIZES=[{label:'🪙 100金貨',type:'gold',amount:100,rate:30},{label:'🪙 300金貨',type:'gold',amount:300,rate:25},{label:'🪙 500金貨',type:'gold',amount:500,rate:15},{label:'💎 50ジェム',type:'gems',amount:50,rate:15},{label:'💎 100ジェム',type:'gems',amount:100,rate:10},{label:'💎 300ジェム',type:'gems',amount:300,rate:5}];
 const DAILY_COLORS=['#bf823c','#d4a84b','#8d6945','#477bc2','#6e5cc1','#b35a9c'];
-const $=id=>document.getElementById(id);
-const byId=id=>CHARACTERS.find(c=>c.id===id);
-const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const sleep=ms=>new Promise(r=>setTimeout(r,ms));
-const alive=a=>a.filter(u=>u.hp>0);
-const random=a=>a.length?a[Math.floor(Math.random()*a.length)]:null;
+// 新イベントはここに追加。ステージ報酬は開催期間ごとに各ステージ初回だけ。
+const EVENT_DATA={
+ undead:{name:'☠️ アンデッド襲来',type:'sub',schedule:'第1・第3月曜日から7日間',period:'undead',stages:[{enemies:[['zombie',1],['zombie',1],['zombie',1]],gold:1000,gems:25},{enemies:[['skeleton',1.5],['skeleton',1.5],['skeleton',1.5]],gold:1500,gems:50},{enemies:[['zombie',2],['skeleton',2],['skeleton',2]],gold:2500,gems:100,characterDrop:['zombie','skeleton']}]},
+ general:{name:'⚔️ 将軍の進軍',type:'sub',schedule:'毎週土曜日・日曜日',period:'general',stages:[{enemies:[['spearman',1],['swordman',1],['将軍',1]],gold:1000,gems:25},{enemies:[['archer',1.5],['farmer',2],['将軍',1.5]],gold:1500,gems:50},{enemies:[['spearman',2],['swordman',2],['将軍',2]],gold:2500,gems:100},{enemies:[['将軍',2,4]],gold:0,gems:200,characterDrop:['将軍']}]},
+ golem:{name:'🗿 ゴーレムの目覚め',type:'sub',schedule:'毎月25日から月末まで',period:'golem',stages:[{enemies:[['ゴーレム',10]],gold:3000,gems:300}]}
+};
+/* ===========================================================
+   2. 基本処理・セーブ（旧セーブキーを保持）
+   =========================================================== */
+const $=id=>document.getElementById(id),byId=id=>CHARACTERS.find(c=>c.id===id),esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const sleep=ms=>new Promise(r=>setTimeout(r,ms)),alive=a=>a.filter(u=>u.hp>0),random=a=>a.length?a[Math.floor(Math.random()*a.length)]:null;
 function imagePath(name){return 'images/'+encodeURIComponent(/[ガ-ゴザ-ゾダ-ドバ-ボパ-ポヴが-ござ-ぞだ-どば-ぼぱ-ぽ]/.test(name)?name.normalize('NFD'):name)}
 function portrait(id){const c=byId(id);return c?`<div class="portrait"><img src="${imagePath(c.imageFile)}" alt="${esc(c.name)}" onerror="this.style.display='none';this.parentElement.append('⚔️')"></div>`:'<div class="portrait">？</div>'}
 function rarityClass(r){return r==='エピック'?'epic':r==='レア'?'rare':'normal'}
 function fresh(){return {gems:500,gold:300,stage:1,clearedStage:0,stageClearCounts:{},owned:{swordman:{level:1,dupes:0},archer:{level:1,dupes:0},spearman:{level:1,dupes:0}},party:['swordman','archer','spearman'],ringInventory:{power:0,heart:0,skill:0},equipment:{}}}
-function loadState(){let saved;try{saved=JSON.parse(localStorage.getItem(KEY))}catch(e){}if(!saved||typeof saved!=='object')return fresh();const s={...fresh(),...saved};s.owned=saved.owned||fresh().owned;s.party=Array.isArray(saved.party)?saved.party.filter(id=>s.owned[id]&&byId(id)).slice(0,3):fresh().party;s.stageClearCounts=saved.stageClearCounts||{};s.ringInventory={power:0,heart:0,skill:0,...saved.ringInventory};s.equipment=saved.equipment||{};s.gems=Math.max(0,Number(s.gems)||0);s.gold=Math.max(0,Number(s.gold)||0);s.clearedStage=Math.min(MAX_STAGE,Math.max(0,Number(s.clearedStage)||0));s.stage=Math.min(MAX_STAGE,Math.max(1,Number(s.stage)||1));for(const id of Object.keys(s.owned)){const c=byId(id);if(!c){delete s.owned[id];continue}const o=s.owned[id];if(!o||typeof o!=='object')s.owned[id]={level:1,dupes:0};else{o.level=Math.min(c.max,Math.max(1,Number(o.level)||1));o.dupes=Math.max(0,Number(o.dupes)||0)}}return s}
-let state=loadState();let selectedStage=Math.min(MAX_STAGE,state.clearedStage+1);let ringTarget=null,slotTarget=null,battle=null;let summonQueue=[],summonIndex=0;
-let dexRarity='ノーマル',dexPage=0;let battleSerial=0;let dailyData=readDaily(),dailySpinning=false,dailyRotation=0;
+function loadState(){let saved;try{saved=JSON.parse(localStorage.getItem(KEY))}catch(e){}if(!saved||typeof saved!=='object')return fresh();const s={...fresh(),...saved};s.owned=saved.owned||fresh().owned;s.party=Array.isArray(saved.party)?saved.party.filter(id=>s.owned[id]&&byId(id)).slice(0,3):fresh().party;s.stageClearCounts=saved.stageClearCounts||{};s.ringInventory={power:0,heart:0,skill:0,...saved.ringInventory};for(const type of RING_IDS)s.ringInventory[type]=Math.max(0,Number(s.ringInventory[type])||0);s.equipment=saved.equipment||{};s.gems=Math.max(0,Number(s.gems)||0);s.gold=Math.max(0,Number(s.gold)||0);s.clearedStage=Math.min(MAX_STAGE,Math.max(0,Number(s.clearedStage)||0));s.stage=Math.min(MAX_STAGE,Math.max(1,Number(s.stage)||1));for(const id of Object.keys(s.owned)){const c=byId(id);if(!c){delete s.owned[id];continue}const o=s.owned[id];if(!o||typeof o!=='object')s.owned[id]={level:1,dupes:0};else{o.level=Math.min(c.max,Math.max(1,Number(o.level)||1));o.dupes=Math.max(0,Number(o.dupes)||0)}}return s}
+let state=loadState(),selectedStage=Math.min(MAX_STAGE,state.clearedStage+1),ringTarget=null,slotTarget=null,battle=null,summonQueue=[],summonIndex=0;
+let dexRarity='ノーマル',dexPage=0,battleSerial=0,dailyData=readDaily(),dailySpinning=false,dailyRotation=0,animationToken=0;
+let selectedEvent='undead',eventStage=1;
 function save(){try{localStorage.setItem(KEY,JSON.stringify(state))}catch(e){console.warn('セーブ失敗',e)}}
 function showError(message){const el=$('errorBox');el.textContent=message;el.style.display='block';setTimeout(()=>{if(el.textContent===message)el.style.display='none'},4500)}
 function showPage(page){document.querySelectorAll('.page').forEach(el=>el.classList.toggle('active',el.id===page));if(page!=='battleFight')renderAll();window.scrollTo(0,0)}
+/* ===========================================================
+   3. 成長・スキル補正：固定攻撃と固定回復だけレベルで成長
+   =========================================================== */
+const LEVEL_GROWING_EFFECTS=new Set(['damage','heal']);
 function getLevelMultiplier(id){const c=byId(id);return Math.pow(1+c.growth,(state.owned[id]?.level||1)-1)}
 function getEquipped(id,type){return(state.equipment[id]||[]).filter(x=>x===type).length}
 function getRingAvailable(type){let used=0;for(const a of Object.values(state.equipment)){if(Array.isArray(a))used+=a.filter(x=>x===type).length}return Math.max(0,(Number(state.ringInventory[type])||0)-used)}
-function getStats(id){const c=byId(id),m=getLevelMultiplier(id);return {hp:Math.floor(c.hp*m*(1+.1*getEquipped(id,'heart'))),atk:Math.floor(c.atk*m*(1+.1*getEquipped(id,'power'))),speed:c.speed,skillMultiplier:1+.1*getEquipped(id,'skill')}}
-function cardHTML(id){const c=byId(id),o=state.owned[id],s=getStats(id),inParty=state.party.includes(id),icons=(state.equipment[id]||[]).filter(Boolean).map(t=>RINGS[t]?.icon||'').join('');return `<article class="card ${inParty?'selected':''}">${portrait(id)}<div class="name ${rarityClass(c.rarity)}">${esc(c.name)}</div><div class="small">${c.rarity} / Lv.${o.level}/${c.max}</div><div class="stats">HP ${s.hp}<br>攻撃力 ${s.atk}<br>素早さ ${s.speed}<br>スキル ${esc(c.skill)}<br>溜め ${c.charge}<br>成長率 ${Math.round(c.growth*100)}%</div><div class="small">装備 ${icons||'なし'}（${c.slot??0}枠）</div><button class="wide" data-action="toggleParty" data-id="${esc(id)}">${inParty?'編成から外す':'編成する'}</button></article>`}
-/* 未所持.png はすべての未所持キャラに共通で使用 */
+function ringCharge(id){const original=byId(id).charge;return original<5?original:Math.max(4,original-getEquipped(id,'charge'))}
+function getStats(id){const c=byId(id),m=getLevelMultiplier(id);return {hp:Math.floor(c.hp*m*(1+.1*getEquipped(id,'heart'))),atk:Math.floor(c.atk*m*(1+.1*getEquipped(id,'power'))),speed:c.speed+2*getEquipped(id,'speed'),skillMultiplier:(LEVEL_GROWING_EFFECTS.has(c.effect)?m:1)*(1+.1*getEquipped(id,'skill'))}}
+/* ===========================================================
+   4. 図鑑・編成・指輪
+   =========================================================== */
+function cardHTML(id){const c=byId(id),o=state.owned[id],s=getStats(id),inParty=state.party.includes(id),icons=(state.equipment[id]||[]).filter(Boolean).map(t=>RINGS[t]?.icon||'').join('');return `<article class="card ${inParty?'selected':''}">${portrait(id)}<div class="name ${rarityClass(c.rarity)}">${esc(c.name)}</div><div class="small">${c.rarity} / Lv.${o.level}/${c.max}</div><div class="stats">HP ${s.hp}<br>攻撃力 ${s.atk}<br>素早さ ${s.speed}<br>スキル ${esc(c.skill)}<br>溜め ${ringCharge(id)}<br>成長率 ${Math.round(c.growth*100)}%</div><div class="small">装備 ${icons||'なし'}（${c.slot??0}枠）</div><button class="wide" data-action="toggleParty" data-id="${esc(id)}">${inParty?'編成から外す':'編成する'}</button></article>`}
 function encyclopediaCardHTML(id){const c=byId(id),o=state.owned[id];if(!o)return `<article class="encyclopedia-card encyclopedia-locked"><div class="encyclopedia-image"><div class="portrait"><img src="${imagePath('未所持.png')}" alt="未所持キャラクター" onerror="this.style.display='none';this.parentElement.append('🔒')"></div></div><div class="name">？？？</div><div class="small">${esc(c.rarity)}</div><div class="small">未獲得</div></article>`;return `<article class="encyclopedia-card"><button class="encyclopedia-image" data-action="openEncyclopedia" data-id="${esc(id)}">${portrait(id)}</button><div class="name ${rarityClass(c.rarity)}">${esc(c.name)}</div><div class="encyclopedia-level">Lv.${o.level}/${c.max}</div><button class="plus" data-action="openRing" data-id="${esc(id)}">＋</button></article>`}
 function changeDexRarity(rarity){if(!['ノーマル','レア','エピック'].includes(rarity))return;dexRarity=rarity;dexPage=0;renderAll()}
 function changeDexPage(direction){const count=CHARACTERS.filter(c=>c.rarity===dexRarity).length;dexPage=Math.max(0,Math.min(dexPage+direction,Math.max(1,Math.ceil(count/9))-1));renderAll()}
-function renderDex(){const characters=CHARACTERS.filter(c=>c.rarity===dexRarity),total=Math.max(1,Math.ceil(characters.length/9));dexPage=Math.min(dexPage,total-1);$('characterList').innerHTML=characters.slice(dexPage*9,(dexPage+1)*9).map(c=>encyclopediaCardHTML(c.id)).join('');$('dexControls').innerHTML=`<div class="dex-tabs">${['ノーマル','レア','エピック'].map(r=>`<button class="${dexRarity===r?'selected':''}" data-action="dexRarity" data-rarity="${r}">${r}</button>`).join('')}</div><div class="dex-pages"><button data-action="dexPage" data-direction="-1" ${dexPage===0?'disabled':''}>◀ 前へ</button><span>${dexPage+1} / ${total}</span><button data-action="dexPage" data-direction="1" ${dexPage>=total-1?'disabled':''}>次へ ▶</button></div>`}
-function renderAll(){$('gems').textContent=state.gems;$('gold').textContent=state.gold;$('stage').textContent=Math.min(MAX_STAGE,state.clearedStage+1);$('homeSummary').innerHTML=`所持キャラクター：${Object.keys(state.owned).length}体<br>編成中：${state.party.map(id=>esc(byId(id)?.name||id)).join(' / ')||'なし'}<br>草原クリア状況：${state.clearedStage} / 20`;$('gachaOwned').textContent=Object.keys(state.owned).length+' / '+CHARACTERS.length+'体を所持';$('partyView').innerHTML=state.party.map(id=>cardHTML(id)).join('')||'<p>編成がありません。</p>';renderDex();renderStageMap();$('battleIntro').innerHTML=`選択中：ステージ ${selectedStage}<br>敵編成：${esc(formationText(selectedStage))}<br>味方編成：${state.party.map(id=>esc(byId(id)?.name||id)).join(' / ')||'なし'}`;$('startBattleButton').textContent='ステージ '+selectedStage+' に挑戦';$('startBattleButton').disabled=!state.party.length;updateDailyStatus()}
+function renderDex(){const chars=CHARACTERS.filter(c=>c.rarity===dexRarity),total=Math.max(1,Math.ceil(chars.length/9));dexPage=Math.min(dexPage,total-1);$('characterList').innerHTML=chars.slice(dexPage*9,(dexPage+1)*9).map(c=>encyclopediaCardHTML(c.id)).join('');$('dexControls').innerHTML=`<div class="dex-tabs">${['ノーマル','レア','エピック'].map(r=>`<button class="${dexRarity===r?'selected':''}" data-action="dexRarity" data-rarity="${r}">${r}</button>`).join('')}</div><div class="dex-pages"><button data-action="dexPage" data-direction="-1" ${dexPage===0?'disabled':''}>◀ 前へ</button><span>${dexPage+1} / ${total}</span><button data-action="dexPage" data-direction="1" ${dexPage>=total-1?'disabled':''}>次へ ▶</button></div>`}
 function toggleParty(id){if(!state.owned[id])return;if(state.party.includes(id))state.party=state.party.filter(x=>x!==id);else{if(state.party.length>=3){showError('編成は最大3体です');return}state.party.push(id)}save();renderAll()}
-function openEncyclopedia(id){const c=byId(id),o=state.owned[id];if(!c||!o)return;const s=getStats(id),inParty=state.party.includes(id);$('encyclopediaDetail').innerHTML=`<h2 class="section-title ${rarityClass(c.rarity)}">${esc(c.name)}</h2><div class="encyclopedia-detail-image">${portrait(id)}</div><div style="text-align:center"><b>${esc(c.rarity)}</b><br>Lv.${o.level}/${c.max}</div><div class="encyclopedia-detail-stats">❤️ HP：${s.hp}<br>⚔️ 攻撃力：${s.atk}<br>💨 素早さ：${s.speed}<br>✨ スキル：${esc(c.skill)}<br>⏳ スキル溜め：${c.charge}<br>📈 成長率：${Math.round(c.growth*100)}%<br>💍 装備スロット：${c.slot??0}枠${c.passive?`<br>🌟 パッシブ：${esc(c.passive)}`:''}</div><button class="wide" data-action="togglePartyFromDetail" data-id="${esc(id)}">${inParty?'編成から外す':'編成する'}</button>`;$('encyclopediaModal').classList.add('active')}
+function openEncyclopedia(id){const c=byId(id),o=state.owned[id];if(!c||!o)return;const s=getStats(id),inParty=state.party.includes(id);$('encyclopediaDetail').innerHTML=`<h2 class="section-title ${rarityClass(c.rarity)}">${esc(c.name)}</h2><div class="encyclopedia-detail-image">${portrait(id)}</div><div style="text-align:center"><b>${esc(c.rarity)}</b><br>Lv.${o.level}/${c.max}</div><div class="encyclopedia-detail-stats">❤️ HP：${s.hp}<br>⚔️ 攻撃力：${s.atk}<br>💨 素早さ：${s.speed}<br>✨ スキル：${esc(c.skill)}<br>⏳ スキル溜め：${ringCharge(id)}<br>📈 成長率：${Math.round(c.growth*100)}%<br>💍 装備スロット：${c.slot??0}枠${c.passive?`<br>🌟 パッシブ：${esc(c.passive)}`:''}</div><button class="wide" data-action="togglePartyFromDetail" data-id="${esc(id)}">${inParty?'編成から外す':'編成する'}</button>`;$('encyclopediaModal').classList.add('active')}
 function openRing(id){if(!state.owned[id])return;ringTarget=id;renderRingModal();$('characterRingModal').classList.add('active')}
 function renderRingModal(){if(!ringTarget)return;const id=ringTarget,c=byId(id),slots=c.slot??0,equipment=state.equipment[id]||[];let html=`<b>${esc(c.name)}</b><h4>指輪の所持数（未装備）</h4><div class="stock">`;for(const type of RING_IDS)html+=`<div>${RINGS[type].icon}<br>${RINGS[type].name}<br>${getRingAvailable(type)}個</div>`;html+='</div><h4>装備スロット</h4><div class="slots">';for(let i=0;i<slots;i++){const type=equipment[i];html+=`<button class="slot ${type?'':'empty'}" data-action="openSlot" data-id="${esc(id)}" data-index="${i}"><span class="small">装備枠 ${i+1}</span><br>${type?RINGS[type].icon+' '+RINGS[type].name:'＋'}</button>`}html+='</div>';if(!slots)html+='<p>装備枠はありません。</p>';$('characterRingContent').innerHTML=html}
 function openSlot(id,index){if(index<0||index>=(byId(id)?.slot??0))return;slotTarget={id,index};$('equipmentModalCharacter').textContent=byId(id).name+' / 装備枠 '+(index+1);renderSlotModal();$('equipmentModal').classList.add('active')}
 function renderSlotModal(){if(!slotTarget)return;const {id,index}=slotTarget,current=state.equipment[id]?.[index];let html='';if(current)html=`<p>装備中：${RINGS[current].icon} ${RINGS[current].name}</p><button class="wide" data-action="unequip" data-id="${esc(id)}" data-index="${index}">取り外す</button>`;else for(const type of RING_IDS)html+=`<button class="choice" data-action="equip" data-id="${esc(id)}" data-index="${index}" data-type="${type}" ${getRingAvailable(type)?'':'disabled'}><span>${RINGS[type].icon} ${RINGS[type].name}<br><span class="small">${RINGS[type].description}</span></span><b>${getRingAvailable(type)}個</b></button>`;$('equipmentModalChoices').innerHTML=html}
 function equip(id,index,type){if(!RINGS[type]||getRingAvailable(type)<=0)return;if(!state.equipment[id])state.equipment[id]=[];if(state.equipment[id][index])return;state.equipment[id][index]=type;save();renderSlotModal();renderRingModal();renderAll()}
 function unequip(id,index){if(!state.equipment[id])return;state.equipment[id][index]=null;save();renderSlotModal();renderRingModal();renderAll()}
+/* ===========================================================
+   5. 草原・ガチャ
+   =========================================================== */
 function formationText(stage){const cleared=(Number(state.stageClearCounts[stage])||0)>0||stage<=state.clearedStage;if(!cleared)return '？？？（初回クリア後に公開）';return(STAGE_ENEMIES[stage]||[]).map(([id])=>byId(id)?.name||'不明').join(' / ')}
 function renderStageMap(){let nodes='';const unlocked=Math.min(MAX_STAGE,state.clearedStage+1);for(let i=1;i<=MAX_STAGE;i++){const boss=BOSS_STAGES.includes(i),locked=i>unlocked;nodes+=`<button class="stage-node ${boss?'boss':''} ${i<=state.clearedStage?'completed':''} ${i===unlocked?'current':''} ${i===selectedStage?'selected':''} ${locked?'locked':''}" data-action="selectStage" data-stage="${i}" ${locked?'disabled':''}><span class="num">${boss?'👑 ':''}${i}</span><span class="small">${boss?'BOSS STAGE':'STAGE'}</span><span class="small">${locked?'🔒 未解放':i<=state.clearedStage?'✓ クリア済み':'挑戦可能'}</span></button>`}const count=Number(state.stageClearCounts[selectedStage])||0,gold=Math.floor(STAGE_GOLD[selectedStage]*Math.pow(.8,count));$('stageMap').innerHTML=`<div class="stage-map"><h3>🌿 緑風の草原</h3><p>クリア済み ${state.clearedStage} / 20</p><div class="map-grid">${nodes}</div><div class="stage-info"><b>ステージ ${selectedStage}</b> ${BOSS_STAGES.includes(selectedStage)?'👑 BOSS':''}<br>敵編成：${esc(formationText(selectedStage))}<br>次回の金貨報酬：🪙 ${gold}${selectedStage===20&&count===0?'<br>初回確定：🟠 チカラの指輪 ×1':''}</div><button class="map-start" data-action="startBattle" ${state.party.length?'':'disabled'}>ステージ ${selectedStage} に挑戦</button></div>`}
 function selectStage(stage){if(!Number.isInteger(stage)||stage<1||stage>MAX_STAGE||stage>state.clearedStage+1)return;selectedStage=stage;renderAll()}
 function addCharacter(id){const c=byId(id);if(!c)return '';if(!state.owned[id]){state.owned[id]={level:1,dupes:0};return '新しい仲間を獲得！'}const o=state.owned[id];o.dupes=(o.dupes||0)+1;while(o.level<c.max&&o.dupes>=o.level){o.dupes-=o.level;o.level++}return '重複獲得！ Lv.'+o.level}
 function drawCharacter(){const r=Math.random(),rarity=r<.7?'ノーマル':r<.95?'レア':'エピック';return random(CHARACTERS.filter(c=>c.rarity===rarity))}
 function summon(count){const cost=count===10?900:100;if(state.gems<cost){showError('ジェムが足りません');return}state.gems-=cost;summonQueue=[];for(let i=0;i<count;i++){const c=drawCharacter();summonQueue.push({c,message:addCharacter(c.id)})}save();renderAll();summonIndex=0;$('summonOverlay').classList.add('active');showSummon()}
-function showSummon(){const item=summonQueue[summonIndex];if(!item){finishSummon();return}const c=item.c;$('summonOverlay').classList.toggle('epic-mode',c.rarity==='エピック');$('summonVisual').innerHTML=`<div class="magic"><img src="${imagePath(c.imageFile)}" alt="${esc(c.name)}"></div><div class="summon-name">${esc(c.name)}</div><p class="${rarityClass(c.rarity)}">${c.rarity}</p><p>${esc(item.message)}</p>`;$('summonProgress').textContent=(summonIndex+1)+' / '+summonQueue.length;$('summonControls').innerHTML=`<button data-action="nextSummon">${summonIndex===summonQueue.length-1?'結果を見る':'次へ'}</button> <button data-action="skipSummon">スキップ</button>`}
-function finishSummon(){$('gachaResult').innerHTML=summonQueue.map(x=>`<div class="row" style="margin:8px 0"><div style="width:75px">${portrait(x.c.id)}</div><div><b class="${rarityClass(x.c.rarity)}">${esc(x.c.name)}</b><br><span class="small">${esc(x.message)}</span></div></div>`).join('');$('summonOverlay').classList.remove('active');summonQueue=[];renderAll()}
-function makeUnit(id,side,options={}){const c=byId(id),multiplier=options.multiplier??1,st=side==='ally'?getStats(id):{hp:Math.floor(c.hp*multiplier*(options.hpMultiplier||1)),atk:Math.floor(c.atk*multiplier),speed:Math.max(1,Math.floor(c.speed*multiplier)),skillMultiplier:1};if(options.hp)st.hp=options.hp;if(options.speed)st.speed=options.speed;return {uid:++battleSerial,id,side,name:c.name,maxHp:st.hp,hp:st.hp,atk:st.atk,speed:st.speed,charge:options.charge??c.charge,skillCount:0,gauge:0,skillMultiplier:st.skillMultiplier,buff:1,buffTurns:0,permanentBuff:1,guard:0,evade:0,poison:0,acting:false,effectText:'',effectKind:''}}
+function showSummon(){const item=summonQueue[summonIndex];if(!item){finishSummon();return}const token=++animationToken,index=summonIndex,c=item.c,overlay=$('summonOverlay'),epic=c.rarity==='エピック';overlay.classList.toggle('epic-mode',epic);const particles=Array.from({length:32},(_,i)=>`<span class="summon-particle" style="--angle:${i*137.5}deg;--size:${3+i%5}px;--duration:${1.2+i%4*.3}s;--delay:${-(i%9)*.2}s"></span>`).join('');$('summonVisual').innerHTML=`<div class="summon-cinema"><div class="summon-magic"></div><div class="summon-lightning"></div>${particles}<div id="summonCharacter" class="summon-character"><img src="${imagePath(c.imageFile)}" alt="${esc(c.name)}" onerror="this.style.display='none';this.parentElement.append('⚔️')"></div></div><div id="summonInformation" class="summon-information"><h2>${esc(c.name)}</h2><p class="${rarityClass(c.rarity)}">✦ ${esc(c.rarity)} ✦</p><p>${esc(item.message)}</p></div><div id="summonFlash" class="summon-flash"></div>`;$('summonProgress').textContent=(index+1)+' / '+summonQueue.length;$('summonControls').innerHTML='<button id="summonNextButton" data-action="nextSummon" disabled>召喚中…</button> <button data-action="skipSummon">スキップ</button>';setTimeout(()=>{if(token!==animationToken||summonIndex!==index||!overlay.classList.contains('active'))return;$('summonFlash')?.classList.add('play');$('summonCharacter')?.classList.add('visible');$('summonInformation')?.classList.add('visible');const b=$('summonNextButton');if(b){b.disabled=false;b.textContent=index===summonQueue.length-1?'結果を見る':'次へ'}},epic?4000:1500)}
+function finishSummon(){++animationToken;$('gachaResult').innerHTML=summonQueue.map(x=>`<div class="row" style="margin:8px 0"><div style="width:75px">${portrait(x.c.id)}</div><div><b class="${rarityClass(x.c.rarity)}">${esc(x.c.name)}</b><br><span class="small">${esc(x.message)}</span></div></div>`).join('');$('summonOverlay').classList.remove('active');summonQueue=[];renderAll()}
+/* ===========================================================
+   6. 戦闘：元の行動順・パッシブ・演出・指輪を保持
+   =========================================================== */
+function makeUnit(id,side,options={}){const c=byId(id),m=options.multiplier??1,st=side==='ally'?getStats(id):{hp:Math.floor(c.hp*m*(options.hpMultiplier||1)),atk:Math.floor(c.atk*m),speed:Math.max(1,Math.floor(c.speed*m)),skillMultiplier:1};if(options.hp)st.hp=options.hp;if(options.speed)st.speed=options.speed;return {uid:++battleSerial,id,side,name:c.name,maxHp:st.hp,hp:st.hp,atk:st.atk,speed:st.speed,charge:options.charge??(side==='ally'?ringCharge(id):c.charge),skillCount:0,gauge:0,skillMultiplier:st.skillMultiplier,buff:1,buffTurns:0,permanentBuff:1,guard:0,evade:0,poison:0,acting:false,effectText:'',effectKind:''}}
 function startBattle(){if(battle?.running)return;if(selectedStage>state.clearedStage+1){showError('まだ解放されていません');return}if(!state.party.length){showError('編成してください');return}const allies=state.party.map(id=>makeUnit(id,'ally'));const enemies=STAGE_ENEMIES[selectedStage].map(([id,m,hpMul])=>{const opt={multiplier:m,hpMultiplier:hpMul||1};if(selectedStage===10&&id==='ゴーレム'){opt.hp=700;opt.speed=12;opt.charge=3}return makeUnit(id,'enemy',opt)});battle={stage:selectedStage,allies,enemies,running:true,busy:false,current:null,awaitingAction:false,result:null,token:++battleSerial,message:'戦闘開始！'};showPage('battleFight');renderBattle();advanceTurn()}
 function unitCard(u){const c=byId(u.id),hpRate=Math.max(0,100*u.hp/u.maxHp);return `<div class="unit ${u.side==='enemy'?'enemy':''} ${u.hp<=0?'dead':''} ${u.acting?'active':''}">${u.acting?`<div style="color:#ffe17c;font-weight:900;font-size:11px">${u.side==='enemy'?'▼ 敵の行動':'▶ 行動中'}</div>`:''}${portrait(u.id)}<div class="name ${rarityClass(c.rarity)}">${esc(u.name)}</div><div class="small">HP ${Math.max(0,u.hp)} / ${u.maxHp}</div><div class="hpbar"><i style="width:${hpRate}%"></i></div><div class="small">スキル ${Math.min(u.skillCount,u.charge)} / ${u.charge}</div>${u.guard>0?'<div class="small">🛡️ 防御中</div>':''}${u.evade>0?'<div class="small">💨 回避中</div>':''}</div>`}
-function renderBattle(){if(!battle)return;$('bossLabel').textContent=BOSS_STAGES.includes(battle.stage)?'👑 BOSS':'STAGE '+battle.stage;$('enemyUnits').innerHTML=battle.enemies.map(unitCard).join('');$('allyUnits').innerHTML=battle.allies.map(unitCard).join('');if(battle.result){renderBattleResult();return}
-  const u=battle.current;
-  if(battle.pendingUseSkill!==undefined&&u?.side==='ally'){
-    $('actionArea').innerHTML=`<b>🎯 ${esc(u.name)}：攻撃対象を選択</b><div class="action-buttons" style="grid-template-columns:1fr">${alive(battle.enemies).map(t=>`<button data-action="selectTarget" data-uid="${t.uid}">${esc(t.name)}（HP ${t.hp}/${t.maxHp}）</button>`).join('')}</div><button data-action="cancelTarget" style="margin-top:8px">戻る</button>`;
-    return;
-  }if(battle.awaitingAction&&u?.side==='ally'){const c=byId(u.id),ready=u.skillCount>=u.charge;$('actionArea').innerHTML=`<b>${esc(u.name)} の行動</b><p class="small">${esc(battle.message)}</p><div class="action-buttons"><button class="attack" data-action="battleAttack">⚔️ 通常攻撃</button><button class="skill" data-action="battleSkill" ${ready?'':'disabled'}>✨ ${esc(c.skill)} ${ready?'':'（溜め中）'}</button></div>`}else $('actionArea').innerHTML=`<div class="${u?.side==='enemy'?'enemy-preview':''}">${esc(battle.message||'次の行動を待っています…')}</div>`}
-/* ダメージ数字はキャラ枠外へ1回だけ表示。再描画で二重生成しない */
+function renderBattle(){if(!battle)return;$('bossLabel').textContent=battle.eventId?EVENT_DATA[battle.eventId].name+' STAGE '+battle.stage:BOSS_STAGES.includes(battle.stage)?'👑 BOSS':'STAGE '+battle.stage;$('enemyUnits').innerHTML=battle.enemies.map(unitCard).join('');$('allyUnits').innerHTML=battle.allies.map(unitCard).join('');if(battle.result){renderBattleResult();return}const u=battle.current;if(battle.pendingUseSkill!==undefined&&u?.side==='ally'){$('actionArea').innerHTML=`<b>🎯 ${esc(u.name)}：攻撃対象を選択</b><div class="action-buttons" style="grid-template-columns:1fr">${alive(battle.enemies).map(t=>`<button data-action="selectTarget" data-uid="${t.uid}">${esc(t.name)}（HP ${t.hp}/${t.maxHp}）</button>`).join('')}</div><button data-action="cancelTarget" style="margin-top:8px">戻る</button>`;return}if(battle.awaitingAction&&u?.side==='ally'){const c=byId(u.id),ready=u.skillCount>=u.charge;$('actionArea').innerHTML=`<b>${esc(u.name)} の行動</b><p class="small">${esc(battle.message)}</p><div class="action-buttons"><button class="attack" data-action="battleAttack">⚔️ 通常攻撃</button><button class="skill" data-action="battleSkill" ${ready?'':'disabled'}>✨ ${esc(c.skill)} ${ready?'':'（溜め中）'}</button></div>`}else $('actionArea').innerHTML=`<div class="${u?.side==='enemy'?'enemy-preview':''}">${esc(battle.message||'次の行動を待っています…')}</div>`}
 function showEffect(target,text,kind=''){if(!battle||!target)return;const units=target.side==='enemy'?battle.enemies:battle.allies,parent=target.side==='enemy'?$('enemyUnits'):$('allyUnits'),index=units.findIndex(u=>u.uid===target.uid),card=parent?.children[index];if(!card)return;const rect=card.getBoundingClientRect(),popup=document.createElement('div');popup.textContent=String(text);Object.assign(popup.style,{position:'fixed',left:(rect.left+rect.width/2)+'px',top:(rect.top+rect.height*.3)+'px',transform:'translateX(-50%)',zIndex:'9999',pointerEvents:'none',fontSize:'30px',fontWeight:'900',color:kind==='heal'?'#86f3ad':kind==='buff'?'#ffe17c':'#ff8585',textShadow:'0 2px 5px black',whiteSpace:'nowrap',transition:'transform .9s ease-out, opacity .9s ease-out'});document.body.appendChild(popup);requestAnimationFrame(()=>{popup.style.transform='translate(-50%,-45px)';popup.style.opacity='0'});setTimeout(()=>popup.remove(),950)}
-function chooseNextUnit(){const units=[...alive(battle.allies),...alive(battle.enemies)];for(let i=0;i<10000;i++){const ready=units.filter(u=>u.gauge>=100);if(ready.length){ready.sort((a,b)=>a.side!==b.side?(a.side==='ally'?-1:1):b.gauge-a.gauge);const u=ready[0];u.gauge-=100;return u}for(const u of units)u.gauge+=u.speed}return units[0]||null}
+function chooseNextUnit(){const units=[...alive(battle.allies),...alive(battle.enemies)];for(let i=0;i<10000;i++){const ready=units.filter(u=>u.gauge>=100);if(ready.length){ready.sort((a,b)=>a.side!==b.side?(a.side==='ally'?-1:1):b.gauge-a.gauge);const u=ready[0];u.gauge-=100;if(u.side==='ally'){const recovered=Math.min(u.maxHp-u.hp,getEquipped(u.id,'heal')*10);if(recovered>0){u.hp+=recovered;const token=battle.token;setTimeout(()=>{if(battle&&battle.token===token)showEffect(u,'+'+recovered,'heal')},0)}}return u}for(const u of units)u.gauge+=u.speed}return units[0]||null}
 function clearActing(){if(!battle)return;for(const u of [...battle.allies,...battle.enemies])u.acting=false}
 function getAttackPower(u){let atk=u.atk*u.buff*u.permanentBuff;if(u.id==='一閃スピアドン'&&u.hp<=u.maxHp/2)atk*=1.5;return Math.max(1,Math.floor(atk))}
-function chooseTarget(u){
-  const opponents=u.side==='ally'?battle.enemies:battle.allies;
-  const targets=alive(opponents);
-  if(u.side==='ally'&&u.id==='狙撃手アーチャー'&&battle?.targetUID!=null){
-    return targets.find(t=>t.uid===battle.targetUID)||null;
-  }
-  return random(targets);
-}
-function dealDamage(attacker,target,amount,isSkill=false){if(!target||target.hp<=0)return 0;if(target.evade>0){const chance=target.evade;target.evade=0;if(Math.random()<chance){showEffect(target,'回避','buff');battle.message=target.name+' は攻撃を回避！';return 0}}let damage=Math.max(1,Math.floor(amount));if(target.guard>0){damage=Math.max(1,Math.floor(damage*(1-target.guard)));target.guard=0}target.hp=Math.max(0,target.hp-damage);showEffect(target,'−'+damage);battle.message=attacker.name+' → '+target.name+'：'+damage+'ダメージ';if(target.id==='鍛錬剣士'&&target.hp>0&&attacker.hp>0&&Math.random()<(isSkill?1:.2)){const reflected=damage*2;attacker.hp=Math.max(0,attacker.hp-reflected);showEffect(attacker,'−'+reflected);battle.message+=' / アルティメットカウンター！'}return damage}
+function chooseTarget(u){const targets=alive(u.side==='ally'?battle.enemies:battle.allies);if(u.side==='ally'&&u.id==='狙撃手アーチャー'&&battle?.targetUID!=null)return targets.find(t=>t.uid===battle.targetUID)||null;return random(targets)}
+function dealDamage(attacker,target,amount,isSkill=false){if(!target||target.hp<=0)return 0;if(target.side==='ally'&&Math.random()<getEquipped(target.id,'dodge')*.03){showEffect(target,'回避','buff');battle.message=target.name+'は攻撃を回避！';return 0}if(target.evade>0){const chance=target.evade;target.evade=0;if(Math.random()<chance){showEffect(target,'回避','buff');battle.message=target.name+' は攻撃を回避！';return 0}}let damage=Math.max(1,Math.floor(amount));if(target.guard>0){damage=Math.max(1,Math.floor(damage*(1-target.guard)));target.guard=0}target.hp=Math.max(0,target.hp-damage);showEffect(target,'−'+damage);battle.message=attacker.name+' → '+target.name+'：'+damage+'ダメージ';if(target.id==='鍛錬剣士'&&target.hp>0&&attacker.hp>0&&Math.random()<(isSkill?1:.2)){const reflected=damage*2;attacker.hp=Math.max(0,attacker.hp-reflected);showEffect(attacker,'−'+reflected);battle.message+=' / アルティメットカウンター！'}return damage}
 function healUnit(target,amount){const before=target.hp;target.hp=Math.min(target.maxHp,target.hp+Math.max(1,Math.floor(amount)));const healed=target.hp-before;showEffect(target,'+'+healed,'heal');return healed}
 async function advanceTurn(){if(!battle||!battle.running||battle.busy)return;if(checkBattleEnd())return;clearActing();battle.pendingUseSkill=undefined;battle.targetUID=null;const u=chooseNextUnit();if(!u)return;battle.current=u;u.acting=true;if(u.poison>0){const d=Math.max(1,Math.floor(u.maxHp*.08));u.hp=Math.max(0,u.hp-d);u.poison--;showEffect(u,'−'+d);battle.message=u.name+' は毒で '+d+' ダメージ！';renderBattle();await sleep(650);if(!battle?.running)return;if(u.hp<=0){clearActing();if(!checkBattleEnd())advanceTurn();return}}if(u.side==='ally'){battle.awaitingAction=true;battle.message=u.name+' の行動を選択してください。';renderBattle();return}battle.awaitingAction=false;const c=byId(u.id),ready=u.skillCount>=u.charge;battle.message=u.name+' の行動予告：'+(ready?'スキル「'+c.skill+'」':'通常攻撃');renderBattle();const token=battle.token;await sleep(1100);if(!battle||!battle.running||battle.token!==token)return;await enemyAct(u)}
-async function allyAct(useSkill){if(!battle?.running||!battle.awaitingAction||battle.busy)return;const u=battle.current;if(!u||u.side!=='ally'||(useSkill&&u.skillCount<u.charge))return;
-  if(u.id==='狙撃手アーチャー'&&alive(battle.enemies).length>1){
-    battle.pendingUseSkill=useSkill;
-    battle.awaitingAction=false;
-    battle.message='攻撃する敵を選択してください';
-    renderBattle();
-    return;
-  }
-  battle.targetUID=null;
-  battle.busy=true;battle.awaitingAction=false;
-  await performAction(u,useSkill);
-  if(!battle?.running)return;
-  battle.busy=false;clearActing();
-  if(checkBattleEnd())return;
-  await sleep(450);advanceTurn()}
+async function allyAct(useSkill){if(!battle?.running||!battle.awaitingAction||battle.busy)return;const u=battle.current;if(!u||u.side!=='ally'||(useSkill&&u.skillCount<u.charge))return;if(u.id==='狙撃手アーチャー'&&alive(battle.enemies).length>1){battle.pendingUseSkill=useSkill;battle.awaitingAction=false;battle.message='攻撃する敵を選択してください';renderBattle();return}battle.targetUID=null;battle.busy=true;battle.awaitingAction=false;await performAction(u,useSkill);if(!battle?.running)return;battle.busy=false;clearActing();if(checkBattleEnd())return;await sleep(450);advanceTurn()}
 async function enemyAct(u){if(!battle?.running)return;battle.busy=true;const c=byId(u.id),useSkill=u.skillCount>=u.charge;battle.message=u.name+' の'+(useSkill?'スキル「'+c.skill+'」':'通常攻撃')+'！';renderBattle();await sleep(300);await performAction(u,useSkill);if(!battle?.running)return;battle.busy=false;clearActing();if(checkBattleEnd())return;await sleep(500);advanceTurn()}
+// skillMultiplier: プレイヤー固定威力はレベル×指輪、イベント敵の固定威力はイベント倍率。
 async function performAction(u,useSkill){if(!battle?.running)return;const c=byId(u.id);if(!useSkill){const target=chooseTarget(u);if(target)dealDamage(u,target,getAttackPower(u),false);u.skillCount=Math.min(u.charge,u.skillCount+1)}else{u.skillCount=0;const power=c.power*u.skillMultiplier,allies=u.side==='ally'?battle.allies:battle.enemies,opponents=u.side==='ally'?battle.enemies:battle.allies;if(c.effect==='damage'){const targets=c.target==='all'?alive(opponents):[chooseTarget(u)].filter(Boolean);for(const target of targets)dealDamage(u,target,power,true);if(c.target==='all')battle.message=u.name+' の「'+c.skill+'」！ 全体攻撃！'}else if(c.effect==='poison'){const target=chooseTarget(u);if(target){dealDamage(u,target,power,true);if(target.hp>0)target.poison=3}}else if(c.effect==='heal'){const target=random(alive(allies));if(target)healUnit(target,power);battle.message=u.name+' の「'+c.skill+'」！'}else if(c.effect==='healPercent'){for(const target of alive(allies))healUnit(target,target.maxHp*power/100);battle.message=u.name+' の「'+c.skill+'」！'}else if(c.effect==='evade'||c.effect==='evadeSure'){u.evade=c.effect==='evadeSure'?1:Math.min(1,power/100);showEffect(u,'回避','buff');battle.message=u.name+' は回避状態になった！'}else if(c.effect==='guard'){u.guard=Math.min(.95,power/100);showEffect(u,'防御','buff');battle.message=u.name+' は防御態勢を取った！'}else if(c.effect==='buffAlly'){for(const target of alive(allies)){target.buff=1+power/100;target.buffTurns=1;showEffect(target,'強化','buff')}battle.message=u.name+' の「'+c.skill+'」！'}else if(c.effect==='buffSelf'){u.permanentBuff+=power/100;showEffect(u,'強化','buff');battle.message=u.name+' の「'+c.skill+'」！'}}if(u.buffTurns>0&&!(useSkill&&c.effect==='buffAlly')){u.buffTurns--;if(u.buffTurns===0)u.buff=1}renderBattle();await sleep(850)}
 function checkBattleEnd(){if(!battle?.running)return true;if(!alive(battle.enemies).length){finishBattle(true);return true}if(!alive(battle.allies).length){finishBattle(false);return true}return false}
+/* ===========================================================
+   7. 勝敗・報酬：草原・イベント共通の入り口
+   =========================================================== */
 function createStageDrop(stage){const candidates=[...new Set(STAGE_ENEMIES[stage].map(x=>x[0]))],successful=[];for(const id of candidates){const c=byId(id);if(c&&Math.random()*100<DROP_RATES[c.rarity])successful.push(id)}if(!successful.length)return null;const id=random(successful);return {id,name:byId(id).name,message:addCharacter(id)}}
 function grantStageRewards(stage){const count=Number(state.stageClearCounts[stage])||0,firstClear=count===0,gold=Math.floor(STAGE_GOLD[stage]*Math.pow(.8,count));state.gold+=gold;let gems=0;if(firstClear&&Math.random()<.2){gems=50;state.gems+=gems}let ringReward=null;if(stage===20&&firstClear){state.ringInventory.power=(Number(state.ringInventory.power)||0)+1;ringReward='power'}const drop=createStageDrop(stage);state.stageClearCounts[stage]=count+1;state.clearedStage=Math.max(state.clearedStage,stage);state.stage=Math.min(MAX_STAGE,state.clearedStage+1);save();return {firstClear,gold,gems,ringReward,drop}}
-function finishBattle(victory){if(!battle?.running)return;battle.running=false;battle.busy=false;battle.awaitingAction=false;clearActing();battle.result={victory,rewards:victory?grantStageRewards(battle.stage):null};renderBattle()}
-function renderBattleResult(){const {victory,rewards}=battle.result;if(!victory){$('actionArea').innerHTML=`<div class="result"><h2>敗北…</h2><p>編成や装備を見直して再挑戦しよう。</p><button data-action="returnMap">草原マップへ戻る</button></div>`;return}let html=`<p>🪙 金貨 +${rewards.gold}</p>`;if(rewards.gems)html+=`<p>💎 ジェム +${rewards.gems}</p>`;if(rewards.ringReward)html+=`<p>🟠 チカラの指輪 ×1<br><span class="small">初回クリア確定報酬</span></p>`;if(rewards.drop)html+=`<p>🎁 キャラクタードロップ！<br><b>${esc(rewards.drop.name)}</b><br><span class="small">${esc(rewards.drop.message)}</span></p>`;$('actionArea').innerHTML=`<div class="result"><h2>🎉 ステージクリア！</h2><p>ステージ ${battle.stage} 勝利！</p>${rewards.firstClear?'<p>✨ 初回クリア！</p>':''}${html}<button data-action="returnMap">草原マップへ戻る</button></div>`}
-function returnMap(){if(battle){battle.running=false;battle.token=-1}battle=null;selectedStage=Math.min(MAX_STAGE,Math.max(1,state.clearedStage+1));showPage('battle')}
-/* ログインボーナス・ルーレット */
+function finishBattle(victory){if(!battle?.running)return;battle.running=false;battle.busy=false;battle.awaitingAction=false;clearActing();let rewards=null;if(victory){if(battle.eventId){const progress=eventProgress(battle.eventId,battle.eventPeriod),firstClear=!progress.cleared.includes(battle.stage);rewards={firstClear,gold:0,gems:0,character:null};if(firstClear){const d=EVENT_DATA[battle.eventId].stages[battle.stage-1];rewards.gold=d.gold||0;rewards.gems=d.gems||0;state.gold+=rewards.gold;state.gems+=rewards.gems;if(d.characterDrop?.length){const id=random(d.characterDrop);rewards.character={name:byId(id).name,message:addCharacter(id)}}progress.cleared.push(battle.stage);save()}}else rewards=grantStageRewards(battle.stage)}battle.result={victory,rewards};renderBattle();if(battle.eventId)renderAll()}
+function renderBattleResult(){const {victory,rewards}=battle.result;if(battle.eventId){let html='';if(!victory)html='<h2>敗北…</h2><p>編成を見直して再挑戦しよう。</p>';else if(rewards?.firstClear){html='<h2>🎉 初回クリア！</h2>';if(rewards.gold)html+=`<p>🪙 金貨 +${rewards.gold}</p>`;if(rewards.gems)html+=`<p>💎 ジェム +${rewards.gems}</p>`;if(rewards.character)html+=`<p>🎁 ${esc(rewards.character.name)} ×1</p><p class="small">${esc(rewards.character.message)}</p>`}else html='<h2>🎉 ステージクリア！</h2><p>初回報酬は獲得済みです。</p>';$('actionArea').innerHTML=`<div class="result">${html}<button data-action="returnMap">イベントマップへ戻る</button></div>`;return}if(!victory){$('actionArea').innerHTML='<div class="result"><h2>敗北…</h2><p>編成や装備を見直して再挑戦しよう。</p><button data-action="returnMap">草原マップへ戻る</button></div>';return}let html=`<p>🪙 金貨 +${rewards.gold}</p>`;if(rewards.gems)html+=`<p>💎 ジェム +${rewards.gems}</p>`;if(rewards.ringReward)html+='<p>🟠 チカラの指輪 ×1<br><span class="small">初回クリア確定報酬</span></p>';if(rewards.drop)html+=`<p>🎁 キャラクタードロップ！<br><b>${esc(rewards.drop.name)}</b><br><span class="small">${esc(rewards.drop.message)}</span></p>`;$('actionArea').innerHTML=`<div class="result"><h2>🎉 ステージクリア！</h2><p>ステージ ${battle.stage} 勝利！</p>${rewards.firstClear?'<p>✨ 初回クリア！</p>':''}${html}<button data-action="returnMap">草原マップへ戻る</button></div>`}
+function returnMap(){if(battle?.eventId){const id=battle.eventId;battle.running=false;battle.token=-1;battle=null;if(activeEventPeriod(id)){selectedEvent=id;showPage('subEventMap');renderEventMap()}else{showPage('events');renderEventList()}return}if(battle){battle.running=false;battle.token=-1}battle=null;selectedStage=Math.min(MAX_STAGE,Math.max(1,state.clearedStage+1));showPage('battle')}
+/* ===========================================================
+   8. 日替わりログインボーナス・ルーレット
+   =========================================================== */
 function dailyDate(){return new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Tokyo',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date())}
 function readDaily(){try{return JSON.parse(localStorage.getItem(DAILY_KEY))||{}}catch(e){return {}}}
 function saveDaily(){try{localStorage.setItem(DAILY_KEY,JSON.stringify(dailyData))}catch(e){console.warn('デイリー保存失敗',e)}}
@@ -221,9 +162,39 @@ function claimDailyBonus(){if(!dailyAvailable('bonus'))return;dailyData.bonus=da
 function wheelGradient(){return 'conic-gradient('+DAILY_COLORS.map((color,i)=>`${color} ${i*60}deg ${(i+1)*60}deg`).join(',')+')'}
 function showDailyWheel(){$('dailyContent').innerHTML=`<h2>🎰 ログインルーレット</h2><p>毎日1回無料！</p><div class="daily-wheel-wrap"><div class="daily-pointer">▼</div><div id="dailyWheel" class="daily-wheel" style="background:${wheelGradient()}"></div><div class="daily-center">✦</div></div><div id="dailyWheelResult">${dailyAvailable('wheel')?'本日の運試し！':'本日は挑戦済み'}</div><button class="wide" id="dailySpinButton" data-action="dailySpin" ${dailyAvailable('wheel')?'':'disabled'}>${dailyAvailable('wheel')?'無料で回す':'本日は挑戦済み'}</button><p class="small">100金貨30% / 300金貨25% / 500金貨15%<br>50ジェム15% / 100ジェム10% / 300ジェム5%</p>`;const wheel=$('dailyWheel');DAILY_PRIZES.forEach((prize,i)=>{const a=(i*60+30)*Math.PI/180,label=document.createElement('div');label.className='daily-wheel-label';label.textContent=prize.label;label.style.left=(50+32*Math.sin(a))+'%';label.style.top=(50-32*Math.cos(a))+'%';label.style.transform='translate(-50%,-50%)';wheel.parentElement.appendChild(label)});dailyRotation=0;openDailyModal()}
 function chooseDailyPrize(){let r=Math.random()*100;for(let i=0;i<DAILY_PRIZES.length;i++){r-=DAILY_PRIZES[i].rate;if(r<0)return i}return DAILY_PRIZES.length-1}
-function spinDailyWheel(){if(dailySpinning||!dailyAvailable('wheel'))return;const index=chooseDailyPrize(),prize=DAILY_PRIZES[index];dailySpinning=true;dailyData.wheel=dailyDate();saveDaily();$('dailySpinButton').disabled=true;$('dailyClose').disabled=true;$('dailyWheelResult').textContent='抽選中…';const target=(360-(index*60+30))%360;dailyRotation=360*6+target;const wheel=$('dailyWheel');requestAnimationFrame(()=>requestAnimationFrame(()=>{wheel.style.transform=`rotate(${dailyRotation}deg)`;wheel.parentElement.querySelectorAll('.daily-wheel-label').forEach(el=>{el.style.transition='transform 4.5s cubic-bezier(.12,.75,.12,1)';el.style.transform=`translate(-50%,-50%) rotate(${dailyRotation}deg)`})}));setTimeout(()=>{state[prize.type]+=prize.amount;save();renderAll();$('dailyWheelResult').innerHTML=`<h2>🎉 ${prize.label} 獲得！</h2>`;dailySpinning=false;$('dailyClose').disabled=false},4700)}
-/* ボタンイベント */
-document.addEventListener('click',event=>{const button=event.target.closest('button');if(!button||button.disabled)return;if(button.dataset.page){showPage(button.dataset.page);return}const a=button.dataset.action,id=button.dataset.id,index=Number(button.dataset.index);switch(a){
+function spinDailyWheel(){if(dailySpinning||!dailyAvailable('wheel'))return;const index=chooseDailyPrize(),prize=DAILY_PRIZES[index];dailySpinning=true;dailyData.wheel=dailyDate();saveDaily();$('dailySpinButton').disabled=true;$('dailyClose').disabled=true;$('dailyWheelResult').textContent='抽選中…';dailyRotation=360*6+(360-(index*60+30))%360;const wheel=$('dailyWheel');requestAnimationFrame(()=>requestAnimationFrame(()=>{wheel.style.transform=`rotate(${dailyRotation}deg)`;wheel.parentElement.querySelectorAll('.daily-wheel-label').forEach(el=>{el.style.transition='transform 4.5s cubic-bezier(.12,.75,.12,1)';el.style.transform=`translate(-50%,-50%) rotate(${dailyRotation}deg)`})}));setTimeout(()=>{state[prize.type]+=prize.amount;save();renderAll();$('dailyWheelResult').innerHTML=`<h2>🎉 ${prize.label} 獲得！</h2>`;dailySpinning=false;$('dailyClose').disabled=false},4700)}
+/* ===========================================================
+   9. 日替わりショップ
+   =========================================================== */
+const shopRings=Object.keys(RINGS),shopCharacters=CHARACTERS.filter(c=>c.rarity==='ノーマル'||c.rarity==='レア');
+const shopPrice=c=>c.rarity==='レア'?5000:1500;
+function updateShopStock(){const date=dailyDate(),old=state.dailyShop;if(old&&old.date===date&&shopRings.includes(old.ring)&&Array.isArray(old.characters)&&old.characters.length===2&&old.characters[0]!==old.characters[1]&&old.characters.every(id=>shopCharacters.some(c=>c.id===id))&&old.purchased)return;const available=[...shopCharacters],first=available.splice(Math.floor(Math.random()*available.length),1)[0],second=available.splice(Math.floor(Math.random()*available.length),1)[0];state.dailyShop={date,ring:shopRings[Math.floor(Math.random()*shopRings.length)],characters:[first.id,second.id],purchased:{ring:false,character0:false,character1:false,gems:false}};save()}
+function shopItem(key,image,name,detail,price){const sold=state.dailyShop.purchased[key],affordable=state.gold>=price;return `<div class="shop-product"><div class="shop-product-image">${image}</div><b>${esc(name)}</b><div class="small">${esc(detail)}</div><div class="shop-product-price">🪙 ${price.toLocaleString('ja-JP')}</div><button class="wide" data-action="shopPurchase" data-shop-key="${key}" ${sold||!affordable?'disabled':''}>${sold?'✓ 売り切れ':affordable?'購入する':'金貨不足'}</button></div>`}
+function renderShop(){updateShopStock();const stock=state.dailyShop,ring=RINGS[stock.ring];let html=shopItem('ring',`<span class="shop-ring-icon">${ring.icon}</span>`,ring.name,ring.description,5000);stock.characters.forEach((id,i)=>{const c=byId(id);html+=shopItem('character'+i,portrait(id),c.name,c.rarity+(state.owned[id]?' / 所持済み':' / 未所持'),shopPrice(c))});html+=shopItem('gems','<span class="shop-ring-icon">💎</span>','100ジェム','ジェム ×100',5000);$('shop').innerHTML=`<div class="panel"><h2 class="section-title">🛍️ 日替わりショップ</h2><p class="small">毎日0時（日本時間）に商品と購入回数を更新！</p><p>🪙 所持金貨：<b>${state.gold.toLocaleString('ja-JP')}</b></p><div id="shopMessage" role="status"></div><div class="shop-product-grid">${html}</div><p class="small">※各商品は1日1回限り購入できます。</p></div>`}
+function purchaseShopItem(key){updateShopStock();const stock=state.dailyShop;if(!['ring','character0','character1','gems'].includes(key)||stock.purchased[key])return;let price=5000,message='';if(key==='ring')message=RINGS[stock.ring].name+'を獲得！';else if(key==='character0'||key==='character1'){const i=key==='character0'?0:1,c=byId(stock.characters[i]);if(!c||!shopCharacters.some(x=>x.id===c.id))return;price=shopPrice(c);message=c.name+'を購入！'}else message='100ジェムを獲得！';if(state.gold<price){showError('金貨が足りません');renderShop();return}state.gold-=price;if(key==='ring'){const type=stock.ring;state.ringInventory[type]=(Number(state.ringInventory[type])||0)+1}else if(key==='character0'||key==='character1'){const id=stock.characters[key==='character0'?0:1];message=byId(id).name+'：'+addCharacter(id)}else state.gems+=100;stock.purchased[key]=true;save();renderAll();renderShop();$('shopMessage').textContent='✅ '+message}
+/* ===========================================================
+   10. 期間限定イベント・開催判定・マップ
+   =========================================================== */
+const DAY_MS=86400000,JST_MS=9*3600000;
+function getJST(){return new Date(Date.now()+JST_MS)}
+function golemPeriod(){const jst=getJST(),y=jst.getUTCFullYear(),m=jst.getUTCMonth(),day=jst.getUTCDate();if(day<25)return null;const start=Date.UTC(y,m,25)-JST_MS,end=Date.UTC(y,m+1,1)-JST_MS;return {key:`${y}-${String(m+1).padStart(2,'0')}`,start,end}}
+function undeadPeriod(){const now=Date.now(),jst=getJST(),y=jst.getUTCFullYear(),m=jst.getUTCMonth(),firstDay=new Date(Date.UTC(y,m,1)).getUTCDay(),firstMonday=1+(8-firstDay)%7;for(const [round,day] of [[1,firstMonday],[3,firstMonday+14]]){const start=Date.UTC(y,m,day)-JST_MS,end=start+7*DAY_MS;if(now>=start&&now<end)return {key:`${y}-${m+1}-${round}`,start,end}}return null}
+function generalPeriod(){const jst=getJST(),day=jst.getUTCDay();if(day!==0&&day!==6)return null;const today=Date.UTC(jst.getUTCFullYear(),jst.getUTCMonth(),jst.getUTCDate()),saturday=today-(day===0?1:0)*DAY_MS,start=saturday-JST_MS,end=start+2*DAY_MS,d=new Date(saturday),key=[d.getUTCFullYear(),String(d.getUTCMonth()+1).padStart(2,'0'),String(d.getUTCDate()).padStart(2,'0')].join('-');return {key,start,end}}
+// 今後の開催パターンはこの対応表と、対応する開催関数を追加するだけでよい。
+const EVENT_PERIODS={undead:undeadPeriod,general:generalPeriod,golem:golemPeriod};
+function activeEventPeriod(id){return EVENT_PERIODS[EVENT_DATA[id]?.period||id]?.()||null}
+function eventProgress(id,periodKey){if(!state.eventProgress||typeof state.eventProgress!=='object')state.eventProgress={};const key=id+':'+periodKey;if(!state.eventProgress[key]){state.eventProgress[key]={cleared:[]};save()}const p=state.eventProgress[key];if(!Array.isArray(p.cleared))p.cleared=[];return p}
+function formatEnd(end){const d=new Date(end-1+JST_MS);return `${d.getUTCMonth()+1}月${d.getUTCDate()}日23:59`}
+function renderEventList(){const list=$('subEventList');if(!list)return;let html='',activeCount=0;for(const [id,data] of Object.entries(EVENT_DATA)){const period=activeEventPeriod(id);if(!period)continue;activeCount++;const progress=eventProgress(id,period.key);html+=`<div class="panel"><h3>${esc(data.name)}</h3><p class="small">🟢 開催中！ ${formatEnd(period.end)}まで</p><p>クリア進捗：${progress.cleared.length} / ${data.stages.length}</p><button class="wide" data-action="openSubEvent" data-event="${id}">⚔️ イベントに挑戦！</button></div>`}if(!activeCount)html+='<p class="muted">現在開催中のサブイベントはありません。</p>';html+=`<div class="panel"><h3>📅 イベント開催予定</h3>${Object.values(EVENT_DATA).map(d=>`<p class="small">${esc(d.name)}：${esc(d.schedule)}</p>`).join('')}</div>`;list.innerHTML=html}
+function renderEventMap(){const id=selectedEvent,data=EVENT_DATA[id],period=activeEventPeriod(id);if(!data||!period){showPage('events');renderEventList();return}const progress=eventProgress(id,period.key);if(eventStage<1||eventStage>data.stages.length||(eventStage>1&&!progress.cleared.includes(eventStage-1)))eventStage=1;const nodes=data.stages.map((stage,i)=>{const n=i+1,cleared=progress.cleared.includes(n),unlocked=n===1||progress.cleared.includes(n-1),boss=n===data.stages.length;return `<button class="stage-node ${cleared?'completed':''} ${boss?'boss':''} ${eventStage===n?'selected':''} ${unlocked?'':'locked'}" data-action="selectEventStage" data-stage="${n}" ${unlocked?'':'disabled'}><span class="num">${boss?'👑 ':''}${n}</span><span class="small">${cleared?'✓ クリア':unlocked?'挑戦可能':'🔒 未解放'}</span></button>`}).join('');const stage=data.stages[eventStage-1],cleared=progress.cleared.includes(eventStage);const enemies=stage.enemies.map(([enemyId,m,hpMul])=>{const c=byId(enemyId);if(!c)return '不明な敵';const hpRate=m*(hpMul||1),extra=hpRate!==m?`・HP ${Math.round(hpRate*100)}%`:'';return `${c.name}（${Math.round(m*100)}%${extra}）`}).join(' / ');let rewardHTML='';if(stage.gold)rewardHTML+=`<p>🪙 ${stage.gold}金貨</p>`;if(stage.gems)rewardHTML+=`<p>💎 ${stage.gems}ジェム</p>`;if(stage.characterDrop)rewardHTML+=`<p>🎁 ${stage.characterDrop.map(id=>byId(id)?.name||id).join(' または ')} ×1 確定</p>`;$('subEventMap').innerHTML=`<div class="panel"><h2 class="section-title">${esc(data.name)}</h2><p class="small">全${data.stages.length}ステージ ・${esc(data.schedule)}</p><p class="small">開催終了：${formatEnd(period.end)}</p><button data-page="events">← イベント一覧へ</button><div class="stage-map" style="margin-top:12px;background:linear-gradient(145deg,${id==='general'?'#65452e,#34251e':'#473451,#241d38'});border-color:${id==='general'?'#b99765':'#9874ad'}"><div class="map-grid">${nodes}</div></div></div><div class="panel"><h3>${eventStage===data.stages.length?'👑 ':''}ステージ ${eventStage}</h3><p class="small">敵編成：${esc(enemies)}</p><h4>🎁 今回の初回クリア報酬</h4>${rewardHTML}<p class="small">${cleared?'✓ 報酬獲得済み（再挑戦可能）':'初回クリアで報酬確定'}</p><button class="wide" data-action="startEventBattle">⚔️ 挑戦する</button></div>`}
+function startEventBattle(){const id=selectedEvent,data=EVENT_DATA[id],period=activeEventPeriod(id);if(!period||!data){showError('開催期間外です');return}if(battle?.running)return;const progress=eventProgress(id,period.key);if(eventStage>1&&!progress.cleared.includes(eventStage-1)){showError('前のステージをクリアしてください');return}if(!state.party.length){showError('キャラクターを編成してください');return}const stageData=data.stages[eventStage-1];if(!stageData)return;const allies=state.party.map(id=>makeUnit(id,'ally'));const enemies=stageData.enemies.map(([enemyId,m,hpMul])=>{const u=makeUnit(enemyId,'enemy',{multiplier:m,hpMultiplier:hpMul||1}),c=byId(enemyId);u.speed=c.speed;u.charge=c.charge;u.skillMultiplier=['damage','poison','heal'].includes(c.effect)?m:1;return u});battle={eventId:id,eventPeriod:period.key,stage:eventStage,allies,enemies,running:true,busy:false,current:null,awaitingAction:false,result:null,token:++battleSerial,message:data.name+'！'};showPage('battleFight');renderBattle();advanceTurn()}
+/* ===========================================================
+   11. 画面更新と操作の一元管理
+   =========================================================== */
+function renderAll(){$('gems').textContent=state.gems;$('gold').textContent=state.gold;$('stage').textContent=Math.min(MAX_STAGE,state.clearedStage+1);$('homeSummary').innerHTML=`所持キャラクター：${Object.keys(state.owned).length}体<br>編成中：${state.party.map(id=>esc(byId(id)?.name||id)).join(' / ')||'なし'}<br>草原クリア状況：${state.clearedStage} / 20`;$('gachaOwned').textContent=Object.keys(state.owned).length+' / '+CHARACTERS.length+'体を所持';$('partyView').innerHTML=state.party.map(id=>cardHTML(id)).join('')||'<p>編成がありません。</p>';renderDex();renderStageMap();$('battleIntro').innerHTML=`選択中：ステージ ${selectedStage}<br>敵編成：${esc(formationText(selectedStage))}<br>味方編成：${state.party.map(id=>esc(byId(id)?.name||id)).join(' / ')||'なし'}`;$('startBattleButton').textContent='ステージ '+selectedStage+' に挑戦';$('startBattleButton').disabled=!state.party.length;updateDailyStatus()}
+function selectTargetAction(uid){if(!battle?.running||battle.busy||battle.pendingUseSkill===undefined)return;if(!alive(battle.enemies).some(u=>u.uid===uid))return;const useSkill=battle.pendingUseSkill;battle.pendingUseSkill=undefined;battle.targetUID=uid;battle.busy=true;battle.awaitingAction=false;(async()=>{const token=battle.token;await performAction(battle.current,useSkill);if(!battle?.running||battle.token!==token)return;battle.targetUID=null;battle.busy=false;clearActing();if(checkBattleEnd())return;await sleep(450);if(battle?.running&&battle.token===token)advanceTurn()})()}
+// 追加ボタンの処理もここへ追加できる。現在の既存操作をすべて維持。
+document.addEventListener('click',event=>{const button=event.target.closest('button');if(!button||button.disabled)return;if(button.dataset.page){showPage(button.dataset.page);if(button.dataset.page==='shop')renderShop();if(button.dataset.page==='events')renderEventList();return}const a=button.dataset.action,id=button.dataset.id,index=Number(button.dataset.index);switch(a){
 case 'summon':summon(Number(button.dataset.count));break;
 case 'nextSummon':summonIndex++;showSummon();break;
 case 'skipSummon':finishSummon();break;
@@ -241,31 +212,8 @@ case 'equip':equip(id,index,button.dataset.type);break;
 case 'unequip':unequip(id,index);break;
 case 'selectStage':selectStage(Number(button.dataset.stage));break;
 case 'startBattle':startBattle();break;
-case 'selectTarget':{
-  if(!battle?.running||battle.busy||battle.pendingUseSkill===undefined)break;
-  const uid=Number(button.dataset.uid);
-  if(!alive(battle.enemies).some(u=>u.uid===uid))break;
-  const useSkill=battle.pendingUseSkill;
-  battle.pendingUseSkill=undefined;
-  battle.targetUID=uid;
-  battle.busy=true;
-  battle.awaitingAction=false;
-  (async()=>{
-    const token=battle.token;
-    await performAction(battle.current,useSkill);
-    if(!battle?.running||battle.token!==token)return;
-    battle.targetUID=null;
-    battle.busy=false;
-    clearActing();
-    if(checkBattleEnd())return;
-    await sleep(450);
-    if(battle?.running&&battle.token===token)advanceTurn();
-  })();
-  break;
-}
-case 'cancelTarget':
-  if(battle?.pendingUseSkill!==undefined){battle.pendingUseSkill=undefined;battle.awaitingAction=true;renderBattle()}
-  break;
+case 'selectTarget':selectTargetAction(Number(button.dataset.uid));break;
+case 'cancelTarget':if(battle?.pendingUseSkill!==undefined){battle.pendingUseSkill=undefined;battle.awaitingAction=true;renderBattle()}break;
 case 'battleAttack':allyAct(false);break;
 case 'battleSkill':allyAct(true);break;
 case 'returnMap':returnMap();break;
@@ -274,1455 +222,12 @@ case 'dailyClaim':claimDailyBonus();break;
 case 'dailyWheelOpen':showDailyWheel();break;
 case 'dailySpin':spinDailyWheel();break;
 case 'dailyClose':closeDailyModal();break;
+case 'shopPurchase':purchaseShopItem(button.dataset.shopKey);break;
+case 'openSubEvent':{const eventId=button.dataset.event;if(!EVENT_DATA[eventId]||!activeEventPeriod(eventId)){showError('開催期間外です');break}selectedEvent=eventId;eventStage=1;showPage('subEventMap');renderEventMap();break}
+case 'selectEventStage':eventStage=Number(button.dataset.stage);renderEventMap();break;
+case 'startEventBattle':startEventBattle();break;
 }});
 window.addEventListener('error',event=>{console.error(event.error||event.message);showError('ゲーム内エラー：'+(event.message||'不明なエラー'))});
-renderAll();
-if(dailyAvailable('bonus'))showDailyBonus();
-</script>
-
-<script>
-/* ===== 新しい指輪4種類 ===== */
-(() => {
-  const extraRings = {
-    dodge: {
-      name: '回避の指輪',
-      icon: '🟣',
-      description: '攻撃を3%の確率で回避'
-    },
-    speed: {
-      name: '素早さの指輪',
-      icon: '🔵',
-      description: '素早さ +2'
-    },
-    heal: {
-      name: '癒しの指輪',
-      icon: '🩷',
-      description: '自分の行動時にHP10回復'
-    },
-    charge: {
-      name: '溜めの指輪',
-      icon: '🟡',
-      description: '溜めを1軽減（最低4）'
-    }
-  };
-
-  Object.assign(RINGS, extraRings);
-
-  for (const type of Object.keys(extraRings)) {
-    if (!RING_IDS.includes(type)) RING_IDS.push(type);
-    state.ringInventory[type] =
-      Math.max(0, Number(state.ringInventory[type]) || 0);
-  }
-
-  // 装備中の指輪を加算した溜め
-  function ringCharge(id) {
-    const original = byId(id).charge;
-    if (original < 5) return original;
-    return Math.max(
-      4,
-      original - getEquipped(id, 'charge')
-    );
-  }
-
-  // 素早さ
-  const oldGetStats = getStats;
-  getStats = function(id) {
-    const s = oldGetStats(id);
-    s.speed += getEquipped(id, 'speed') * 2;
-    return s;
-  };
-
-  // 戦闘開始時の能力
-  const oldMakeUnit = makeUnit;
-  makeUnit = function(id, side, options = {}) {
-    const u = oldMakeUnit(id, side, options);
-    if (side === 'ally') {
-      u.charge = ringCharge(id);
-    }
-    return u;
-  };
-
-  // 回避の指輪
-  const oldDealDamage = dealDamage;
-  dealDamage = function(attacker, target, amount, isSkill = false) {
-    if (target && target.hp > 0 && target.side === 'ally') {
-      const count = getEquipped(target.id, 'dodge');
-      if (Math.random() < count * 0.03) {
-        showEffect(target, '回避', 'buff');
-        battle.message = target.name + 'は攻撃を回避！';
-        return 0;
-      }
-    }
-    return oldDealDamage(attacker, target, amount, isSkill);
-  };
-
-  // 癒しの指輪
-  const oldChooseNextUnit = chooseNextUnit;
-  chooseNextUnit = function() {
-    const u = oldChooseNextUnit();
-    if (!u || u.side !== 'ally' || u.hp <= 0) return u;
-
-    const amount = getEquipped(u.id, 'heal') * 10;
-    const recovered = Math.min(u.maxHp - u.hp, amount);
-
-    if (recovered > 0) {
-      u.hp += recovered;
-      const token = battle.token;
-      setTimeout(() => {
-        if (battle && battle.token === token) {
-          showEffect(u, '+' + recovered, 'heal');
-        }
-      }, 0);
-    }
-    return u;
-  };
-
-  // 編成画面の溜め表示
-  const oldCardHTML = cardHTML;
-  cardHTML = function(id) {
-    const c = byId(id);
-    return oldCardHTML(id).replace(
-      '溜め ' + c.charge + '<br>',
-      '溜め ' + ringCharge(id) + '<br>'
-    );
-  };
-
-  // 図鑑の溜め表示
-  const oldOpenEncyclopedia = openEncyclopedia;
-  openEncyclopedia = function(id) {
-    oldOpenEncyclopedia(id);
-    const c = byId(id);
-    if (!c || !state.owned[id]) return;
-
-    const detail = document.getElementById(
-      'encyclopediaDetail'
-    );
-    detail.innerHTML = detail.innerHTML.replace(
-      '⏳ スキル溜め：' + c.charge,
-      '⏳ スキル溜め：' + ringCharge(id)
-    );
-  };
-
-  save();
-  renderAll();
-})();
-</script>
-
- 
-<script>
-/* ===== 日替わりショップ ===== */
-(() => {
-  const shopElement = document.getElementById('shop');
-  const shopRings = Object.keys(RINGS);
-  const shopCharacters = CHARACTERS.filter(c =>
-    c.rarity === 'ノーマル' || c.rarity === 'レア'
-  );
-  const shopPrice = c => c.rarity === 'レア' ? 5000 : 1500;
-
-  function updateShopStock() {
-    const date = dailyDate();
-    const old = state.dailyShop;
-
-    if (
-      old &&
-      old.date === date &&
-      shopRings.includes(old.ring) &&
-      Array.isArray(old.characters) &&
-      old.characters.length === 2 &&
-      old.characters[0] !== old.characters[1] &&
-      old.characters.every(id => shopCharacters.some(c => c.id === id)) &&
-      old.purchased
-    ) return;
-
-    const available = [...shopCharacters];
-    const first = available.splice(
-      Math.floor(Math.random() * available.length), 1
-    )[0];
-    const second = available.splice(
-      Math.floor(Math.random() * available.length), 1
-    )[0];
-
-    state.dailyShop = {
-      date,
-      ring: shopRings[Math.floor(Math.random() * shopRings.length)],
-      characters: [first.id, second.id],
-      purchased: {
-        ring: false,
-        character0: false,
-        character1: false,
-        gems: false
-      }
-    };
-    save();
-  }
-
-  function shopItem(key, image, name, detail, price) {
-    const sold = state.dailyShop.purchased[key];
-    const affordable = state.gold >= price;
-
-    return `
-      <div class="shop-product">
-        <div class="shop-product-image">${image}</div>
-        <b>${esc(name)}</b>
-        <div class="small">${esc(detail)}</div>
-        <div class="shop-product-price">
-          🪙 ${price.toLocaleString('ja-JP')}
-        </div>
-        <button class="wide"
-          data-action="shopPurchase"
-          data-shop-key="${key}"
-          ${sold || !affordable ? 'disabled' : ''}>
-          ${sold ? '✓ 売り切れ' :
-            affordable ? '購入する' : '金貨不足'}
-        </button>
-      </div>
-    `;
-  }
-
-  function renderShop() {
-    updateShopStock();
-    const stock = state.dailyShop;
-    const ring = RINGS[stock.ring];
-
-    let html = shopItem(
-      'ring',
-      `<span class="shop-ring-icon">${ring.icon}</span>`,
-      ring.name,
-      ring.description,
-      5000
-    );
-
-    stock.characters.forEach((id, i) => {
-      const c = byId(id);
-      html += shopItem(
-        'character' + i,
-        portrait(id),
-        c.name,
-        c.rarity + (state.owned[id] ? ' / 所持済み' : ' / 未所持'),
-        shopPrice(c)
-      );
-    });
-
-    html += shopItem(
-      'gems',
-      '<span class="shop-ring-icon">💎</span>',
-      '100ジェム',
-      'ジェム ×100',
-      5000
-    );
-
-    shopElement.innerHTML = `
-      <div class="panel">
-        <h2 class="section-title">🛍️ 日替わりショップ</h2>
-        <p class="small">
-          毎日0時（日本時間）に商品と購入回数を更新！
-        </p>
-        <p>🪙 所持金貨：
-          <b>${state.gold.toLocaleString('ja-JP')}</b>
-        </p>
-        <div id="shopMessage" role="status"></div>
-        <div class="shop-product-grid">${html}</div>
-        <p class="small">
-          ※各商品は1日1回限り購入できます。
-        </p>
-      </div>
-    `;
-  }
-
-  function purchaseShopItem(key) {
-    updateShopStock();
-    const stock = state.dailyShop;
-
-    if (!['ring','character0','character1','gems'].includes(key)) return;
-    if (stock.purchased[key]) return;
-
-    let price = 5000;
-    let message = '';
-
-    if (key === 'ring') {
-      message = RINGS[stock.ring].name + 'を獲得！';
-    } else if (key === 'character0' || key === 'character1') {
-      const i = key === 'character0' ? 0 : 1;
-      const c = byId(stock.characters[i]);
-      if (!c || !shopCharacters.some(x => x.id === c.id)) return;
-      price = shopPrice(c);
-      message = c.name + 'を購入！';
-    } else {
-      message = '100ジェムを獲得！';
-    }
-
-    if (state.gold < price) {
-      showError('金貨が足りません');
-      renderShop();
-      return;
-    }
-
-    state.gold -= price;
-
-    if (key === 'ring') {
-      const type = stock.ring;
-      state.ringInventory[type] =
-        (Number(state.ringInventory[type]) || 0) + 1;
-    } else if (key === 'character0' || key === 'character1') {
-      const i = key === 'character0' ? 0 : 1;
-      const id = stock.characters[i];
-      message = byId(id).name + '：' + addCharacter(id);
-    } else {
-      state.gems += 100;
-    }
-
-    stock.purchased[key] = true;
-    save();
-    renderAll();
-    renderShop();
-
-    document.getElementById('shopMessage').textContent =
-      '✅ ' + message;
-  }
-
-  const css = document.createElement('style');
-  css.textContent = `
-    .shop-product-grid {
-      display:grid;
-      grid-template-columns:repeat(2,minmax(0,1fr));
-      gap:8px;
-      margin:12px 0;
-    }
-    .shop-product {
-      min-width:0;
-      display:flex;
-      flex-direction:column;
-      align-items:center;
-      text-align:center;
-      gap:6px;
-      background:#202d49;
-      border:1px solid #394866;
-      border-radius:12px;
-      padding:9px 6px;
-    }
-    .shop-product-image {
-      width:100%;
-      height:110px;
-      display:flex;
-      justify-content:center;
-      align-items:center;
-    }
-    .shop-product-image .portrait {
-      width:100%;
-      height:100%;
-    }
-    .shop-product b {
-      font-size:13px;
-      overflow-wrap:anywhere;
-    }
-    .shop-ring-icon {
-      font-size:58px;
-    }
-    .shop-product-price {
-      margin-top:auto;
-      color:#f4c76b;
-      font-weight:900;
-    }
-    .shop-product button {
-      font-size:12px;
-      padding:9px 3px;
-    }
-    #shopMessage:not(:empty) {
-      color:#86efac;
-      padding:8px;
-    }
-  `;
-  document.head.appendChild(css);
-
-  document.addEventListener('click', event => {
-    const button = event.target.closest('button');
-    if (!button || button.disabled) return;
-
-    if (button.dataset.action === 'shopPurchase') {
-      purchaseShopItem(button.dataset.shopKey);
-    }
-
-    if (button.dataset.page === 'shop') {
-      renderShop();
-    }
-  });
-
-  setInterval(() => {
-    if (state.dailyShop?.date !== dailyDate()) {
-      updateShopStock();
-      if (shopElement.classList.contains('active')) {
-        renderShop();
-      }
-    }
-  }, 15000);
-
-  renderShop();
-})();
-</script>
-
-<style>
-/* ===== 豪華な召喚演出 ===== */
-#summonOverlay {
-  --summon-color:#64c8ff;
-  --summon-glow:#1684ff;
-  background:radial-gradient(circle,#15345a,#030612 80%);
-  overflow:hidden;
-}
-#summonOverlay.epic-mode {
-  --summon-color:#ffe18a;
-  --summon-glow:#ffb700;
-  background:radial-gradient(circle,#463210,#05040b 80%);
-}
-#summonOverlay .summon-box {
-  position:relative;
-  z-index:2;
-}
-.summon-cinema {
-  position:relative;
-  height:min(52dvh,370px);
-  min-height:270px;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  isolation:isolate;
-}
-.summon-magic {
-  position:absolute;
-  width:min(65vw,260px);
-  aspect-ratio:1;
-  border:3px solid var(--summon-color);
-  border-radius:50%;
-  box-shadow:0 0 30px var(--summon-glow),
-             inset 0 0 35px var(--summon-glow);
-  animation:summonRotate 4s linear infinite,
-            summonAppear 1s ease-out both;
-}
-.summon-magic::before {
-  content:"✦ ✧ ✦ ✧ ✦ ✧";
-  position:absolute;
-  inset:15px;
-  border:2px dashed var(--summon-color);
-  border-radius:50%;
-  display:grid;
-  place-items:center;
-  color:var(--summon-color);
-  letter-spacing:5px;
-}
-.summon-magic::after {
-  content:"";
-  position:absolute;
-  inset:43px;
-  border:2px solid var(--summon-color);
-  border-radius:50%;
-  box-shadow:0 0 20px var(--summon-glow);
-}
-.summon-particle {
-  position:absolute;
-  left:50%;
-  top:50%;
-  width:var(--size);
-  height:var(--size);
-  border-radius:50%;
-  background:var(--summon-color);
-  box-shadow:0 0 12px var(--summon-color);
-  animation:summonParticle var(--duration) ease-in-out infinite;
-  animation-delay:var(--delay);
-}
-.summon-character {
-  position:relative;
-  z-index:3;
-  opacity:0;
-  transform:scale(.3);
-  filter:brightness(4);
-}
-.summon-character.visible {
-  animation:summonReveal .85s ease-out forwards;
-}
-.summon-character img {
-  width:min(55vw,190px);
-  height:210px;
-  object-fit:contain;
-  filter:drop-shadow(0 0 20px var(--summon-glow));
-}
-.summon-information {
-  opacity:0;
-  transform:translateY(15px);
-}
-.summon-information.visible {
-  animation:summonText .5s ease-out forwards;
-}
-.summon-information h2 {
-  color:var(--summon-color);
-  text-shadow:0 0 18px var(--summon-glow);
-}
-.summon-flash {
-  position:fixed;
-  inset:0;
-  background:white;
-  opacity:0;
-  pointer-events:none;
-  z-index:5;
-}
-.summon-flash.play {
-  animation:summonFlash .8s ease-out;
-}
-.summon-lightning {
-  position:absolute;
-  inset:0;
-  opacity:0;
-  pointer-events:none;
-  background:linear-gradient(
-    115deg,
-    transparent 43%,
-    #fff7c7 47%,
-    #ffcf49 50%,
-    transparent 54%
-  );
-}
-.epic-mode .summon-lightning {
-  animation:summonLightning .55s steps(2) infinite;
-}
-.epic-mode .summon-magic {
-  animation:summonRotate 2s linear infinite,
-            summonAppear 1s ease-out both,
-            summonPulse .7s ease-in-out infinite alternate;
-}
-@keyframes summonRotate {
-  to {transform:rotate(360deg)}
-}
-@keyframes summonAppear {
-  from {opacity:0;scale:.1}
-  to {opacity:1;scale:1}
-}
-@keyframes summonPulse {
-  to {box-shadow:0 0 75px var(--summon-glow),
-    inset 0 0 50px var(--summon-glow)}
-}
-@keyframes summonParticle {
-  0% {opacity:0;transform:rotate(var(--angle)) translateX(145px)}
-  50% {opacity:1}
-  100% {opacity:0;transform:rotate(var(--angle)) translateX(10px)}
-}
-@keyframes summonReveal {
-  from {opacity:0;transform:scale(.3);filter:brightness(4)}
-  to {opacity:1;transform:scale(1);filter:brightness(1)}
-}
-@keyframes summonText {
-  to {opacity:1;transform:translateY(0)}
-}
-@keyframes summonFlash {
-  0% {opacity:0}
-  30% {opacity:.95}
-  100% {opacity:0}
-}
-@keyframes summonLightning {
-  0%,100% {opacity:0}
-  50% {opacity:.8}
-}
-</style>
-
-<script>
-/* ===== 新召喚アニメーション ===== */
-(() => {
-  let animationToken = 0;
-
-  showSummon = function() {
-    const item = summonQueue[summonIndex];
-
-    if (!item) {
-      finishSummon();
-      return;
-    }
-
-    const token = ++animationToken;
-    const index = summonIndex;
-    const c = item.c;
-    const overlay = $('summonOverlay');
-    const epic = c.rarity === 'エピック';
-    const duration = epic ? 4000 : 1500;
-
-    overlay.classList.toggle('epic-mode', epic);
-
-    const particles = Array.from({length:32},(_,i)=>`
-      <span class="summon-particle" style="
-        --angle:${i*137.5}deg;
-        --size:${3+i%5}px;
-        --duration:${1.2+i%4*.3}s;
-        --delay:${-(i%9)*.2}s;
-      "></span>
-    `).join('');
-
-    $('summonVisual').innerHTML = `
-      <div class="summon-cinema">
-        <div class="summon-magic"></div>
-        <div class="summon-lightning"></div>
-        ${particles}
-        <div id="summonCharacter" class="summon-character">
-          <img src="${imagePath(c.imageFile)}"
-               alt="${esc(c.name)}"
-               onerror="this.style.display='none';this.parentElement.append('⚔️')">
-        </div>
-      </div>
-
-      <div id="summonInformation" class="summon-information">
-        <h2>${esc(c.name)}</h2>
-        <p class="${rarityClass(c.rarity)}">
-          ✦ ${esc(c.rarity)} ✦
-        </p>
-        <p>${esc(item.message)}</p>
-      </div>
-
-      <div id="summonFlash" class="summon-flash"></div>
-    `;
-
-    $('summonProgress').textContent =
-      (index+1)+' / '+summonQueue.length;
-
-    $('summonControls').innerHTML = `
-      <button id="summonNextButton"
-              data-action="nextSummon" disabled>
-        召喚中…
-      </button>
-      <button data-action="skipSummon">
-        スキップ
-      </button>
-    `;
-
-    setTimeout(()=>{
-      if (
-        token !== animationToken ||
-        summonIndex !== index ||
-        !overlay.classList.contains('active')
-      ) return;
-
-      $('summonFlash')?.classList.add('play');
-      $('summonCharacter')?.classList.add('visible');
-      $('summonInformation')?.classList.add('visible');
-
-      const button = $('summonNextButton');
-      if (button) {
-        button.disabled = false;
-        button.textContent =
-          index === summonQueue.length-1
-            ? '結果を見る'
-            : '次へ';
-      }
-    },duration);
-  };
-})();
-</script>
-
-<script>
-/* ===== イベントステージ基本画面 ===== */
-(() => {
-  // 戦闘画面にイベント入口を追加
-  const battlePage = document.getElementById('battle');
-
-  const entrance = document.createElement('div');
-  entrance.className = 'panel';
-  entrance.innerHTML = `
-    <h2 class="section-title">⚔️ イベントステージ</h2>
-    <p class="small">
-      期間限定の特別なステージに挑戦！
-    </p>
-    <button class="wide" data-page="events">
-      ✨ イベント一覧を見る
-    </button>
-  `;
-  battlePage.prepend(entrance);
-
-  // イベント一覧画面
-  const page = document.createElement('section');
-  page.id = 'events';
-  page.className = 'page';
-
-  page.innerHTML = `
-    <div class="panel">
-      <h2 class="section-title">⚔️ イベント一覧</h2>
-      <p class="small">
-        開催中のイベントに挑戦しよう！
-      </p>
-      <button data-page="battle">
-        ← 戦闘画面に戻る
-      </button>
-    </div>
-
-    <div class="panel">
-      <h2 class="section-title">👑 メインイベント</h2>
-      <div id="mainEventList">
-        <p class="muted">開催中のイベントはありません。</p>
-      </div>
-    </div>
-
-    <div class="panel">
-      <h2 class="section-title">⚔️ サブイベント</h2>
-      <div id="subEventList">
-        <p class="muted">開催中のイベントはありません。</p>
-      </div>
-    </div>
-  `;
-
-  document.querySelector('main').appendChild(page);
-})();
-</script>
-
-
-<script>
-/* ===== 期間限定イベントシステム ===== */
-(() => {
-  'use strict';
-
-  // ===== イベントデータ =====
-  const EVENT_DATA = {
-    undead: {
-      name: '☠️ アンデッド襲来',
-      type: 'sub',
-      schedule: '第1・第3月曜日から7日間',
-      stages: [
-        {
-          enemies: [
-            ['zombie', 1],
-            ['zombie', 1],
-            ['zombie', 1]
-          ],
-          gold: 1000,
-          gems: 25
-        },
-        {
-          enemies: [
-            ['skeleton', 1.5],
-            ['skeleton', 1.5],
-            ['skeleton', 1.5]
-          ],
-          gold: 1500,
-          gems: 50
-        },
-        {
-          enemies: [
-            ['zombie', 2],
-            ['skeleton', 2],
-            ['skeleton', 2]
-          ],
-          gold: 2500,
-          gems: 100,
-          characterDrop: ['zombie', 'skeleton']
-        }
-      ]
-    },
-
-    general: {
-      name: '⚔️ 将軍の進軍',
-      type: 'sub',
-      schedule: '毎週土曜日・日曜日',
-      stages: [
-        {
-          enemies: [
-            ['spearman', 1],
-            ['swordman', 1],
-            ['将軍', 1]
-          ],
-          gold: 1000,
-          gems: 25
-        },
-        {
-          enemies: [
-            ['archer', 1.5],
-            ['farmer', 2],
-            ['将軍', 1.5]
-          ],
-          gold: 1500,
-          gems: 50
-        },
-        {
-          enemies: [
-            ['spearman', 2],
-            ['swordman', 2],
-            ['将軍', 2]
-          ],
-          gold: 2500,
-          gems: 100
-        },
-        {
-          enemies: [
-            ['将軍', 2, 4]
-          ],
-          gold: 0,
-          gems: 200,
-          characterDrop: ['将軍']
-        }
-      ]
-    }
-   
-,
-golem: {
-  name: '🗿 ゴーレムの目覚め',
-  type: 'sub',
-  schedule: '毎月25日から月末まで',
-  stages: [
-    {
-      enemies: [
-        ['ゴーレム', 10]
-      ],
-      gold: 3000,
-      gems: 300
-    }
-  ]
-}
-
-  };
-
-  let selectedEvent = 'undead';
-  let eventStage = 1;
-
-  const DAY_MS = 86400000;
-  const JST_MS = 9 * 3600000;
-
-  // ===== 日本時間で開催判定 =====
-  function getJST() {
-    return new Date(Date.now() + JST_MS);
-  }
-
-  // ゴーレムの目覚め：毎月25日〜月末
-  
-function golemPeriod() {
-  const jst = getJST();
-  const y = jst.getUTCFullYear();
-  const m = jst.getUTCMonth();
-  const day = jst.getUTCDate();
-
-  if (day < 25) return null;
-
-  const start = Date.UTC(y, m, 25) - JST_MS;
-  const end = Date.UTC(y, m + 1, 1) - JST_MS;
-
-  return {
-    key: `${y}-${String(m + 1).padStart(2, '0')}`,
-    start,
-    end
-  };
-}
-
-
-  // アンデッド襲来：第1・第3月曜日から7日間
-  function undeadPeriod() {
-    const now = Date.now();
-    const jst = getJST();
-    const y = jst.getUTCFullYear();
-    const m = jst.getUTCMonth();
-
-    const firstDay = new Date(
-      Date.UTC(y, m, 1)
-    ).getUTCDay();
-
-    const firstMonday = 1 + (8 - firstDay) % 7;
-
-    for (const [round, day] of [
-      [1, firstMonday],
-      [3, firstMonday + 14]
-    ]) {
-      const start =
-        Date.UTC(y, m, day) - JST_MS;
-      const end = start + 7 * DAY_MS;
-
-      if (now >= start && now < end) {
-        return {
-          key: `${y}-${m + 1}-${round}`,
-          start,
-          end
-        };
-      }
-    }
-    return null;
-  }
-
-  // 将軍の進軍：毎週土日
-  function generalPeriod() {
-    const now = Date.now();
-    const jst = getJST();
-
-    const day = jst.getUTCDay();
-    if (day !== 0 && day !== 6) return null;
-
-    const today = Date.UTC(
-      jst.getUTCFullYear(),
-      jst.getUTCMonth(),
-      jst.getUTCDate()
-    );
-
-    const saturday =
-      today - (day === 0 ? 1 : 0) * DAY_MS;
-
-    const start = saturday - JST_MS;
-    const end = start + 2 * DAY_MS;
-
-    const d = new Date(saturday);
-    const key = [
-      d.getUTCFullYear(),
-      String(d.getUTCMonth() + 1).padStart(2, '0'),
-      String(d.getUTCDate()).padStart(2, '0')
-    ].join('-');
-
-    return {
-      key,
-      start,
-      end
-    };
-  }
-
-  function activeEventPeriod(id) {
-    if (id === 'undead') return undeadPeriod();
-    if (id === 'general') return generalPeriod();
-   
-  if (id === 'golem') return golemPeriod();
-
-    return null;
-  }
-
-  // ===== イベント進捗保存 =====
-  function eventProgress(id, periodKey) {
-    if (!state.eventProgress ||
-        typeof state.eventProgress !== 'object') {
-      state.eventProgress = {};
-    }
-
-    const key = id + ':' + periodKey;
-
-    if (!state.eventProgress[key]) {
-      state.eventProgress[key] = {
-        cleared: []
-      };
-      save();
-    }
-
-    const progress = state.eventProgress[key];
-
-    if (!Array.isArray(progress.cleared)) {
-      progress.cleared = [];
-    }
-
-    return progress;
-  }
-
-  function formatEnd(end) {
-    const d = new Date(end - 1 + JST_MS);
-    return `${d.getUTCMonth() + 1}月${d.getUTCDate()}日23:59`;
-  }
-
-  // ===== イベント一覧表示 =====
-  function renderEventList() {
-    const list = $('subEventList');
-    if (!list) return;
-
-    let html = '';
-    let activeCount = 0;
-
-    for (const [id, data] of Object.entries(EVENT_DATA)) {
-      const period = activeEventPeriod(id);
-
-      if (!period) continue;
-
-      activeCount++;
-
-      const progress = eventProgress(id, period.key);
-      const cleared = progress.cleared.length;
-
-      html += `
-        <div class="panel">
-          <h3>${esc(data.name)}</h3>
-          <p class="small">
-            🟢 開催中！ ${formatEnd(period.end)}まで
-          </p>
-          <p>
-            クリア進捗：
-            ${cleared} / ${data.stages.length}
-          </p>
-          <button class="wide"
-            data-action="openSubEvent"
-            data-event="${id}">
-            ⚔️ イベントに挑戦！
-          </button>
-        </div>
-      `;
-    }
-
-    if (!activeCount) {
-      html += `
-        <p class="muted">
-          現在開催中のサブイベントはありません。
-        </p>
-      `;
-    }
-
-    html += `
-      <div class="panel">
-        <h3>📅 イベント開催予定</h3>
-        ${Object.values(EVENT_DATA).map(data => `
-          <p class="small">
-            ${esc(data.name)}：
-            ${esc(data.schedule)}
-          </p>
-        `).join('')}
-      </div>
-    `;
-
-    list.innerHTML = html;
-  }
-
-  // ===== イベント専用マップ =====
-  const eventPage = document.createElement('section');
-  eventPage.id = 'subEventMap';
-  eventPage.className = 'page';
-  document.querySelector('main').appendChild(eventPage);
-
-  function renderEventMap() {
-    const id = selectedEvent;
-    const data = EVENT_DATA[id];
-    const period = activeEventPeriod(id);
-
-    if (!data || !period) {
-      showPage('events');
-      renderEventList();
-      return;
-    }
-
-    const progress = eventProgress(id, period.key);
-
-    if (
-      eventStage < 1 ||
-      eventStage > data.stages.length ||
-      (eventStage > 1 &&
-       !progress.cleared.includes(eventStage - 1))
-    ) {
-      eventStage = 1;
-    }
-
-    const nodes = data.stages.map((stage, i) => {
-      const n = i + 1;
-      const cleared = progress.cleared.includes(n);
-      const unlocked =
-        n === 1 || progress.cleared.includes(n - 1);
-      const boss = n === data.stages.length;
-
-      return `
-        <button
-          class="stage-node
-          ${cleared ? 'completed' : ''}
-          ${boss ? 'boss' : ''}
-          ${eventStage === n ? 'selected' : ''}
-          ${unlocked ? '' : 'locked'}"
-          data-action="selectEventStage"
-          data-stage="${n}"
-          ${unlocked ? '' : 'disabled'}>
-          <span class="num">
-            ${boss ? '👑 ' : ''}${n}
-          </span>
-          <span class="small">
-            ${cleared ? '✓ クリア' :
-              unlocked ? '挑戦可能' : '🔒 未解放'}
-          </span>
-        </button>
-      `;
-    }).join('');
-
-    const stage = data.stages[eventStage - 1];
-    const cleared = progress.cleared.includes(eventStage);
-
-    const enemies = stage.enemies.map(([id, m, hpMul]) => {
-      const c = byId(id);
-      if (!c) return '不明な敵';
-
-      const hpRate = m * (hpMul || 1);
-      const extra = hpRate !== m
-        ? `・HP ${Math.round(hpRate * 100)}%`
-        : '';
-
-      return `${c.name}（${Math.round(m * 100)}%${extra}）`;
-    }).join(' / ');
-
-    let rewardHTML = '';
-
-    if (stage.gold) {
-      rewardHTML += `<p>🪙 ${stage.gold}金貨</p>`;
-    }
-    if (stage.gems) {
-      rewardHTML += `<p>💎 ${stage.gems}ジェム</p>`;
-    }
-    if (stage.characterDrop) {
-      const names = stage.characterDrop
-        .map(id => byId(id)?.name || id);
-
-      rewardHTML += `
-        <p>🎁 ${names.join(' または ')} ×1 確定</p>
-      `;
-    }
-
-    eventPage.innerHTML = `
-      <div class="panel">
-        <h2 class="section-title">
-          ${esc(data.name)}
-        </h2>
-        <p class="small">
-          全${data.stages.length}ステージ
-          ・${esc(data.schedule)}
-        </p>
-        <p class="small">
-          開催終了：${formatEnd(period.end)}
-        </p>
-
-        <button data-page="events">
-          ← イベント一覧へ
-        </button>
-
-        <div class="stage-map" style="
-          margin-top:12px;
-          background:linear-gradient(
-            145deg,
-            ${id === 'general' ? '#65452e,#34251e' : '#473451,#241d38'}
-          );
-          border-color:${id === 'general' ? '#b99765' : '#9874ad'};
-        ">
-          <div class="map-grid">
-            ${nodes}
-          </div>
-        </div>
-      </div>
-
-      <div class="panel">
-        <h3>
-          ${eventStage === data.stages.length ? '👑 ' : ''}
-          ステージ ${eventStage}
-        </h3>
-        <p class="small">
-          敵編成：${esc(enemies)}
-        </p>
-
-        <h4>🎁 今回の初回クリア報酬</h4>
-        ${rewardHTML}
-
-        <p class="small">
-          ${cleared
-            ? '✓ 報酬獲得済み（再挑戦可能）'
-            : '初回クリアで報酬確定'}
-        </p>
-
-        <button class="wide"
-          data-action="startEventBattle">
-          ⚔️ 挑戦する
-        </button>
-      </div>
-    `;
-  }
-
-  // ===== イベント戦闘開始 =====
-  function startEventBattle() {
-    const id = selectedEvent;
-    const data = EVENT_DATA[id];
-    const period = activeEventPeriod(id);
-
-    if (!period || !data) {
-      showError('開催期間外です');
-      return;
-    }
-
-    if (battle?.running) return;
-
-    const progress = eventProgress(id, period.key);
-
-    if (
-      eventStage > 1 &&
-      !progress.cleared.includes(eventStage - 1)
-    ) {
-      showError('前のステージをクリアしてください');
-      return;
-    }
-
-    if (!state.party.length) {
-      showError('キャラクターを編成してください');
-      return;
-    }
-
-    const stageData = data.stages[eventStage - 1];
-    if (!stageData) return;
-
-    const allies = state.party.map(id =>
-      makeUnit(id, 'ally')
-    );
-
-    const enemies = stageData.enemies.map(
-      ([enemyId, m, hpMul]) => {
-        const u = makeUnit(enemyId, 'enemy', {
-          multiplier: m,
-          hpMultiplier: hpMul || 1
-        });
-
-        const c = byId(enemyId);
-
-        // 素早さ・スキル溜めは倍率を適用しない
-        u.speed = c.speed;
-        u.charge = c.charge;
-
-        // 固定威力の攻撃・毒・回復のみ倍率適用
-        if (['damage', 'poison', 'heal'].includes(c.effect)) {
-          u.skillMultiplier = m;
-        } else {
-          u.skillMultiplier = 1;
-        }
-
-        return u;
-      }
-    );
-
-    battle = {
-      eventId: id,
-      eventPeriod: period.key,
-      stage: eventStage,
-      allies,
-      enemies,
-      running: true,
-      busy: false,
-      current: null,
-      awaitingAction: false,
-      result: null,
-      token: ++battleSerial,
-      message: data.name + '！'
-    };
-
-    showPage('battleFight');
-    renderBattle();
-    advanceTurn();
-  }
-
-  // ===== 通常戦闘の機能を保持 =====
-  const normalFinishBattle = finishBattle;
-  const normalRenderResult = renderBattleResult;
-  const normalReturnMap = returnMap;
-  const normalRenderBattle = renderBattle;
-
-  // ===== 勝敗・報酬処理 =====
-  finishBattle = function(victory) {
-    if (!battle?.eventId) {
-      return normalFinishBattle(victory);
-    }
-
-    if (!battle.running) return;
-
-    battle.running = false;
-    battle.busy = false;
-    battle.awaitingAction = false;
-    clearActing();
-
-    const result = {
-      victory,
-      rewards: null
-    };
-
-    if (victory) {
-      const id = battle.eventId;
-      const progress = eventProgress(
-        id,
-        battle.eventPeriod
-      );
-
-      const firstClear =
-        !progress.cleared.includes(battle.stage);
-
-      const rewards = {
-        firstClear,
-        gold: 0,
-        gems: 0,
-        character: null
-      };
-
-      if (firstClear) {
-        const stageData =
-          EVENT_DATA[id].stages[battle.stage - 1];
-
-        rewards.gold = stageData.gold || 0;
-        rewards.gems = stageData.gems || 0;
-
-        state.gold += rewards.gold;
-        state.gems += rewards.gems;
-
-        if (stageData.characterDrop?.length) {
-          const characterId =
-            random(stageData.characterDrop);
-
-          rewards.character = {
-            name: byId(characterId).name,
-            message: addCharacter(characterId)
-          };
-        }
-
-        progress.cleared.push(battle.stage);
-        save();
-      }
-
-      result.rewards = rewards;
-    }
-
-    battle.result = result;
-    renderBattle();
-    renderAll();
-  };
-
-  // ===== 戦闘結果表示 =====
-  renderBattleResult = function() {
-    if (!battle?.eventId) {
-      return normalRenderResult();
-    }
-
-    const {victory, rewards} = battle.result;
-
-    let html = '';
-
-    if (!victory) {
-      html = `
-        <h2>敗北…</h2>
-        <p>編成を見直して再挑戦しよう。</p>
-      `;
-    } else if (rewards?.firstClear) {
-      html = `<h2>🎉 初回クリア！</h2>`;
-
-      if (rewards.gold) {
-        html += `
-          <p>🪙 金貨 +${rewards.gold}</p>
-        `;
-      }
-
-      if (rewards.gems) {
-        html += `
-          <p>💎 ジェム +${rewards.gems}</p>
-        `;
-      }
-
-      if (rewards.character) {
-        html += `
-          <p>🎁 ${esc(rewards.character.name)} ×1</p>
-          <p class="small">
-            ${esc(rewards.character.message)}
-          </p>
-        `;
-      }
-    } else {
-      html = `
-        <h2>🎉 ステージクリア！</h2>
-        <p>初回報酬は獲得済みです。</p>
-      `;
-    }
-
-    $('actionArea').innerHTML = `
-      <div class="result">
-        ${html}
-        <button data-action="returnMap">
-          イベントマップへ戻る
-        </button>
-      </div>
-    `;
-  };
-
-  // ===== 戦闘画面のイベント表示 =====
-  renderBattle = function() {
-    normalRenderBattle();
-
-    if (battle?.eventId) {
-      const data = EVENT_DATA[battle.eventId];
-      if (data && $('bossLabel')) {
-        $('bossLabel').textContent =
-          data.name + ' STAGE ' + battle.stage;
-      }
-    }
-  };
-
-  // ===== イベントマップに戻る =====
-  returnMap = function() {
-    if (!battle?.eventId) {
-      return normalReturnMap();
-    }
-
-    const id = battle.eventId;
-
-    battle.running = false;
-    battle.token = -1;
-    battle = null;
-
-    if (activeEventPeriod(id)) {
-      selectedEvent = id;
-      showPage('subEventMap');
-      renderEventMap();
-    } else {
-      showPage('events');
-      renderEventList();
-    }
-  };
-
-  // ===== ボタン操作 =====
-  document.addEventListener('click', e => {
-    const button = e.target.closest('button');
-    if (!button || button.disabled) return;
-
-    const action = button.dataset.action;
-
-    if (button.dataset.page === 'events') {
-      renderEventList();
-    }
-
-    if (action === 'openSubEvent') {
-      const id = button.dataset.event;
-
-      if (!EVENT_DATA[id] || !activeEventPeriod(id)) {
-        showError('開催期間外です');
-        return;
-      }
-
-      selectedEvent = id;
-      eventStage = 1;
-
-      showPage('subEventMap');
-      renderEventMap();
-    }
-
-    if (action === 'selectEventStage') {
-      eventStage = Number(button.dataset.stage);
-      renderEventMap();
-    }
-
-    if (action === 'startEventBattle') {
-      startEventBattle();
-    }
-  });
-
-  // ===== 開催状況の自動更新 =====
-  setInterval(() => {
-    if ($('events')?.classList.contains('active')) {
-      renderEventList();
-    }
-
-    if (
-      $('subEventMap')?.classList.contains('active') &&
-      !activeEventPeriod(selectedEvent)
-    ) {
-      showPage('events');
-      renderEventList();
-    }
-  }, 30000);
-
-  renderEventList();
-})();
-</script>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- 
-</body>
-</html>
+setInterval(()=>{if(state.dailyShop?.date!==dailyDate()){updateShopStock();if($('shop').classList.contains('active'))renderShop()}if($('events').classList.contains('active'))renderEventList();if($('subEventMap').classList.contains('active')&&!activeEventPeriod(selectedEvent)){showPage('events');renderEventList()}},15000);
+renderAll();renderShop();renderEventList();if(dailyAvailable('bonus'))showDailyBonus();
+</script></body></html>
