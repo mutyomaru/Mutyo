@@ -171,7 +171,94 @@ async function advanceTurn(){if(!battle||!battle.running||battle.busy)return;if(
 async function allyAct(useSkill){if(!battle?.running||!battle.awaitingAction||battle.busy)return;const u=battle.current;if(!u||u.side!=='ally'||(useSkill&&u.skillCount<u.charge))return;if(u.id==='狙撃手アーチャー'&&alive(battle.enemies).length>1){battle.pendingUseSkill=useSkill;battle.awaitingAction=false;battle.message='攻撃する敵を選択してください';renderBattle();return}battle.targetUID=null;battle.busy=true;battle.awaitingAction=false;await performAction(u,useSkill);if(!battle?.running)return;battle.busy=false;clearActing();if(checkBattleEnd())return;await sleep(450);advanceTurn()}
 async function enemyAct(u){if(!battle?.running)return;battle.busy=true;const c=byId(u.id),useSkill=u.skillCount>=u.charge;battle.message=u.name+' の'+(useSkill?'スキル「'+c.skill+'」':'通常攻撃')+'！';renderBattle();await sleep(300);await performAction(u,useSkill);if(!battle?.running)return;battle.busy=false;clearActing();if(checkBattleEnd())return;await sleep(500);advanceTurn()}
 // skillMultiplier: プレイヤー固定威力はレベル×指輪、イベント敵の固定威力はイベント倍率。
-async function performAction(u,useSkill){if(!battle?.running)return;const c=byId(u.id);if(!useSkill){const target=chooseTarget(u);if(target)dealDamage(u,target,getAttackPower(u),false);u.skillCount=Math.min(u.charge,u.skillCount+1)}else{u.skillCount=0;const power=c.power*u.skillMultiplier,allies=u.side==='ally'?battle.allies:battle.enemies,opponents=u.side==='ally'?battle.enemies:battle.allies;if(c.effect==='damage'){const targets=c.target==='all'?alive(opponents):[chooseTarget(u)].filter(Boolean);for(const target of targets)dealDamage(u,target,power,true);if(c.target==='all')battle.message=u.name+' の「'+c.skill+'」！ 全体攻撃！'}else if(c.effect==='poison'){const target=chooseTarget(u);if(target){dealDamage(u,target,power,true);if(target.hp>0)target.poison=3}}else if(c.effect==='heal'){const target=random(alive(allies));if(target)healUnit(target,power);battle.message=u.name+' の「'+c.skill+'」！'}else if(c.effect==='healPercent'){for(const target of alive(allies))healUnit(target,target.maxHp*power/100);battle.message=u.name+' の「'+c.skill+'」！'}else if(c.effect==='evade'||c.effect==='evadeSure'){u.evade=c.effect==='evadeSure'?1:Math.min(1,power/100);showEffect(u,'回避','buff');battle.message=u.name+' は回避状態になった！'}else if(c.effect==='guard'){u.guard=Math.min(.95,power/100);showEffect(u,'防御','buff');battle.message=u.name+' は防御態勢を取った！'}else if(c.effect==='buffAlly'){for(const target of alive(allies)){target.buff=1+power/100;target.buffTurns=1;showEffect(target,'強化','buff')}battle.message=u.name+' の「'+c.skill+'」！'}else if(c.effect==='buffSelf'){u.permanentBuff+=power/100;showEffect(u,'強化','buff');battle.message=u.name+' の「'+c.skill+'」！'}}if(u.buffTurns>0&&!(useSkill&&c.effect==='buffAlly')){u.buffTurns--;if(u.buffTurns===0)u.buff=1}renderBattle();await sleep(850)}
+
+async function performAction(u,useSkill){
+  if(!battle?.running)return;
+  const c=byId(u.id);
+  const hadBuff=u.buffTurns>0;
+
+  if(!useSkill){
+    const target=chooseTarget(u);
+    if(target)dealDamage(u,target,getAttackPower(u),false);
+    u.skillCount=Math.min(u.charge,u.skillCount+1);
+  }else{
+    u.skillCount=0;
+
+    const power=c.power*u.skillMultiplier;
+    const allies=u.side==='ally'?battle.allies:battle.enemies;
+    const opponents=u.side==='ally'?battle.enemies:battle.allies;
+
+    if(c.effect==='damage'){
+      const targets=c.target==='all'
+        ?alive(opponents)
+        :[chooseTarget(u)].filter(Boolean);
+
+      const damage=power*u.buff;
+
+      for(const target of targets){
+        dealDamage(u,target,damage,true);
+      }
+
+      if(c.target==='all'){
+        battle.message=u.name+' の「'+c.skill+'」！ 全体攻撃！';
+      }
+
+    }else if(c.effect==='poison'){
+      const target=chooseTarget(u);
+      if(target){
+        dealDamage(u,target,power*u.buff,true);
+        if(target.hp>0)target.poison=3;
+      }
+
+    }else if(c.effect==='heal'){
+      const target=random(alive(allies));
+      if(target)healUnit(target,power);
+      battle.message=u.name+' の「'+c.skill+'」！';
+
+    }else if(c.effect==='healPercent'){
+      for(const target of alive(allies)){
+        healUnit(target,target.maxHp*power/100);
+      }
+      battle.message=u.name+' の「'+c.skill+'」！';
+
+    }else if(c.effect==='evade'||c.effect==='evadeSure'){
+      u.evade=c.effect==='evadeSure'?1:Math.min(1,power/100);
+      showEffect(u,'回避','buff');
+      battle.message=u.name+' は回避状態になった！';
+
+    }else if(c.effect==='guard'){
+      u.guard=Math.min(.95,power/100);
+      showEffect(u,'防御','buff');
+      battle.message=u.name+' は防御態勢を取った！';
+
+    }else if(c.effect==='buffAlly'){
+      for(const target of alive(allies)){
+        target.buff=1+power/100;
+        target.buffTurns=1;
+        showEffect(target,'強化','buff');
+      }
+      battle.message=u.name+' の「'+c.skill+'」！';
+
+    }else if(c.effect==='buffSelf'){
+      u.permanentBuff+=power/100;
+      showEffect(u,'強化','buff');
+      battle.message=u.name+' の「'+c.skill+'」！';
+    }
+  }
+
+  // 行動開始時にバフを持っていたキャラだけ解除
+  // 魔導士が今回付与した新しいバフは解除しない
+  
+if(hadBuff && !(useSkill && c.effect==='buffAlly')){
+  u.buffTurns=0;
+  u.buff=1;
+}
+
+
+  renderBattle();
+  await sleep(850);
+}
+
 function checkBattleEnd(){if(!battle?.running)return true;if(!alive(battle.enemies).length){finishBattle(true);return true}if(!alive(battle.allies).length){finishBattle(false);return true}return false}
 /* ===========================================================
    7. 勝敗・報酬：草原・イベント共通の入り口
