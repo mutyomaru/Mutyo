@@ -984,6 +984,7 @@ case 'equip':equip(id,index,button.dataset.type);break;
 case 'unequip':unequip(id,index);break;
 case 'selectStage':selectStage(Number(button.dataset.stage));break;
 case 'startBattle':startBattle();break;
+    case 'startPvpBattle':startPvpBattle();break;
 case 'selectTarget':selectTargetAction(Number(button.dataset.uid));break;
 case 'cancelTarget':if(battle?.pendingUseSkill!==undefined){battle.pendingUseSkill=undefined;battle.awaitingAction=true;renderBattle()}break;
 case 'battleAttack':allyAct(false);break;
