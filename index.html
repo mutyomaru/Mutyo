@@ -65,7 +65,22 @@ const DAILY_COLORS=['#bf823c','#d4a84b','#8d6945','#477bc2','#6e5cc1','#b35a9c']
 const EVENT_DATA={
  undead:{name:'☠️ アンデッド襲来',type:'sub',schedule:'第1・第3月曜日から7日間',period:'undead',stages:[{enemies:[['zombie',1],['zombie',1],['zombie',1]],gold:1000,gems:25},{enemies:[['skeleton',1.5],['skeleton',1.5],['skeleton',1.5]],gold:1500,gems:50},{enemies:[['zombie',2],['skeleton',2],['skeleton',2]],gold:2500,gems:100,characterDrop:['zombie','skeleton']}]},
  general:{name:'⚔️ 将軍の進軍',type:'sub',schedule:'毎週土曜日・日曜日',period:'general',stages:[{enemies:[['spearman',1],['swordman',1],['将軍',1]],gold:1000,gems:25},{enemies:[['archer',1.5],['farmer',2],['将軍',1.5]],gold:1500,gems:50},{enemies:[['spearman',2],['swordman',2],['将軍',2]],gold:2500,gems:100},{enemies:[['将軍',2,4]],gold:0,gems:200,characterDrop:['将軍']}]},
- golem:{name:'🗿 ゴーレムの目覚め',type:'sub',schedule:'毎月25日から月末まで',period:'golem',stages:[{enemies:[['ゴーレム',10]],gold:3000,gems:300}]}
+ 
+  goblinRaid:{
+    name:'👺 ゴブリン盗賊団襲来',
+    type:'sub',
+    schedule:'毎月第2・第4月曜日から7日間',
+    period:'goblinRaid',
+    stages:[
+      {enemies:[['goblin',1],['goblin',1],['goblin',1]],gold:1000},
+      {enemies:[['goblin',1.5],['goblin',1.5],['goblin',1.5]],gold:1500},
+      {enemies:[['goblin',2],['goblin',2],['goblin',2]],gold:2000,gems:100},
+      {enemies:[['goblin',2.5],['goblin',2.5],['goblin',2.5]],gold:2500},
+      {enemies:[['goblin',3],['goblin',3],['goblin',3]],gold:3500,gems:200}
+    ]
+  },
+
+   golem:{name:'🗿 ゴーレムの目覚め',type:'sub',schedule:'毎月25日から月末まで',period:'golem',stages:[{enemies:[['ゴーレム',10]],gold:3000,gems:300}]}
 };
 /* ===========================================================
    2. 基本処理・セーブ（旧セーブキーを保持）
@@ -179,9 +194,27 @@ const DAY_MS=86400000,JST_MS=9*3600000;
 function getJST(){return new Date(Date.now()+JST_MS)}
 function golemPeriod(){const jst=getJST(),y=jst.getUTCFullYear(),m=jst.getUTCMonth(),day=jst.getUTCDate();if(day<25)return null;const start=Date.UTC(y,m,25)-JST_MS,end=Date.UTC(y,m+1,1)-JST_MS;return {key:`${y}-${String(m+1).padStart(2,'0')}`,start,end}}
 function undeadPeriod(){const now=Date.now(),jst=getJST(),y=jst.getUTCFullYear(),m=jst.getUTCMonth(),firstDay=new Date(Date.UTC(y,m,1)).getUTCDay(),firstMonday=1+(8-firstDay)%7;for(const [round,day] of [[1,firstMonday],[3,firstMonday+14]]){const start=Date.UTC(y,m,day)-JST_MS,end=start+7*DAY_MS;if(now>=start&&now<end)return {key:`${y}-${m+1}-${round}`,start,end}}return null}
+   
+function goblinRaidPeriod(){
+  const now=Date.now(),jst=getJST();
+  const y=jst.getUTCFullYear(),m=jst.getUTCMonth();
+  const firstDay=new Date(Date.UTC(y,m,1)).getUTCDay();
+  const firstMonday=1+(8-firstDay)%7;
+
+  for(const [round,day] of [[2,firstMonday+7],[4,firstMonday+21]]){
+    const start=Date.UTC(y,m,day)-JST_MS;
+    const end=start+7*DAY_MS;
+    if(now>=start&&now<end)
+      return {key:`${y}-${m+1}-${round}`,start,end};
+  }
+  return null;
+}
+
 function generalPeriod(){const jst=getJST(),day=jst.getUTCDay();if(day!==0&&day!==6)return null;const today=Date.UTC(jst.getUTCFullYear(),jst.getUTCMonth(),jst.getUTCDate()),saturday=today-(day===0?1:0)*DAY_MS,start=saturday-JST_MS,end=start+2*DAY_MS,d=new Date(saturday),key=[d.getUTCFullYear(),String(d.getUTCMonth()+1).padStart(2,'0'),String(d.getUTCDate()).padStart(2,'0')].join('-');return {key,start,end}}
 // 今後の開催パターンはこの対応表と、対応する開催関数を追加するだけでよい。
-const EVENT_PERIODS={undead:undeadPeriod,general:generalPeriod,golem:golemPeriod};
+
+const EVENT_PERIODS={undead:undeadPeriod,general:generalPeriod,goblinRaid:goblinRaidPeriod,golem:golemPeriod};
+
 function activeEventPeriod(id){return EVENT_PERIODS[EVENT_DATA[id]?.period||id]?.()||null}
 function eventProgress(id,periodKey){if(!state.eventProgress||typeof state.eventProgress!=='object')state.eventProgress={};const key=id+':'+periodKey;if(!state.eventProgress[key]){state.eventProgress[key]={cleared:[]};save()}const p=state.eventProgress[key];if(!Array.isArray(p.cleared))p.cleared=[];return p}
 function formatEnd(end){const d=new Date(end-1+JST_MS);return `${d.getUTCMonth()+1}月${d.getUTCDate()}日23:59`}
