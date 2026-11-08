@@ -160,7 +160,50 @@ function makeUnit(id,side,options={}){const c=byId(id),m=options.multiplier??1,s
 function startBattle(){if(battle?.running)return;if(selectedStage>state.clearedStage+1){showError('まだ解放されていません');return}if(!state.party.length){showError('編成してください');return}const allies=state.party.map(id=>makeUnit(id,'ally'));const enemies=STAGE_ENEMIES[selectedStage].map(([id,m,hpMul])=>{const opt={multiplier:m,hpMultiplier:hpMul||1};if(selectedStage===10&&id==='ゴーレム'){opt.hp=700;opt.speed=12;opt.charge=3}return makeUnit(id,'enemy',opt)});battle={stage:selectedStage,allies,enemies,running:true,busy:false,current:null,awaitingAction:false,result:null,token:++battleSerial,message:'戦闘開始！'};showPage('battleFight');renderBattle();advanceTurn()}
 function unitCard(u){const c=byId(u.id),hpRate=Math.max(0,100*u.hp/u.maxHp);return `<div class="unit ${u.side==='enemy'?'enemy':''} ${u.hp<=0?'dead':''} ${u.acting?'active':''}">${u.acting?`<div style="color:#ffe17c;font-weight:900;font-size:11px">${u.side==='enemy'?'▼ 敵の行動':'▶ 行動中'}</div>`:''}${portrait(u.id)}<div class="name ${rarityClass(c.rarity)}">${esc(u.name)}</div><div class="small">HP ${Math.max(0,u.hp)} / ${u.maxHp}</div><div class="hpbar"><i style="width:${hpRate}%"></i></div><div class="small">スキル ${Math.min(u.skillCount,u.charge)} / ${u.charge}</div>${u.guard>0?'<div class="small">🛡️ 防御中</div>':''}${u.evade>0?'<div class="small">💨 回避中</div>':''}</div>`}
 function renderBattle(){if(!battle)return;$('bossLabel').textContent=battle.eventId?EVENT_DATA[battle.eventId].name+' STAGE '+battle.stage:BOSS_STAGES.includes(battle.stage)?'👑 BOSS':'STAGE '+battle.stage;$('enemyUnits').innerHTML=battle.enemies.map(unitCard).join('');$('allyUnits').innerHTML=battle.allies.map(unitCard).join('');if(battle.result){renderBattleResult();return}const u=battle.current;if(battle.pendingUseSkill!==undefined&&u?.side==='ally'){$('actionArea').innerHTML=`<b>🎯 ${esc(u.name)}：攻撃対象を選択</b><div class="action-buttons" style="grid-template-columns:1fr">${alive(battle.enemies).map(t=>`<button data-action="selectTarget" data-uid="${t.uid}">${esc(t.name)}（HP ${t.hp}/${t.maxHp}）</button>`).join('')}</div><button data-action="cancelTarget" style="margin-top:8px">戻る</button>`;return}if(battle.awaitingAction&&u?.side==='ally'){const c=byId(u.id),ready=u.skillCount>=u.charge;$('actionArea').innerHTML=`<b>${esc(u.name)} の行動</b><p class="small">${esc(battle.message)}</p><div class="action-buttons"><button class="attack" data-action="battleAttack">⚔️ 通常攻撃</button><button class="skill" data-action="battleSkill" ${ready?'':'disabled'}>✨ ${esc(c.skill)} ${ready?'':'（溜め中）'}</button></div>`}else $('actionArea').innerHTML=`<div class="${u?.side==='enemy'?'enemy-preview':''}">${esc(battle.message||'次の行動を待っています…')}</div>`}
-function showEffect(target,text,kind=''){if(!battle||!target)return;const units=target.side==='enemy'?battle.enemies:battle.allies,parent=target.side==='enemy'?$('enemyUnits'):$('allyUnits'),index=units.findIndex(u=>u.uid===target.uid),card=parent?.children[index];if(!card)return;const rect=card.getBoundingClientRect(),popup=document.createElement('div');popup.textContent=String(text);Object.assign(popup.style,{position:'fixed',left:(rect.left+rect.width/2)+'px',top:(rect.top+rect.height*.3)+'px',transform:'translateX(-50%)',zIndex:'9999',pointerEvents:'none',fontSize:'30px',fontWeight:'900',color:kind==='heal'?'#86f3ad':kind==='buff'?'#ffe17c':'#ff8585',textShadow:'0 2px 5px black',whiteSpace:'nowrap',transition:'transform .9s ease-out, opacity .9s ease-out'});document.body.appendChild(popup);requestAnimationFrame(()=>{popup.style.transform='translate(-50%,-45px)';popup.style.opacity='0'});setTimeout(()=>popup.remove(),950)}
+
+function showEffect(target,text,kind=''){
+  if(!battle||!target)return;
+
+  const units=target.side==='enemy'?battle.enemies:battle.allies;
+  const parent=target.side==='enemy'?$('enemyUnits'):$('allyUnits');
+  const index=units.findIndex(u=>u.uid===target.uid);
+  const card=parent?.children[index];
+  if(!card)return;
+
+  const rect=card.getBoundingClientRect();
+  const popup=document.createElement('div');
+  popup.textContent=String(text);
+
+  Object.assign(popup.style,{
+    position:'fixed',
+    left:(rect.left+rect.width/2)+'px',
+    top:(rect.top+rect.height*.3)+'px',
+    transform:'translateX(-50%)',
+    zIndex:'9999',
+    pointerEvents:'none',
+    fontSize:'30px',
+    fontWeight:'900',
+    color:kind==='heal'?'#86f3ad':kind==='buff'?'#ffe17c':'#ff8585',
+    textShadow:'0 2px 5px black',
+    whiteSpace:'nowrap',
+    opacity:'1',
+    transition:'none'
+  });
+
+  document.body.appendChild(popup);
+
+  // 1秒間くっきり表示
+  setTimeout(()=>{
+    // その後1秒かけて上昇しながら消える
+    popup.style.transition='transform 1s ease-out, opacity 1s ease-out';
+    popup.style.transform='translate(-50%,-45px)';
+    popup.style.opacity='0';
+  },1000);
+
+  // 合計2秒後に削除
+  setTimeout(()=>popup.remove(),2000);
+}
+
 function chooseNextUnit(){const units=[...alive(battle.allies),...alive(battle.enemies)];for(let i=0;i<10000;i++){const ready=units.filter(u=>u.gauge>=100);if(ready.length){ready.sort((a,b)=>a.side!==b.side?(a.side==='ally'?-1:1):b.gauge-a.gauge);const u=ready[0];u.gauge-=100;if(u.side==='ally'){const recovered=Math.min(u.maxHp-u.hp,getEquipped(u.id,'heal')*10);if(recovered>0){u.hp+=recovered;const token=battle.token;setTimeout(()=>{if(battle&&battle.token===token)showEffect(u,'+'+recovered,'heal')},0)}}return u}for(const u of units)u.gauge+=u.speed}return units[0]||null}
 function clearActing(){if(!battle)return;for(const u of [...battle.allies,...battle.enemies])u.acting=false}
 function getAttackPower(u){let atk=u.atk*u.buff*u.permanentBuff;if(u.id==='一閃スピアドン'&&u.hp<=u.maxHp/2)atk*=1.5;return Math.max(1,Math.floor(atk))}
