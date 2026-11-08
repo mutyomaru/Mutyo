@@ -251,23 +251,18 @@ function activeEventPeriod(id){return EVENT_PERIODS[EVENT_DATA[id]?.period||id]?
 function eventProgress(id,periodKey){if(!state.eventProgress||typeof state.eventProgress!=='object')state.eventProgress={};const key=id+':'+periodKey;if(!state.eventProgress[key]){state.eventProgress[key]={cleared:[]};save()}const p=state.eventProgress[key];if(!Array.isArray(p.cleared))p.cleared=[];return p}
 function formatEnd(end){if(!Number.isFinite(end))return '終了日未定';const d=new Date(end-1+JST_MS);return `${d.getUTCMonth()+1}月${d.getUTCDate()}日23:59`}
 
+
 function renderEventList(){
-  const list=$('subEventList');
-  if(!list)return;
+  const mainList=$('mainEventList');
+  const subList=$('subEventList');
+  if(!mainList||!subList)return;
 
-  const sections=[
-    {type:'main',title:'👑 メインイベント'},
-    {type:'sub',title:'⚔️ サブイベント'}
-  ];
-
-  let html='';
-
-  for(const section of sections){
-    html+=`<h2 class="section-title">${section.title}</h2>`;
-    let count=0;
+  for(const type of ['main','sub']){
+    const list=type==='main'?mainList:subList;
+    let html='',count=0;
 
     for(const [id,data] of Object.entries(EVENT_DATA)){
-      if(data.type!==section.type)continue;
+      if(data.type!==type)continue;
 
       const period=activeEventPeriod(id);
       if(!period)continue;
@@ -290,19 +285,22 @@ function renderEventList(){
     }
 
     if(!count){
-      html+='<p class="muted">現在開催中のイベントはありません。</p>';
+      html='<p class="muted">現在開催中のイベントはありません。</p>';
     }
+
+    if(type==='sub'){
+      html+=`<div class="panel">
+        <h3>📅 イベント開催予定</h3>
+        ${Object.values(EVENT_DATA).map(d=>`
+          <p class="small">${esc(d.name)}：${esc(d.schedule)}</p>
+        `).join('')}
+      </div>`;
+    }
+
+    list.innerHTML=html;
   }
-
-  html+=`<div class="panel">
-    <h3>📅 イベント開催予定</h3>
-    ${Object.values(EVENT_DATA).map(d=>`
-      <p class="small">${esc(d.name)}：${esc(d.schedule)}</p>
-    `).join('')}
-  </div>`;
-
-  list.innerHTML=html;
 }
+
 
 function renderEventMap(){const id=selectedEvent,data=EVENT_DATA[id],period=activeEventPeriod(id);if(!data||!period){showPage('events');renderEventList();return}const progress=eventProgress(id,period.key);if(eventStage<1||eventStage>data.stages.length||(eventStage>1&&!progress.cleared.includes(eventStage-1)))eventStage=1;const nodes=data.stages.map((stage,i)=>{const n=i+1,cleared=progress.cleared.includes(n),unlocked=n===1||progress.cleared.includes(n-1),boss=n===data.stages.length;return `<button class="stage-node ${cleared?'completed':''} ${boss?'boss':''} ${eventStage===n?'selected':''} ${unlocked?'':'locked'}" data-action="selectEventStage" data-stage="${n}" ${unlocked?'':'disabled'}><span class="num">${boss?'👑 ':''}${n}</span><span class="small">${cleared?'✓ クリア':unlocked?'挑戦可能':'🔒 未解放'}</span></button>`}).join('');const stage=data.stages[eventStage-1],cleared=progress.cleared.includes(eventStage);const enemies=stage.enemies.map(([enemyId,m,hpMul])=>{const c=byId(enemyId);if(!c)return '不明な敵';const hpRate=m*(hpMul||1),extra=hpRate!==m?`・HP ${Math.round(hpRate*100)}%`:'';return `${c.name}（${Math.round(m*100)}%${extra}）`}).join(' / ');let rewardHTML='';if(stage.gold)rewardHTML+=`<p>🪙 ${stage.gold}金貨</p>`;if(stage.gems)rewardHTML+=`<p>💎 ${stage.gems}ジェム</p>`;if(stage.characterDrop)rewardHTML+=`<p>🎁 ${stage.characterDrop.map(id=>byId(id)?.name||id).join(' または ')} ×1 確定</p>`;$('subEventMap').innerHTML=`<div class="panel"><h2 class="section-title">${esc(data.name)}</h2><p class="small">全${data.stages.length}ステージ ・${esc(data.schedule)}</p><p class="small">開催終了：${formatEnd(period.end)}</p><button data-page="events">← イベント一覧へ</button><div class="stage-map" style="margin-top:12px;background:linear-gradient(145deg,${id==='general'?'#65452e,#34251e':'#473451,#241d38'});border-color:${id==='general'?'#b99765':'#9874ad'}"><div class="map-grid">${nodes}</div></div></div><div class="panel"><h3>${eventStage===data.stages.length?'👑 ':''}ステージ ${eventStage}</h3><p class="small">敵編成：${esc(enemies)}</p><h4>🎁 今回の初回クリア報酬</h4>${rewardHTML}<p class="small">${cleared?'✓ 報酬獲得済み（再挑戦可能）':'初回クリアで報酬確定'}</p><button class="wide" data-action="startEventBattle">⚔️ 挑戦する</button></div>`}
 function startEventBattle(){const id=selectedEvent,data=EVENT_DATA[id],period=activeEventPeriod(id);if(!period||!data){showError('開催期間外です');return}if(battle?.running)return;const progress=eventProgress(id,period.key);if(eventStage>1&&!progress.cleared.includes(eventStage-1)){showError('前のステージをクリアしてください');return}if(!state.party.length){showError('キャラクターを編成してください');return}const stageData=data.stages[eventStage-1];if(!stageData)return;const allies=state.party.map(id=>makeUnit(id,'ally'));const enemies=stageData.enemies.map(([enemyId,m,hpMul])=>{const u=makeUnit(enemyId,'enemy',{multiplier:m,hpMultiplier:hpMul||1}),c=byId(enemyId);u.speed=c.speed;u.charge=c.charge;u.skillMultiplier=['damage','poison','heal'].includes(c.effect)?m:1;return u});battle={eventId:id,eventPeriod:period.key,stage:eventStage,allies,enemies,running:true,busy:false,current:null,awaitingAction:false,result:null,token:++battleSerial,message:data.name+'！'};showPage('battleFight');renderBattle();advanceTurn()}
