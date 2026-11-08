@@ -1,40 +1,29 @@
 <!doctype html>
-<html lang="ja">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#171b20">
-<title>星詠みの旅団</title>
+<html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#171b20"><title>星詠みの旅団</title>
 <style>
-/* ============================================================
-   外観：中世ファンタジーの石壁・古書・真鍮をイメージ
-   色を変える場合はまず :root を編集してください。
-   ============================================================ */
 :root{--bg:#15191d;--panel:#25282a;--panel2:#31312e;--gold:#d6b476;--text:#f1e9d6;--muted:#b7af9e;--line:#6e6452;--red:#b45b51;--green:#74b38a;--blue:#829cb6}
 *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;min-height:100dvh;color:var(--text);background:radial-gradient(ellipse at top,#33352f 0,#181d21 58%,#111416 100%);font-family:Georgia,"Hiragino Mincho ProN","Yu Mincho","Noto Serif JP",serif}
 button,textarea{font:inherit}button{color:inherit;border:1px solid #938467;background:linear-gradient(#555449,#34372f);border-radius:8px;padding:10px 12px;cursor:pointer;touch-action:manipulation;box-shadow:inset 0 1px #ffffff18}button:disabled{opacity:.42;cursor:default}button:focus-visible,textarea:focus-visible{outline:2px solid var(--gold);outline-offset:2px}textarea{width:100%;padding:10px;color:var(--text);background:#191d20;border:1px solid var(--line);border-radius:8px;resize:vertical}
 .wrap{max-width:900px;margin:auto;padding:10px}.row,.top{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.top{justify-content:space-between;padding:9px 0}.brand,.section-title{color:var(--gold);font-weight:900}.brand{font-size:21px;letter-spacing:.08em}.pill{background:#292a27;border:1px solid var(--line);padding:5px 9px;border-radius:5px}.nav{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px;margin:8px 0 12px}.nav button{padding:10px 2px;font-size:clamp(10px,2.5vw,14px)}.page{display:none}.page.active{display:block}
 .panel{background:linear-gradient(145deg,#30312d,#22272b);border:1px solid var(--line);border-radius:9px;padding:13px;margin-bottom:10px;box-shadow:0 3px 12px #0003,inset 0 1px #ffffff09}.hero{text-align:center;padding:20px;border-top:2px solid var(--gold)}.hero h1{font-size:clamp(20px,5vw,30px);color:var(--gold)}.section-title{font-size:19px;margin:0 0 9px}.muted,.small{color:var(--muted)}.small{font-size:12px}.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.card{position:relative;min-width:0;background:#323630;border:1px solid var(--line);border-radius:9px;padding:8px 7px 39px}.card.selected{outline:2px solid var(--gold)}.portrait{height:100px;display:flex;align-items:center;justify-content:center;font-size:42px}.portrait img{display:block;max-width:100%;max-height:100%;object-fit:contain}.name{font-weight:900;overflow-wrap:anywhere}.stats{font-size:12px;line-height:1.6;margin:5px 0}.normal{color:#d0d1cf}.rare{color:#91bcdf}.epic{color:#d8a6e8}.wide{width:100%}.plus{position:absolute;bottom:5px;right:5px;width:28px;height:28px;padding:0;border-radius:6px;color:#ffe5a0;border-color:#b99550;background:#58472d;font-size:20px}
 .modal{display:none;position:fixed;inset:0;z-index:1000;background:#050708ef;align-items:center;justify-content:center;padding:12px}.modal.active{display:flex}.modal-box{width:100%;max-width:460px;max-height:90dvh;overflow:auto;background:linear-gradient(#3c3a32,#22272b);border:1px solid #ad9570;border-radius:11px;padding:15px}.slots,.stock{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}.slot{min-height:65px;background:#202421;border:1px solid #726653;border-radius:8px;padding:8px;text-align:center}.slot.empty{border-style:dashed}.stock{grid-template-columns:repeat(3,1fr);margin:10px 0}.stock>div{background:#202421;border-radius:7px;padding:8px 3px;text-align:center;font-size:12px}.choice{display:flex;width:100%;justify-content:space-between;align-items:center;text-align:left;margin:8px 0}.ring-mark{display:inline-flex;align-items:center;justify-content:center;min-width:19px;min-height:19px;border:3px solid var(--ring-color,#d6b476);border-radius:50%;box-shadow:0 0 7px #0006,inset 0 0 3px var(--ring-color,#d6b476);vertical-align:middle;font-family:serif;font-size:0}.ring-mark.large{width:68px;height:68px;border-width:9px}
-/* 図鑑 */
 .dex-tabs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:5px;margin-bottom:8px}.dex-tabs button{padding:8px 2px;font-size:12px}.dex-tabs .selected{border:2px solid var(--gold);color:var(--gold);background:#554b37}.dex-pages{display:flex;justify-content:space-between;align-items:center;gap:8px;margin:9px 0}.dex-pages span{font-weight:900;color:var(--gold)}#characterList{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;align-items:stretch}.encyclopedia-card{position:relative;min-width:0;display:flex;flex-direction:column;align-items:center;text-align:center;background:#323630;border:1px solid var(--line);border-radius:8px;padding:4px 3px 32px;overflow:hidden}.encyclopedia-image{width:100%;display:block;flex:0 0 auto;margin:0;padding:0;border:0;background:transparent}.encyclopedia-image .portrait{height:clamp(130px,19vh,185px);width:100%;padding:0;margin:0;overflow:hidden;display:flex;align-items:flex-end;justify-content:center}.encyclopedia-image img{display:block;width:100%;height:100%;max-width:100%;max-height:100%;object-fit:contain;object-position:center bottom}.encyclopedia-card .name{margin-top:3px;font-size:clamp(10px,2.6vw,13px);line-height:1.25;overflow-wrap:anywhere}.encyclopedia-level{margin-top:3px;color:var(--gold);font-weight:800;font-size:12px}.encyclopedia-card .plus{bottom:4px;right:4px;width:25px;height:25px;font-size:17px}.encyclopedia-locked .name{color:var(--muted)}.encyclopedia-detail-image .portrait{height:220px}.encyclopedia-detail-stats{line-height:1.9;padding:12px;margin:10px 0;background:#202421;border-radius:8px}
-/* 地図と戦闘 */
 .stage-map{padding:12px;border:2px solid #857851;border-radius:10px;background:linear-gradient(145deg,#48513a,#333e32 55%,#48513a)}.map-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}.stage-node{min-height:70px;padding:5px 2px;background:linear-gradient(#ded1ac,#af9f73);color:#342b1d;border:2px solid #ad986b;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px}.stage-node .num{font-size:20px;font-weight:900}.stage-node .small{color:inherit;font-size:10px}.stage-node.completed{background:linear-gradient(#b5c5a1,#718c70)}.stage-node.current{background:linear-gradient(#fff0a8,#d5ad56)}.stage-node.boss{background:linear-gradient(#d4a39a,#a36054);color:#351d19}.stage-node.locked{background:#676a62;color:#c1bfb7}.stage-node.selected{outline:3px solid #f3e1b4}.stage-info{margin-top:10px;background:#222c25d9;padding:10px;border-radius:8px;line-height:1.7}.map-start{width:100%;margin-top:10px;background:linear-gradient(#dfc584,#95703d);color:#2d210e;font-weight:900}.battle-side{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}.unit{position:relative;min-width:0;background:#333f44;border:1px solid #668495;border-radius:8px;text-align:center;padding:5px 3px}.unit.enemy{background:#4b3535;border-color:#996b5e}.unit.dead{opacity:.35;filter:grayscale(1)}.unit.active{outline:2px solid #ffe17c;box-shadow:0 0 12px #f4c76b99}.unit.enemy.active{outline-color:#ff8585}.unit .portrait{height:clamp(80px,16vh,145px)}.unit .name{font-size:12px}.unit .small{font-size:10px}.hpbar{height:8px;background:#101827;border-radius:10px;overflow:hidden;margin:5px 0}.hpbar i{display:block;height:100%;background:#76d6a1}.battle-divider{text-align:center;font-size:18px;color:var(--gold);font-weight:900;margin:7px}.action-panel{margin-top:9px;background:#2e3231;border:1px solid #87765d;border-radius:8px;padding:10px}.action-buttons{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:7px}.action-buttons button{min-height:42px}.attack{background:#75433c}.skill{background:#5c4b76}.enemy-preview{background:#633b48;border:2px solid #bd687b;padding:10px;border-radius:8px;line-height:1.6}.result{text-align:center;line-height:1.7}.result h2{color:var(--gold)}.error{display:none;background:#542d36;border:1px solid #b65d6a;padding:10px;border-radius:8px;margin-bottom:10px}.status-badges{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px}.status-badge{display:inline-block;padding:2px 6px;border-radius:4px;font-size:10px;font-weight:700;line-height:1.2;border:1px solid #ffffff30}.status-badge.buff{background:#574a2f;color:#ffe17c}.status-badge.poison{background:#403154;color:#d4b3ff}.status-badge.guard{background:#29485c;color:#9ad8ff}.status-badge.evade{background:#2c4a41;color:#9ff5c6}
 .unit.hit-flash{animation:damageFlash .65s ease-out}.unit.heal-flash{animation:healFlash .65s ease-out}.unit.buff-flash{animation:buffFlash .65s ease-out}@keyframes damageFlash{0%,100%{box-shadow:none}20%{box-shadow:0 0 22px 7px #ff4545;background-color:#ff3c3c4d}}@keyframes healFlash{0%,100%{box-shadow:none}20%{box-shadow:0 0 22px 7px #50ff9a;background-color:#32ff783f}}@keyframes buffFlash{0%,100%{box-shadow:none}20%{box-shadow:0 0 22px 7px #ffe17c;background-color:#ffe17c3f}}
-/* 依頼掲示板 */
-.quest-tabs{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:12px 0}.quest-tabs button.active{border-color:var(--gold);color:var(--gold)}
-.quest-card{padding:12px;margin:9px 0;border:1px solid var(--line);border-radius:9px;background:#272a27}
-.quest-head{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}.quest-head b{font-size:14px}.quest-reward{white-space:nowrap;color:var(--gold);font-size:13px}
-.quest-progress{height:9px;border-radius:10px;overflow:hidden;background:#151b1a;margin:9px 0 5px;border:1px solid #485349}.quest-progress>i{display:block;height:100%;background:linear-gradient(90deg,#7c9e72,#d2b678);transition:width .2s}
-.quest-foot{display:flex;gap:10px;align-items:center;justify-content:space-between}.quest-foot button{min-width:100px}.quest-complete{border-color:#ae9163;background:#39362a}
-/* 日替わり・店 */
+.quest-tabs{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:12px 0}.quest-tabs button.active{border-color:var(--gold);color:var(--gold)}.quest-card{padding:12px;margin:9px 0;border:1px solid var(--line);border-radius:9px;background:#272a27}.quest-head{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}.quest-head b{font-size:14px}.quest-reward{white-space:nowrap;color:var(--gold);font-size:13px}.quest-progress{height:9px;border-radius:10px;overflow:hidden;background:#151b1a;margin:9px 0 5px;border:1px solid #485349}.quest-progress>i{display:block;height:100%;background:linear-gradient(90deg,#7c9e72,#d2b678);transition:width .2s}.quest-foot{display:flex;gap:10px;align-items:center;justify-content:space-between}.quest-foot button{min-width:100px}.quest-complete{border-color:#ae9163;background:#39362a}
 .daily-panel{text-align:center}.daily-wheel-wrap{position:relative;width:min(76vw,290px);aspect-ratio:1;margin:15px auto}.daily-wheel{width:100%;height:100%;border-radius:50%;border:7px solid var(--gold);box-shadow:0 0 22px #f4c76b66;transition:transform 4.5s cubic-bezier(.12,.75,.12,1)}.daily-wheel-label{position:absolute;left:50%;top:50%;transform-origin:center;color:white;font-size:11px;font-weight:900;text-shadow:0 1px 3px black;pointer-events:none}.daily-pointer{position:absolute;top:-15px;left:50%;transform:translateX(-50%);z-index:5;color:#ffb46b;font-size:36px;text-shadow:0 2px 3px black}.daily-center{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:54px;height:54px;border-radius:50%;display:grid;place-items:center;background:var(--gold);color:#34240a;border:4px solid #ede4d0;font-weight:900}.daily-buttons{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:10px}.daily-buttons button{min-width:135px}.shop-product-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:12px 0}.shop-product{min-width:0;display:flex;flex-direction:column;align-items:center;text-align:center;gap:6px;background:#333631;border:1px solid var(--line);border-radius:8px;padding:9px 6px}.shop-product-image{width:100%;height:110px;display:flex;justify-content:center;align-items:center}.shop-product-image .portrait{width:100%;height:100%}.shop-product b{font-size:13px;overflow-wrap:anywhere}.shop-ring-icon{display:flex;align-items:center;justify-content:center;height:85px}.shop-product-price{margin-top:auto;color:var(--gold);font-weight:900}.shop-product button{font-size:12px;padding:9px 3px}#shopMessage:not(:empty){color:#b0e5bd;padding:8px}
-/* 魔法召喚の演出 */
 .summon{display:none;position:fixed;inset:0;z-index:1100;background:radial-gradient(circle,#33454a,#030612 80%);align-items:center;justify-content:center;padding:15px;overflow:hidden;--summon-color:#9bc5d5;--summon-glow:#659cba}.summon.active{display:flex}.summon.epic-mode{--summon-color:#ffe18a;--summon-glow:#ffb700;background:radial-gradient(circle,#463210,#05040b 80%)}.summon-box{text-align:center;max-width:520px;width:100%;position:relative;z-index:2}.summon-cinema{position:relative;height:min(52dvh,370px);min-height:270px;display:flex;justify-content:center;align-items:center;isolation:isolate}.summon-magic{position:absolute;width:min(65vw,260px);aspect-ratio:1;border:3px solid var(--summon-color);border-radius:50%;box-shadow:0 0 30px var(--summon-glow),inset 0 0 35px var(--summon-glow);animation:summonRotate 4s linear infinite,summonAppear 1s ease-out both}.summon-magic:before{content:"✦ ✧ ✦ ✧ ✦ ✧";position:absolute;inset:15px;border:2px dashed var(--summon-color);border-radius:50%;display:grid;place-items:center;color:var(--summon-color);letter-spacing:5px}.summon-magic:after{content:"";position:absolute;inset:43px;border:2px solid var(--summon-color);border-radius:50%;box-shadow:0 0 20px var(--summon-glow)}.summon-particle{position:absolute;left:50%;top:50%;width:var(--size);height:var(--size);border-radius:50%;background:var(--summon-color);box-shadow:0 0 12px var(--summon-color);animation:summonParticle var(--duration) ease-in-out infinite;animation-delay:var(--delay)}.summon-character{position:relative;z-index:3;opacity:0;transform:scale(.3);filter:brightness(4)}.summon-character.visible{animation:summonReveal .85s ease-out forwards}.summon-character img{width:min(55vw,190px);height:210px;object-fit:contain;filter:drop-shadow(0 0 20px var(--summon-glow))}.summon-information{opacity:0;transform:translateY(15px)}.summon-information.visible{animation:summonText .5s ease-out forwards}.summon-information h2{color:var(--summon-color);text-shadow:0 0 18px var(--summon-glow)}.summon-flash{position:fixed;inset:0;background:white;opacity:0;pointer-events:none;z-index:5}.summon-flash.play{animation:summonFlash .8s ease-out}.summon-lightning{position:absolute;inset:0;opacity:0;pointer-events:none;background:linear-gradient(115deg,transparent 43%,#fff7c7 47%,#ffcf49 50%,transparent 54%)}.epic-mode .summon-lightning{animation:summonLightning .55s steps(2) infinite}.epic-mode .summon-magic{animation:summonRotate 2s linear infinite,summonAppear 1s ease-out both,summonPulse .7s ease-in-out infinite alternate}@keyframes summonRotate{to{transform:rotate(360deg)}}@keyframes summonAppear{from{opacity:0;scale:.1}to{opacity:1;scale:1}}@keyframes summonPulse{to{box-shadow:0 0 75px var(--summon-glow),inset 0 0 50px var(--summon-glow)}}@keyframes summonParticle{0%{opacity:0;transform:rotate(var(--angle)) translateX(145px)}50%{opacity:1}100%{opacity:0;transform:rotate(var(--angle)) translateX(10px)}}@keyframes summonReveal{from{opacity:0;transform:scale(.3);filter:brightness(4)}to{opacity:1;transform:scale(1);filter:brightness(1)}}@keyframes summonText{to{opacity:1;transform:translateY(0)}}@keyframes summonFlash{0%{opacity:0}30%{opacity:.95}100%{opacity:0}}@keyframes summonLightning{0%,100%{opacity:0}50%{opacity:.8}}
 .footer{text-align:center;color:var(--muted);font-size:11px;padding:9px}@media(max-width:600px){html,body{width:100%;overflow-x:hidden}.wrap{max-width:100%;padding:5px 6px}.top{padding:3px 0;gap:4px}.brand{font-size:15px}.top .row{gap:4px}.pill{padding:3px 6px;font-size:11px}.nav{gap:3px;margin:5px 0 7px}.nav button{padding:9px 1px;font-size:10px;border-radius:5px}.panel{padding:7px;margin-bottom:6px;border-radius:7px}.section-title{font-size:15px;margin-bottom:5px}.panel p{margin:5px 0}.hero{padding:10px 6px}.hero h1{font-size:19px;margin:5px 0}.grid{gap:5px}.card{padding:4px 3px 32px}.card .portrait{height:60px}.card .name{font-size:11px}.card .stats{font-size:10px}.card button.wide{font-size:10px;padding:5px 1px}#characterList{gap:4px}.encyclopedia-card{padding:3px 2px 29px}.encyclopedia-image .portrait{height:clamp(110px,16vh,155px)}.encyclopedia-card .name,.encyclopedia-level{font-size:11px}.battle-side{gap:4px}.unit{padding:3px 2px}.unit .portrait{height:clamp(65px,12vh,100px)}.unit .name,.unit .small{font-size:10px}.hpbar{height:6px;margin:3px 0}.battle-divider{margin:4px}.action-panel{margin-top:5px;padding:7px}.action-buttons button{min-height:38px;padding:5px;font-size:12px}.stage-map{padding:6px}.map-grid{gap:4px}.stage-node{min-height:47px;padding:3px 1px}.stage-node .num{font-size:15px}.stage-node .small{font-size:9px}.stage-info{padding:6px;margin-top:6px;font-size:12px}.modal{padding:7px}.modal-box{max-height:91dvh;padding:10px}.footer{display:none}}
-</style>
-</head>
-<body>
+
+
+/* 初心者依頼とレベルストーン */
+.stone-inventory,.stone-detail{background:#182d36;border:1px solid #527b80;border-radius:12px;padding:10px;margin:8px 0}
+.stone-detail button{margin-top:7px}
+.quest-tabs{display:flex;flex-wrap:wrap;gap:6px}
+.quest-tabs button{flex:1 1 100px}
+.quest-tabs button.active{border-color:#f4c76b;color:#f4c76b}
+
+</style></head><body>
 <div class="wrap">
 <header class="top"><div class="brand">✦ 星詠みの旅団</div><div class="row"><span class="pill">💎 <b id="gems">0</b></span><span class="pill">🪙 <b id="gold">0</b></span><span class="pill">到達 <b id="stage">1</b></span></div></header>
 <div id="errorBox" class="error" role="alert"></div>
@@ -42,20 +31,10 @@ button,textarea{font:inherit}button{color:inherit;border:1px solid #938467;backg
 <main>
 <section id="home" class="page active"><div class="panel hero"><h1>星の導きが、旅の始まり</h1><p class="muted">剣と魔法を携え、未知なる大地へ。</p><div class="row" style="justify-content:center"><button data-page="gacha">仲間を召喚する</button><button data-page="team">旅団を編成する</button><button data-page="battle">遠征へ向かう</button><button data-page="quests">依頼掲示板</button></div></div><div class="panel"><h2 class="section-title">旅団の記録</h2><div id="homeSummary"></div></div><div class="panel daily-panel"><h2 class="section-title">日々の授与品</h2><p class="small">毎日0時（日本時間）に更新</p><div class="daily-buttons"><button data-action="dailyBonusOpen">日々の支給品</button><button data-action="dailyWheelOpen">運命の円盤</button></div><p id="dailyStatus" class="small"></p></div></section>
 <section id="gacha" class="page"><div class="panel"><h2 class="section-title">星詠みの召喚陣</h2><p>ノーマル 70% / レア 25% / エピック 5%</p><div class="row"><button data-action="summon" data-count="1">1回召喚（💎100）</button><button data-action="summon" data-count="10">10回召喚（💎900）</button></div><div id="gachaResult" style="margin-top:12px">召喚結果が表示されます。</div></div><div class="panel"><h2 class="section-title">仲間の記録</h2><div id="gachaOwned"></div></div></section>
-<section id="team" class="page"><div class="panel"><h2 class="section-title">旅団の陣形</h2><p class="muted">最大3体まで編成できます。</p><div id="partyView" class="grid"></div></div><div class="panel"><h2 class="section-title">英雄図鑑</h2><div id="dexControls"></div><div id="characterList"></div></div></section>
+<section id="team" class="page"><div class="panel"><h2 class="section-title">旅団の陣形</h2><p class="muted">最大3体まで編成できます。</p><div id="partyView" class="grid"></div></div><div class="panel"><h2 class="section-title">英雄図鑑</h2><div id="levelStoneInventory" class="stone-inventory"></div><div id="dexControls"></div><div id="characterList"></div></div></section>
 <section id="shop" class="page"></section>
-<!-- 依頼掲示板：クエストの表示は renderQuests() で自動生成 -->
-<section id="quests" class="page">
-  <div class="panel">
-    <h2 class="section-title">旅団の依頼掲示板</h2>
-    <p class="small">日替わりは毎日0時、週替わりは月曜日0時（日本時間）に更新。各5件が抽選されます。</p>
-    <div class="quest-tabs">
-      <button data-action="questTab" data-type="daily" id="questDailyTab">日替わり依頼</button>
-      <button data-action="questTab" data-type="weekly" id="questWeeklyTab">週替わり依頼</button>
-    </div>
-    <div id="questList"></div>
-  </div>
-</section>
+<section id="quests" class="page"><div class="panel"><h2 class="section-title">旅団の依頼掲示板</h2><p class="small">日替わりは毎日0時、週替わりは月曜日0時（日本時間）に更新。各5件が抽選されます。</p><div class="quest-tabs"><button data-action="questTab" data-type="beginner" id="questBeginnerTab">初心者ミッション</button>
+       <button data-action="questTab" data-type="daily" id="questDailyTab">日替わり依頼</button><button data-action="questTab" data-type="weekly" id="questWeeklyTab">週替わり依頼</button></div><div id="questList"></div></div></section>
 <section id="battle" class="page"><div class="panel"><h2 class="section-title">特別遠征</h2><p class="small">期間限定の戦役へ参戦する。</p><button class="wide" data-page="events">戦役一覧へ</button><button class="wide" data-page="pvp">旅団対戦へ</button></div><div class="panel"><h2 class="section-title">緑風の草原</h2><p class="muted">踏破済みの地にも再び挑戦できます。</p><div id="stageMap"></div></div><div class="panel"><h2 class="section-title">出陣の準備</h2><div id="battleIntro"></div><button id="startBattleButton" class="map-start" data-action="startBattle">挑戦する</button></div></section>
 <section id="battleFight" class="page"><div class="panel"><div class="row" style="justify-content:space-between"><h2 class="section-title">戦場</h2><button data-action="returnMap">戦場を離れる</button></div><h3 style="color:#ffaaaa;margin:5px 0">敵軍 <span id="bossLabel"></span></h3><div id="enemyUnits" class="battle-side"></div><div class="battle-divider">✦ 対陣 ✦</div><h3 style="color:#9acbff;margin:5px 0">旅団</h3><div id="allyUnits" class="battle-side"></div><div id="actionArea" class="action-panel"></div></div></section>
 <section id="events" class="page"><div class="panel"><h2 class="section-title">戦役一覧</h2><p class="small">開催中の戦役に出陣しよう。</p><button data-page="battle">遠征へ戻る</button></div><div class="panel"><h2 class="section-title">本戦役</h2><div id="mainEventList"></div></div><div class="panel"><h2 class="section-title">地方戦役</h2><div id="subEventList"></div></div></section>
@@ -69,14 +48,6 @@ button,textarea{font:inherit}button{color:inherit;border:1px solid #938467;backg
 <div id="summonOverlay" class="summon"><div class="summon-box"><h2 class="section-title">星詠みの召喚陣</h2><div id="summonVisual"></div><div id="summonProgress" class="small"></div><div id="summonControls"></div></div></div>
 <script>
 'use strict';
-/* ============================================================
-   1. ゲーム定数／追加データ
-   新キャラ → CHARACTERS
-   新指輪   → RINGS（効果は戦闘処理にも対応させる）
-   草原敵   → STAGE_ENEMIES
-   新戦役   → EVENT_DATA と EVENT_PERIODS
-   セーブ互換性：KEY / DAILY_KEY は絶対に変更しない
-   ============================================================ */
 const KEY='hoshiyomi_save_v2';
 const DAILY_KEY='hoshiyomi_daily_v1';
 const MAX_STAGE=20;
@@ -111,7 +82,8 @@ const CHARACTERS=[
 {id:'アサシン',imageFile:'アサシン.png',name:'アサシン',rarity:'レア',hp:70,atk:70,speed:29,charge:2,skill:'回避',effect:'evadeSure',power:100,target:'self',growth:.16,max:10,slot:1},
 {id:'鍛錬剣士',imageFile:'鍛錬剣士.png',name:'果てしなき鍛錬剣士',rarity:'エピック',hp:200,atk:40,speed:22,charge:2,skill:'乱舞',effect:'damage',power:40,target:'all',growth:.30,max:6,slot:2,passive:'アルティメットカウンター'},
 {id:'狙撃手アーチャー',imageFile:'狙撃手アーチャー.png',name:'戦場の狙撃手アーチャー',rarity:'エピック',hp:160,atk:80,speed:19,charge:4,skill:'正射必中',effect:'damage',power:160,target:'one',growth:.30,max:6,slot:2,passive:'アタックセレクト'},
-{id:'一閃スピアドン',imageFile:'一閃スピアドン.png',name:'紫電一閃スピアドン',rarity:'エピック',hp:200,atk:30,speed:24,charge:5,skill:'致命のひと突き',effect:'damage',power:300,target:'one',growth:.30,max:6,slot:2,passive:'ウィルパワー'}
+{id:'一閃スピアドン',imageFile:'一閃スピアドン.png',name:'紫電一閃スピアドン',rarity:'エピック',hp:200,atk:30,speed:24,charge:5,skill:'致命のひと突き',effect:'damage',power:300,target:'one',growth:.30,max:6,slot:2,passive:'ウィルパワー'},
+{id:'超越武士',imageFile:'超越武士.png',name:'超越の武神武士',rarity:'エピック',hp:140,atk:40,speed:26,charge:2,skill:'一刀両断',effect:'damage',power:140,target:'one',growth:.30,max:6,slot:2,passive:'ファーストアクション',limited:true}
 ];
 const STAGE_ENEMIES={1:[['goblin',.5]],2:[['goblin',.5],['goblin',.5]],3:[['zombie',1],['goblin',.5]],4:[['swordman',1]],5:[['swordman',.75],['spearman',.75]],6:[['miner',.75],['miner',.75]],7:[['axeman',1]],8:[['farmer',1],['miner',.75]],9:[['swordman',.75],['archer',.75],['spearman',.75]],10:[['ゴーレム',1]],11:[['axeman',1],['farmer',1]],12:[['アサシン',1],['miner',1]],13:[['swordman',1],['ドワーフ',1]],14:[['エルフ',1],['miner',1]],15:[['将軍',1],['spearman',1]],16:[['ゴーレム',1],['goblin',1],['zombie',1]],17:[['アサシン',1],['アサシン',1]],18:[['エルフ',1],['ドワーフ',1]],19:[['魔導士',1],['axeman',1],['archer',1]],20:[['spearman',1],['swordman',1],['将軍',1,5]]};
 const DAILY_PRIZES=[{label:'🪙 100金貨',type:'gold',amount:100,rate:30},{label:'🪙 300金貨',type:'gold',amount:300,rate:25},{label:'🪙 500金貨',type:'gold',amount:500,rate:15},{label:'💎 50ジェム',type:'gems',amount:50,rate:15},{label:'💎 100ジェム',type:'gems',amount:100,rate:10},{label:'💎 300ジェム',type:'gems',amount:300,rate:5}];
@@ -123,9 +95,6 @@ const EVENT_DATA={
  martial:{name:'武の境地',type:'main',schedule:'2026年11月8日から無期限開催',period:'martial',stages:[{enemies:[['swordman',1],['spearman',1],['archer',1]],gold:500},{enemies:[['swordman',1.25],['spearman',1.25],['archer',1.25]],gold:700},{enemies:[['swordman',1.5],['spearman',1.5],['archer',1.5]],gold:800},{enemies:[['swordman',2],['spearman',2],['archer',2]],gold:1500},{enemies:[['swordman',2.5],['spearman',2.5],['archer',2.5]],gold:2000,characterDrop:['swordman','spearman','archer']},{enemies:[['swordman',2],['swordman',2],['鍛錬剣士',1.5]],gold:2500,gems:25},{enemies:[['archer',2.5],['archer',2.5],['狙撃手アーチャー',1.75]],gold:3000,gems:25},{enemies:[['spearman',2.5],['spearman',2.5],['一閃スピアドン',2]],gold:3500,gems:50},{enemies:[['鍛錬剣士',2],['狙撃手アーチャー',2],['一閃スピアドン',2]],gold:4000,gems:50},{enemies:[['鍛錬剣士',2.5],['狙撃手アーチャー',2.5],['一閃スピアドン',2.5]],gold:5000,gems:100,characterDrop:['鍛錬剣士','狙撃手アーチャー','一閃スピアドン']}]},
  golem:{name:'ゴーレムの目覚め',type:'sub',schedule:'毎月25日から月末まで',period:'golem',stages:[{enemies:[['ゴーレム',10]],gold:3000,gems:300}]}
 };
-/* ============================================================
-   2. 共通関数・保存
-   ============================================================ */
 const $=id=>document.getElementById(id);
 const byId=id=>CHARACTERS.find(c=>c.id===id);
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -145,139 +114,41 @@ let selectedEvent='undead',eventStage=1,pvpOpponent=null;
 function save(){try{localStorage.setItem(KEY,JSON.stringify(state))}catch(e){console.warn('セーブ失敗',e)}}
 function showError(message){const el=$('errorBox');el.textContent=message;el.style.display='block';setTimeout(()=>{if(el.textContent===message)el.style.display='none'},4500)}
 function showPage(page){document.querySelectorAll('.page').forEach(el=>el.classList.toggle('active',el.id===page));if(page!=='battleFight')renderAll();window.scrollTo(0,0)}
-/* ============================================================
-   3. 依頼掲示板（デイリー・ウィークリー）
-   ・各候補から重複なしで5種類を固定抽選
-   ・各達成条件はイベント通知 recordQuestEvent() で更新
-   ・同一キャラの3体/5体討伐等は同時に進む
-   ・一度受け取った報酬は再受取不可
-   ・セーブデータは既存 KEY の state.quests に追加
-   ============================================================ */
 const QUEST_COUNT=5;
 const QUEST_DEFINITIONS={
-  daily:{
-    summon:{title:'星詠みの召喚',goal:1,event:'summon',reward:{gems:20}},
-    shop:{title:'商館の取引',goal:1,event:'shop',reward:{gold:1000}},
-    story:{title:'草原の遠征',goal:3,event:'storyWin',reward:{gems:20}}
-  },
-  weekly:{
-    summon:{title:'星詠みの召喚',goal:3,event:'summon',reward:{gems:100}},
-    shop:{title:'商館の取引',goal:3,event:'shop',reward:{gold:4000}},
-    story:{title:'草原の遠征',goal:10,event:'storyWin',reward:{gems:100}}
-  }
+  daily:{summon:{title:'星詠みの召喚',goal:1,event:'summon',reward:{gems:20}},shop:{title:'商館の取引',goal:1,event:'shop',reward:{gold:1000}},story:{title:'草原の遠征',goal:3,event:'storyWin',reward:{gems:20}}},
+  weekly:{summon:{title:'星詠みの召喚',goal:3,event:'summon',reward:{gems:100}},shop:{title:'商館の取引',goal:3,event:'shop',reward:{gold:4000}},story:{title:'草原の遠征',goal:10,event:'storyWin',reward:{gems:100}}}
 };
-// ノーマルキャラごとに、日替わり2種・週替わり2種を作る。
 for(const c of CHARACTERS.filter(c=>c.rarity==='ノーマル')){
   for(const [type,tiers] of Object.entries({daily:[[3,20],[5,30]],weekly:[[15,100],[25,150]]})){
-    for(const [goal,gems] of tiers){
-      QUEST_DEFINITIONS[type]['defeat_'+c.id+'_'+goal]={
-        title:c.name+'討伐 '+goal+'体',
-        goal,event:'defeat',target:c.id,reward:{gems}
-      };
-    }
+    for(const [goal,gems] of tiers){QUEST_DEFINITIONS[type]['defeat_'+c.id+'_'+goal]={title:c.name+'討伐 '+goal+'体',goal,event:'defeat',target:c.id,reward:{gems}}}
   }
 }
 const QUEST_COMPLETE_BONUS={daily:100,weekly:300};
 let questTab='daily';
-function questPeriodKey(type){
-  const today=dailyDate();
-  if(type==='daily')return today;
-  // 日本時間のその週の月曜日を週キーとする。
-  const jst=new Date(today+'T00:00:00Z');
-  const weekday=jst.getUTCDay();
-  jst.setUTCDate(jst.getUTCDate()-(weekday+6)%7);
-  return jst.toISOString().slice(0,10);
-}
-function randomQuestIds(type){
-  const ids=Object.keys(QUEST_DEFINITIONS[type]);
-  for(let i=ids.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[ids[i],ids[j]]=[ids[j],ids[i]]}
-  return ids.slice(0,QUEST_COUNT);
-}
-function ensureQuests(){
-  if(!state.quests||typeof state.quests!=='object')state.quests={};
-  let changed=false;
-  for(const type of ['daily','weekly']){
-    const key=questPeriodKey(type),old=state.quests[type];
-    const valid=old&&old.key===key&&Array.isArray(old.ids)&&old.ids.length===QUEST_COUNT
-      &&new Set(old.ids).size===QUEST_COUNT
-      &&old.ids.every(id=>QUEST_DEFINITIONS[type][id])
-      &&old.progress&&typeof old.progress==='object';
-    if(!valid){state.quests[type]={key,ids:randomQuestIds(type),progress:{},claimed:[],bonusClaimed:false};changed=true}
-    const current=state.quests[type];
-    if(!Array.isArray(current.claimed)){current.claimed=[];changed=true}
-    if(typeof current.bonusClaimed!=='boolean'){current.bonusClaimed=false;changed=true}
-  }
-  if(changed)save();
-}
+function questPeriodKey(type){const today=dailyDate();if(type==='daily')return today;const jst=new Date(today+'T00:00:00Z'),weekday=jst.getUTCDay();jst.setUTCDate(jst.getUTCDate()-(weekday+6)%7);return jst.toISOString().slice(0,10)}
+function randomQuestIds(type){const ids=Object.keys(QUEST_DEFINITIONS[type]);for(let i=ids.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[ids[i],ids[j]]=[ids[j],ids[i]]}return ids.slice(0,QUEST_COUNT)}
+function ensureQuests(){if(!state.quests||typeof state.quests!=='object')state.quests={};let changed=false;for(const type of ['daily','weekly']){const key=questPeriodKey(type),old=state.quests[type];const valid=old&&old.key===key&&Array.isArray(old.ids)&&old.ids.length===QUEST_COUNT&&new Set(old.ids).size===QUEST_COUNT&&old.ids.every(id=>QUEST_DEFINITIONS[type][id])&&old.progress&&typeof old.progress==='object';if(!valid){state.quests[type]={key,ids:randomQuestIds(type),progress:{},claimed:[],bonusClaimed:false};changed=true}const current=state.quests[type];if(!Array.isArray(current.claimed)){current.claimed=[];changed=true}if(typeof current.bonusClaimed!=='boolean'){current.bonusClaimed=false;changed=true}}if(changed)save()}
 function recordQuestEvent(event,amount=1,target=null){
   if(battle?.mode==='pvp')return;
-  ensureQuests();
-  let changed=false;
-  for(const type of ['daily','weekly']){
-    const q=state.quests[type];
-    for(const id of q.ids){
-      const def=QUEST_DEFINITIONS[type][id];
-      if(def.event!==event||(def.target&&def.target!==target))continue;
-      if(q.claimed.includes(id))continue;
-      const before=Math.min(def.goal,Math.max(0,Number(q.progress[id])||0));
-      const after=Math.min(def.goal,before+amount);
-      if(before!==after){q.progress[id]=after;changed=true}
-    }
-  }
+   beginnerRecord(event,amount);
+  ensureQuests();let changed=false;
+  for(const type of ['daily','weekly']){const q=state.quests[type];for(const id of q.ids){const def=QUEST_DEFINITIONS[type][id];if(def.event!==event||(def.target&&def.target!==target))continue;if(q.claimed.includes(id))continue;const before=Math.min(def.goal,Math.max(0,Number(q.progress[id])||0)),after=Math.min(def.goal,before+amount);if(before!==after){q.progress[id]=after;changed=true}}}
   if(changed){save();if($('quests').classList.contains('active'))renderQuests()}
 }
-function questDetail(def){
-  if(def.event==='summon')return '召喚を'+def.goal+'回行う';
-  if(def.event==='shop')return '商館で'+def.goal+'回買い物をする';
-  if(def.event==='storyWin')return 'ストーリーモードで'+def.goal+'回勝利する';
-  return def.title.replace('討伐 ','を')+'倒す';
-}
-function questRewardText(reward){
-  return [reward.gems?'💎 '+reward.gems+'ジェム':'',reward.gold?'🪙 '+reward.gold+'金貨':''].filter(Boolean).join(' / ');
-}
+function questDetail(def){if(def.event==='summon')return '召喚を'+def.goal+'回行う';if(def.event==='shop')return '商館で'+def.goal+'回買い物をする';if(def.event==='storyWin')return 'ストーリーモードで'+def.goal+'回勝利する';return def.title.replace('討伐 ','を')+'倒す'}
+function questRewardText(reward){return [reward.gems?'💎 '+reward.gems+'ジェム':'',reward.gold?'🪙 '+reward.gold+'金貨':''].filter(Boolean).join(' / ')}
 function renderQuests(){
-  ensureQuests();
+   if(questTab==='beginner'){renderBeginner();return}
+   $('questBeginnerTab').classList.remove('active');
+   ensureQuests();
   for(const type of ['daily','weekly'])$('quest'+(type==='daily'?'Daily':'Weekly')+'Tab').classList.toggle('active',questTab===type);
-  const type=questTab,q=state.quests[type];
-  const claimed=q.ids.filter(id=>q.claimed.includes(id)).length;
-  const title=type==='daily'?'日替わり':'週替わり';
-  let html=`<p class="small">${title}依頼：報酬受取済み ${claimed}/${QUEST_COUNT}件</p>`;
-  for(const id of q.ids){
-    const def=QUEST_DEFINITIONS[type][id];
-    const current=Math.min(def.goal,Math.max(0,Number(q.progress[id])||0));
-    const completed=current>=def.goal,received=q.claimed.includes(id);
-    html+=`<article class="quest-card ${completed?'quest-complete':''}">
-      <div class="quest-head"><b>${esc(def.title)}</b><span class="quest-reward">${questRewardText(def.reward)}</span></div>
-      <p class="small">${esc(questDetail(def))}</p>
-      <div class="quest-progress"><i style="width:${Math.round(current/def.goal*100)}%"></i></div>
-      <div class="quest-foot"><span class="small">${current} / ${def.goal}</span>
-      <button data-action="claimQuest" data-type="${type}" data-quest="${esc(id)}" ${!completed||received?'disabled':''}>${received?'受取済み':completed?'報酬を受け取る':'進行中'}</button></div>
-    </article>`;
-  }
-  const allClaimed=claimed===QUEST_COUNT;
-  html+=`<div class="quest-card quest-complete"><div class="quest-head"><b>依頼全件達成報酬</b><span class="quest-reward">💎 ${QUEST_COMPLETE_BONUS[type]}ジェム</span></div>
-    <p class="small">5件すべての依頼報酬を受け取ると解放</p><div class="quest-foot"><span class="small">${claimed}/${QUEST_COUNT}</span>
-    <button data-action="claimQuestBonus" data-type="${type}" ${!allClaimed||q.bonusClaimed?'disabled':''}>${q.bonusClaimed?'受取済み':allClaimed?'報酬を受け取る':'未達成'}</button></div></div>`;
-  $('questList').innerHTML=html;
+  const type=questTab,q=state.quests[type],claimed=q.ids.filter(id=>q.claimed.includes(id)).length,title=type==='daily'?'日替わり':'週替わり';let html=`<p class="small">${title}依頼：報酬受取済み ${claimed}/${QUEST_COUNT}件</p>`;
+  for(const id of q.ids){const def=QUEST_DEFINITIONS[type][id],current=Math.min(def.goal,Math.max(0,Number(q.progress[id])||0)),completed=current>=def.goal,received=q.claimed.includes(id);html+=`<article class="quest-card ${completed?'quest-complete':''}"><div class="quest-head"><b>${esc(def.title)}</b><span class="quest-reward">${questRewardText(def.reward)}</span></div><p class="small">${esc(questDetail(def))}</p><div class="quest-progress"><i style="width:${Math.round(current/def.goal*100)}%"></i></div><div class="quest-foot"><span class="small">${current} / ${def.goal}</span><button data-action="claimQuest" data-type="${type}" data-quest="${esc(id)}" ${!completed||received?'disabled':''}>${received?'受取済み':completed?'報酬を受け取る':'進行中'}</button></div></article>`}
+  const allClaimed=claimed===QUEST_COUNT;html+=`<div class="quest-card quest-complete"><div class="quest-head"><b>依頼全件達成報酬</b><span class="quest-reward">💎 ${QUEST_COMPLETE_BONUS[type]}ジェム</span></div><p class="small">5件すべての依頼報酬を受け取ると解放</p><div class="quest-foot"><span class="small">${claimed}/${QUEST_COUNT}</span><button data-action="claimQuestBonus" data-type="${type}" ${!allClaimed||q.bonusClaimed?'disabled':''}>${q.bonusClaimed?'受取済み':allClaimed?'報酬を受け取る':'未達成'}</button></div></div>`;$('questList').innerHTML=html;
 }
-function claimQuest(type,id){
-  ensureQuests();
-  const q=state.quests[type],def=QUEST_DEFINITIONS[type]?.[id];
-  if(!q||!def||!q.ids.includes(id)||q.claimed.includes(id))return;
-  if((Number(q.progress[id])||0)<def.goal)return;
-  q.claimed.push(id);
-  state.gems+=(def.reward.gems||0);state.gold+=(def.reward.gold||0);
-  save();renderAll();renderQuests();
-}
-function claimQuestBonus(type){
-  ensureQuests();const q=state.quests[type];
-  if(!q||q.bonusClaimed||q.claimed.length!==QUEST_COUNT)return;
-  q.bonusClaimed=true;state.gems+=QUEST_COMPLETE_BONUS[type];
-  save();renderAll();renderQuests();
-}
-/* ============================================================
-   3. 育成・装備の計算
-   ============================================================ */
+function claimQuest(type,id){ensureQuests();const q=state.quests[type],def=QUEST_DEFINITIONS[type]?.[id];if(!q||!def||!q.ids.includes(id)||q.claimed.includes(id))return;if((Number(q.progress[id])||0)<def.goal)return;q.claimed.push(id);state.gems+=(def.reward.gems||0);state.gold+=(def.reward.gold||0);save();renderAll();renderQuests()}
+function claimQuestBonus(type){ensureQuests();const q=state.quests[type];if(!q||q.bonusClaimed||q.claimed.length!==QUEST_COUNT)return;q.bonusClaimed=true;state.gems+=QUEST_COMPLETE_BONUS[type];save();renderAll();renderQuests()}
 const LEVEL_GROWING_EFFECTS=new Set(['damage','heal']);
 function getLevelMultiplier(id){const c=byId(id);return Math.pow(1+c.growth,(state.owned[id]?.level||1)-1)}
 function getEquipped(id,type){return(state.equipment[id]||[]).filter(x=>x===type).length}
@@ -286,179 +157,66 @@ function adjustedCharge(base,rings){const reduction=rings.filter(r=>r==='charge'
 function ringCharge(id){return adjustedCharge(byId(id).charge,state.equipment[id]||[])}
 function statsFor(id,level,rings=[]){const c=byId(id),m=Math.pow(1+c.growth,level-1),count=type=>rings.filter(r=>r===type).length;return {hp:Math.floor(c.hp*m*(1+.1*count('heart'))),atk:Math.floor(c.atk*m*(1+.1*count('power'))),speed:c.speed+2*count('speed'),charge:adjustedCharge(c.charge,rings),skillMultiplier:(LEVEL_GROWING_EFFECTS.has(c.effect)?m:1)*(1+.1*count('skill'))}}
 function getStats(id){const s=statsFor(id,state.owned[id]?.level||1,state.equipment[id]||[]);return {hp:s.hp,atk:s.atk,speed:s.speed,skillMultiplier:s.skillMultiplier}}
-/* ============================================================
-   4. 英雄図鑑・編成・装身具
-   ============================================================ */
 function cardHTML(id){const c=byId(id),o=state.owned[id],s=getStats(id),inParty=state.party.includes(id),rings=(state.equipment[id]||[]).filter(Boolean).map(t=>ringMark(t)).join(' ');return `<article class="card ${inParty?'selected':''}">${portrait(id)}<div class="name ${rarityClass(c.rarity)}">${esc(c.name)}</div><div class="small">${c.rarity} / Lv.${o.level}/${c.max}</div><div class="stats">HP ${s.hp}<br>攻撃力 ${s.atk}<br>素早さ ${s.speed}<br>スキル ${esc(c.skill)}<br>溜め ${ringCharge(id)}<br>成長率 ${Math.round(c.growth*100)}%</div><div class="small">装備 ${rings||'なし'}（${c.slot??0}枠）</div><button class="wide" data-action="toggleParty" data-id="${esc(id)}">${inParty?'編成から外す':'編成する'}</button></article>`}
 function encyclopediaCardHTML(id){const c=byId(id),o=state.owned[id];if(!o)return `<article class="encyclopedia-card encyclopedia-locked"><div class="encyclopedia-image"><div class="portrait"><img src="${imagePath('未所持.png')}" alt="未所持の英雄" onerror="this.style.display='none';this.parentElement.append('未詳')"></div></div><div class="name">？？？</div><div class="small">${esc(c.rarity)}</div><div class="small">未獲得</div></article>`;return `<article class="encyclopedia-card"><button class="encyclopedia-image" data-action="openEncyclopedia" data-id="${esc(id)}">${portrait(id)}</button><div class="name ${rarityClass(c.rarity)}">${esc(c.name)}</div><div class="encyclopedia-level">Lv.${o.level}/${c.max}</div><button class="plus" data-action="openRing" data-id="${esc(id)}">＋</button></article>`}
 function changeDexRarity(rarity){if(!['ノーマル','レア','エピック'].includes(rarity))return;dexRarity=rarity;dexPage=0;renderAll()}
 function changeDexPage(direction){const count=CHARACTERS.filter(c=>c.rarity===dexRarity).length;dexPage=Math.max(0,Math.min(dexPage+direction,Math.max(1,Math.ceil(count/9))-1));renderAll()}
 function renderDex(){const chars=CHARACTERS.filter(c=>c.rarity===dexRarity),total=Math.max(1,Math.ceil(chars.length/9));dexPage=Math.min(dexPage,total-1);$('characterList').innerHTML=chars.slice(dexPage*9,(dexPage+1)*9).map(c=>encyclopediaCardHTML(c.id)).join('');$('dexControls').innerHTML=`<div class="dex-tabs">${['ノーマル','レア','エピック'].map(r=>`<button class="${dexRarity===r?'selected':''}" data-action="dexRarity" data-rarity="${r}">${r}</button>`).join('')}</div><div class="dex-pages"><button data-action="dexPage" data-direction="-1" ${dexPage===0?'disabled':''}>前へ</button><span>${dexPage+1} / ${total}</span><button data-action="dexPage" data-direction="1" ${dexPage>=total-1?'disabled':''}>次へ</button></div>`}
 function toggleParty(id){if(!state.owned[id])return;if(state.party.includes(id))state.party=state.party.filter(x=>x!==id);else{if(state.party.length>=3){showError('編成は最大3体です');return}state.party.push(id)}save();renderAll()}
-function openEncyclopedia(id){const c=byId(id),o=state.owned[id];if(!c||!o)return;const s=getStats(id),inParty=state.party.includes(id);$('encyclopediaDetail').innerHTML=`<h2 class="section-title ${rarityClass(c.rarity)}">${esc(c.name)}</h2><div class="encyclopedia-detail-image">${portrait(id)}</div><div style="text-align:center"><b>${esc(c.rarity)}</b><br>Lv.${o.level}/${c.max}</div><div class="encyclopedia-detail-stats">HP：${s.hp}<br>攻撃力：${s.atk}<br>素早さ：${s.speed}<br>スキル：${esc(c.skill)}<br>スキル溜め：${ringCharge(id)}<br>成長率：${Math.round(c.growth*100)}%<br>装備枠：${c.slot??0}${c.passive?`<br>パッシブ：${esc(c.passive)}`:''}</div><button class="wide" data-action="togglePartyFromDetail" data-id="${esc(id)}">${inParty?'編成から外す':'編成する'}</button>`;$('encyclopediaModal').classList.add('active')}
+function openEncyclopedia(id){const c=byId(id),o=state.owned[id];if(!c||!o)return;const s=getStats(id),inParty=state.party.includes(id);$('encyclopediaDetail').innerHTML=`<h2 class="section-title ${rarityClass(c.rarity)}">${esc(c.name)}</h2><div class="encyclopedia-detail-image">${portrait(id)}</div><div style="text-align:center"><b>${esc(c.rarity)}</b><br>Lv.${o.level}/${c.max}</div><div class="encyclopedia-detail-stats">HP：${s.hp}<br>攻撃力：${s.atk}<br>素早さ：${s.speed}<br>スキル：${esc(c.skill)}<br>スキル溜め：${ringCharge(id)}<br>成長率：${Math.round(c.growth*100)}%<br>装備枠：${c.slot??0}${c.passive?`<br>パッシブ：${esc(c.passive)}`:''}</div><button class="wide" data-action="togglePartyFromDetail" data-id="${esc(id)}">${inParty?'編成から外す':'編成する'}</button><div class="stone-detail"><p>🪨 レベルストーン：${Math.max(0,Number(state.levelStones)||0)}個</p><p class="small">レベルアップ進捗：${o.level>=c.max?'MAX':(o.dupes||0)+' / '+o.level}</p><button class="wide" data-action="useLevelStone" data-id="${esc(id)}" ${(o.level>=c.max||!state.levelStones)?'disabled':''}>🪨 レベルストーンを使う</button></div>`;$('encyclopediaModal').classList.add('active')}
 function openRing(id){if(!state.owned[id])return;ringTarget=id;renderRingModal();$('characterRingModal').classList.add('active')}
 function renderRingModal(){if(!ringTarget)return;const id=ringTarget,c=byId(id),slots=c.slot??0,equipment=state.equipment[id]||[];let html=`<b>${esc(c.name)}</b><h4>所持する指輪（未装備）</h4><div class="stock">`;for(const type of RING_IDS)html+=`<div>${ringMark(type)}<br>${RINGS[type].name}<br>${getRingAvailable(type)}個</div>`;html+='</div><h4>装備枠</h4><div class="slots">';for(let i=0;i<slots;i++){const type=equipment[i];html+=`<button class="slot ${type?'':'empty'}" data-action="openSlot" data-id="${esc(id)}" data-index="${i}"><span class="small">装備枠 ${i+1}</span><br>${type?ringMark(type)+' '+RINGS[type].name:'＋'}</button>`}html+='</div>';if(!slots)html+='<p>装備枠はありません。</p>';$('characterRingContent').innerHTML=html}
 function openSlot(id,index){if(index<0||index>=(byId(id)?.slot??0))return;slotTarget={id,index};$('equipmentModalCharacter').textContent=byId(id).name+' / 装備枠 '+(index+1);renderSlotModal();$('equipmentModal').classList.add('active')}
 function renderSlotModal(){if(!slotTarget)return;const {id,index}=slotTarget,current=state.equipment[id]?.[index];let html='';if(current)html=`<p>装備中：${ringMark(current)} ${RINGS[current].name}</p><button class="wide" data-action="unequip" data-id="${esc(id)}" data-index="${index}">取り外す</button>`;else for(const type of RING_IDS)html+=`<button class="choice" data-action="equip" data-id="${esc(id)}" data-index="${index}" data-type="${type}" ${getRingAvailable(type)?'':'disabled'}><span>${ringMark(type)} ${RINGS[type].name}<br><span class="small">${RINGS[type].description}</span></span><b>${getRingAvailable(type)}個</b></button>`;$('equipmentModalChoices').innerHTML=html}
 function equip(id,index,type){if(!RINGS[type]||getRingAvailable(type)<=0)return;if(!state.equipment[id])state.equipment[id]=[];if(state.equipment[id][index])return;state.equipment[id][index]=type;save();renderSlotModal();renderRingModal();renderAll()}
 function unequip(id,index){if(!state.equipment[id])return;state.equipment[id][index]=null;save();renderSlotModal();renderRingModal();renderAll()}
-/* ============================================================
-   5. 草原・召喚
-   ============================================================ */
 function formationText(stage){const cleared=(Number(state.stageClearCounts[stage])||0)>0||stage<=state.clearedStage;if(!cleared)return '？？？（初回クリア後に公開）';return(STAGE_ENEMIES[stage]||[]).map(([id])=>byId(id)?.name||'不明').join(' / ')}
 function renderStageMap(){let nodes='';const unlocked=Math.min(MAX_STAGE,state.clearedStage+1);for(let i=1;i<=MAX_STAGE;i++){const boss=BOSS_STAGES.includes(i),locked=i>unlocked;nodes+=`<button class="stage-node ${boss?'boss':''} ${i<=state.clearedStage?'completed':''} ${i===unlocked?'current':''} ${i===selectedStage?'selected':''} ${locked?'locked':''}" data-action="selectStage" data-stage="${i}" ${locked?'disabled':''}><span class="num">${i}</span><span class="small">${boss?'首領戦':'草原'}</span><span class="small">${locked?'未解放':i<=state.clearedStage?'踏破済み':'挑戦可能'}</span></button>`}const count=Number(state.stageClearCounts[selectedStage])||0,gold=Math.floor(STAGE_GOLD[selectedStage]*Math.pow(.8,count));$('stageMap').innerHTML=`<div class="stage-map"><h3>緑風の草原</h3><p>踏破済み ${state.clearedStage} / 20</p><div class="map-grid">${nodes}</div><div class="stage-info"><b>ステージ ${selectedStage}</b> ${BOSS_STAGES.includes(selectedStage)?'・首領戦':''}<br>敵編成：${esc(formationText(selectedStage))}<br>次回の金貨報酬：🪙 ${gold}${selectedStage===20&&count===0?'<br>初回確定：チカラの指輪 ×1':''}</div><button class="map-start" data-action="startBattle" ${state.party.length?'':'disabled'}>ステージ ${selectedStage} に挑戦</button></div>`}
 function selectStage(stage){if(!Number.isInteger(stage)||stage<1||stage>MAX_STAGE||stage>state.clearedStage+1)return;selectedStage=stage;renderAll()}
-function addCharacter(id){const c=byId(id);if(!c)return '';if(!state.owned[id]){state.owned[id]={level:1,dupes:0};return '新しい仲間を獲得！'}const o=state.owned[id];o.dupes=(o.dupes||0)+1;while(o.level<c.max&&o.dupes>=o.level){o.dupes-=o.level;o.level++}return '重複獲得！ Lv.'+o.level}
-function drawCharacter(){const r=Math.random(),rarity=r<.7?'ノーマル':r<.95?'レア':'エピック';return random(CHARACTERS.filter(c=>c.rarity===rarity))}
+function addCharacter(id){
+  const c=byId(id);if(!c)return '';
+  if(!state.owned[id]){state.owned[id]={level:1,dupes:0};beginnerRecord('owned');return '新しい仲間を獲得！'}
+  const o=state.owned[id],before=o.level;
+  if(o.level>=c.max)return '最大レベル到達済み';
+  o.dupes=(o.dupes||0)+1;
+  while(o.level<c.max&&o.dupes>=o.level){o.dupes-=o.level;o.level++}
+  if(o.level>before)beginnerRecord('levelUp');
+  return '重複獲得！ Lv.'+o.level;
+}
+function drawCharacter(){const r=Math.random(),rarity=r<.7?'ノーマル':r<.95?'レア':'エピック';return random(CHARACTERS.filter(c=>c.rarity===rarity&&!c.limited))}
 function summon(count){const cost=count===10?900:100;if(state.gems<cost){showError('ジェムが足りません');return}state.gems-=cost;summonQueue=[];for(let i=0;i<count;i++){const c=drawCharacter();summonQueue.push({c,message:addCharacter(c.id)})}recordQuestEvent('summon',count);save();renderAll();summonIndex=0;$('summonOverlay').classList.add('active');showSummon()}
 function showSummon(){const item=summonQueue[summonIndex];if(!item){finishSummon();return}const token=++animationToken,index=summonIndex,c=item.c,overlay=$('summonOverlay'),epic=c.rarity==='エピック';overlay.classList.toggle('epic-mode',epic);const particles=Array.from({length:32},(_,i)=>`<span class="summon-particle" style="--angle:${i*137.5}deg;--size:${3+i%5}px;--duration:${1.2+i%4*.3}s;--delay:${-(i%9)*.2}s"></span>`).join('');$('summonVisual').innerHTML=`<div class="summon-cinema"><div class="summon-magic"></div><div class="summon-lightning"></div>${particles}<div id="summonCharacter" class="summon-character"><img src="${imagePath(c.imageFile)}" alt="${esc(c.name)}" onerror="this.style.display='none';this.parentElement.append('剣')"></div></div><div id="summonInformation" class="summon-information"><h2>${esc(c.name)}</h2><p class="${rarityClass(c.rarity)}">✦ ${esc(c.rarity)} ✦</p><p>${esc(item.message)}</p></div><div id="summonFlash" class="summon-flash"></div>`;$('summonProgress').textContent=(index+1)+' / '+summonQueue.length;$('summonControls').innerHTML='<button id="summonNextButton" data-action="nextSummon" disabled>召喚中…</button> <button data-action="skipSummon">スキップ</button>';setTimeout(()=>{if(token!==animationToken||summonIndex!==index||!overlay.classList.contains('active'))return;$('summonFlash')?.classList.add('play');$('summonCharacter')?.classList.add('visible');$('summonInformation')?.classList.add('visible');const b=$('summonNextButton');if(b){b.disabled=false;b.textContent=index===summonQueue.length-1?'結果を見る':'次へ'}},epic?4000:1500)}
 function finishSummon(){++animationToken;$('gachaResult').innerHTML=summonQueue.map(x=>`<div class="row" style="margin:8px 0"><div style="width:75px">${portrait(x.c.id)}</div><div><b class="${rarityClass(x.c.rarity)}">${esc(x.c.name)}</b><br><span class="small">${esc(x.message)}</span></div></div>`).join('');$('summonOverlay').classList.remove('active');summonQueue=[];renderAll()}
-/* ============================================================
-   6. PvP 対戦符号：従来の HSPVP1- 形式を維持
-   ============================================================ */
-function generatePvpCode(){
-  if(!state.party.length){showError('パーティを編成してください');return}
-  const data={version:1,party:state.party.map(id=>({id,level:state.owned[id].level,rings:(state.equipment[id]||[]).slice(0,byId(id).slot??0).map(r=>RING_IDS.includes(r)?r:null)}))};
-  const bytes=new TextEncoder().encode(JSON.stringify(data));
-  let binary='';for(const byte of bytes)binary+=String.fromCharCode(byte);
-  $('pvpMyCode').value='HSPVP1-'+btoa(binary).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
-}
-function loadPvpCode(){
-  const input=$('pvpOpponentCode').value.trim();pvpOpponent=null;
-  $('pvpOpponentPreview').innerHTML='';$('pvpStatus').textContent='対戦相手が未設定です。';
-  try{
-    if(!input.startsWith('HSPVP1-'))throw new Error('対戦符号の形式が異なります');
-    const encoded=input.slice(7).replace(/-/g,'+').replace(/_/g,'/');
-    if(!encoded||encoded.length>10000)throw new Error('符号の長さが不正です');
-    const bytes=Uint8Array.from(atob(encoded),c=>c.charCodeAt(0));
-    const data=JSON.parse(new TextDecoder().decode(bytes));
-    if(data.version!==1||!Array.isArray(data.party)||data.party.length<1||data.party.length>3)throw new Error('対戦データが不正です');
-    const party=data.party.map(item=>{
-      if(!item||typeof item.id!=='string')throw new Error('英雄情報が不正です');
-      const c=byId(item.id);if(!c)throw new Error('未登録の英雄です');
-      if(!Number.isInteger(item.level)||item.level<1||item.level>c.max)throw new Error('レベルが不正です');
-      if(!Array.isArray(item.rings)||item.rings.length>(c.slot??0)||item.rings.some(r=>r!==null&&!RING_IDS.includes(r)))throw new Error('指輪情報が不正です');
-      return {id:c.id,level:item.level,rings:item.rings.slice()};
-    });
-    if(new Set(party.map(c=>c.id)).size!==party.length)throw new Error('同じ英雄が重複しています');
-    pvpOpponent=party;
-    $('pvpOpponentPreview').innerHTML=party.map(p=>`<p class="small">${esc(byId(p.id).name)} Lv.${p.level} / 指輪 ${p.rings.filter(Boolean).length}個</p>`).join('');
-    $('pvpStatus').textContent='読み込み完了。対戦可能です。';
-  }catch(e){pvpOpponent=null;showError(e.message||'対戦符号を読み込めませんでした')}
-}
+function generatePvpCode(){if(!state.party.length){showError('パーティを編成してください');return}const data={version:1,party:state.party.map(id=>({id,level:state.owned[id].level,rings:(state.equipment[id]||[]).slice(0,byId(id).slot??0).map(r=>RING_IDS.includes(r)?r:null)}))};const bytes=new TextEncoder().encode(JSON.stringify(data));let binary='';for(const byte of bytes)binary+=String.fromCharCode(byte);$('pvpMyCode').value='HSPVP1-'+btoa(binary).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'')}
+function loadPvpCode(){const input=$('pvpOpponentCode').value.trim();pvpOpponent=null;$('pvpOpponentPreview').innerHTML='';$('pvpStatus').textContent='対戦相手が未設定です。';try{if(!input.startsWith('HSPVP1-'))throw new Error('対戦符号の形式が異なります');const encoded=input.slice(7).replace(/-/g,'+').replace(/_/g,'/');if(!encoded||encoded.length>10000)throw new Error('符号の長さが不正です');const bytes=Uint8Array.from(atob(encoded),c=>c.charCodeAt(0)),data=JSON.parse(new TextDecoder().decode(bytes));if(data.version!==1||!Array.isArray(data.party)||data.party.length<1||data.party.length>3)throw new Error('対戦データが不正です');const party=data.party.map(item=>{if(!item||typeof item.id!=='string')throw new Error('英雄情報が不正です');const c=byId(item.id);if(!c)throw new Error('未登録の英雄です');if(!Number.isInteger(item.level)||item.level<1||item.level>c.max)throw new Error('レベルが不正です');if(!Array.isArray(item.rings)||item.rings.length>(c.slot??0)||item.rings.some(r=>r!==null&&!RING_IDS.includes(r)))throw new Error('指輪情報が不正です');return {id:c.id,level:item.level,rings:item.rings.slice()}});if(new Set(party.map(c=>c.id)).size!==party.length)throw new Error('同じ英雄が重複しています');pvpOpponent=party;$('pvpOpponentPreview').innerHTML=party.map(p=>`<p class="small">${esc(byId(p.id).name)} Lv.${p.level} / 指輪 ${p.rings.filter(Boolean).length}個</p>`).join('');$('pvpStatus').textContent='読み込み完了。対戦可能です。'}catch(e){pvpOpponent=null;showError(e.message||'対戦符号を読み込めませんでした')}}
 async function copyPvpCode(){const area=$('pvpMyCode'),code=area.value;if(!code){showError('先に対戦符号を発行してください');return}area.focus();area.select();try{if(!navigator.clipboard?.writeText)throw new Error('clipboard');await navigator.clipboard.writeText(code);alert('対戦符号をコピーしました')}catch(e){alert('符号欄を長押ししてコピーしてください')}}
-/* ============================================================
-   7. 戦闘ユニット：共通のステータスと状態異常
-   ============================================================ */
 function baseUnit(id,side,stats,rings=[]){const c=byId(id);return {uid:++battleSerial,id,side,name:c.name,maxHp:stats.hp,hp:stats.hp,atk:stats.atk,speed:stats.speed,charge:stats.charge,skillCount:0,gauge:0,skillMultiplier:stats.skillMultiplier,buff:1,buffTurns:0,permanentBuff:1,guard:0,evade:0,poison:0,acting:false,effectText:'',effectKind:'',rings:rings.filter(Boolean)}}
-function makeUnit(id,side,options={}){
-  const c=byId(id),m=options.multiplier??1;
-  if(side==='ally'){const rings=state.equipment[id]||[];const stats=statsFor(id,state.owned[id]?.level||1,rings);const unit=baseUnit(id,side,stats,rings);if(options.hp){unit.maxHp=unit.hp=options.hp}if(options.speed)unit.speed=options.speed;return unit}
-  const stats={hp:Math.floor(c.hp*m*(options.hpMultiplier||1)),atk:Math.floor(c.atk*m),speed:Math.max(1,Math.floor(c.speed*m)),charge:c.charge,skillMultiplier:1};
-  if(options.hp)stats.hp=options.hp;if(options.speed)stats.speed=options.speed;if(options.charge!==undefined)stats.charge=options.charge;
-  return baseUnit(id,side,stats);
-}
+function makeUnit(id,side,options={}){const c=byId(id),m=options.multiplier??1;if(side==='ally'){const rings=state.equipment[id]||[];const stats=statsFor(id,state.owned[id]?.level||1,rings);const unit=baseUnit(id,side,stats,rings);if(options.hp){unit.maxHp=unit.hp=options.hp}if(options.speed)unit.speed=options.speed;return unit}const stats={hp:Math.floor(c.hp*m*(options.hpMultiplier||1)),atk:Math.floor(c.atk*m),speed:Math.max(1,Math.floor(c.speed*m)),charge:c.charge,skillMultiplier:1};if(options.hp)stats.hp=options.hp;if(options.speed)stats.speed=options.speed;if(options.charge!==undefined)stats.charge=options.charge;return baseUnit(id,side,stats)}
 function makePvpUnit(data,side){const c=byId(data.id);if(!c)return null;return baseUnit(data.id,side,statsFor(data.id,data.level,data.rings||[]),data.rings||[])}
 function newBattle(info){battle={...info,running:true,busy:false,current:null,awaitingAction:false,result:null,token:++battleSerial,message:info.message||'戦闘開始！'};showPage('battleFight');renderBattle();advanceTurn()}
 function startBattle(){if(battle?.running)return;if(selectedStage>state.clearedStage+1){showError('まだ解放されていません');return}if(!state.party.length){showError('編成してください');return}const allies=state.party.map(id=>makeUnit(id,'ally'));const enemies=STAGE_ENEMIES[selectedStage].map(([id,m,hpMul])=>{const opt={multiplier:m,hpMultiplier:hpMul||1};if(selectedStage===10&&id==='ゴーレム'){opt.hp=700;opt.speed=12;opt.charge=3}return makeUnit(id,'enemy',opt)});newBattle({stage:selectedStage,allies,enemies,message:'戦闘開始！'})}
 function startPvpBattle(){if(battle?.running){showError('戦闘中は開始できません');return}if(!pvpOpponent?.length){showError('先に相手の対戦符号を読み込んでください');return}if(!state.party.length){showError('パーティを編成してください');return}const allies=state.party.map(id=>makeUnit(id,'ally')),enemies=pvpOpponent.map(data=>makePvpUnit(data,'enemy'));if(enemies.some(u=>!u)){showError('相手の編成を読み込めません');return}newBattle({mode:'pvp',stage:0,allies,enemies,message:'旅団対戦開始！'})}
 function unitCard(u){const c=byId(u.id),hpRate=Math.max(0,100*u.hp/u.maxHp);let badges='';if(u.buff>1)badges+='<span class="status-badge buff">攻撃強化</span>';if(u.poison>0)badges+=`<span class="status-badge poison">毒 ${u.poison}</span>`;if(u.guard>0)badges+='<span class="status-badge guard">防御</span>';if(u.evade>0)badges+='<span class="status-badge evade">回避</span>';if(u.permanentBuff>1)badges+='<span class="status-badge buff">永続強化</span>';return `<div class="unit ${u.side==='enemy'?'enemy':''} ${u.hp<=0?'dead':''} ${u.acting?'active':''}">${u.acting?`<div style="color:#ffe17c;font-weight:900;font-size:11px">${u.side==='enemy'?'敵軍の行動':'旅団の行動'}</div>`:''}${portrait(u.id)}<div class="name ${rarityClass(c.rarity)}">${esc(u.name)}</div><div class="small">HP ${Math.max(0,u.hp)} / ${u.maxHp}</div><div class="hpbar"><i style="width:${hpRate}%"></i></div><div class="small">スキル ${Math.min(u.skillCount,u.charge)} / ${u.charge}</div>${badges?`<div class="status-badges">${badges}</div>`:''}</div>`}
-function renderBattle(){
-  if(!battle)return;
-  $('bossLabel').textContent=battle.mode==='pvp'?'旅団対戦':battle.eventId?EVENT_DATA[battle.eventId].name+' STAGE '+battle.stage:BOSS_STAGES.includes(battle.stage)?'首領戦':'STAGE '+battle.stage;
-  $('enemyUnits').innerHTML=battle.enemies.map(unitCard).join('');
-  $('allyUnits').innerHTML=battle.allies.map(unitCard).join('');
-  if(battle.result){renderBattleResult();return}
-  const u=battle.current,manual=u&&(u.side==='ally'||battle.mode==='pvp'),targets=u?.side==='enemy'?battle.allies:battle.enemies;
-  if(battle.pendingUseSkill!==undefined&&manual){$('actionArea').innerHTML=`<b>対象を選択：${esc(u.name)}</b><div class="action-buttons" style="grid-template-columns:1fr">${alive(targets).map(t=>`<button data-action="selectTarget" data-uid="${t.uid}">${esc(t.name)}（HP ${t.hp}/${t.maxHp}）</button>`).join('')}</div><button data-action="cancelTarget" style="margin-top:8px">戻る</button>`;return}
-  if(battle.awaitingAction&&manual){const c=byId(u.id),ready=u.skillCount>=u.charge,sideLabel=u.side==='ally'?'自軍':'相手軍';$('actionArea').innerHTML=`<b>${sideLabel}：${esc(u.name)} の行動</b><p class="small">${esc(battle.message)}</p><div class="action-buttons"><button class="attack" data-action="battleAttack">通常攻撃</button><button class="skill" data-action="battleSkill" ${ready?'':'disabled'}>${esc(c.skill)} ${ready?'':'（溜め中）'}</button></div>`}
-  else $('actionArea').innerHTML=`<div class="${u?.side==='enemy'?'enemy-preview':''}">${esc(battle.message||'次の行動を待っています…')}</div>`;
-}
-/* 数値演出2.5秒・対象カードの発光0.7秒 */
-function showEffect(target,text,kind=''){
-  if(!battle||!target)return;const units=target.side==='enemy'?battle.enemies:battle.allies,parent=target.side==='enemy'?$('enemyUnits'):$('allyUnits'),index=units.findIndex(u=>u.uid===target.uid),card=parent?.children[index];if(!card)return;
-  const rect=card.getBoundingClientRect(),popup=document.createElement('div');popup.textContent=String(text);
-  Object.assign(popup.style,{position:'fixed',left:(rect.left+rect.width/2)+'px',top:(rect.top+rect.height*.3)+'px',transform:'translateX(-50%)',zIndex:'9999',pointerEvents:'none',fontSize:'30px',fontWeight:'900',color:kind==='heal'?'#86f3ad':kind==='buff'?'#ffe17c':'#ff8585',textShadow:'0 2px 5px black',whiteSpace:'nowrap',opacity:'1',transition:'none'});
-  document.body.appendChild(popup);
-  const glow=document.createElement('div'),flashClass=kind==='heal'?'heal-flash':kind==='buff'?'buff-flash':'hit-flash';glow.className='unit '+flashClass;Object.assign(glow.style,{position:'fixed',left:rect.left+'px',top:rect.top+'px',width:rect.width+'px',height:rect.height+'px',background:'transparent',border:'none',borderRadius:'8px',pointerEvents:'none',zIndex:'9998'});document.body.appendChild(glow);setTimeout(()=>glow.remove(),700);
-  requestAnimationFrame(()=>requestAnimationFrame(()=>{popup.style.transition='transform 2.5s ease-out, opacity 2.5s linear';popup.style.transform='translate(-50%,-45px)';popup.style.opacity='0'}));setTimeout(()=>popup.remove(),2600);
-}
+function renderBattle(){if(!battle)return;$('bossLabel').textContent=battle.mode==='pvp'?'旅団対戦':battle.eventId?EVENT_DATA[battle.eventId].name+' STAGE '+battle.stage:BOSS_STAGES.includes(battle.stage)?'首領戦':'STAGE '+battle.stage;$('enemyUnits').innerHTML=battle.enemies.map(unitCard).join('');$('allyUnits').innerHTML=battle.allies.map(unitCard).join('');if(battle.result){renderBattleResult();return}const u=battle.current,manual=u&&(u.side==='ally'||battle.mode==='pvp'),targets=u?.side==='enemy'?battle.allies:battle.enemies;if(battle.pendingUseSkill!==undefined&&manual){$('actionArea').innerHTML=`<b>対象を選択：${esc(u.name)}</b><div class="action-buttons" style="grid-template-columns:1fr">${alive(targets).map(t=>`<button data-action="selectTarget" data-uid="${t.uid}">${esc(t.name)}（HP ${t.hp}/${t.maxHp}）</button>`).join('')}</div><button data-action="cancelTarget" style="margin-top:8px">戻る</button>`;return}if(battle.awaitingAction&&manual){const c=byId(u.id),ready=u.skillCount>=u.charge,sideLabel=u.side==='ally'?'自軍':'相手軍';$('actionArea').innerHTML=`<b>${sideLabel}：${esc(u.name)} の行動</b><p class="small">${esc(battle.message)}</p><div class="action-buttons"><button class="attack" data-action="battleAttack">通常攻撃</button><button class="skill" data-action="battleSkill" ${ready?'':'disabled'}>${esc(c.skill)} ${ready?'':'（溜め中）'}</button></div>`}else $('actionArea').innerHTML=`<div class="${u?.side==='enemy'?'enemy-preview':''}">${esc(battle.message||'次の行動を待っています…')}</div>`}
+function showEffect(target,text,kind=''){if(!battle||!target)return;const units=target.side==='enemy'?battle.enemies:battle.allies,parent=target.side==='enemy'?$('enemyUnits'):$('allyUnits'),index=units.findIndex(u=>u.uid===target.uid),card=parent?.children[index];if(!card)return;const rect=card.getBoundingClientRect(),popup=document.createElement('div');popup.textContent=String(text);Object.assign(popup.style,{position:'fixed',left:(rect.left+rect.width/2)+'px',top:(rect.top+rect.height*.3)+'px',transform:'translateX(-50%)',zIndex:'9999',pointerEvents:'none',fontSize:'30px',fontWeight:'900',color:kind==='heal'?'#86f3ad':kind==='buff'?'#ffe17c':'#ff8585',textShadow:'0 2px 5px black',whiteSpace:'nowrap',opacity:'1',transition:'none'});document.body.appendChild(popup);const glow=document.createElement('div'),flashClass=kind==='heal'?'heal-flash':kind==='buff'?'buff-flash':'hit-flash';glow.className='unit '+flashClass;Object.assign(glow.style,{position:'fixed',left:rect.left+'px',top:rect.top+'px',width:rect.width+'px',height:rect.height+'px',background:'transparent',border:'none',borderRadius:'8px',pointerEvents:'none',zIndex:'9998'});document.body.appendChild(glow);setTimeout(()=>glow.remove(),700);requestAnimationFrame(()=>requestAnimationFrame(()=>{popup.style.transition='transform 2.5s ease-out, opacity 2.5s linear';popup.style.transform='translate(-50%,-45px)';popup.style.opacity='0'}));setTimeout(()=>popup.remove(),2600)}
 function clearActing(){if(!battle)return;for(const u of [...battle.allies,...battle.enemies])u.acting=false}
 function countUnitRing(u,type){return (u.rings||[]).filter(r=>r===type).length}
-function chooseNextUnit(){const units=[...alive(battle.allies),...alive(battle.enemies)];for(let i=0;i<10000;i++){const ready=units.filter(u=>u.gauge>=100);if(ready.length){ready.sort((a,b)=>a.side!==b.side?(a.side==='ally'?-1:1):b.gauge-a.gauge);const u=ready[0];u.gauge-=100;const recovered=Math.min(u.maxHp-u.hp,countUnitRing(u,'heal')*10);if(recovered>0){u.hp+=recovered;const token=battle.token;setTimeout(()=>{if(battle&&battle.token===token)showEffect(u,'+'+recovered,'heal')},0)}return u}for(const u of units)u.gauge+=u.speed}return units[0]||null}
+function chooseNextUnit(){if(!battle.firstActionResolved){battle.firstActionResolved=true;const first=[...alive(battle.allies),...alive(battle.enemies)].find(u=>u.id==='超越武士');if(first)return first}const units=[...alive(battle.allies),...alive(battle.enemies)];for(let i=0;i<10000;i++){const ready=units.filter(u=>u.gauge>=100);if(ready.length){ready.sort((a,b)=>a.side!==b.side?(a.side==='ally'?-1:1):b.gauge-a.gauge);const u=ready[0];u.gauge-=100;const recovered=Math.min(u.maxHp-u.hp,countUnitRing(u,'heal')*10);if(recovered>0){u.hp+=recovered;const token=battle.token;setTimeout(()=>{if(battle&&battle.token===token)showEffect(u,'+'+recovered,'heal')},0)}return u}for(const u of units)u.gauge+=u.speed}return units[0]||null}
 function getAttackPower(u){let atk=u.atk*u.buff*u.permanentBuff;if(u.id==='一閃スピアドン'&&u.hp<=u.maxHp/2)atk*=1.5;return Math.max(1,Math.floor(atk))}
 function chooseTarget(u){const targets=alive(u.side==='ally'?battle.enemies:battle.allies);if(u.id==='狙撃手アーチャー'&&battle?.targetUID!=null)return targets.find(t=>t.uid===battle.targetUID)||null;return random(targets)}
 function dealDamage(attacker,target,amount,isSkill=false){if(!target||target.hp<=0)return 0;if(Math.random()<countUnitRing(target,'dodge')*.03){showEffect(target,'回避','buff');battle.message=target.name+' は攻撃を回避！';return 0}if(target.evade>0){const chance=target.evade;target.evade=0;if(Math.random()<chance){showEffect(target,'回避','buff');battle.message=target.name+' は攻撃を回避！';return 0}}let damage=Math.max(1,Math.floor(amount));if(target.guard>0){damage=Math.max(1,Math.floor(damage*(1-target.guard)));target.guard=0}target.hp=Math.max(0,target.hp-damage);if(target.hp===0&&target.side==='enemy'&&attacker.side==='ally')recordQuestEvent('defeat',1,target.id);showEffect(target,'−'+damage);battle.message=attacker.name+' → '+target.name+'：'+damage+'ダメージ';if(target.id==='鍛錬剣士'&&target.hp>0&&attacker.hp>0&&Math.random()<(isSkill?1:.2)){const reflected=damage*2;attacker.hp=Math.max(0,attacker.hp-reflected);showEffect(attacker,'−'+reflected);battle.message+=' / アルティメットカウンター！'}return damage}
 function healUnit(target,amount){const before=target.hp;target.hp=Math.min(target.maxHp,target.hp+Math.max(1,Math.floor(amount)));const healed=target.hp-before;showEffect(target,'+'+healed,'heal');return healed}
-async function advanceTurn(){
-  if(!battle||!battle.running||battle.busy)return;if(checkBattleEnd())return;clearActing();battle.pendingUseSkill=undefined;battle.targetUID=null;
-  const u=chooseNextUnit();if(!u)return;battle.current=u;u.acting=true;
-  if(u.poison>0){const d=Math.max(1,Math.floor(u.maxHp*.08));u.hp=Math.max(0,u.hp-d);if(u.hp===0&&u.side==='enemy')recordQuestEvent('defeat',1,u.id);u.poison--;showEffect(u,'−'+d);battle.message=u.name+' は毒で '+d+' ダメージ！';renderBattle();await sleep(650);if(!battle?.running)return;if(u.hp<=0){clearActing();if(!checkBattleEnd())advanceTurn();return}}
-  if(u.side==='ally'||battle.mode==='pvp'){battle.awaitingAction=true;battle.message=(u.side==='ally'?'自軍：':'相手軍：')+u.name+' の行動を選択してください。';renderBattle();return}
-  battle.awaitingAction=false;const c=byId(u.id),ready=u.skillCount>=u.charge;battle.message=u.name+' の行動予告：'+(ready?'スキル「'+c.skill+'」':'通常攻撃');renderBattle();const token=battle.token;await sleep(1100);if(!battle||!battle.running||battle.token!==token)return;await enemyAct(u)
-}
-async function allyAct(useSkill){
-  if(!battle?.running||!battle.awaitingAction||battle.busy)return;const u=battle.current;if(!u)return;
-  if(u.side!=='ally'&&battle.mode!=='pvp')return;if(useSkill&&u.skillCount<u.charge)return;
-  const targets=u.side==='ally'?battle.enemies:battle.allies;
-  if(u.id==='狙撃手アーチャー'&&alive(targets).length>1){battle.pendingUseSkill=useSkill;battle.awaitingAction=false;battle.message='攻撃対象を選択してください';renderBattle();return}
-  battle.targetUID=null;battle.busy=true;battle.awaitingAction=false;const token=battle.token;await performAction(u,useSkill);if(!battle?.running||battle.token!==token)return;battle.busy=false;clearActing();if(checkBattleEnd())return;await sleep(450);if(battle?.running&&battle.token===token)advanceTurn()
-}
+async function advanceTurn(){if(!battle||!battle.running||battle.busy)return;if(checkBattleEnd())return;clearActing();battle.pendingUseSkill=undefined;battle.targetUID=null;const u=chooseNextUnit();if(!u)return;battle.current=u;u.acting=true;if(u.poison>0){const d=Math.max(1,Math.floor(u.maxHp*.08));u.hp=Math.max(0,u.hp-d);if(u.hp===0&&u.side==='enemy')recordQuestEvent('defeat',1,u.id);u.poison--;showEffect(u,'−'+d);battle.message=u.name+' は毒で '+d+' ダメージ！';renderBattle();await sleep(650);if(!battle?.running)return;if(u.hp<=0){clearActing();if(!checkBattleEnd())advanceTurn();return}}if(u.side==='ally'||battle.mode==='pvp'){battle.awaitingAction=true;battle.message=(u.side==='ally'?'自軍：':'相手軍：')+u.name+' の行動を選択してください。';renderBattle();return}battle.awaitingAction=false;const c=byId(u.id),ready=u.skillCount>=u.charge;battle.message=u.name+' の行動予告：'+(ready?'スキル「'+c.skill+'」':'通常攻撃');renderBattle();const token=battle.token;await sleep(1100);if(!battle||!battle.running||battle.token!==token)return;await enemyAct(u)}
+async function allyAct(useSkill){if(!battle?.running||!battle.awaitingAction||battle.busy)return;const u=battle.current;if(!u)return;if(u.side!=='ally'&&battle.mode!=='pvp')return;if(useSkill&&u.skillCount<u.charge)return;const targets=u.side==='ally'?battle.enemies:battle.allies;if(u.id==='狙撃手アーチャー'&&alive(targets).length>1){battle.pendingUseSkill=useSkill;battle.awaitingAction=false;battle.message='攻撃対象を選択してください';renderBattle();return}battle.targetUID=null;battle.busy=true;battle.awaitingAction=false;const token=battle.token;await performAction(u,useSkill);if(!battle?.running||battle.token!==token)return;battle.busy=false;clearActing();if(checkBattleEnd())return;await sleep(450);if(battle?.running&&battle.token===token)advanceTurn()}
 async function enemyAct(u){if(!battle?.running)return;battle.busy=true;const c=byId(u.id),useSkill=u.skillCount>=u.charge;battle.message=u.name+' の'+(useSkill?'スキル「'+c.skill+'」':'通常攻撃')+'！';renderBattle();await sleep(300);await performAction(u,useSkill);if(!battle?.running)return;battle.busy=false;clearActing();if(checkBattleEnd())return;await sleep(500);advanceTurn()}
-/* バフは各対象の次の行動が終わるまで維持。固定攻撃にも適用する。 */
-async function performAction(u,useSkill){
-  if(!battle?.running)return;const c=byId(u.id),hadBuff=u.buffTurns>0;
-  if(!useSkill){const target=chooseTarget(u);if(target)dealDamage(u,target,getAttackPower(u),false);u.skillCount=Math.min(u.charge,u.skillCount+1)}
-  else{
-    u.skillCount=0;const power=c.power*u.skillMultiplier,allies=u.side==='ally'?battle.allies:battle.enemies,opponents=u.side==='ally'?battle.enemies:battle.allies;
-    if(c.effect==='damage'){const targets=c.target==='all'?alive(opponents):[chooseTarget(u)].filter(Boolean),damage=power*u.buff;for(const target of targets)dealDamage(u,target,damage,true);if(c.target==='all')battle.message=u.name+' の「'+c.skill+'」！ 全体攻撃！'}
-    else if(c.effect==='poison'){const target=chooseTarget(u);if(target){dealDamage(u,target,power*u.buff,true);if(target.hp>0)target.poison=3}}
-    else if(c.effect==='heal'){const target=random(alive(allies));if(target)healUnit(target,power);battle.message=u.name+' の「'+c.skill+'」！'}
-    else if(c.effect==='healPercent'){for(const target of alive(allies))healUnit(target,target.maxHp*power/100);battle.message=u.name+' の「'+c.skill+'」！'}
-    else if(c.effect==='evade'||c.effect==='evadeSure'){u.evade=c.effect==='evadeSure'?1:Math.min(1,power/100);showEffect(u,'回避','buff');battle.message=u.name+' は回避状態になった！'}
-    else if(c.effect==='guard'){u.guard=Math.min(.95,power/100);showEffect(u,'防御','buff');battle.message=u.name+' は防御態勢を取った！'}
-    else if(c.effect==='buffAlly'){for(const target of alive(allies)){target.buff=1+power/100;target.buffTurns=1;showEffect(target,'強化','buff')}battle.message=u.name+' の「'+c.skill+'」！'}
-    else if(c.effect==='buffSelf'){u.permanentBuff+=power/100;showEffect(u,'強化','buff');battle.message=u.name+' の「'+c.skill+'」！'}
-  }
-  if(hadBuff&&!(useSkill&&c.effect==='buffAlly')){u.buffTurns=0;u.buff=1}
-  renderBattle();await sleep(850)
-}
-function selectTargetAction(uid){
-  if(!battle?.running||battle.busy||battle.pendingUseSkill===undefined)return;
-  const targets=alive(battle.current?.side==='enemy'?battle.allies:battle.enemies);
-  if(!targets.some(u=>u.uid===uid))return;
-  const useSkill=battle.pendingUseSkill;battle.pendingUseSkill=undefined;battle.targetUID=uid;battle.busy=true;battle.awaitingAction=false;
-  (async()=>{const token=battle.token;await performAction(battle.current,useSkill);if(!battle?.running||battle.token!==token)return;battle.targetUID=null;battle.busy=false;clearActing();if(checkBattleEnd())return;await sleep(450);if(battle?.running&&battle.token===token)advanceTurn()})()
-}
-/* ============================================================
-   8. 戦闘結果・報酬（対戦には報酬を付けない）
-   ============================================================ */
+async function performAction(u,useSkill){if(!battle?.running)return;const c=byId(u.id),hadBuff=u.buffTurns>0;if(!useSkill){const target=chooseTarget(u);if(target)dealDamage(u,target,getAttackPower(u),false);u.skillCount=Math.min(u.charge,u.skillCount+1)}else{u.skillCount=0;const power=c.power*u.skillMultiplier,allies=u.side==='ally'?battle.allies:battle.enemies,opponents=u.side==='ally'?battle.enemies:battle.allies;if(c.effect==='damage'){const targets=c.target==='all'?alive(opponents):[chooseTarget(u)].filter(Boolean),damage=power*u.buff;for(const target of targets)dealDamage(u,target,damage,true);if(c.target==='all')battle.message=u.name+' の「'+c.skill+'」！ 全体攻撃！'}else if(c.effect==='poison'){const target=chooseTarget(u);if(target){dealDamage(u,target,power*u.buff,true);if(target.hp>0)target.poison=3}}else if(c.effect==='heal'){const target=random(alive(allies));if(target)healUnit(target,power);battle.message=u.name+' の「'+c.skill+'」！'}else if(c.effect==='healPercent'){for(const target of alive(allies))healUnit(target,target.maxHp*power/100);battle.message=u.name+' の「'+c.skill+'」！'}else if(c.effect==='evade'||c.effect==='evadeSure'){u.evade=c.effect==='evadeSure'?1:Math.min(1,power/100);showEffect(u,'回避','buff');battle.message=u.name+' は回避状態になった！'}else if(c.effect==='guard'){u.guard=Math.min(.95,power/100);showEffect(u,'防御','buff');battle.message=u.name+' は防御態勢を取った！'}else if(c.effect==='buffAlly'){for(const target of alive(allies)){target.buff=1+power/100;target.buffTurns=1;showEffect(target,'強化','buff')}battle.message=u.name+' の「'+c.skill+'」！'}else if(c.effect==='buffSelf'){u.permanentBuff+=power/100;showEffect(u,'強化','buff');battle.message=u.name+' の「'+c.skill+'」！'}}if(hadBuff&&!(useSkill&&c.effect==='buffAlly')){u.buffTurns=0;u.buff=1}renderBattle();await sleep(850)}
+function selectTargetAction(uid){if(!battle?.running||battle.busy||battle.pendingUseSkill===undefined)return;const targets=alive(battle.current?.side==='enemy'?battle.allies:battle.enemies);if(!targets.some(u=>u.uid===uid))return;const useSkill=battle.pendingUseSkill;battle.pendingUseSkill=undefined;battle.targetUID=uid;battle.busy=true;battle.awaitingAction=false;(async()=>{const token=battle.token;await performAction(battle.current,useSkill);if(!battle?.running||battle.token!==token)return;battle.targetUID=null;battle.busy=false;clearActing();if(checkBattleEnd())return;await sleep(450);if(battle?.running&&battle.token===token)advanceTurn()})()}
 function checkBattleEnd(){if(!battle?.running)return true;if(!alive(battle.enemies).length){finishBattle(true);return true}if(!alive(battle.allies).length){finishBattle(false);return true}return false}
 function createStageDrop(stage){const candidates=[...new Set(STAGE_ENEMIES[stage].map(x=>x[0]))],successful=[];for(const id of candidates){const c=byId(id);if(c&&Math.random()*100<DROP_RATES[c.rarity])successful.push(id)}if(!successful.length)return null;const id=random(successful);return {id,name:byId(id).name,message:addCharacter(id)}}
 function grantStageRewards(stage){const count=Number(state.stageClearCounts[stage])||0,firstClear=count===0,gold=Math.floor(STAGE_GOLD[stage]*Math.pow(.8,count));state.gold+=gold;let gems=0;if(firstClear&&Math.random()<.2){gems=50;state.gems+=gems}let ringReward=null;if(stage===20&&firstClear){state.ringInventory.power=(Number(state.ringInventory.power)||0)+1;ringReward='power'}const drop=createStageDrop(stage);state.stageClearCounts[stage]=count+1;state.clearedStage=Math.max(state.clearedStage,stage);state.stage=Math.min(MAX_STAGE,state.clearedStage+1);save();return {firstClear,gold,gems,ringReward,drop}}
-function finishBattle(victory){
-  if(!battle?.running)return;battle.running=false;battle.busy=false;battle.awaitingAction=false;clearActing();let rewards=null;
-  if(victory&&battle.mode!=='pvp'){
-    if(battle.eventId){const progress=eventProgress(battle.eventId,battle.eventPeriod),firstClear=!progress.cleared.includes(battle.stage);rewards={firstClear,gold:0,gems:0,character:null};if(firstClear){const d=EVENT_DATA[battle.eventId].stages[battle.stage-1];rewards.gold=d.gold||0;rewards.gems=d.gems||0;state.gold+=rewards.gold;state.gems+=rewards.gems;if(d.characterDrop?.length){const id=random(d.characterDrop);rewards.character={name:byId(id).name,message:addCharacter(id)}}progress.cleared.push(battle.stage);save()}}
-    else{rewards=grantStageRewards(battle.stage);recordQuestEvent('storyWin')}
-  }
-  battle.result={victory,rewards};renderBattle();if(battle.eventId)renderAll()
-}
-function renderBattleResult(){
-  const {victory,rewards}=battle.result;
-  if(battle.mode==='pvp'){$('actionArea').innerHTML=`<div class="result"><h2>${victory?'自軍の勝利！':'相手軍の勝利！'}</h2><p>旅団対戦が決着しました。対戦では報酬は発生しません。</p><button data-action="returnMap">対戦の間へ戻る</button></div>`;return}
-  if(battle.eventId){let html='';if(!victory)html='<h2>敗北…</h2><p>編成を見直して再挑戦しよう。</p>';else if(rewards?.firstClear){html='<h2>初回踏破！</h2>';if(rewards.gold)html+=`<p>🪙 金貨 +${rewards.gold}</p>`;if(rewards.gems)html+=`<p>💎 ジェム +${rewards.gems}</p>`;if(rewards.character)html+=`<p>${esc(rewards.character.name)} ×1</p><p class="small">${esc(rewards.character.message)}</p>`}else html='<h2>戦役踏破！</h2><p>初回報酬は獲得済みです。</p>';$('actionArea').innerHTML=`<div class="result">${html}<button data-action="returnMap">戦役マップへ戻る</button></div>`;return}
-  if(!victory){$('actionArea').innerHTML='<div class="result"><h2>敗北…</h2><p>編成や装備を見直して再挑戦しよう。</p><button data-action="returnMap">草原へ戻る</button></div>';return}
-  let html=`<p>🪙 金貨 +${rewards.gold}</p>`;if(rewards.gems)html+=`<p>💎 ジェム +${rewards.gems}</p>`;if(rewards.ringReward)html+='<p>チカラの指輪 ×1<br><span class="small">初回踏破報酬</span></p>';if(rewards.drop)html+=`<p>英雄獲得！<br><b>${esc(rewards.drop.name)}</b><br><span class="small">${esc(rewards.drop.message)}</span></p>`;$('actionArea').innerHTML=`<div class="result"><h2>草原を踏破！</h2><p>ステージ ${battle.stage} 勝利！</p>${rewards.firstClear?'<p>初回踏破！</p>':''}${html}<button data-action="returnMap">草原へ戻る</button></div>`
-}
-function returnMap(){
-  if(battle?.mode==='pvp'){battle.running=false;battle.token=-1;battle=null;showPage('pvp');return}
-  if(battle?.eventId){const id=battle.eventId;battle.running=false;battle.token=-1;battle=null;if(activeEventPeriod(id)){selectedEvent=id;showPage('subEventMap');renderEventMap()}else{showPage('events');renderEventList()}return}
-  if(battle){battle.running=false;battle.token=-1}battle=null;selectedStage=Math.min(MAX_STAGE,Math.max(1,state.clearedStage+1));showPage('battle')
-}
-/* ============================================================
-   9. 毎日の支給品と運命の円盤
-   ============================================================ */
+function finishBattle(victory){if(!battle?.running)return;battle.running=false;battle.busy=false;battle.awaitingAction=false;clearActing();let rewards=null;if(victory&&battle.mode!=='pvp'){if(battle.eventId){const progress=eventProgress(battle.eventId,battle.eventPeriod),firstClear=!progress.cleared.includes(battle.stage);rewards={firstClear,gold:0,gems:0,character:null};if(firstClear){const d=EVENT_DATA[battle.eventId].stages[battle.stage-1];rewards.gold=d.gold||0;rewards.gems=d.gems||0;state.gold+=rewards.gold;state.gems+=rewards.gems;if(d.characterDrop?.length){const id=random(d.characterDrop);rewards.character={name:byId(id).name,message:addCharacter(id)}}progress.cleared.push(battle.stage);save()}}else{rewards=grantStageRewards(battle.stage);recordQuestEvent('storyWin')}}battle.result={victory,rewards};renderBattle();if(battle.eventId)renderAll()}
+function renderBattleResult(){const {victory,rewards}=battle.result;if(battle.mode==='pvp'){$('actionArea').innerHTML=`<div class="result"><h2>${victory?'自軍の勝利！':'相手軍の勝利！'}</h2><p>旅団対戦が決着しました。対戦では報酬は発生しません。</p><button data-action="returnMap">対戦の間へ戻る</button></div>`;return}if(battle.eventId){let html='';if(!victory)html='<h2>敗北…</h2><p>編成を見直して再挑戦しよう。</p>';else if(rewards?.firstClear){html='<h2>初回踏破！</h2>';if(rewards.gold)html+=`<p>🪙 金貨 +${rewards.gold}</p>`;if(rewards.gems)html+=`<p>💎 ジェム +${rewards.gems}</p>`;if(rewards.character)html+=`<p>${esc(rewards.character.name)} ×1</p><p class="small">${esc(rewards.character.message)}</p>`}else html='<h2>戦役踏破！</h2><p>初回報酬は獲得済みです。</p>';$('actionArea').innerHTML=`<div class="result">${html}<button data-action="returnMap">戦役マップへ戻る</button></div>`;return}if(!victory){$('actionArea').innerHTML='<div class="result"><h2>敗北…</h2><p>編成や装備を見直して再挑戦しよう。</p><button data-action="returnMap">草原へ戻る</button></div>';return}let html=`<p>🪙 金貨 +${rewards.gold}</p>`;if(rewards.gems)html+=`<p>💎 ジェム +${rewards.gems}</p>`;if(rewards.ringReward)html+='<p>チカラの指輪 ×1<br><span class="small">初回踏破報酬</span></p>';if(rewards.drop)html+=`<p>英雄獲得！<br><b>${esc(rewards.drop.name)}</b><br><span class="small">${esc(rewards.drop.message)}</span></p>`;$('actionArea').innerHTML=`<div class="result"><h2>草原を踏破！</h2><p>ステージ ${battle.stage} 勝利！</p>${rewards.firstClear?'<p>初回踏破！</p>':''}${html}<button data-action="returnMap">草原へ戻る</button></div>`}
+function returnMap(){if(battle?.mode==='pvp'){battle.running=false;battle.token=-1;battle=null;showPage('pvp');return}if(battle?.eventId){const id=battle.eventId;battle.running=false;battle.token=-1;battle=null;if(activeEventPeriod(id)){selectedEvent=id;showPage('subEventMap');renderEventMap()}else{showPage('events');renderEventList()}return}if(battle){battle.running=false;battle.token=-1}battle=null;selectedStage=Math.min(MAX_STAGE,Math.max(1,state.clearedStage+1));showPage('battle')}
 function dailyDate(){return new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Tokyo',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date())}
 function saveDaily(){try{localStorage.setItem(DAILY_KEY,JSON.stringify(dailyData))}catch(e){console.warn('デイリー保存失敗',e)}}
 function dailyAvailable(kind){return dailyData[kind]!==dailyDate()}
@@ -471,18 +229,12 @@ function wheelGradient(){return 'conic-gradient('+DAILY_COLORS.map((color,i)=>`$
 function showDailyWheel(){$('dailyContent').innerHTML=`<h2>運命の円盤</h2><p>毎日1回無料</p><div class="daily-wheel-wrap"><div class="daily-pointer">▼</div><div id="dailyWheel" class="daily-wheel" style="background:${wheelGradient()}"></div><div class="daily-center">✦</div></div><div id="dailyWheelResult">${dailyAvailable('wheel')?'本日の運試し':'本日は挑戦済み'}</div><button class="wide" id="dailySpinButton" data-action="dailySpin" ${dailyAvailable('wheel')?'':'disabled'}>${dailyAvailable('wheel')?'円盤を回す':'本日は挑戦済み'}</button><p class="small">100金貨30% / 300金貨25% / 500金貨15%<br>50ジェム15% / 100ジェム10% / 300ジェム5%</p>`;const wheel=$('dailyWheel');DAILY_PRIZES.forEach((prize,i)=>{const a=(i*60+30)*Math.PI/180,label=document.createElement('div');label.className='daily-wheel-label';label.textContent=prize.label;label.style.left=(50+32*Math.sin(a))+'%';label.style.top=(50-32*Math.cos(a))+'%';label.style.transform='translate(-50%,-50%)';wheel.parentElement.appendChild(label)});dailyRotation=0;openDailyModal()}
 function chooseDailyPrize(){let r=Math.random()*100;for(let i=0;i<DAILY_PRIZES.length;i++){r-=DAILY_PRIZES[i].rate;if(r<0)return i}return DAILY_PRIZES.length-1}
 function spinDailyWheel(){if(dailySpinning||!dailyAvailable('wheel'))return;const index=chooseDailyPrize(),prize=DAILY_PRIZES[index];dailySpinning=true;dailyData.wheel=dailyDate();saveDaily();$('dailySpinButton').disabled=true;$('dailyClose').disabled=true;$('dailyWheelResult').textContent='抽選中…';dailyRotation=360*6+(360-(index*60+30))%360;const wheel=$('dailyWheel');requestAnimationFrame(()=>requestAnimationFrame(()=>{wheel.style.transform=`rotate(${dailyRotation}deg)`;wheel.parentElement.querySelectorAll('.daily-wheel-label').forEach(el=>{el.style.transition='transform 4.5s cubic-bezier(.12,.75,.12,1)';el.style.transform=`translate(-50%,-50%) rotate(${dailyRotation}deg)`})}));setTimeout(()=>{state[prize.type]+=prize.amount;save();renderAll();$('dailyWheelResult').innerHTML=`<h2>${prize.label} を獲得！</h2>`;dailySpinning=false;$('dailyClose').disabled=false},4700)}
-/* ============================================================
-   10. 商館：毎日商品が変わる。保存形式は旧版と互換
-   ============================================================ */
 const shopRings=Object.keys(RINGS),shopCharacters=CHARACTERS.filter(c=>c.rarity==='ノーマル'||c.rarity==='レア');
 const shopPrice=c=>c.rarity==='レア'?5000:1500;
 function updateShopStock(){const date=dailyDate(),old=state.dailyShop;if(old&&old.date===date&&shopRings.includes(old.ring)&&Array.isArray(old.characters)&&old.characters.length===2&&old.characters[0]!==old.characters[1]&&old.characters.every(id=>shopCharacters.some(c=>c.id===id))&&old.purchased)return;const available=[...shopCharacters],first=available.splice(Math.floor(Math.random()*available.length),1)[0],second=available.splice(Math.floor(Math.random()*available.length),1)[0];state.dailyShop={date,ring:shopRings[Math.floor(Math.random()*shopRings.length)],characters:[first.id,second.id],purchased:{ring:false,character0:false,character1:false,gems:false}};save()}
 function shopItem(key,image,name,detail,price){const sold=state.dailyShop.purchased[key],affordable=state.gold>=price;return `<div class="shop-product"><div class="shop-product-image">${image}</div><b>${esc(name)}</b><div class="small">${esc(detail)}</div><div class="shop-product-price">🪙 ${price.toLocaleString('ja-JP')}</div><button class="wide" data-action="shopPurchase" data-shop-key="${key}" ${sold||!affordable?'disabled':''}>${sold?'売り切れ':affordable?'購入する':'金貨不足'}</button></div>`}
 function renderShop(){updateShopStock();const stock=state.dailyShop,ring=RINGS[stock.ring];let html=shopItem('ring',`<span class="shop-ring-icon">${ringMark(stock.ring,true)}</span>`,ring.name,ring.description,5000);stock.characters.forEach((id,i)=>{const c=byId(id);html+=shopItem('character'+i,portrait(id),c.name,c.rarity+(state.owned[id]?' / 所持済み':' / 未所持'),shopPrice(c))});html+=shopItem('gems','<span class="shop-ring-icon">💎</span>','100ジェム','ジェム ×100',5000);$('shop').innerHTML=`<div class="panel"><h2 class="section-title">旅の商館</h2><p class="small">毎日0時（日本時間）に品揃えと購入回数を更新</p><p>🪙 所持金貨：<b>${state.gold.toLocaleString('ja-JP')}</b></p><div id="shopMessage" role="status"></div><div class="shop-product-grid">${html}</div><p class="small">各品は1日1回限り購入できます。</p></div>`}
 function purchaseShopItem(key){updateShopStock();const stock=state.dailyShop;if(!['ring','character0','character1','gems'].includes(key)||stock.purchased[key])return;let price=5000,message='';if(key==='ring')message=RINGS[stock.ring].name+'を獲得！';else if(key==='character0'||key==='character1'){const i=key==='character0'?0:1,c=byId(stock.characters[i]);if(!c||!shopCharacters.some(x=>x.id===c.id))return;price=shopPrice(c);message=c.name+'を購入！'}else message='100ジェムを獲得！';if(state.gold<price){showError('金貨が足りません');renderShop();return}state.gold-=price;if(key==='ring'){const type=stock.ring;state.ringInventory[type]=(Number(state.ringInventory[type])||0)+1}else if(key==='character0'||key==='character1'){const id=stock.characters[key==='character0'?0:1];message=byId(id).name+'：'+addCharacter(id)}else state.gems+=100;stock.purchased[key]=true;recordQuestEvent('shop');save();renderAll();renderShop();$('shopMessage').textContent=message}
-/* ============================================================
-   11. 戦役の開催カレンダー
-   ============================================================ */
 const DAY_MS=86400000,JST_MS=9*3600000;
 function getJST(){return new Date(Date.now()+JST_MS)}
 function golemPeriod(){const jst=getJST(),y=jst.getUTCFullYear(),m=jst.getUTCMonth(),day=jst.getUTCDate();if(day<25)return null;const start=Date.UTC(y,m,25)-JST_MS,end=Date.UTC(y,m+1,1)-JST_MS;return {key:`${y}-${String(m+1).padStart(2,'0')}`,start,end}}
@@ -494,30 +246,80 @@ function activeEventPeriod(id){return EVENT_PERIODS[EVENT_DATA[id]?.period||id]?
 function eventProgress(id,periodKey){if(!state.eventProgress||typeof state.eventProgress!=='object')state.eventProgress={};const key=id+':'+periodKey;if(!state.eventProgress[key]){state.eventProgress[key]={cleared:[]};save()}const p=state.eventProgress[key];if(!Array.isArray(p.cleared))p.cleared=[];return p}
 function formatEnd(end){if(!Number.isFinite(end))return '終了日未定';const d=new Date(end-1+JST_MS);return `${d.getUTCMonth()+1}月${d.getUTCDate()}日23:59`}
 function renderEventList(){const mainList=$('mainEventList'),subList=$('subEventList');if(!mainList||!subList)return;for(const type of ['main','sub']){const list=type==='main'?mainList:subList;let html='',count=0;for(const [id,data] of Object.entries(EVENT_DATA)){if(data.type!==type)continue;const period=activeEventPeriod(id);if(!period)continue;count++;const progress=eventProgress(id,period.key);const endText=Number.isFinite(period.end)?`${formatEnd(period.end)}まで`:'終了日未定';html+=`<div class="panel"><h3>${esc(data.name)}</h3><p class="small">開催中・${endText}</p><p>踏破進捗：${progress.cleared.length} / ${data.stages.length}</p><button class="wide" data-action="openSubEvent" data-event="${id}">戦役に出陣する</button></div>`}if(!count)html='<p class="muted">現在開催中の戦役はありません。</p>';if(type==='sub')html+=`<div class="panel"><h3>戦役の開催予定</h3>${Object.values(EVENT_DATA).map(d=>`<p class="small">${esc(d.name)}：${esc(d.schedule)}</p>`).join('')}</div>`;list.innerHTML=html}}
-function renderEventMap(){
-  const id=selectedEvent,data=EVENT_DATA[id],period=activeEventPeriod(id);if(!data||!period){showPage('events');renderEventList();return}
-  const progress=eventProgress(id,period.key);
-  if(eventStage<1||eventStage>data.stages.length||(eventStage>1&&!progress.cleared.includes(eventStage-1)))eventStage=1;
-  const nodes=data.stages.map((stage,i)=>{const n=i+1,cleared=progress.cleared.includes(n),unlocked=n===1||progress.cleared.includes(n-1),boss=n===data.stages.length;return `<button class="stage-node ${cleared?'completed':''} ${boss?'boss':''} ${eventStage===n?'selected':''} ${unlocked?'':'locked'}" data-action="selectEventStage" data-stage="${n}" ${unlocked?'':'disabled'}><span class="num">${n}</span><span class="small">${cleared?'踏破済み':unlocked?'挑戦可能':'未解放'}</span></button>`}).join('');
-  const stage=data.stages[eventStage-1],cleared=progress.cleared.includes(eventStage);
-  const enemies=stage.enemies.map(([enemyId,m,hpMul])=>{const c=byId(enemyId);if(!c)return '不明な敵';const hpRate=m*(hpMul||1),extra=hpRate!==m?`・HP ${Math.round(hpRate*100)}%`:'';return `${c.name}（${Math.round(m*100)}%${extra}）`}).join(' / ');
-  let rewardHTML='';if(stage.gold)rewardHTML+=`<p>🪙 ${stage.gold}金貨</p>`;if(stage.gems)rewardHTML+=`<p>💎 ${stage.gems}ジェム</p>`;if(stage.characterDrop)rewardHTML+=`<p>${stage.characterDrop.map(id=>byId(id)?.name||id).join(' または ')} ×1 確定</p>`;
-  $('subEventMap').innerHTML=`<div class="panel"><h2 class="section-title">${esc(data.name)}</h2><p class="small">全${data.stages.length}ステージ ・${esc(data.schedule)}</p><p class="small">開催終了：${formatEnd(period.end)}</p><button data-page="events">戦役一覧へ戻る</button><div class="stage-map" style="margin-top:12px;background:linear-gradient(145deg,${id==='general'?'#65452e,#34251e':'#48423d,#242624'});border-color:${id==='general'?'#b99765':'#987f68'}"><div class="map-grid">${nodes}</div></div></div><div class="panel"><h3>ステージ ${eventStage}${eventStage===data.stages.length?'・最終戦':''}</h3><p class="small">敵編成：${esc(enemies)}</p><h4>初回踏破報酬</h4>${rewardHTML}<p class="small">${cleared?'報酬獲得済み（再挑戦可能）':'初回踏破で報酬確定'}</p><button class="wide" data-action="startEventBattle">出陣する</button></div>`
-}
+function renderEventMap(){const id=selectedEvent,data=EVENT_DATA[id],period=activeEventPeriod(id);if(!data||!period){showPage('events');renderEventList();return}const progress=eventProgress(id,period.key);if(eventStage<1||eventStage>data.stages.length||(eventStage>1&&!progress.cleared.includes(eventStage-1)))eventStage=1;const nodes=data.stages.map((stage,i)=>{const n=i+1,cleared=progress.cleared.includes(n),unlocked=n===1||progress.cleared.includes(n-1),boss=n===data.stages.length;return `<button class="stage-node ${cleared?'completed':''} ${boss?'boss':''} ${eventStage===n?'selected':''} ${unlocked?'':'locked'}" data-action="selectEventStage" data-stage="${n}" ${unlocked?'':'disabled'}><span class="num">${n}</span><span class="small">${cleared?'踏破済み':unlocked?'挑戦可能':'未解放'}</span></button>`}).join('');const stage=data.stages[eventStage-1],cleared=progress.cleared.includes(eventStage);const enemies=stage.enemies.map(([enemyId,m,hpMul])=>{const c=byId(enemyId);if(!c)return '不明な敵';const hpRate=m*(hpMul||1),extra=hpRate!==m?`・HP ${Math.round(hpRate*100)}%`:'';return `${c.name}（${Math.round(m*100)}%${extra}）`}).join(' / ');let rewardHTML='';if(stage.gold)rewardHTML+=`<p>🪙 ${stage.gold}金貨</p>`;if(stage.gems)rewardHTML+=`<p>💎 ${stage.gems}ジェム</p>`;if(stage.characterDrop)rewardHTML+=`<p>${stage.characterDrop.map(id=>byId(id)?.name||id).join(' または ')} ×1 確定</p>`;$('subEventMap').innerHTML=`<div class="panel"><h2 class="section-title">${esc(data.name)}</h2><p class="small">全${data.stages.length}ステージ ・${esc(data.schedule)}</p><p class="small">開催終了：${formatEnd(period.end)}</p><button data-page="events">戦役一覧へ戻る</button><div class="stage-map" style="margin-top:12px;background:linear-gradient(145deg,${id==='general'?'#65452e,#34251e':'#48423d,#242624'});border-color:${id==='general'?'#b99765':'#987f68'}"><div class="map-grid">${nodes}</div></div></div><div class="panel"><h3>ステージ ${eventStage}${eventStage===data.stages.length?'・最終戦':''}</h3><p class="small">敵編成：${esc(enemies)}</p><h4>初回踏破報酬</h4>${rewardHTML}<p class="small">${cleared?'報酬獲得済み（再挑戦可能）':'初回踏破で報酬確定'}</p><button class="wide" data-action="startEventBattle">出陣する</button></div>`}
 function startEventBattle(){const id=selectedEvent,data=EVENT_DATA[id],period=activeEventPeriod(id);if(!period||!data){showError('開催期間外です');return}if(battle?.running)return;const progress=eventProgress(id,period.key);if(eventStage>1&&!progress.cleared.includes(eventStage-1)){showError('前のステージを踏破してください');return}if(!state.party.length){showError('英雄を編成してください');return}const stageData=data.stages[eventStage-1];if(!stageData)return;const allies=state.party.map(id=>makeUnit(id,'ally'));const enemies=stageData.enemies.map(([enemyId,m,hpMul])=>{const u=makeUnit(enemyId,'enemy',{multiplier:m,hpMultiplier:hpMul||1}),c=byId(enemyId);u.speed=c.speed;u.charge=c.charge;u.skillMultiplier=['damage','poison','heal'].includes(c.effect)?m:1;return u});newBattle({eventId:id,eventPeriod:period.key,stage:eventStage,allies,enemies,message:data.name+'！'})}
-/* ============================================================
-   12. 表示の一元更新・ボタンの操作
-   ============================================================ */
+
+/* ===== BEGINNER_MISSIONS_V1 / 育成アイテム ===== */
+const BEGINNER_LIST=[
+  {id:'summon',label:'初めて召喚する',event:'summon',goal:1,gems:50},
+  {id:'shop',label:'初めてショップで購入する',event:'shop',goal:1,gems:50},
+  {id:'level',label:'キャラを1回レベルアップする',event:'levelUp',goal:1,gems:100},
+  {id:'story',label:'ストーリーで1回勝利する',event:'storyWin',goal:1,gems:50},
+  {id:'owned',label:'キャラを5種類入手する',event:'owned',goal:5,gems:100}
+];
+function ensureBeginner(){
+  if(!state.beginner||typeof state.beginner!=='object')state.beginner={progress:{},claimed:[],bonusClaimed:false};
+  const b=state.beginner;
+  if(!b.progress||typeof b.progress!=='object')b.progress={};
+  if(!Array.isArray(b.claimed))b.claimed=[];
+  if(typeof b.bonusClaimed!=='boolean')b.bonusClaimed=false;
+  if(!Number.isFinite(Number(state.levelStones)))state.levelStones=0;
+  state.levelStones=Math.max(0,Math.floor(Number(state.levelStones)||0));
+  // 図鑑に存在する「所持済みキャラの種類数」は復元できる。
+  b.progress.owned=Math.max(Number(b.progress.owned)||0,Object.keys(state.owned).length);
+  // 既存のセーブデータでも確実に確認できる実績は進捗に反映する。
+  if((Number(state.clearedStage)||0)>0)b.progress.story=1;
+  if(Object.values(state.owned).some(o=>o.level>1))b.progress.level=1;
+  return b;
+}
+function beginnerRecord(event,amount=1){
+  const b=ensureBeginner();let changed=false;
+  for(const m of BEGINNER_LIST){
+    if(m.event!==event||b.claimed.includes(m.id))continue;
+    const next=m.event==='owned'?Object.keys(state.owned).length:Math.min(m.goal,(Number(b.progress[m.id])||0)+amount);
+    if(next>(Number(b.progress[m.id])||0)){b.progress[m.id]=next;changed=true}
+  }
+  if(changed){save();if(document.getElementById('quests')?.classList.contains('active')&&questTab==='beginner')renderBeginner()}
+}
+function renderBeginner(){
+  const b=ensureBeginner();
+  $('questBeginnerTab').classList.add('active');$('questDailyTab').classList.remove('active');$('questWeeklyTab').classList.remove('active');
+  let html='<p class="small">期間無制限・一度きりの初心者ミッション。進捗と受取履歴は自動保存されます。</p>';
+  for(const m of BEGINNER_LIST){
+    const n=Math.min(m.goal,Math.max(0,Number(b.progress[m.id])||0)),done=n>=m.goal,received=b.claimed.includes(m.id);
+    html+='<article class="quest-card '+(done?'quest-complete':'')+'"><div class="quest-head"><b>'+esc(m.label)+'</b><span class="quest-reward">💎 '+m.gems+'ジェム</span></div><div class="quest-progress"><i style="width:'+Math.floor(100*n/m.goal)+'%"></i></div><div class="quest-foot"><span class="small">'+n+' / '+m.goal+'</span><button data-action="claimBeginner" data-mission="'+m.id+'" '+(!done||received?'disabled':'')+'>'+(received?'受取済み':done?'報酬を受け取る':'進行中')+'</button></div></article>';
+  }
+  const all=BEGINNER_LIST.every(m=>b.claimed.includes(m.id));
+  html+='<article class="quest-card quest-complete"><div class="quest-head"><b>🏆 初心者ミッションコンプリート</b><span class="quest-reward">💎 500ジェム + 超越の武神武士 ×1</span></div><p class="small">全5件の報酬を受け取ると解放。限定エピックはガチャから排出されません。</p><button class="wide" data-action="claimBeginnerBonus" '+(!all||b.bonusClaimed?'disabled':'')+'>'+(b.bonusClaimed?'受取済み':all?'全達成報酬を受け取る':'未達成')+'</button></article>';
+  $('questList').innerHTML=html;
+}
+function claimBeginner(id){
+  const b=ensureBeginner(),m=BEGINNER_LIST.find(x=>x.id===id);if(!m||b.claimed.includes(id)||(Number(b.progress[id])||0)<m.goal)return;
+  b.claimed.push(id);state.gems+=m.gems;save();renderAll();renderBeginner();
+}
+function claimBeginnerBonus(){
+  const b=ensureBeginner();if(b.bonusClaimed||!BEGINNER_LIST.every(m=>b.claimed.includes(m.id)))return;
+  b.bonusClaimed=true;state.gems+=500;const note=addCharacter('超越武士');save();renderAll();renderBeginner();
+  alert('初心者ミッション全達成！\n💎 500ジェム\n超越の武神武士 ×1\n'+note);
+}
+function useLevelStone(id){
+  ensureBeginner();const c=byId(id),o=state.owned[id];
+  if(!c||!o||o.level>=c.max||state.levelStones<1)return;
+  if(!confirm(c.name+' にレベルストーンを1個使用しますか？\n重複1体分として育成が進みます。'))return;
+  state.levelStones--;
+  const msg=addCharacter(id);save();renderAll();openEncyclopedia(id);
+  // イベント報酬・今後のショップ商品からは state.levelStones += 個数 で付与可能。
+}
+
 function renderAll(){
   $('gems').textContent=state.gems;$('gold').textContent=state.gold;$('stage').textContent=Math.min(MAX_STAGE,state.clearedStage+1);
   $('homeSummary').innerHTML=`所持する英雄：${Object.keys(state.owned).length}体<br>編成中：${state.party.map(id=>esc(byId(id)?.name||id)).join(' / ')||'なし'}<br>草原踏破：${state.clearedStage} / 20`;
   $('gachaOwned').textContent=Object.keys(state.owned).length+' / '+CHARACTERS.length+'体を所持';
   $('partyView').innerHTML=state.party.map(id=>cardHTML(id)).join('')||'<p>編成がありません。</p>';
-  renderDex();renderStageMap();
+  $('levelStoneInventory').innerHTML='🪨 レベルストーン：<b>'+Math.max(0,Number(state.levelStones)||0)+'</b>個 <span class="small">（重複キャラ1体分として使用）</span>';renderDex();renderStageMap();
   $('battleIntro').innerHTML=`選択中：ステージ ${selectedStage}<br>敵編成：${esc(formationText(selectedStage))}<br>味方編成：${state.party.map(id=>esc(byId(id)?.name||id)).join(' / ')||'なし'}`;
   $('startBattleButton').textContent='ステージ '+selectedStage+' に挑戦';$('startBattleButton').disabled=!state.party.length;updateDailyStatus()
 }
-/* 操作は全て data-action と対応させる。新しいボタンはここに追加。 */
 document.addEventListener('click',event=>{
   const button=event.target.closest('button');if(!button||button.disabled)return;
   if(button.dataset.page){showPage(button.dataset.page);if(button.dataset.page==='shop')renderShop();if(button.dataset.page==='events')renderEventList();if(button.dataset.page==='quests')renderQuests();return}
@@ -527,7 +329,10 @@ document.addEventListener('click',event=>{
     case 'copyPvpCode':copyPvpCode();break;
     case 'loadPvpCode':loadPvpCode();break;
     case 'startPvpBattle':startPvpBattle();break;
-    case 'questTab':questTab=button.dataset.type==='weekly'?'weekly':'daily';renderQuests();break;
+    case 'questTab':questTab=['weekly','daily','beginner'].includes(button.dataset.type)?button.dataset.type:'daily';renderQuests();break;
+     case 'claimBeginner':claimBeginner(button.dataset.mission);break;
+     case 'claimBeginnerBonus':claimBeginnerBonus();break;
+     case 'useLevelStone':useLevelStone(id);break;
     case 'claimQuest':claimQuest(button.dataset.type,button.dataset.quest);break;
     case 'claimQuestBonus':claimQuestBonus(button.dataset.type);break;
     case 'summon':summon(Number(button.dataset.count));break;
@@ -566,6 +371,4 @@ document.addEventListener('click',event=>{
 window.addEventListener('error',event=>{console.error(event.error||event.message);showError('ゲーム内エラー：'+(event.message||'不明なエラー'))});
 setInterval(()=>{ensureQuests();if($('quests').classList.contains('active'))renderQuests();if(state.dailyShop?.date!==dailyDate()){updateShopStock();if($('shop').classList.contains('active'))renderShop()}if($('events').classList.contains('active'))renderEventList();if($('subEventMap').classList.contains('active')&&!activeEventPeriod(selectedEvent)){showPage('events');renderEventList()}},15000);
 ensureQuests();renderAll();renderShop();renderEventList();if(dailyAvailable('bonus'))showDailyBonus();
-</script>
-</body>
-</html>
+</script></body></html>
