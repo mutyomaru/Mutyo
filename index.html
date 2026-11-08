@@ -80,6 +80,25 @@ const EVENT_DATA={
     ]
   },
 
+martial:{
+  name:'⚔️ 武の境地',
+  type:'main',
+  schedule:'2026年11月8日から無期限開催',
+  period:'martial',
+  stages:[
+    {enemies:[['swordman',1],['spearman',1],['archer',1]],gold:500},
+    {enemies:[['swordman',1.25],['spearman',1.25],['archer',1.25]],gold:700},
+    {enemies:[['swordman',1.5],['spearman',1.5],['archer',1.5]],gold:800},
+    {enemies:[['swordman',2],['spearman',2],['archer',2]],gold:1500},
+    {enemies:[['swordman',2.5],['spearman',2.5],['archer',2.5]],gold:2000,characterDrop:['swordman','spearman','archer']},
+    {enemies:[['swordman',2],['swordman',2],['鍛錬剣士',1.5]],gold:2500,gems:25},
+    {enemies:[['archer',2.5],['archer',2.5],['狙撃手アーチャー',1.75]],gold:3000,gems:25},
+    {enemies:[['spearman',2.5],['spearman',2.5],['一閃スピアドン',2]],gold:3500,gems:50},
+    {enemies:[['鍛錬剣士',2],['狙撃手アーチャー',2],['一閃スピアドン',2]],gold:4000,gems:50},
+    {enemies:[['鍛錬剣士',2.5],['狙撃手アーチャー',2.5],['一閃スピアドン',2.5]],gold:5000,gems:100,characterDrop:['鍛錬剣士','狙撃手アーチャー','一閃スピアドン']}
+  ]
+},
+
    golem:{name:'🗿 ゴーレムの目覚め',type:'sub',schedule:'毎月25日から月末まで',period:'golem',stages:[{enemies:[['ゴーレム',10]],gold:3000,gems:300}]}
 };
 /* ===========================================================
@@ -213,12 +232,78 @@ function goblinRaidPeriod(){
 function generalPeriod(){const jst=getJST(),day=jst.getUTCDay();if(day!==0&&day!==6)return null;const today=Date.UTC(jst.getUTCFullYear(),jst.getUTCMonth(),jst.getUTCDate()),saturday=today-(day===0?1:0)*DAY_MS,start=saturday-JST_MS,end=start+2*DAY_MS,d=new Date(saturday),key=[d.getUTCFullYear(),String(d.getUTCMonth()+1).padStart(2,'0'),String(d.getUTCDate()).padStart(2,'0')].join('-');return {key,start,end}}
 // 今後の開催パターンはこの対応表と、対応する開催関数を追加するだけでよい。
 
-const EVENT_PERIODS={undead:undeadPeriod,general:generalPeriod,goblinRaid:goblinRaidPeriod,golem:golemPeriod};
+
+const EVENT_PERIODS={
+  undead:undeadPeriod,
+  general:generalPeriod,
+  goblinRaid:goblinRaidPeriod,
+  golem:golemPeriod,
+  martial:()=>{
+    const start=Date.UTC(2026,10,7,15);
+    return Date.now()>=start
+      ? {key:'martial-permanent',start,end:Infinity}
+      : null;
+  }
+};
+
 
 function activeEventPeriod(id){return EVENT_PERIODS[EVENT_DATA[id]?.period||id]?.()||null}
 function eventProgress(id,periodKey){if(!state.eventProgress||typeof state.eventProgress!=='object')state.eventProgress={};const key=id+':'+periodKey;if(!state.eventProgress[key]){state.eventProgress[key]={cleared:[]};save()}const p=state.eventProgress[key];if(!Array.isArray(p.cleared))p.cleared=[];return p}
-function formatEnd(end){const d=new Date(end-1+JST_MS);return `${d.getUTCMonth()+1}月${d.getUTCDate()}日23:59`}
-function renderEventList(){const list=$('subEventList');if(!list)return;let html='',activeCount=0;for(const [id,data] of Object.entries(EVENT_DATA)){const period=activeEventPeriod(id);if(!period)continue;activeCount++;const progress=eventProgress(id,period.key);html+=`<div class="panel"><h3>${esc(data.name)}</h3><p class="small">🟢 開催中！ ${formatEnd(period.end)}まで</p><p>クリア進捗：${progress.cleared.length} / ${data.stages.length}</p><button class="wide" data-action="openSubEvent" data-event="${id}">⚔️ イベントに挑戦！</button></div>`}if(!activeCount)html+='<p class="muted">現在開催中のサブイベントはありません。</p>';html+=`<div class="panel"><h3>📅 イベント開催予定</h3>${Object.values(EVENT_DATA).map(d=>`<p class="small">${esc(d.name)}：${esc(d.schedule)}</p>`).join('')}</div>`;list.innerHTML=html}
+function formatEnd(end){if(!Number.isFinite(end))return '終了日未定';const d=new Date(end-1+JST_MS);return `${d.getUTCMonth()+1}月${d.getUTCDate()}日23:59`}
+
+function renderEventList(){
+  const list=$('subEventList');
+  if(!list)return;
+
+  const sections=[
+    {type:'main',title:'👑 メインイベント'},
+    {type:'sub',title:'⚔️ サブイベント'}
+  ];
+
+  let html='';
+
+  for(const section of sections){
+    html+=`<h2 class="section-title">${section.title}</h2>`;
+    let count=0;
+
+    for(const [id,data] of Object.entries(EVENT_DATA)){
+      if(data.type!==section.type)continue;
+
+      const period=activeEventPeriod(id);
+      if(!period)continue;
+
+      count++;
+      const progress=eventProgress(id,period.key);
+      const endText=Number.isFinite(period.end)
+        ?`${formatEnd(period.end)}まで`
+        :'終了日未定';
+
+      html+=`
+        <div class="panel">
+          <h3>${esc(data.name)}</h3>
+          <p class="small">🟢 開催中！ ${endText}</p>
+          <p>クリア進捗：${progress.cleared.length} / ${data.stages.length}</p>
+          <button class="wide" data-action="openSubEvent" data-event="${id}">
+            ⚔️ イベントに挑戦！
+          </button>
+        </div>`;
+    }
+
+    if(!count){
+      html+='<p class="muted">現在開催中のイベントはありません。</p>';
+    }
+  }
+
+  html+=`<div class="panel">
+    <h3>📅 イベント開催予定</h3>
+    ${Object.values(EVENT_DATA).map(d=>`
+      <p class="small">${esc(d.name)}：${esc(d.schedule)}</p>
+    `).join('')}
+  </div>`;
+
+  list.innerHTML=html;
+}
+
 function renderEventMap(){const id=selectedEvent,data=EVENT_DATA[id],period=activeEventPeriod(id);if(!data||!period){showPage('events');renderEventList();return}const progress=eventProgress(id,period.key);if(eventStage<1||eventStage>data.stages.length||(eventStage>1&&!progress.cleared.includes(eventStage-1)))eventStage=1;const nodes=data.stages.map((stage,i)=>{const n=i+1,cleared=progress.cleared.includes(n),unlocked=n===1||progress.cleared.includes(n-1),boss=n===data.stages.length;return `<button class="stage-node ${cleared?'completed':''} ${boss?'boss':''} ${eventStage===n?'selected':''} ${unlocked?'':'locked'}" data-action="selectEventStage" data-stage="${n}" ${unlocked?'':'disabled'}><span class="num">${boss?'👑 ':''}${n}</span><span class="small">${cleared?'✓ クリア':unlocked?'挑戦可能':'🔒 未解放'}</span></button>`}).join('');const stage=data.stages[eventStage-1],cleared=progress.cleared.includes(eventStage);const enemies=stage.enemies.map(([enemyId,m,hpMul])=>{const c=byId(enemyId);if(!c)return '不明な敵';const hpRate=m*(hpMul||1),extra=hpRate!==m?`・HP ${Math.round(hpRate*100)}%`:'';return `${c.name}（${Math.round(m*100)}%${extra}）`}).join(' / ');let rewardHTML='';if(stage.gold)rewardHTML+=`<p>🪙 ${stage.gold}金貨</p>`;if(stage.gems)rewardHTML+=`<p>💎 ${stage.gems}ジェム</p>`;if(stage.characterDrop)rewardHTML+=`<p>🎁 ${stage.characterDrop.map(id=>byId(id)?.name||id).join(' または ')} ×1 確定</p>`;$('subEventMap').innerHTML=`<div class="panel"><h2 class="section-title">${esc(data.name)}</h2><p class="small">全${data.stages.length}ステージ ・${esc(data.schedule)}</p><p class="small">開催終了：${formatEnd(period.end)}</p><button data-page="events">← イベント一覧へ</button><div class="stage-map" style="margin-top:12px;background:linear-gradient(145deg,${id==='general'?'#65452e,#34251e':'#473451,#241d38'});border-color:${id==='general'?'#b99765':'#9874ad'}"><div class="map-grid">${nodes}</div></div></div><div class="panel"><h3>${eventStage===data.stages.length?'👑 ':''}ステージ ${eventStage}</h3><p class="small">敵編成：${esc(enemies)}</p><h4>🎁 今回の初回クリア報酬</h4>${rewardHTML}<p class="small">${cleared?'✓ 報酬獲得済み（再挑戦可能）':'初回クリアで報酬確定'}</p><button class="wide" data-action="startEventBattle">⚔️ 挑戦する</button></div>`}
 function startEventBattle(){const id=selectedEvent,data=EVENT_DATA[id],period=activeEventPeriod(id);if(!period||!data){showError('開催期間外です');return}if(battle?.running)return;const progress=eventProgress(id,period.key);if(eventStage>1&&!progress.cleared.includes(eventStage-1)){showError('前のステージをクリアしてください');return}if(!state.party.length){showError('キャラクターを編成してください');return}const stageData=data.stages[eventStage-1];if(!stageData)return;const allies=state.party.map(id=>makeUnit(id,'ally'));const enemies=stageData.enemies.map(([enemyId,m,hpMul])=>{const u=makeUnit(enemyId,'enemy',{multiplier:m,hpMultiplier:hpMul||1}),c=byId(enemyId);u.speed=c.speed;u.charge=c.charge;u.skillMultiplier=['damage','poison','heal'].includes(c.effect)?m:1;return u});battle={eventId:id,eventPeriod:period.key,stage:eventStage,allies,enemies,running:true,busy:false,current:null,awaitingAction:false,result:null,token:++battleSerial,message:data.name+'！'};showPage('battleFight');renderBattle();advanceTurn()}
 /* ===========================================================
