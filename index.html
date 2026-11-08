@@ -44,10 +44,61 @@
 <section id="gacha" class="page"><div class="panel"><h2 class="section-title">星詠み召喚</h2><p>ノーマル 70% / レア 25% / エピック 5%</p><div class="row"><button data-action="summon" data-count="1">1回召喚（💎100）</button><button data-action="summon" data-count="10">10回召喚（💎900）</button></div><div id="gachaResult" style="margin-top:12px">召喚結果が表示されます。</div></div><div class="panel"><h2 class="section-title">所持状況</h2><div id="gachaOwned"></div></div></section>
 <section id="team" class="page"><div class="panel"><h2 class="section-title">パーティ編成</h2><p class="muted">最大3体まで編成できます。</p><div id="partyView" class="grid"></div></div><div class="panel"><h2 class="section-title">キャラクター図鑑</h2><div id="dexControls"></div><div id="characterList"></div></div></section>
 <section id="shop" class="page"></section>
-<section id="battle" class="page"><div class="panel"><h2 class="section-title">⚔️ イベントステージ</h2><p class="small">期間限定の特別なステージに挑戦！</p><button class="wide" data-page="events">✨ イベント一覧を見る</button></div><div class="panel"><h2 class="section-title">草原マップ</h2><p class="muted">クリア済みのステージにも再挑戦できます。</p><div id="stageMap"></div></div><div class="panel"><h2 class="section-title">冒険準備</h2><div id="battleIntro"></div><button id="startBattleButton" class="map-start" data-action="startBattle">挑戦する</button></div></section>
+<section id="battle" class="page"><div class="panel"><h2 class="section-title">⚔️ イベントステージ</h2><p class="small">期間限定の特別なステージに挑戦！</p><button class="wide" data-page="events">✨ イベント一覧を見る</button>
+<button class="wide" data-page="pvp">🏆 プレイヤー対戦</button>
+</div><div class="panel"><h2 class="section-title">草原マップ</h2><p class="muted">クリア済みのステージにも再挑戦できます。</p><div id="stageMap"></div></div><div class="panel"><h2 class="section-title">冒険準備</h2><div id="battleIntro"></div><button id="startBattleButton" class="map-start" data-action="startBattle">挑戦する</button></div></section>
 <section id="battleFight" class="page"><div class="panel"><div class="row" style="justify-content:space-between"><h2 class="section-title">戦闘</h2><button data-action="returnMap">ステージ選択に戻る</button></div><h3 style="color:#ffaaaa;margin:5px 0">▼ 敵軍 <span id="bossLabel"></span></h3><div id="enemyUnits" class="battle-side"></div><div class="battle-divider">✦ VS ✦</div><h3 style="color:#9acbff;margin:5px 0">▲ 旅団</h3><div id="allyUnits" class="battle-side"></div><div id="actionArea" class="action-panel"></div></div></section>
 <section id="events" class="page"><div class="panel"><h2 class="section-title">⚔️ イベント一覧</h2><p class="small">開催中のイベントに挑戦しよう！</p><button data-page="battle">← 戦闘画面に戻る</button></div><div class="panel"><h2 class="section-title">👑 メインイベント</h2><div id="mainEventList"><p class="muted">開催中のイベントはありません。</p></div></div><div class="panel"><h2 class="section-title">⚔️ サブイベント</h2><div id="subEventList"></div></div></section>
 <section id="subEventMap" class="page"></section>
+  
+
+<!-- 対戦コード式PvP -->
+<section id="pvp" class="page">
+  <div class="panel">
+    <h2 class="section-title">🏆 プレイヤー対戦</h2>
+    <p class="small">
+      対戦コードを使って友達のパーティと対戦！
+      1台の端末で交互に操作します。
+    </p>
+    <button data-page="battle">← 戦闘メニューに戻る</button>
+  </div>
+
+  <div class="panel">
+    <h3>📤 自分の対戦コード</h3>
+    <button class="wide" data-action="generatePvpCode">
+      対戦コードを発行
+    </button>
+    <textarea id="pvpMyCode" rows="4"
+      readonly placeholder="ここに対戦コードが表示されます"
+      style="width:100%;margin-top:10px"></textarea>
+    <button class="wide" data-action="copyPvpCode">
+      📋 コードをコピー
+    </button>
+  </div>
+
+  <div class="panel">
+    <h3>📥 相手の対戦コード</h3>
+    <textarea id="pvpOpponentCode" rows="4"
+      placeholder="友達の対戦コードを入力"
+      style="width:100%"></textarea>
+    <button class="wide" data-action="loadPvpCode">
+      対戦コードを読み込む
+    </button>
+    <div id="pvpOpponentPreview"></div>
+  </div>
+
+  <div class="panel">
+    <h3>⚔️ 対戦準備</h3>
+    <div id="pvpStatus" class="small">
+      対戦相手が未設定です。
+    </div>
+    <button class="wide" data-action="startPvpBattle">
+      ⚔️ 対戦開始！
+    </button>
+  </div>
+</section>
+
+
 </main><div class="footer">星詠みの旅団</div></div>
 <div id="characterRingModal" class="modal"><div class="modal-box"><h2 class="section-title">アクセサリー一覧</h2><div id="characterRingContent"></div><button class="wide" data-action="closeCharacterRingModal">図鑑に戻る</button></div></div><div id="equipmentModal" class="modal"><div class="modal-box"><h2 class="section-title">指輪を選択</h2><div id="equipmentModalCharacter" class="small"></div><div id="equipmentModalChoices"></div><button class="wide" data-action="closeEquipmentModal">戻る</button></div></div><div id="encyclopediaModal" class="modal"><div class="modal-box"><div id="encyclopediaDetail"></div><button class="wide" data-action="closeEncyclopedia">図鑑に戻る</button></div></div><div id="dailyModal" class="modal"><div class="modal-box daily-panel"><div id="dailyContent"></div><button class="wide" id="dailyClose" data-action="dailyClose">閉じる</button></div></div><div id="summonOverlay" class="summon"><div class="summon-box"><h2 class="section-title">星詠み召喚</h2><div id="summonVisual"></div><div id="summonProgress" class="small"></div><div id="summonControls"></div></div></div>
 <script>
@@ -141,10 +192,131 @@ let state=loadState(),selectedStage=Math.min(MAX_STAGE,state.clearedStage+1),rin
 let dexRarity='ノーマル',dexPage=0,battleSerial=0,dailyData=readDaily(),dailySpinning=false,dailyRotation=0,animationToken=0;
 let selectedEvent='undead',eventStage=1;
 function save(){try{localStorage.setItem(KEY,JSON.stringify(state))}catch(e){console.warn('セーブ失敗',e)}}
-function showError(message){const el=$('errorBox');el.textContent=message;el.style.display='block';setTimeout(()=>{if(el.textContent===message)el.style.display='none'},4500)}
+
+/* ===== PvP対戦コード生成 ===== */
+function generatePvpCode(){
+  if(!state.party.length){
+    showError('パーティを編成してください');
+    return;
+  }
+
+  const data={
+    version:1,
+    party:state.party.map(id=>{
+      const c=byId(id);
+      const owned=state.owned[id];
+
+      return {
+        id:id,
+        level:owned.level,
+        rings:(state.equipment[id]||[])
+          
+.slice(0,c.slot??0)
+
+          .map(r=>RING_IDS.includes(r)?r:null)
+      };
+    })
+  };
+
+  const json=JSON.stringify(data);
+  const bytes=new TextEncoder().encode(json);
+  let binary='';
+
+  for(const byte of bytes){
+    binary+=String.fromCharCode(byte);
+  }
+
+  const code='HSPVP1-'+btoa(binary)
+    .replace(/\+/g,'-')
+    .replace(/\//g,'_')
+    .replace(/=+$/,'');
+
+  $('pvpMyCode').value=code;
+}
+
+/* ===== PvP対戦コード読み込み ===== */
+let pvpOpponent=null;
+
+function loadPvpCode(){
+  const input=$('pvpOpponentCode').value.trim();
+  pvpOpponent=null;
+  $('pvpOpponentPreview').innerHTML='';
+  $('pvpStatus').textContent='対戦相手が未設定です。';
+
+  try{
+    if(!input.startsWith('HSPVP1-')){
+      throw new Error('対戦コードの形式が違います');
+    }
+
+    const encoded=input.slice(7)
+      .replace(/-/g,'+')
+      .replace(/_/g,'/');
+
+    if(!encoded||encoded.length>10000){
+      throw new Error('コードの長さが不正です');
+    }
+
+    const binary=atob(encoded);
+    const bytes=Uint8Array.from(binary,c=>c.charCodeAt(0));
+    const data=JSON.parse(new TextDecoder().decode(bytes));
+
+    if(data.version!==1||!Array.isArray(data.party)||
+       data.party.length<1||data.party.length>3){
+      throw new Error('対戦データが不正です');
+    }
+
+    const party=data.party.map(item=>{
+      if(!item||typeof item.id!=='string'){
+        throw new Error('キャラクター情報が不正です');
+      }
+
+      const c=byId(item.id);
+      if(!c)throw new Error('未登録のキャラクターです');
+
+      if(!Number.isInteger(item.level)||
+         item.level<1||item.level>c.max){
+        throw new Error('レベルが不正です');
+      }
+
+      if(!Array.isArray(item.rings)||
+         
+item.rings.length>(c.slot??0)||
+
+         item.rings.some(r=>r!==null&&!RING_IDS.includes(r))){
+        throw new Error('装備情報が不正です');
+      }
+
+      return {
+        id:c.id,
+        level:item.level,
+        rings:item.rings.slice()
+      };
+    });
+
+    if(new Set(party.map(c=>c.id)).size!==party.length){
+      throw new Error('同じキャラクターが重複しています');
+    }
+
+    pvpOpponent=party;
+
+    $('pvpOpponentPreview').innerHTML=party.map(p=>{
+      const c=byId(p.id);
+      return `<p class="small">${esc(c.name)} Lv.${p.level} / 指輪 ${p.rings.filter(Boolean).length}個</p>`;
+    }).join('');
+
+    $('pvpStatus').textContent='✅ 対戦準備OK！ 相手の編成を読み込みました。';
+
+  }catch(e){
+    pvpOpponent=null;
+    showError(e.message||'対戦コードを読み込めませんでした');
+  }
+}
+
+  function showError(message){const el=$('errorBox');el.textContent=message;el.style.display='block';setTimeout(()=>{if(el.textContent===message)el.style.display='none'},4500)}
 function showPage(page){document.querySelectorAll('.page').forEach(el=>el.classList.toggle('active',el.id===page));if(page!=='battleFight')renderAll();window.scrollTo(0,0)}
 /* ===========================================================
    3. 成長・スキル補正：固定攻撃と固定回復だけレベルで成長
+   
    =========================================================== */
 const LEVEL_GROWING_EFFECTS=new Set(['damage','heal']);
 function getLevelMultiplier(id){const c=byId(id);return Math.pow(1+c.growth,(state.owned[id]?.level||1)-1)}
@@ -183,7 +355,95 @@ function finishSummon(){++animationToken;$('gachaResult').innerHTML=summonQueue.
    6. 戦闘：元の行動順・パッシブ・演出・指輪を保持
    =========================================================== */
 function makeUnit(id,side,options={}){const c=byId(id),m=options.multiplier??1,st=side==='ally'?getStats(id):{hp:Math.floor(c.hp*m*(options.hpMultiplier||1)),atk:Math.floor(c.atk*m),speed:Math.max(1,Math.floor(c.speed*m)),skillMultiplier:1};if(options.hp)st.hp=options.hp;if(options.speed)st.speed=options.speed;return {uid:++battleSerial,id,side,name:c.name,maxHp:st.hp,hp:st.hp,atk:st.atk,speed:st.speed,charge:options.charge??(side==='ally'?ringCharge(id):c.charge),skillCount:0,gauge:0,skillMultiplier:st.skillMultiplier,buff:1,buffTurns:0,permanentBuff:1,guard:0,evade:0,poison:0,acting:false,effectText:'',effectKind:''}}
-function startBattle(){if(battle?.running)return;if(selectedStage>state.clearedStage+1){showError('まだ解放されていません');return}if(!state.party.length){showError('編成してください');return}const allies=state.party.map(id=>makeUnit(id,'ally'));const enemies=STAGE_ENEMIES[selectedStage].map(([id,m,hpMul])=>{const opt={multiplier:m,hpMultiplier:hpMul||1};if(selectedStage===10&&id==='ゴーレム'){opt.hp=700;opt.speed=12;opt.charge=3}return makeUnit(id,'enemy',opt)});battle={stage:selectedStage,allies,enemies,running:true,busy:false,current:null,awaitingAction:false,result:null,token:++battleSerial,message:'戦闘開始！'};showPage('battleFight');renderBattle();advanceTurn()}
+
+/* ===== PvP専用キャラクター生成 ===== */
+function makePvpUnit(data,side){
+  const c=byId(data.id);
+  if(!c)return null;
+
+  const level=data.level;
+  const multiplier=Math.pow(1+c.growth,level-1);
+  const rings=data.rings||[];
+
+  const powerCount=rings.filter(r=>r==='power').length;
+  const heartCount=rings.filter(r=>r==='heart').length;
+  const skillCount=rings.filter(r=>r==='skill').length;
+
+  const hp=Math.floor(c.hp*multiplier*(1+heartCount*0.1));
+  const atk=Math.floor(c.atk*multiplier*(1+powerCount*0.1));
+
+  return {
+    uid:++battleSerial,
+    id:data.id,
+    side:side,
+    name:c.name,
+    maxHp:hp,
+    hp:hp,
+    atk:atk,
+    speed:c.speed,
+    
+charge:c.charge,
+
+    skillCount:0,
+    gauge:0,
+    skillMultiplier:1+skillCount*0.1,
+    buff:1,
+    buffTurns:0,
+    permanentBuff:1,
+    guard:0,
+    evade:0,
+    poison:0,
+    acting:false,
+    effectText:'',
+    effectKind:''
+  };
+}
+
+/* ===== PvP戦闘開始 ===== */
+function startPvpBattle(){
+  if(battle?.running){
+    showError('戦闘中は開始できません');
+    return;
+  }
+
+  if(!pvpOpponent?.length){
+    showError('先に相手の対戦コードを読み込んでください');
+    return;
+  }
+
+  if(!state.party.length){
+    showError('パーティを編成してください');
+    return;
+  }
+
+  const allies=state.party.map(id=>makeUnit(id,'ally'));
+  const enemies=pvpOpponent.map(data=>makePvpUnit(data,'enemy'));
+
+  if(enemies.some(u=>!u)){
+    showError('相手の編成を読み込めません');
+    return;
+  }
+
+  battle={
+    mode:'pvp',
+    stage:0,
+    allies,
+    enemies,
+    running:true,
+    busy:false,
+    current:null,
+    awaitingAction:false,
+    result:null,
+    token:++battleSerial,
+    message:'PvP対戦開始！'
+  };
+
+  showPage('battleFight');
+  renderBattle();
+  advanceTurn();
+}
+
+  function startBattle(){if(battle?.running)return;if(selectedStage>state.clearedStage+1){showError('まだ解放されていません');return}if(!state.party.length){showError('編成してください');return}const allies=state.party.map(id=>makeUnit(id,'ally'));const enemies=STAGE_ENEMIES[selectedStage].map(([id,m,hpMul])=>{const opt={multiplier:m,hpMultiplier:hpMul||1};if(selectedStage===10&&id==='ゴーレム'){opt.hp=700;opt.speed=12;opt.charge=3}return makeUnit(id,'enemy',opt)});battle={stage:selectedStage,allies,enemies,running:true,busy:false,current:null,awaitingAction:false,result:null,token:++battleSerial,message:'戦闘開始！'};showPage('battleFight');renderBattle();advanceTurn()}
 function unitCard(u){
   const c=byId(u.id),hpRate=Math.max(0,100*u.hp/u.maxHp);
 
@@ -204,7 +464,70 @@ function unitCard(u){
     ${statusBadges?`<div class="status-badges">${statusBadges}</div>`:''}
   </div>`
 }
-function renderBattle(){if(!battle)return;$('bossLabel').textContent=battle.eventId?EVENT_DATA[battle.eventId].name+' STAGE '+battle.stage:BOSS_STAGES.includes(battle.stage)?'👑 BOSS':'STAGE '+battle.stage;$('enemyUnits').innerHTML=battle.enemies.map(unitCard).join('');$('allyUnits').innerHTML=battle.allies.map(unitCard).join('');if(battle.result){renderBattleResult();return}const u=battle.current;if(battle.pendingUseSkill!==undefined&&u?.side==='ally'){$('actionArea').innerHTML=`<b>🎯 ${esc(u.name)}：攻撃対象を選択</b><div class="action-buttons" style="grid-template-columns:1fr">${alive(battle.enemies).map(t=>`<button data-action="selectTarget" data-uid="${t.uid}">${esc(t.name)}（HP ${t.hp}/${t.maxHp}）</button>`).join('')}</div><button data-action="cancelTarget" style="margin-top:8px">戻る</button>`;return}if(battle.awaitingAction&&u?.side==='ally'){const c=byId(u.id),ready=u.skillCount>=u.charge;$('actionArea').innerHTML=`<b>${esc(u.name)} の行動</b><p class="small">${esc(battle.message)}</p><div class="action-buttons"><button class="attack" data-action="battleAttack">⚔️ 通常攻撃</button><button class="skill" data-action="battleSkill" ${ready?'':'disabled'}>✨ ${esc(c.skill)} ${ready?'':'（溜め中）'}</button></div>`}else $('actionArea').innerHTML=`<div class="${u?.side==='enemy'?'enemy-preview':''}">${esc(battle.message||'次の行動を待っています…')}</div>`}
+
+function renderBattle(){
+  if(!battle)return;
+
+  $('bossLabel').textContent=
+    battle.mode==='pvp'?'🏆 PvP対戦':
+    battle.eventId?
+      EVENT_DATA[battle.eventId].name+' STAGE '+battle.stage:
+    BOSS_STAGES.includes(battle.stage)?
+      '👑 BOSS':'STAGE '+battle.stage;
+
+  $('enemyUnits').innerHTML=battle.enemies.map(unitCard).join('');
+  $('allyUnits').innerHTML=battle.allies.map(unitCard).join('');
+
+  if(battle.result){
+    renderBattleResult();
+    return;
+  }
+
+  const u=battle.current;
+  const manual=u&&(u.side==='ally'||battle.mode==='pvp');
+  const targets=u?.side==='enemy'?battle.allies:battle.enemies;
+
+  if(battle.pendingUseSkill!==undefined&&manual){
+    $('actionArea').innerHTML=`
+      <b>🎯 ${esc(u.name)}：攻撃対象を選択</b>
+      <div class="action-buttons" style="grid-template-columns:1fr">
+        ${alive(targets).map(t=>`
+          <button data-action="selectTarget" data-uid="${t.uid}">
+            ${esc(t.name)}（HP ${t.hp}/${t.maxHp}）
+          </button>
+        `).join('')}
+      </div>
+      <button data-action="cancelTarget" style="margin-top:8px">
+        戻る
+      </button>`;
+    return;
+  }
+
+  if(battle.awaitingAction&&manual){
+    const c=byId(u.id);
+    const ready=u.skillCount>=u.charge;
+    const sideLabel=u.side==='ally'?'🔵 自分側':'🔴 相手側';
+
+    $('actionArea').innerHTML=`
+      <b>${sideLabel}：${esc(u.name)} の行動</b>
+      <p class="small">${esc(battle.message)}</p>
+      <div class="action-buttons">
+        <button class="attack" data-action="battleAttack">
+          ⚔️ 通常攻撃
+        </button>
+        <button class="skill" data-action="battleSkill"
+          ${ready?'':'disabled'}>
+          ✨ ${esc(c.skill)} ${ready?'':'（溜め中）'}
+        </button>
+      </div>`;
+  }else{
+    $('actionArea').innerHTML=`
+      <div class="${u?.side==='enemy'?'enemy-preview':''}">
+        ${esc(battle.message||'次の行動を待っています…')}
+      </div>`;
+  }
+}
+
 
 function showEffect(target,text,kind=''){
   if(!battle||!target)return;
@@ -286,8 +609,104 @@ function getAttackPower(u){let atk=u.atk*u.buff*u.permanentBuff;if(u.id==='一�
 function chooseTarget(u){const targets=alive(u.side==='ally'?battle.enemies:battle.allies);if(u.side==='ally'&&u.id==='狙撃手アーチャー'&&battle?.targetUID!=null)return targets.find(t=>t.uid===battle.targetUID)||null;return random(targets)}
 function dealDamage(attacker,target,amount,isSkill=false){if(!target||target.hp<=0)return 0;if(target.side==='ally'&&Math.random()<getEquipped(target.id,'dodge')*.03){showEffect(target,'回避','buff');battle.message=target.name+'は攻撃を回避！';return 0}if(target.evade>0){const chance=target.evade;target.evade=0;if(Math.random()<chance){showEffect(target,'回避','buff');battle.message=target.name+' は攻撃を回避！';return 0}}let damage=Math.max(1,Math.floor(amount));if(target.guard>0){damage=Math.max(1,Math.floor(damage*(1-target.guard)));target.guard=0}target.hp=Math.max(0,target.hp-damage);showEffect(target,'−'+damage);battle.message=attacker.name+' → '+target.name+'：'+damage+'ダメージ';if(target.id==='鍛錬剣士'&&target.hp>0&&attacker.hp>0&&Math.random()<(isSkill?1:.2)){const reflected=damage*2;attacker.hp=Math.max(0,attacker.hp-reflected);showEffect(attacker,'−'+reflected);battle.message+=' / アルティメットカウンター！'}return damage}
 function healUnit(target,amount){const before=target.hp;target.hp=Math.min(target.maxHp,target.hp+Math.max(1,Math.floor(amount)));const healed=target.hp-before;showEffect(target,'+'+healed,'heal');return healed}
-async function advanceTurn(){if(!battle||!battle.running||battle.busy)return;if(checkBattleEnd())return;clearActing();battle.pendingUseSkill=undefined;battle.targetUID=null;const u=chooseNextUnit();if(!u)return;battle.current=u;u.acting=true;if(u.poison>0){const d=Math.max(1,Math.floor(u.maxHp*.08));u.hp=Math.max(0,u.hp-d);u.poison--;showEffect(u,'−'+d);battle.message=u.name+' は毒で '+d+' ダメージ！';renderBattle();await sleep(650);if(!battle?.running)return;if(u.hp<=0){clearActing();if(!checkBattleEnd())advanceTurn();return}}if(u.side==='ally'){battle.awaitingAction=true;battle.message=u.name+' の行動を選択してください。';renderBattle();return}battle.awaitingAction=false;const c=byId(u.id),ready=u.skillCount>=u.charge;battle.message=u.name+' の行動予告：'+(ready?'スキル「'+c.skill+'」':'通常攻撃');renderBattle();const token=battle.token;await sleep(1100);if(!battle||!battle.running||battle.token!==token)return;await enemyAct(u)}
-async function allyAct(useSkill){if(!battle?.running||!battle.awaitingAction||battle.busy)return;const u=battle.current;if(!u||u.side!=='ally'||(useSkill&&u.skillCount<u.charge))return;if(u.id==='狙撃手アーチャー'&&alive(battle.enemies).length>1){battle.pendingUseSkill=useSkill;battle.awaitingAction=false;battle.message='攻撃する敵を選択してください';renderBattle();return}battle.targetUID=null;battle.busy=true;battle.awaitingAction=false;await performAction(u,useSkill);if(!battle?.running)return;battle.busy=false;clearActing();if(checkBattleEnd())return;await sleep(450);advanceTurn()}
+
+async function advanceTurn(){
+  if(!battle||!battle.running||battle.busy)return;
+  if(checkBattleEnd())return;
+
+  clearActing();
+  battle.pendingUseSkill=undefined;
+  battle.targetUID=null;
+
+  const u=chooseNextUnit();
+  if(!u)return;
+
+  battle.current=u;
+  u.acting=true;
+
+  if(u.poison>0){
+    const d=Math.max(1,Math.floor(u.maxHp*.08));
+    u.hp=Math.max(0,u.hp-d);
+    u.poison--;
+    showEffect(u,'−'+d);
+    battle.message=u.name+' は毒で '+d+' ダメージ！';
+    renderBattle();
+    await sleep(650);
+    if(!battle?.running)return;
+    if(u.hp<=0){
+      clearActing();
+      if(!checkBattleEnd())advanceTurn();
+      return;
+    }
+  }
+
+  // PvPでは敵味方の両方を手動操作
+  if(u.side==='ally'||battle.mode==='pvp'){
+    battle.awaitingAction=true;
+    battle.message=(u.side==='ally'?'🔵 自分側：':'🔴 相手側：')
+      +u.name+' の行動を選択してください。';
+    renderBattle();
+    return;
+  }
+
+  // 通常戦闘の敵は従来どおりAI操作
+  battle.awaitingAction=false;
+  const c=byId(u.id);
+  const ready=u.skillCount>=u.charge;
+
+  battle.message=u.name+' の行動予告：'
+    +(ready?'スキル「'+c.skill+'」':'通常攻撃');
+
+  renderBattle();
+
+  const token=battle.token;
+  await sleep(1100);
+
+  if(!battle||!battle.running||battle.token!==token)return;
+  await enemyAct(u);
+}
+
+
+async function allyAct(useSkill){
+  if(!battle?.running||!battle.awaitingAction||battle.busy)return;
+
+  const u=battle.current;
+  if(!u)return;
+
+  // 通常戦闘では味方のみ操作可能
+  // PvPでは敵味方の両方を操作可能
+  if(u.side!=='ally'&&battle.mode!=='pvp')return;
+
+  if(useSkill&&u.skillCount<u.charge)return;
+
+  // 狙撃手アーチャーの対象選択
+  const targets=u.side==='ally'?battle.enemies:battle.allies;
+
+  if(u.id==='狙撃手アーチャー'&&alive(targets).length>1){
+    battle.pendingUseSkill=useSkill;
+    battle.awaitingAction=false;
+    battle.message='攻撃対象を選択してください';
+    renderBattle();
+    return;
+  }
+
+  battle.targetUID=null;
+  battle.busy=true;
+  battle.awaitingAction=false;
+
+  await performAction(u,useSkill);
+
+  if(!battle?.running)return;
+
+  battle.busy=false;
+  clearActing();
+
+  if(checkBattleEnd())return;
+
+  await sleep(450);
+  advanceTurn();
+}
+
 async function enemyAct(u){if(!battle?.running)return;battle.busy=true;const c=byId(u.id),useSkill=u.skillCount>=u.charge;battle.message=u.name+' の'+(useSkill?'スキル「'+c.skill+'」':'通常攻撃')+'！';renderBattle();await sleep(300);await performAction(u,useSkill);if(!battle?.running)return;battle.busy=false;clearActing();if(checkBattleEnd())return;await sleep(500);advanceTurn()}
 // skillMultiplier: プレイヤー固定威力はレベル×指輪、イベント敵の固定威力はイベント倍率。
 
@@ -517,7 +936,38 @@ function renderAll(){$('gems').textContent=state.gems;$('gold').textContent=stat
 function selectTargetAction(uid){if(!battle?.running||battle.busy||battle.pendingUseSkill===undefined)return;if(!alive(battle.enemies).some(u=>u.uid===uid))return;const useSkill=battle.pendingUseSkill;battle.pendingUseSkill=undefined;battle.targetUID=uid;battle.busy=true;battle.awaitingAction=false;(async()=>{const token=battle.token;await performAction(battle.current,useSkill);if(!battle?.running||battle.token!==token)return;battle.targetUID=null;battle.busy=false;clearActing();if(checkBattleEnd())return;await sleep(450);if(battle?.running&&battle.token===token)advanceTurn()})()}
 // 追加ボタンの処理もここへ追加できる。現在の既存操作をすべて維持。
 document.addEventListener('click',event=>{const button=event.target.closest('button');if(!button||button.disabled)return;if(button.dataset.page){showPage(button.dataset.page);if(button.dataset.page==='shop')renderShop();if(button.dataset.page==='events')renderEventList();return}const a=button.dataset.action,id=button.dataset.id,index=Number(button.dataset.index);switch(a){
-case 'summon':summon(Number(button.dataset.count));break;
+
+case 'generatePvpCode':
+  generatePvpCode();
+  break;
+
+case 'copyPvpCode':{
+  const code=$('pvpMyCode').value;
+  if(!code){
+    showError('先に対戦コードを発行してください');
+    break;
+  }
+
+  // iPadでもコピーしやすいようにする
+  const area=$('pvpMyCode');
+  area.focus();
+  area.select();
+
+  if(navigator.clipboard?.writeText){
+    navigator.clipboard.writeText(code)
+      .then(()=>alert('対戦コードをコピーしました！'))
+      .catch(()=>alert('コード欄を長押ししてコピーしてください'));
+  }else{
+    alert('コード欄を長押ししてコピーしてください');
+  }
+  break;
+}
+
+case 'loadPvpCode':
+  loadPvpCode();
+  break;
+
+  case 'summon':summon(Number(button.dataset.count));break;
 case 'nextSummon':summonIndex++;showSummon();break;
 case 'skipSummon':finishSummon();break;
 case 'toggleParty':toggleParty(id);break;
