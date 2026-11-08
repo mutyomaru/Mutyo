@@ -240,12 +240,32 @@ function showEffect(target,text,kind=''){
   // ダメージ・回復・強化を受けたキャラを光らせる
   const flashClass=kind==='heal'?'heal-flash'
     :kind==='buff'?'buff-flash':'hit-flash';
+ 
+  // 再描画されても消えない独立した発光演出
+  const glow=document.createElement('div');
+  const r=card.getBoundingClientRect();
 
-  card.classList.remove('hit-flash','heal-flash','buff-flash');
-  void card.offsetWidth;
-  card.classList.add(flashClass);
+  glow.className='unit '+flashClass;
+
+  Object.assign(glow.style,{
+    position:'fixed',
+    left:r.left+'px',
+    top:r.top+'px',
+    width:r.width+'px',
+    height:r.height+'px',
+    background:'transparent',
+    border:'none',
+    borderRadius:'10px',
+    pointerEvents:'none',
+    zIndex:'9998'
+  });
+
+  document.body.appendChild(glow);
+  setTimeout(()=>glow.remove(),700);
 
 
+
+ 
   // 表示直後から2.5秒かけてゆっくり消える
   requestAnimationFrame(()=>{
     requestAnimationFrame(()=>{
