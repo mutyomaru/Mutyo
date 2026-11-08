@@ -6,7 +6,33 @@
 .dex-tabs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:5px;margin-bottom:8px}.dex-tabs button{padding:8px 2px;font-size:12px}.dex-tabs .selected{border:2px solid var(--gold);color:var(--gold);background:#354666}.dex-pages{display:flex;justify-content:space-between;align-items:center;gap:8px;margin:9px 0}.dex-pages span{font-weight:900;color:var(--gold)}#characterList{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;align-items:stretch}.encyclopedia-card{position:relative;min-width:0;display:flex;flex-direction:column;align-items:center;text-align:center;background:#202d49;border:1px solid var(--line);border-radius:10px;padding:4px 3px 32px;overflow:hidden}.encyclopedia-image{width:100%;display:block;flex:0 0 auto;margin:0;padding:0;border:0;background:transparent}.encyclopedia-image .portrait{height:clamp(130px,19vh,185px);width:100%;padding:0;margin:0;overflow:hidden;display:flex;align-items:flex-end;justify-content:center}.encyclopedia-image img{display:block;width:100%;height:100%;max-width:100%;max-height:100%;object-fit:contain;object-position:center bottom}.encyclopedia-card .name{margin-top:3px;font-size:clamp(10px,2.6vw,13px);line-height:1.25;overflow-wrap:anywhere}.encyclopedia-level{margin-top:3px;color:var(--gold);font-weight:800;font-size:12px}.encyclopedia-card .plus{bottom:4px;right:4px;width:25px;height:25px;font-size:17px}.encyclopedia-locked .name{color:var(--muted)}.encyclopedia-detail-image .portrait{height:220px}.encyclopedia-detail-stats{line-height:1.9;padding:12px;margin:10px 0;background:#111b30;border-radius:12px}
 /* ステージ・戦闘 */
 .stage-map{padding:12px;border:2px solid #58794e;border-radius:16px;background:linear-gradient(145deg,#456c43,#31543b 55%,#426a40)}.map-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}.stage-node{min-height:70px;padding:5px 2px;background:linear-gradient(#e1e9b7,#a9c27b);color:#263b26;border:2px solid #b4c98b;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px}.stage-node .num{font-size:20px;font-weight:900}.stage-node .small{color:inherit;font-size:10px}.stage-node.completed{background:linear-gradient(#c5e9bb,#76b879)}.stage-node.current{background:linear-gradient(#fff0a8,#e9b94e)}.stage-node.boss{background:linear-gradient(#f1b2a3,#bd625b);color:#451e25}.stage-node.locked{background:#788477;color:#344236}.stage-node.selected{outline:3px solid white}.stage-info{margin-top:10px;background:#203c2dcc;padding:10px;border-radius:10px;line-height:1.7}.map-start{width:100%;margin-top:10px;background:linear-gradient(#e6c16a,#a77c32);color:#30230e;font-weight:900}.battle-side{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}.unit{position:relative;min-width:0;background:#263653;border:1px solid #5476a4;border-radius:10px;text-align:center;padding:5px 3px}.unit.enemy{background:#513541;border-color:#895767}.unit.dead{opacity:.35;filter:grayscale(1)}.unit.active{outline:2px solid #ffe17c;box-shadow:0 0 12px #f4c76b99}.unit.enemy.active{outline-color:#ff8585}.unit .portrait{height:clamp(80px,16vh,145px)}.unit .name{font-size:12px}.unit .small{font-size:10px}.hpbar{height:8px;background:#101827;border-radius:10px;overflow:hidden;margin:5px 0}.hpbar i{display:block;height:100%;background:#76d6a1}.battle-divider{text-align:center;font-size:18px;color:var(--gold);font-weight:900;margin:7px}.action-panel{margin-top:9px;background:#202e4b;border:1px solid #536486;border-radius:11px;padding:10px}.action-buttons{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:7px}.action-buttons button{min-height:42px}.attack{background:#853c49}.skill{background:#5b4694}.enemy-preview{background:#633b48;border:2px solid #bd687b;padding:10px;border-radius:10px;line-height:1.6}.result{text-align:center;line-height:1.7}.result h2{color:var(--gold)}.error{display:none;background:#542d36;border:1px solid #b65d6a;padding:10px;border-radius:10px;margin-bottom:10px}
-/* デイリー・ショップ */
+
+.status-badges{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px}
+.status-badge{display:inline-block;padding:2px 6px;border-radius:999px;font-size:10px;font-weight:700;line-height:1.2;border:1px solid rgba(255,255,255,.18)}
+.status-badge.buff{background:rgba(255,225,124,.18);color:#ffe17c}
+.status-badge.poison{background:rgba(170,120,255,.18);color:#d4b3ff}
+.status-badge.guard{background:rgba(120,200,255,.18);color:#9ad8ff}
+.status-badge.evade{background:rgba(170,255,210,.18);color:#9ff5c6}
+
+/* 被ダメージ・回復・強化時のカード演出 */
+.unit.hit-flash{animation:damageFlash .65s ease-out}
+.unit.heal-flash{animation:healFlash .65s ease-out}
+.unit.buff-flash{animation:buffFlash .65s ease-out}
+
+@keyframes damageFlash{
+  0%,100%{box-shadow:none}
+  20%{box-shadow:0 0 22px 7px #ff4545;background-color:rgba(255,60,60,.3)}
+}
+@keyframes healFlash{
+  0%,100%{box-shadow:none}
+  20%{box-shadow:0 0 22px 7px #50ff9a;background-color:rgba(50,255,120,.25)}
+}
+@keyframes buffFlash{
+  0%,100%{box-shadow:none}
+  20%{box-shadow:0 0 22px 7px #ffe17c;background-color:rgba(255,225,124,.25)}
+}
+
+   /* デイリー・ショップ */
 .daily-panel{text-align:center}.daily-panel h2{color:var(--gold)}.daily-wheel-wrap{position:relative;width:min(76vw,290px);aspect-ratio:1;margin:15px auto}.daily-wheel{width:100%;height:100%;border-radius:50%;border:7px solid var(--gold);box-shadow:0 0 22px #f4c76b66;transition:transform 4.5s cubic-bezier(.12,.75,.12,1)}.daily-wheel-label{position:absolute;left:50%;top:50%;transform-origin:center;color:white;font-size:11px;font-weight:900;text-shadow:0 1px 3px black;pointer-events:none}.daily-pointer{position:absolute;top:-15px;left:50%;transform:translateX(-50%);z-index:5;color:#ff7777;font-size:36px;text-shadow:0 2px 3px black}.daily-center{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:54px;height:54px;border-radius:50%;display:grid;place-items:center;background:var(--gold);color:#34240a;border:4px solid white;font-weight:900}.daily-buttons{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:10px}.daily-buttons button{min-width:135px}.shop-product-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:12px 0}.shop-product{min-width:0;display:flex;flex-direction:column;align-items:center;text-align:center;gap:6px;background:#202d49;border:1px solid #394866;border-radius:12px;padding:9px 6px}.shop-product-image{width:100%;height:110px;display:flex;justify-content:center;align-items:center}.shop-product-image .portrait{width:100%;height:100%}.shop-product b{font-size:13px;overflow-wrap:anywhere}.shop-ring-icon{font-size:58px}.shop-product-price{margin-top:auto;color:#f4c76b;font-weight:900}.shop-product button{font-size:12px;padding:9px 3px}#shopMessage:not(:empty){color:#86efac;padding:8px}
 /* 召喚演出 */
 .summon{display:none;position:fixed;inset:0;z-index:1100;background:radial-gradient(circle,#15345a,#030612 80%);align-items:center;justify-content:center;padding:15px;overflow:hidden;--summon-color:#64c8ff;--summon-glow:#1684ff}.summon.active{display:flex}.summon.epic-mode{--summon-color:#ffe18a;--summon-glow:#ffb700;background:radial-gradient(circle,#463210,#05040b 80%)}.summon-box{text-align:center;max-width:520px;width:100%;position:relative;z-index:2}.summon-cinema{position:relative;height:min(52dvh,370px);min-height:270px;display:flex;justify-content:center;align-items:center;isolation:isolate}.summon-magic{position:absolute;width:min(65vw,260px);aspect-ratio:1;border:3px solid var(--summon-color);border-radius:50%;box-shadow:0 0 30px var(--summon-glow),inset 0 0 35px var(--summon-glow);animation:summonRotate 4s linear infinite,summonAppear 1s ease-out both}.summon-magic:before{content:"✦ ✧ ✦ ✧ ✦ ✧";position:absolute;inset:15px;border:2px dashed var(--summon-color);border-radius:50%;display:grid;place-items:center;color:var(--summon-color);letter-spacing:5px}.summon-magic:after{content:"";position:absolute;inset:43px;border:2px solid var(--summon-color);border-radius:50%;box-shadow:0 0 20px var(--summon-glow)}.summon-particle{position:absolute;left:50%;top:50%;width:var(--size);height:var(--size);border-radius:50%;background:var(--summon-color);box-shadow:0 0 12px var(--summon-color);animation:summonParticle var(--duration) ease-in-out infinite;animation-delay:var(--delay)}.summon-character{position:relative;z-index:3;opacity:0;transform:scale(.3);filter:brightness(4)}.summon-character.visible{animation:summonReveal .85s ease-out forwards}.summon-character img{width:min(55vw,190px);height:210px;object-fit:contain;filter:drop-shadow(0 0 20px var(--summon-glow))}.summon-information{opacity:0;transform:translateY(15px)}.summon-information.visible{animation:summonText .5s ease-out forwards}.summon-information h2{color:var(--summon-color);text-shadow:0 0 18px var(--summon-glow)}.summon-flash{position:fixed;inset:0;background:white;opacity:0;pointer-events:none;z-index:5}.summon-flash.play{animation:summonFlash .8s ease-out}.summon-lightning{position:absolute;inset:0;opacity:0;pointer-events:none;background:linear-gradient(115deg,transparent 43%,#fff7c7 47%,#ffcf49 50%,transparent 54%)}.epic-mode .summon-lightning{animation:summonLightning .55s steps(2) infinite}.epic-mode .summon-magic{animation:summonRotate 2s linear infinite,summonAppear 1s ease-out both,summonPulse .7s ease-in-out infinite alternate}@keyframes summonRotate{to{transform:rotate(360deg)}}@keyframes summonAppear{from{opacity:0;scale:.1}to{opacity:1;scale:1}}@keyframes summonPulse{to{box-shadow:0 0 75px var(--summon-glow),inset 0 0 50px var(--summon-glow)}}@keyframes summonParticle{0%{opacity:0;transform:rotate(var(--angle)) translateX(145px)}50%{opacity:1}100%{opacity:0;transform:rotate(var(--angle)) translateX(10px)}}@keyframes summonReveal{from{opacity:0;transform:scale(.3);filter:brightness(4)}to{opacity:1;transform:scale(1);filter:brightness(1)}}@keyframes summonText{to{opacity:1;transform:translateY(0)}}@keyframes summonFlash{0%{opacity:0}30%{opacity:.95}100%{opacity:0}}@keyframes summonLightning{0%,100%{opacity:0}50%{opacity:.8}}
@@ -158,7 +184,26 @@ function finishSummon(){++animationToken;$('gachaResult').innerHTML=summonQueue.
    =========================================================== */
 function makeUnit(id,side,options={}){const c=byId(id),m=options.multiplier??1,st=side==='ally'?getStats(id):{hp:Math.floor(c.hp*m*(options.hpMultiplier||1)),atk:Math.floor(c.atk*m),speed:Math.max(1,Math.floor(c.speed*m)),skillMultiplier:1};if(options.hp)st.hp=options.hp;if(options.speed)st.speed=options.speed;return {uid:++battleSerial,id,side,name:c.name,maxHp:st.hp,hp:st.hp,atk:st.atk,speed:st.speed,charge:options.charge??(side==='ally'?ringCharge(id):c.charge),skillCount:0,gauge:0,skillMultiplier:st.skillMultiplier,buff:1,buffTurns:0,permanentBuff:1,guard:0,evade:0,poison:0,acting:false,effectText:'',effectKind:''}}
 function startBattle(){if(battle?.running)return;if(selectedStage>state.clearedStage+1){showError('まだ解放されていません');return}if(!state.party.length){showError('編成してください');return}const allies=state.party.map(id=>makeUnit(id,'ally'));const enemies=STAGE_ENEMIES[selectedStage].map(([id,m,hpMul])=>{const opt={multiplier:m,hpMultiplier:hpMul||1};if(selectedStage===10&&id==='ゴーレム'){opt.hp=700;opt.speed=12;opt.charge=3}return makeUnit(id,'enemy',opt)});battle={stage:selectedStage,allies,enemies,running:true,busy:false,current:null,awaitingAction:false,result:null,token:++battleSerial,message:'戦闘開始！'};showPage('battleFight');renderBattle();advanceTurn()}
-function unitCard(u){const c=byId(u.id),hpRate=Math.max(0,100*u.hp/u.maxHp);return `<div class="unit ${u.side==='enemy'?'enemy':''} ${u.hp<=0?'dead':''} ${u.acting?'active':''}">${u.acting?`<div style="color:#ffe17c;font-weight:900;font-size:11px">${u.side==='enemy'?'▼ 敵の行動':'▶ 行動中'}</div>`:''}${portrait(u.id)}<div class="name ${rarityClass(c.rarity)}">${esc(u.name)}</div><div class="small">HP ${Math.max(0,u.hp)} / ${u.maxHp}</div><div class="hpbar"><i style="width:${hpRate}%"></i></div><div class="small">スキル ${Math.min(u.skillCount,u.charge)} / ${u.charge}</div>${u.guard>0?'<div class="small">🛡️ 防御中</div>':''}${u.evade>0?'<div class="small">💨 回避中</div>':''}</div>`}
+function unitCard(u){
+  const c=byId(u.id),hpRate=Math.max(0,100*u.hp/u.maxHp);
+
+  let statusBadges='';
+  if(u.buff>1)statusBadges+=`<span class="status-badge buff">🟡 攻撃強化</span>`;
+  if(u.poison>0)statusBadges+=`<span class="status-badge poison">☠️ 毒 ${u.poison}</span>`;
+  if(u.guard>0)statusBadges+=`<span class="status-badge guard">🛡️ 防御</span>`;
+  if(u.evade>0)statusBadges+=`<span class="status-badge evade">💨 回避</span>`;
+  if(u.permanentBuff>1)statusBadges+=`<span class="status-badge buff">🔥 永続強化</span>`;
+
+  return `<div class="unit ${u.side==='enemy'?'enemy':''} ${u.hp<=0?'dead':''} ${u.acting?'active':''}">
+    ${u.acting?`<div style="color:#ffe17c;font-weight:900;font-size:11px">${u.side==='enemy'?'▼ 敵の行動':'▶ 行動中'}</div>`:''}
+    ${portrait(u.id)}
+    <div class="name ${rarityClass(c.rarity)}">${esc(u.name)}</div>
+    <div class="small">HP ${Math.max(0,u.hp)} / ${u.maxHp}</div>
+    <div class="hpbar"><i style="width:${hpRate}%"></i></div>
+    <div class="small">スキル ${Math.min(u.skillCount,u.charge)} / ${u.charge}</div>
+    ${statusBadges?`<div class="status-badges">${statusBadges}</div>`:''}
+  </div>`
+}
 function renderBattle(){if(!battle)return;$('bossLabel').textContent=battle.eventId?EVENT_DATA[battle.eventId].name+' STAGE '+battle.stage:BOSS_STAGES.includes(battle.stage)?'👑 BOSS':'STAGE '+battle.stage;$('enemyUnits').innerHTML=battle.enemies.map(unitCard).join('');$('allyUnits').innerHTML=battle.allies.map(unitCard).join('');if(battle.result){renderBattleResult();return}const u=battle.current;if(battle.pendingUseSkill!==undefined&&u?.side==='ally'){$('actionArea').innerHTML=`<b>🎯 ${esc(u.name)}：攻撃対象を選択</b><div class="action-buttons" style="grid-template-columns:1fr">${alive(battle.enemies).map(t=>`<button data-action="selectTarget" data-uid="${t.uid}">${esc(t.name)}（HP ${t.hp}/${t.maxHp}）</button>`).join('')}</div><button data-action="cancelTarget" style="margin-top:8px">戻る</button>`;return}if(battle.awaitingAction&&u?.side==='ally'){const c=byId(u.id),ready=u.skillCount>=u.charge;$('actionArea').innerHTML=`<b>${esc(u.name)} の行動</b><p class="small">${esc(battle.message)}</p><div class="action-buttons"><button class="attack" data-action="battleAttack">⚔️ 通常攻撃</button><button class="skill" data-action="battleSkill" ${ready?'':'disabled'}>✨ ${esc(c.skill)} ${ready?'':'（溜め中）'}</button></div>`}else $('actionArea').innerHTML=`<div class="${u?.side==='enemy'?'enemy-preview':''}">${esc(battle.message||'次の行動を待っています…')}</div>`}
 
 function showEffect(target,text,kind=''){
@@ -191,6 +236,14 @@ function showEffect(target,text,kind=''){
   });
 
   document.body.appendChild(popup);
+
+  // ダメージ・回復・強化を受けたキャラを光らせる
+  const flashClass=kind==='heal'?'heal-flash'
+    :kind==='buff'?'buff-flash':'hit-flash';
+
+  card.classList.remove('hit-flash','heal-flash','buff-flash');
+  void card.offsetWidth;
+  card.classList.add(flashClass);
 
 
   // 表示直後から2.5秒かけてゆっくり消える
