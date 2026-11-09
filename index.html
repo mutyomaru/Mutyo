@@ -440,13 +440,17 @@ ensureQuests();renderAll();renderShop();renderEventList();if(dailyAvailable('bon
   grantStageRewards=function(stage){
     const rewards=oldGrantStageRewards(stage);
     if(rewards.firstClear && (stage===10||stage===20)){
-      state.gems+=100;
-      rewards.gems+=100;
-      if(stage===20){
-        state.levelStones=(Number(state.levelStones)||0)+1;
-        rewards.levelStones=1;
+      if(!state.bossBonusClaims20261109||typeof state.bossBonusClaims20261109!=='object')state.bossBonusClaims20261109={};
+      if(!state.bossBonusClaims20261109[stage]){
+        state.gems+=100;
+        rewards.gems+=100;
+        if(stage===20){
+          state.levelStones=(Number(state.levelStones)||0)+1;
+          rewards.levelStones=1;
+        }
+        state.bossBonusClaims20261109[stage]=true;
+        save();
       }
-      save();
     }
     return rewards;
   };
@@ -581,6 +585,33 @@ ensureQuests();renderAll();renderShop();renderEventList();if(dailyAvailable('bon
       }
     }
   });
+  // 既に草原のボスを踏破済みのプレイヤーにも追加報酬を補填する。
+  // 段階別の受取記録をセーブするため、再読み込みしても二重配布しない。
+  function distributePastBossBonuses(){
+    if(!state.bossBonusClaims20261109||typeof state.bossBonusClaims20261109!=='object')state.bossBonusClaims20261109={};
+    const claimed=state.bossBonusClaims20261109;
+    let grantedGems=0,grantedStones=0;
+    for(const stage of [10,20]){
+      const cleared=state.clearedStage>=stage || (Number(state.stageClearCounts?.[stage])||0)>0;
+      if(!cleared || claimed[stage])continue;
+      state.gems+=100;
+      grantedGems+=100;
+      if(stage===20){
+        state.levelStones=(Number(state.levelStones)||0)+1;
+        grantedStones++;
+      }
+      claimed[stage]=true;
+    }
+    if(grantedGems||grantedStones){
+      save();
+      renderAll();
+      const message='草原ボスの追加報酬を配布しました！\n'
+        +(grantedGems?'💎 '+grantedGems+'ジェム\n':'')
+        +(grantedStones?'🪨 レベルストーン '+grantedStones+'個':'');
+      setTimeout(()=>alert(message),200);
+    }
+  }
+  distributePastBossBonuses();
   renderAll();
 })();
 
