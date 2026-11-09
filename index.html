@@ -14,15 +14,8 @@ button,textarea{font:inherit}button{color:inherit;border:1px solid #938467;backg
 .daily-panel{text-align:center}.daily-wheel-wrap{position:relative;width:min(76vw,290px);aspect-ratio:1;margin:15px auto}.daily-wheel{width:100%;height:100%;border-radius:50%;border:7px solid var(--gold);box-shadow:0 0 22px #f4c76b66;transition:transform 4.5s cubic-bezier(.12,.75,.12,1)}.daily-wheel-label{position:absolute;left:50%;top:50%;transform-origin:center;color:white;font-size:11px;font-weight:900;text-shadow:0 1px 3px black;pointer-events:none}.daily-pointer{position:absolute;top:-15px;left:50%;transform:translateX(-50%);z-index:5;color:#ffb46b;font-size:36px;text-shadow:0 2px 3px black}.daily-center{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:54px;height:54px;border-radius:50%;display:grid;place-items:center;background:var(--gold);color:#34240a;border:4px solid #ede4d0;font-weight:900}.daily-buttons{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:10px}.daily-buttons button{min-width:135px}.shop-product-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:12px 0}.shop-product{min-width:0;display:flex;flex-direction:column;align-items:center;text-align:center;gap:6px;background:#333631;border:1px solid var(--line);border-radius:8px;padding:9px 6px}.shop-product-image{width:100%;height:110px;display:flex;justify-content:center;align-items:center}.shop-product-image .portrait{width:100%;height:100%}.shop-product b{font-size:13px;overflow-wrap:anywhere}.shop-ring-icon{display:flex;align-items:center;justify-content:center;height:85px}.shop-product-price{margin-top:auto;color:var(--gold);font-weight:900}.shop-product button{font-size:12px;padding:9px 3px}#shopMessage:not(:empty){color:#b0e5bd;padding:8px}
 .summon{display:none;position:fixed;inset:0;z-index:1100;background:radial-gradient(circle,#33454a,#030612 80%);align-items:center;justify-content:center;padding:15px;overflow:hidden;--summon-color:#9bc5d5;--summon-glow:#659cba}.summon.active{display:flex}.summon.epic-mode{--summon-color:#ffe18a;--summon-glow:#ffb700;background:radial-gradient(circle,#463210,#05040b 80%)}.summon-box{text-align:center;max-width:520px;width:100%;position:relative;z-index:2}.summon-cinema{position:relative;height:min(52dvh,370px);min-height:270px;display:flex;justify-content:center;align-items:center;isolation:isolate}.summon-magic{position:absolute;width:min(65vw,260px);aspect-ratio:1;border:3px solid var(--summon-color);border-radius:50%;box-shadow:0 0 30px var(--summon-glow),inset 0 0 35px var(--summon-glow);animation:summonRotate 4s linear infinite,summonAppear 1s ease-out both}.summon-magic:before{content:"✦ ✧ ✦ ✧ ✦ ✧";position:absolute;inset:15px;border:2px dashed var(--summon-color);border-radius:50%;display:grid;place-items:center;color:var(--summon-color);letter-spacing:5px}.summon-magic:after{content:"";position:absolute;inset:43px;border:2px solid var(--summon-color);border-radius:50%;box-shadow:0 0 20px var(--summon-glow)}.summon-particle{position:absolute;left:50%;top:50%;width:var(--size);height:var(--size);border-radius:50%;background:var(--summon-color);box-shadow:0 0 12px var(--summon-color);animation:summonParticle var(--duration) ease-in-out infinite;animation-delay:var(--delay)}.summon-character{position:relative;z-index:3;opacity:0;transform:scale(.3);filter:brightness(4)}.summon-character.visible{animation:summonReveal .85s ease-out forwards}.summon-character img{width:min(55vw,190px);height:210px;object-fit:contain;filter:drop-shadow(0 0 20px var(--summon-glow))}.summon-information{opacity:0;transform:translateY(15px)}.summon-information.visible{animation:summonText .5s ease-out forwards}.summon-information h2{color:var(--summon-color);text-shadow:0 0 18px var(--summon-glow)}.summon-flash{position:fixed;inset:0;background:white;opacity:0;pointer-events:none;z-index:5}.summon-flash.play{animation:summonFlash .8s ease-out}.summon-lightning{position:absolute;inset:0;opacity:0;pointer-events:none;background:linear-gradient(115deg,transparent 43%,#fff7c7 47%,#ffcf49 50%,transparent 54%)}.epic-mode .summon-lightning{animation:summonLightning .55s steps(2) infinite}.epic-mode .summon-magic{animation:summonRotate 2s linear infinite,summonAppear 1s ease-out both,summonPulse .7s ease-in-out infinite alternate}@keyframes summonRotate{to{transform:rotate(360deg)}}@keyframes summonAppear{from{opacity:0;scale:.1}to{opacity:1;scale:1}}@keyframes summonPulse{to{box-shadow:0 0 75px var(--summon-glow),inset 0 0 50px var(--summon-glow)}}@keyframes summonParticle{0%{opacity:0;transform:rotate(var(--angle)) translateX(145px)}50%{opacity:1}100%{opacity:0;transform:rotate(var(--angle)) translateX(10px)}}@keyframes summonReveal{from{opacity:0;transform:scale(.3);filter:brightness(4)}to{opacity:1;transform:scale(1);filter:brightness(1)}}@keyframes summonText{to{opacity:1;transform:translateY(0)}}@keyframes summonFlash{0%{opacity:0}30%{opacity:.95}100%{opacity:0}}@keyframes summonLightning{0%,100%{opacity:0}50%{opacity:.8}}
 .footer{text-align:center;color:var(--muted);font-size:11px;padding:9px}@media(max-width:600px){html,body{width:100%;overflow-x:hidden}.wrap{max-width:100%;padding:5px 6px}.top{padding:3px 0;gap:4px}.brand{font-size:15px}.top .row{gap:4px}.pill{padding:3px 6px;font-size:11px}.nav{gap:3px;margin:5px 0 7px}.nav button{padding:9px 1px;font-size:10px;border-radius:5px}.panel{padding:7px;margin-bottom:6px;border-radius:7px}.section-title{font-size:15px;margin-bottom:5px}.panel p{margin:5px 0}.hero{padding:10px 6px}.hero h1{font-size:19px;margin:5px 0}.grid{gap:5px}.card{padding:4px 3px 32px}.card .portrait{height:60px}.card .name{font-size:11px}.card .stats{font-size:10px}.card button.wide{font-size:10px;padding:5px 1px}#characterList{gap:4px}.encyclopedia-card{padding:3px 2px 29px}.encyclopedia-image .portrait{height:clamp(110px,16vh,155px)}.encyclopedia-card .name,.encyclopedia-level{font-size:11px}.battle-side{gap:4px}.unit{padding:3px 2px}.unit .portrait{height:clamp(65px,12vh,100px)}.unit .name,.unit .small{font-size:10px}.hpbar{height:6px;margin:3px 0}.battle-divider{margin:4px}.action-panel{margin-top:5px;padding:7px}.action-buttons button{min-height:38px;padding:5px;font-size:12px}.stage-map{padding:6px}.map-grid{gap:4px}.stage-node{min-height:47px;padding:3px 1px}.stage-node .num{font-size:15px}.stage-node .small{font-size:9px}.stage-info{padding:6px;margin-top:6px;font-size:12px}.modal{padding:7px}.modal-box{max-height:91dvh;padding:10px}.footer{display:none}}
-
-
 /* 初心者依頼とレベルストーン */
-.stone-inventory,.stone-detail{background:#182d36;border:1px solid #527b80;border-radius:12px;padding:10px;margin:8px 0}
-.stone-detail button{margin-top:7px}
-.quest-tabs{display:flex;flex-wrap:wrap;gap:6px}
-.quest-tabs button{flex:1 1 100px}
-.quest-tabs button.active{border-color:#f4c76b;color:#f4c76b}
-
+.stone-inventory,.stone-detail{background:#182d36;border:1px solid #527b80;border-radius:12px;padding:10px;margin:8px 0}.stone-detail button{margin-top:7px}.quest-tabs{display:flex;flex-wrap:wrap;gap:6px}.quest-tabs button{flex:1 1 100px}.quest-tabs button.active{border-color:#f4c76b;color:#f4c76b}
 </style></head><body>
 <div class="wrap">
 <header class="top"><div class="brand">✦ 星詠みの旅団</div><div class="row"><span class="pill">💎 <b id="gems">0</b></span><span class="pill">🪙 <b id="gold">0</b></span><span class="pill">到達 <b id="stage">1</b></span></div></header>
@@ -33,8 +26,7 @@ button,textarea{font:inherit}button{color:inherit;border:1px solid #938467;backg
 <section id="gacha" class="page"><div class="panel"><h2 class="section-title">星詠みの召喚陣</h2><p>ノーマル 70% / レア 25% / エピック 5%</p><div class="row"><button data-action="summon" data-count="1">1回召喚（💎100）</button><button data-action="summon" data-count="10">10回召喚（💎900）</button></div><div id="gachaResult" style="margin-top:12px">召喚結果が表示されます。</div></div><div class="panel"><h2 class="section-title">仲間の記録</h2><div id="gachaOwned"></div></div></section>
 <section id="team" class="page"><div class="panel"><h2 class="section-title">旅団の陣形</h2><p class="muted">最大3体まで編成できます。</p><div id="partyView" class="grid"></div></div><div class="panel"><h2 class="section-title">英雄図鑑</h2><div id="levelStoneInventory" class="stone-inventory"></div><div id="dexControls"></div><div id="characterList"></div></div></section>
 <section id="shop" class="page"></section>
-<section id="quests" class="page"><div class="panel"><h2 class="section-title">旅団の依頼掲示板</h2><p class="small">日替わりは毎日0時、週替わりは月曜日0時（日本時間）に更新。各5件が抽選されます。</p><div class="quest-tabs"><button data-action="questTab" data-type="beginner" id="questBeginnerTab">初心者ミッション</button>
-       <button data-action="questTab" data-type="daily" id="questDailyTab">日替わり依頼</button><button data-action="questTab" data-type="weekly" id="questWeeklyTab">週替わり依頼</button></div><div id="questList"></div></div></section>
+<section id="quests" class="page"><div class="panel"><h2 class="section-title">旅団の依頼掲示板</h2><p class="small">日替わりは毎日0時、週替わりは月曜日0時（日本時間）に更新。各5件が抽選されます。</p><div class="quest-tabs"><button data-action="questTab" data-type="beginner" id="questBeginnerTab">初心者ミッション</button><button data-action="questTab" data-type="daily" id="questDailyTab">日替わり依頼</button><button data-action="questTab" data-type="weekly" id="questWeeklyTab">週替わり依頼</button></div><div id="questList"></div></div></section>
 <section id="battle" class="page"><div class="panel"><h2 class="section-title">特別遠征</h2><p class="small">期間限定の戦役へ参戦する。</p><button class="wide" data-page="events">戦役一覧へ</button><button class="wide" data-page="pvp">旅団対戦へ</button></div><div class="panel"><h2 class="section-title">緑風の草原</h2><p class="muted">踏破済みの地にも再び挑戦できます。</p><div id="stageMap"></div></div><div class="panel"><h2 class="section-title">出陣の準備</h2><div id="battleIntro"></div><button id="startBattleButton" class="map-start" data-action="startBattle">挑戦する</button></div></section>
 <section id="battleFight" class="page"><div class="panel"><div class="row" style="justify-content:space-between"><h2 class="section-title">戦場</h2><button data-action="returnMap">戦場を離れる</button></div><h3 style="color:#ffaaaa;margin:5px 0">敵軍 <span id="bossLabel"></span></h3><div id="enemyUnits" class="battle-side"></div><div class="battle-divider">✦ 対陣 ✦</div><h3 style="color:#9acbff;margin:5px 0">旅団</h3><div id="allyUnits" class="battle-side"></div><div id="actionArea" class="action-panel"></div></div></section>
 <section id="events" class="page"><div class="panel"><h2 class="section-title">戦役一覧</h2><p class="small">開催中の戦役に出陣しよう。</p><button data-page="battle">遠征へ戻る</button></div><div class="panel"><h2 class="section-title">本戦役</h2><div id="mainEventList"></div></div><div class="panel"><h2 class="section-title">地方戦役</h2><div id="subEventList"></div></div></section>
@@ -131,7 +123,7 @@ function randomQuestIds(type){const ids=Object.keys(QUEST_DEFINITIONS[type]);for
 function ensureQuests(){if(!state.quests||typeof state.quests!=='object')state.quests={};let changed=false;for(const type of ['daily','weekly']){const key=questPeriodKey(type),old=state.quests[type];const valid=old&&old.key===key&&Array.isArray(old.ids)&&old.ids.length===QUEST_COUNT&&new Set(old.ids).size===QUEST_COUNT&&old.ids.every(id=>QUEST_DEFINITIONS[type][id])&&old.progress&&typeof old.progress==='object';if(!valid){state.quests[type]={key,ids:randomQuestIds(type),progress:{},claimed:[],bonusClaimed:false};changed=true}const current=state.quests[type];if(!Array.isArray(current.claimed)){current.claimed=[];changed=true}if(typeof current.bonusClaimed!=='boolean'){current.bonusClaimed=false;changed=true}}if(changed)save()}
 function recordQuestEvent(event,amount=1,target=null){
   if(battle?.mode==='pvp')return;
-   beginnerRecord(event,amount);
+  beginnerRecord(event,amount);
   ensureQuests();let changed=false;
   for(const type of ['daily','weekly']){const q=state.quests[type];for(const id of q.ids){const def=QUEST_DEFINITIONS[type][id];if(def.event!==event||(def.target&&def.target!==target))continue;if(q.claimed.includes(id))continue;const before=Math.min(def.goal,Math.max(0,Number(q.progress[id])||0)),after=Math.min(def.goal,before+amount);if(before!==after){q.progress[id]=after;changed=true}}}
   if(changed){save();if($('quests').classList.contains('active'))renderQuests()}
@@ -248,7 +240,6 @@ function formatEnd(end){if(!Number.isFinite(end))return '終了日未定';const 
 function renderEventList(){const mainList=$('mainEventList'),subList=$('subEventList');if(!mainList||!subList)return;for(const type of ['main','sub']){const list=type==='main'?mainList:subList;let html='',count=0;for(const [id,data] of Object.entries(EVENT_DATA)){if(data.type!==type)continue;const period=activeEventPeriod(id);if(!period)continue;count++;const progress=eventProgress(id,period.key);const endText=Number.isFinite(period.end)?`${formatEnd(period.end)}まで`:'終了日未定';html+=`<div class="panel"><h3>${esc(data.name)}</h3><p class="small">開催中・${endText}</p><p>踏破進捗：${progress.cleared.length} / ${data.stages.length}</p><button class="wide" data-action="openSubEvent" data-event="${id}">戦役に出陣する</button></div>`}if(!count)html='<p class="muted">現在開催中の戦役はありません。</p>';if(type==='sub')html+=`<div class="panel"><h3>戦役の開催予定</h3>${Object.values(EVENT_DATA).map(d=>`<p class="small">${esc(d.name)}：${esc(d.schedule)}</p>`).join('')}</div>`;list.innerHTML=html}}
 function renderEventMap(){const id=selectedEvent,data=EVENT_DATA[id],period=activeEventPeriod(id);if(!data||!period){showPage('events');renderEventList();return}const progress=eventProgress(id,period.key);if(eventStage<1||eventStage>data.stages.length||(eventStage>1&&!progress.cleared.includes(eventStage-1)))eventStage=1;const nodes=data.stages.map((stage,i)=>{const n=i+1,cleared=progress.cleared.includes(n),unlocked=n===1||progress.cleared.includes(n-1),boss=n===data.stages.length;return `<button class="stage-node ${cleared?'completed':''} ${boss?'boss':''} ${eventStage===n?'selected':''} ${unlocked?'':'locked'}" data-action="selectEventStage" data-stage="${n}" ${unlocked?'':'disabled'}><span class="num">${n}</span><span class="small">${cleared?'踏破済み':unlocked?'挑戦可能':'未解放'}</span></button>`}).join('');const stage=data.stages[eventStage-1],cleared=progress.cleared.includes(eventStage);const enemies=stage.enemies.map(([enemyId,m,hpMul])=>{const c=byId(enemyId);if(!c)return '不明な敵';const hpRate=m*(hpMul||1),extra=hpRate!==m?`・HP ${Math.round(hpRate*100)}%`:'';return `${c.name}（${Math.round(m*100)}%${extra}）`}).join(' / ');let rewardHTML='';if(stage.gold)rewardHTML+=`<p>🪙 ${stage.gold}金貨</p>`;if(stage.gems)rewardHTML+=`<p>💎 ${stage.gems}ジェム</p>`;if(stage.characterDrop)rewardHTML+=`<p>${stage.characterDrop.map(id=>byId(id)?.name||id).join(' または ')} ×1 確定</p>`;$('subEventMap').innerHTML=`<div class="panel"><h2 class="section-title">${esc(data.name)}</h2><p class="small">全${data.stages.length}ステージ ・${esc(data.schedule)}</p><p class="small">開催終了：${formatEnd(period.end)}</p><button data-page="events">戦役一覧へ戻る</button><div class="stage-map" style="margin-top:12px;background:linear-gradient(145deg,${id==='general'?'#65452e,#34251e':'#48423d,#242624'});border-color:${id==='general'?'#b99765':'#987f68'}"><div class="map-grid">${nodes}</div></div></div><div class="panel"><h3>ステージ ${eventStage}${eventStage===data.stages.length?'・最終戦':''}</h3><p class="small">敵編成：${esc(enemies)}</p><h4>初回踏破報酬</h4>${rewardHTML}<p class="small">${cleared?'報酬獲得済み（再挑戦可能）':'初回踏破で報酬確定'}</p><button class="wide" data-action="startEventBattle">出陣する</button></div>`}
 function startEventBattle(){const id=selectedEvent,data=EVENT_DATA[id],period=activeEventPeriod(id);if(!period||!data){showError('開催期間外です');return}if(battle?.running)return;const progress=eventProgress(id,period.key);if(eventStage>1&&!progress.cleared.includes(eventStage-1)){showError('前のステージを踏破してください');return}if(!state.party.length){showError('英雄を編成してください');return}const stageData=data.stages[eventStage-1];if(!stageData)return;const allies=state.party.map(id=>makeUnit(id,'ally'));const enemies=stageData.enemies.map(([enemyId,m,hpMul])=>{const u=makeUnit(enemyId,'enemy',{multiplier:m,hpMultiplier:hpMul||1}),c=byId(enemyId);u.speed=c.speed;u.charge=c.charge;u.skillMultiplier=['damage','poison','heal'].includes(c.effect)?m:1;return u});newBattle({eventId:id,eventPeriod:period.key,stage:eventStage,allies,enemies,message:data.name+'！'})}
-
 /* ===== BEGINNER_MISSIONS_V1 / 育成アイテム ===== */
 const BEGINNER_LIST=[
   {id:'summon',label:'初めて召喚する',event:'summon',goal:1,gems:50},
@@ -265,9 +256,7 @@ function ensureBeginner(){
   if(typeof b.bonusClaimed!=='boolean')b.bonusClaimed=false;
   if(!Number.isFinite(Number(state.levelStones)))state.levelStones=0;
   state.levelStones=Math.max(0,Math.floor(Number(state.levelStones)||0));
-  // 図鑑に存在する「所持済みキャラの種類数」は復元できる。
   b.progress.owned=Math.max(Number(b.progress.owned)||0,Object.keys(state.owned).length);
-  // 既存のセーブデータでも確実に確認できる実績は進捗に反映する。
   if((Number(state.clearedStage)||0)>0)b.progress.story=1;
   if(Object.values(state.owned).some(o=>o.level>1))b.progress.level=1;
   return b;
@@ -308,9 +297,7 @@ function useLevelStone(id){
   if(!confirm(c.name+' にレベルストーンを1個使用しますか？\n重複1体分として育成が進みます。'))return;
   state.levelStones--;
   const msg=addCharacter(id);save();renderAll();openEncyclopedia(id);
-  // イベント報酬・今後のショップ商品からは state.levelStones += 個数 で付与可能。
 }
-
 function renderAll(){
   $('gems').textContent=state.gems;$('gold').textContent=state.gold;$('stage').textContent=Math.min(MAX_STAGE,state.clearedStage+1);
   $('homeSummary').innerHTML=`所持する英雄：${Object.keys(state.owned).length}体<br>編成中：${state.party.map(id=>esc(byId(id)?.name||id)).join(' / ')||'なし'}<br>草原踏破：${state.clearedStage} / 20`;
@@ -330,9 +317,9 @@ document.addEventListener('click',event=>{
     case 'loadPvpCode':loadPvpCode();break;
     case 'startPvpBattle':startPvpBattle();break;
     case 'questTab':questTab=['weekly','daily','beginner'].includes(button.dataset.type)?button.dataset.type:'daily';renderQuests();break;
-     case 'claimBeginner':claimBeginner(button.dataset.mission);break;
-     case 'claimBeginnerBonus':claimBeginnerBonus();break;
-     case 'useLevelStone':useLevelStone(id);break;
+    case 'claimBeginner':claimBeginner(button.dataset.mission);break;
+    case 'claimBeginnerBonus':claimBeginnerBonus();break;
+    case 'useLevelStone':useLevelStone(id);break;
     case 'claimQuest':claimQuest(button.dataset.type,button.dataset.quest);break;
     case 'claimQuestBonus':claimQuestBonus(button.dataset.type);break;
     case 'summon':summon(Number(button.dataset.count));break;
@@ -371,4 +358,230 @@ document.addEventListener('click',event=>{
 window.addEventListener('error',event=>{console.error(event.error||event.message);showError('ゲーム内エラー：'+(event.message||'不明なエラー'))});
 setInterval(()=>{ensureQuests();if($('quests').classList.contains('active'))renderQuests();if(state.dailyShop?.date!==dailyDate()){updateShopStock();if($('shop').classList.contains('active'))renderShop()}if($('events').classList.contains('active'))renderEventList();if($('subEventMap').classList.contains('active')&&!activeEventPeriod(selectedEvent)){showPage('events');renderEventList()}},15000);
 ensureQuests();renderAll();renderShop();renderEventList();if(dailyAvailable('bonus'))showDailyBonus();
+
+/* ===== 2026-11-09 荒野・報酬・召喚演出 拡張 =====
+   完成版index.htmlに統合済み。
+   既存のセーブデータは消去しません。
+*/
+(() => {
+  const WASTELAND = {
+    1:[['zombie',1],['zombie',1],['zombie',1]],
+    2:[['swordman',2],['spearman',2]],
+    3:[['エルフ',1.25],['ゴーレム',1.25],['miner',1.5]],
+    4:[['魔導士',1.25],['アサシン',1.25],['farmer',1.5]],
+    5:[['将軍',1.25],['将軍',1.25],['将軍',1.25]]
+  };
+  let currentStoryMap='grass';
+  let selectedWastelandStage=1;
+  let gettingFromGacha=false;
+  let usingStone=false;
+  let externalPlaying=false;
+  let externalPending=[];
+  let externalTimer=null;
+
+  function wastelandProgress(){
+    state.wastelandCleared=Math.min(5,Math.max(0,Number(state.wastelandCleared)||0));
+    if(!state.wastelandCounts||typeof state.wastelandCounts!=='object')state.wastelandCounts={};
+  }
+  wastelandProgress();
+
+  // 以前の召喚演出をほかのキャラ獲得経路にも共用する。
+  const oldAddCharacter=addCharacter;
+  addCharacter=function(id){
+    const message=oldAddCharacter(id);
+    const c=byId(id);
+    if(c && !gettingFromGacha && !usingStone){
+      externalPending.push({c,message});
+      if(externalTimer===null){
+        externalTimer=setTimeout(()=>{
+          externalTimer=null;
+          if(!externalPlaying && !$('summonOverlay').classList.contains('active'))openExternalSummon();
+        },80);
+      }
+    }
+    return message;
+  };
+  function openExternalSummon(){
+    if(externalPlaying || !externalPending.length || $('summonOverlay').classList.contains('active'))return;
+    externalPlaying=true;
+    summonQueue=externalPending.splice(0);
+    summonIndex=0;
+    $('summonOverlay').classList.add('active');
+    showSummon();
+  }
+  const oldSummon=summon;
+  summon=function(count){
+    gettingFromGacha=true;
+    try{return oldSummon(count)}finally{gettingFromGacha=false}
+  };
+  const oldFinishSummon=finishSummon;
+  finishSummon=function(){
+    if(externalPlaying){
+      ++animationToken;
+      $('summonOverlay').classList.remove('active');
+      summonQueue=[];
+      externalPlaying=false;
+      renderAll();
+      if(externalPending.length)setTimeout(openExternalSummon,100);
+      return;
+    }
+    oldFinishSummon();
+    if(externalPending.length)setTimeout(openExternalSummon,100);
+  };
+  const oldUseLevelStone=useLevelStone;
+  useLevelStone=function(id){
+    usingStone=true;
+    try{return oldUseLevelStone(id)}finally{usingStone=false}
+  };
+
+  // 草原の10・20の初回クリアは、従来報酬に100ジェムを追加する。
+  // 草原20の初回クリアにはレベルストーンも追加する。
+  const oldGrantStageRewards=grantStageRewards;
+  grantStageRewards=function(stage){
+    const rewards=oldGrantStageRewards(stage);
+    if(rewards.firstClear && (stage===10||stage===20)){
+      state.gems+=100;
+      rewards.gems+=100;
+      if(stage===20){
+        state.levelStones=(Number(state.levelStones)||0)+1;
+        rewards.levelStones=1;
+      }
+      save();
+    }
+    return rewards;
+  };
+
+  // 既存の戦闘画面と戦闘AIをそのまま使う。
+  const oldStartBattle=startBattle;
+  startBattle=function(){
+    if(currentStoryMap==='grass')return oldStartBattle();
+    wastelandProgress();
+    if(battle?.running)return;
+    if(selectedWastelandStage<1||selectedWastelandStage>5||selectedWastelandStage>state.wastelandCleared+1){showError('このステージにはまだ挑戦できません');return}
+    if(!state.party.length){showError('英雄を編成してください');return}
+    const allies=state.party.map(id=>makeUnit(id,'ally'));
+    const enemies=WASTELAND[selectedWastelandStage].map(([id,m])=>{
+      const u=makeUnit(id,'enemy',{multiplier:m});
+      // ストーリーの倍率は既存ステージと同じく基本HP・攻撃力・速度に適用。
+      return u;
+    });
+    newBattle({storyMap:'wasteland',stage:selectedWastelandStage,allies,enemies,message:'荒野へ出陣！'});
+  };
+
+  const oldFinishBattle=finishBattle;
+  finishBattle=function(victory){
+    if(!battle?.running)return;
+    if(battle.storyMap!=='wasteland')return oldFinishBattle(victory);
+    battle.running=false;
+    battle.busy=false;
+    battle.awaitingAction=false;
+    clearActing();
+    let rewards=null;
+    if(victory){
+      wastelandProgress();
+      const stage=battle.stage;
+      const count=Number(state.wastelandCounts[stage])||0;
+      rewards={firstClear:count===0,gold:800,gems:0};
+      state.gold+=800;
+      state.wastelandCounts[stage]=count+1;
+      state.wastelandCleared=Math.max(state.wastelandCleared,stage);
+      recordQuestEvent('storyWin');
+      save();
+    }
+    battle.result={victory,rewards};
+    renderBattle();
+    renderAll();
+  };
+
+  const oldRenderBattleResult=renderBattleResult;
+  renderBattleResult=function(){
+    if(battle?.storyMap==='wasteland'){
+      const {victory,rewards}=battle.result;
+      $('actionArea').innerHTML=`<div class="result"><h2>${victory?'荒野を踏破！':'敗北…'}</h2>${victory?`<p>荒野 ステージ${battle.stage} 勝利！</p><p>🪙 金貨 +${rewards.gold}</p>${rewards.firstClear?'<p>初回踏破！</p>':''}`:'<p>編成や装備を見直して再挑戦しよう。</p>'}<button data-action="returnMap">荒野へ戻る</button></div>`;
+      return;
+    }
+    oldRenderBattleResult();
+    if(battle?.result?.victory && battle.result.rewards?.levelStones){
+      const element=$('actionArea').querySelector('.result button');
+      if(element)element.insertAdjacentHTML('beforebegin','<p>🪨 レベルストーン ×1（初回踏破報酬）</p>');
+    }
+  };
+
+  const oldReturnMap=returnMap;
+  returnMap=function(){
+    const isWasteland=battle?.storyMap==='wasteland';
+    if(isWasteland){
+      battle.running=false;
+      battle.token=-1;
+      battle=null;
+      selectedWastelandStage=Math.min(5,state.wastelandCleared+1);
+      currentStoryMap='wasteland';
+      showPage('battle');
+      renderAll();
+      return;
+    }
+    oldReturnMap();
+  };
+
+  // 草原と荒野の2つのマップを同じ出陣ページで切り替える。
+  const oldRenderStageMap=renderStageMap;
+  renderStageMap=function(){
+    const tabs=`<div class="row" style="margin-bottom:12px;display:grid;grid-template-columns:1fr 1fr"><button data-action="storyMapChange" data-map="grass" ${currentStoryMap==='grass'?'style="border:2px solid #d6b476"':''}>🌿 草原</button><button data-action="storyMapChange" data-map="wasteland" ${currentStoryMap==='wasteland'?'style="border:2px solid #d6b476"':''}>🏜️ 荒野</button></div>`;
+    if(currentStoryMap==='grass'){
+      oldRenderStageMap();
+      const host=$('stageMap');
+      host.insertAdjacentHTML('afterbegin',tabs);
+      const count=Number(state.stageClearCounts[selectedStage])||0;
+      if(count===0 && (selectedStage===10||selectedStage===20)){
+        const extra=selectedStage===20?' ＋ 🪨 レベルストーン ×1':'';
+        const info=host.querySelector('.stage-info');
+        if(info)info.insertAdjacentHTML('beforeend',`<br>初回ボス報酬：💎 100ジェム${extra}`);
+      }
+      return;
+    }
+    wastelandProgress();
+    const unlocked=Math.min(5,state.wastelandCleared+1);
+    const nodes=Array.from({length:20},(_,i)=>{
+      const n=i+1,notReady=n>5,locked=n>unlocked||notReady;
+      return `<button class="stage-node ${n<=state.wastelandCleared?'completed':''} ${n===unlocked?'current':''} ${n===selectedWastelandStage?'selected':''} ${locked?'locked':''}" data-action="selectWastelandStage" data-stage="${n}" ${locked?'disabled':''}><span class="num">${n}</span><span class="small">${notReady?'未実装':locked?'未解放':n<=state.wastelandCleared?'踏破済み':'挑戦可能'}</span></button>`;
+    }).join('');
+    const enemies=WASTELAND[selectedWastelandStage]||[];
+    const cleared=(Number(state.wastelandCounts[selectedWastelandStage])||0)>0;
+    const names=cleared?enemies.map(([id])=>byId(id)?.name||id).join(' / '):'？？？（初回クリア後に公開）';
+    $('stageMap').innerHTML=tabs+`<div class="stage-map" style="background:linear-gradient(145deg,#705035,#4b382d 55%,#7c6246);border-color:#c29a65"><h3>🏜️ 砂塵の荒野</h3><p>踏破済み ${state.wastelandCleared} / 20（現在5まで実装）</p><div class="map-grid">${nodes}</div><div class="stage-info"><b>ステージ ${selectedWastelandStage}</b><br>敵編成：${esc(names)}<br>クリア報酬：🪙 800金貨</div><button class="map-start" data-action="startBattle" ${state.party.length?'':'disabled'}>荒野 ステージ${selectedWastelandStage} に挑戦</button></div>`;
+  };
+  const oldSelectStage=selectStage;
+  selectStage=function(stage){currentStoryMap='grass';oldSelectStage(stage)};
+  const oldRenderAll=renderAll;
+  renderAll=function(){
+    oldRenderAll();
+    const title=$('battle').querySelector('#stageMap')?.parentElement?.querySelector('.section-title');
+    if(title)title.textContent=currentStoryMap==='grass'?'緑風の草原':'砂塵の荒野';
+    if(currentStoryMap==='wasteland'){
+      const enemies=WASTELAND[selectedWastelandStage]||[];
+      const cleared=(Number(state.wastelandCounts[selectedWastelandStage])||0)>0;
+      const formation=cleared?enemies.map(([id])=>byId(id)?.name||id).join(' / '):'？？？（初回クリア後に公開）';
+      $('battleIntro').innerHTML=`選択中：荒野 ステージ ${selectedWastelandStage}<br>敵編成：${esc(formation)}<br>味方編成：${state.party.map(id=>esc(byId(id)?.name||id)).join(' / ')||'なし'}`;
+      $('startBattleButton').textContent=`荒野 ステージ${selectedWastelandStage} に挑戦`;
+    }
+    $('homeSummary').insertAdjacentHTML('beforeend',`<br>荒野踏破：${state.wastelandCleared||0} / 20`);
+  };
+
+  // 既存のボタンクリック処理に追加する（既存機能は変更しない）。
+  document.addEventListener('click',e=>{
+    const btn=e.target.closest('button');
+    if(!btn||btn.disabled)return;
+    if(btn.dataset.action==='storyMapChange'){
+      currentStoryMap=btn.dataset.map==='wasteland'?'wasteland':'grass';
+      renderAll();
+    }else if(btn.dataset.action==='selectWastelandStage'){
+      const n=Number(btn.dataset.stage);
+      if(Number.isInteger(n)&&n>=1&&n<=5&&n<=state.wastelandCleared+1){
+        currentStoryMap='wasteland';selectedWastelandStage=n;renderAll();
+      }
+    }
+  });
+  renderAll();
+})();
+
 </script></body></html>
