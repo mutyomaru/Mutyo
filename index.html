@@ -80,6 +80,8 @@ const CHARACTERS=[
 {id:'miner',imageFile:'Miner.png',name:'鉱夫',rarity:'ノーマル',hp:140,atk:10,speed:14,charge:3,skill:'ガード',effect:'guard',power:70,target:'self',growth:.07,max:20,slot:2},
 {id:'zombie',imageFile:'Zombie.png',name:'ゾンビ',rarity:'ノーマル',hp:50,atk:50,speed:12,charge:3,skill:'噛みつき',effect:'poison',power:50,target:'one',growth:.07,max:20,slot:0},
 {id:'farmer',imageFile:'Farmer.png',name:'農夫',rarity:'ノーマル',hp:110,atk:20,speed:15,charge:3,skill:'ランダム回復',effect:'heal',power:20,target:'ally',growth:.07,max:20,slot:1},
+{id:'mummy',imageFile:'ミイラ.png',name:'ミイラ',rarity:'ノーマル',hp:60,atk:60,speed:14,charge:3,skill:'掴みかかり',effect:'damage',power:90,target:'one',growth:.14,max:11,slot:1,limited:true},
+{id:'gargoyle',imageFile:'ガーゴイル.png',name:'ガーゴイル',rarity:'ノーマル',hp:120,atk:20,speed:15,charge:3,skill:'連撃',effect:'damage',power:50,target:'one',growth:.07,max:20,slot:0},
 {id:'魔導士',imageFile:'魔導士.png',name:'魔導士',rarity:'レア',hp:100,atk:30,speed:21,charge:0,skill:'力の魔術',effect:'buffAlly',power:50,target:'ally',growth:.16,max:10,slot:2},
 {id:'将軍',imageFile:'将軍.png',name:'将軍',rarity:'レア',hp:150,atk:40,speed:23,charge:2,skill:'薙ぎ払い',effect:'damage',power:30,target:'all',growth:.16,max:10,slot:2},
 {id:'ゴーレム',imageFile:'ゴーレム.png',name:'ゴーレム',rarity:'レア',hp:210,atk:40,speed:7,charge:8,skill:'大地砕き',effect:'damage',power:100,target:'all',growth:.16,max:10,slot:1},
@@ -235,7 +237,7 @@ function wheelGradient(){return 'conic-gradient('+DAILY_COLORS.map((color,i)=>`$
 function showDailyWheel(){$('dailyContent').innerHTML=`<h2>運命の円盤</h2><p>毎日1回無料</p><div class="daily-wheel-wrap"><div class="daily-pointer">▼</div><div id="dailyWheel" class="daily-wheel" style="background:${wheelGradient()}"></div><div class="daily-center">✦</div></div><div id="dailyWheelResult">${dailyAvailable('wheel')?'本日の運試し':'本日は挑戦済み'}</div><button class="wide" id="dailySpinButton" data-action="dailySpin" ${dailyAvailable('wheel')?'':'disabled'}>${dailyAvailable('wheel')?'円盤を回す':'本日は挑戦済み'}</button><p class="small">100金貨30% / 300金貨25% / 500金貨15%<br>50ジェム15% / 100ジェム10% / 300ジェム5%</p>`;const wheel=$('dailyWheel');DAILY_PRIZES.forEach((prize,i)=>{const a=(i*60+30)*Math.PI/180,label=document.createElement('div');label.className='daily-wheel-label';label.textContent=prize.label;label.style.left=(50+32*Math.sin(a))+'%';label.style.top=(50-32*Math.cos(a))+'%';label.style.transform='translate(-50%,-50%)';wheel.parentElement.appendChild(label)});dailyRotation=0;openDailyModal()}
 function chooseDailyPrize(){let r=Math.random()*100;for(let i=0;i<DAILY_PRIZES.length;i++){r-=DAILY_PRIZES[i].rate;if(r<0)return i}return DAILY_PRIZES.length-1}
 function spinDailyWheel(){if(dailySpinning||!dailyAvailable('wheel'))return;const index=chooseDailyPrize(),prize=DAILY_PRIZES[index];dailySpinning=true;dailyData.wheel=dailyDate();saveDaily();$('dailySpinButton').disabled=true;$('dailyClose').disabled=true;$('dailyWheelResult').textContent='抽選中…';dailyRotation=360*6+(360-(index*60+30))%360;const wheel=$('dailyWheel');requestAnimationFrame(()=>requestAnimationFrame(()=>{wheel.style.transform=`rotate(${dailyRotation}deg)`;wheel.parentElement.querySelectorAll('.daily-wheel-label').forEach(el=>{el.style.transition='transform 4.5s cubic-bezier(.12,.75,.12,1)';el.style.transform=`translate(-50%,-50%) rotate(${dailyRotation}deg)`})}));setTimeout(()=>{state[prize.type]+=prize.amount;save();renderAll();$('dailyWheelResult').innerHTML=`<h2>${prize.label} を獲得！</h2>`;dailySpinning=false;$('dailyClose').disabled=false},4700)}
-const shopRings=Object.keys(RINGS),shopCharacters=CHARACTERS.filter(c=>c.rarity==='ノーマル'||c.rarity==='レア');
+const shopRings=Object.keys(RINGS),shopCharacters=CHARACTERS.filter(c=>(c.rarity==='ノーマル'||c.rarity==='レア')&&!c.limited);
 const shopPrice=c=>c.rarity==='レア'?5000:1500;
 function updateShopStock(){const date=dailyDate(),old=state.dailyShop;if(old&&old.date===date&&shopRings.includes(old.ring)&&Array.isArray(old.characters)&&old.characters.length===2&&old.characters[0]!==old.characters[1]&&old.characters.every(id=>shopCharacters.some(c=>c.id===id))&&old.purchased)return;const available=[...shopCharacters],first=available.splice(Math.floor(Math.random()*available.length),1)[0],second=available.splice(Math.floor(Math.random()*available.length),1)[0];state.dailyShop={date,ring:shopRings[Math.floor(Math.random()*shopRings.length)],characters:[first.id,second.id],purchased:{ring:false,character0:false,character1:false,gems:false}};save()}
 function shopItem(key,image,name,detail,price){const sold=state.dailyShop.purchased[key],affordable=state.gold>=price;return `<div class="shop-product"><div class="shop-product-image">${image}</div><b>${esc(name)}</b><div class="small">${esc(detail)}</div><div class="shop-product-price">🪙 ${price.toLocaleString('ja-JP')}</div><button class="wide" data-action="shopPurchase" data-shop-key="${key}" ${sold||!affordable?'disabled':''}>${sold?'売り切れ':affordable?'購入する':'金貨不足'}</button></div>`}
@@ -383,7 +385,12 @@ ensureQuests();renderAll();renderShop();renderEventList();if(dailyAvailable('bon
     2:[['swordman',2],['spearman',2]],
     3:[['エルフ',1.25],['ゴーレム',1.25],['miner',1.5]],
     4:[['魔導士',1.25],['アサシン',1.25],['farmer',1.5]],
-    5:[['将軍',1.25],['将軍',1.25],['将軍',1.25]]
+    5:[['将軍',1.25],['将軍',1.25],['将軍',1.25]],
+    6:[['mummy',1.25],['mummy',1.25],['mummy',1.25]],
+    7:[['zombie',1.5],['skeleton',1.5],['mummy',1.25]],
+    8:[['swordman',1.5],['spearman',1.5],['archer',1.5]],
+    9:[['魔導士',1.5],['axeman',1.5],['axeman',1.5]],
+    10:[['skeleton',2],['skeleton',2],['gargoyle',2,5]]
   };
   let currentStoryMap='grass';
   let selectedWastelandStage=1;
@@ -394,7 +401,7 @@ ensureQuests();renderAll();renderShop();renderEventList();if(dailyAvailable('bon
   let externalTimer=null;
 
   function wastelandProgress(){
-    state.wastelandCleared=Math.min(5,Math.max(0,Number(state.wastelandCleared)||0));
+    state.wastelandCleared=Math.min(10,Math.max(0,Number(state.wastelandCleared)||0));
     if(!state.wastelandCounts||typeof state.wastelandCounts!=='object')state.wastelandCounts={};
   }
   wastelandProgress();
@@ -475,11 +482,11 @@ ensureQuests();renderAll();renderShop();renderEventList();if(dailyAvailable('bon
     if(currentStoryMap==='grass')return oldStartBattle();
     wastelandProgress();
     if(battle?.running)return;
-    if(selectedWastelandStage<1||selectedWastelandStage>5||selectedWastelandStage>state.wastelandCleared+1){showError('このステージにはまだ挑戦できません');return}
+    if(selectedWastelandStage<1||selectedWastelandStage>10||selectedWastelandStage>state.wastelandCleared+1){showError('このステージにはまだ挑戦できません');return}
     if(!state.party.length){showError('英雄を編成してください');return}
     const allies=state.party.map(id=>makeUnit(id,'ally'));
-    const enemies=WASTELAND[selectedWastelandStage].map(([id,m])=>{
-      const u=makeUnit(id,'enemy',{multiplier:m});
+    const enemies=WASTELAND[selectedWastelandStage].map(([id,m,hpMul])=>{
+      const u=makeUnit(id,'enemy',{multiplier:m,hpMultiplier:hpMul||1});
       // ストーリーの倍率は既存ステージと同じく基本HP・攻撃力・速度に適用。
       return u;
     });
@@ -499,8 +506,26 @@ ensureQuests();renderAll();renderShop();renderEventList();if(dailyAvailable('bon
       wastelandProgress();
       const stage=battle.stage;
       const count=Number(state.wastelandCounts[stage])||0;
-      rewards={firstClear:count===0,gold:800,gems:0};
-      state.gold+=800;
+      const firstClear=count===0;
+      const gold=stage===10?3000:stage>=6?900:800;
+      rewards={firstClear,gold,gems:0,levelStones:0,drop:null};
+      state.gold+=gold;
+      if(stage===10 && firstClear){
+        rewards.gems=100;
+        rewards.levelStones=1;
+        state.gems+=100;
+        state.levelStones=(Number(state.levelStones)||0)+1;
+      }
+      // 荒野の出現敵は草原と同じレアリティ別確率でドロップ。
+      // 敵が重複していても同一キャラは1回の抽選とする。
+      const successful=[...new Set(WASTELAND[stage].map(([id])=>id))].filter(id=>{
+        const c=byId(id);
+        return c && Math.random()*100<DROP_RATES[c.rarity];
+      });
+      if(successful.length){
+        const id=random(successful);
+        rewards.drop={name:byId(id).name,message:addCharacter(id)};
+      }
       state.wastelandCounts[stage]=count+1;
       state.wastelandCleared=Math.max(state.wastelandCleared,stage);
       recordQuestEvent('storyWin');
@@ -515,7 +540,7 @@ ensureQuests();renderAll();renderShop();renderEventList();if(dailyAvailable('bon
   renderBattleResult=function(){
     if(battle?.storyMap==='wasteland'){
       const {victory,rewards}=battle.result;
-      $('actionArea').innerHTML=`<div class="result"><h2>${victory?'荒野を踏破！':'敗北…'}</h2>${victory?`<p>荒野 ステージ${battle.stage} 勝利！</p><p>🪙 金貨 +${rewards.gold}</p>${rewards.firstClear?'<p>初回踏破！</p>':''}`:'<p>編成や装備を見直して再挑戦しよう。</p>'}<button data-action="returnMap">荒野へ戻る</button></div>`;
+      $('actionArea').innerHTML=`<div class="result"><h2>${victory?'荒野を踏破！':'敗北…'}</h2>${victory?`<p>荒野 ステージ${battle.stage} 勝利！</p><p>🪙 金貨 +${rewards.gold}</p>${rewards.firstClear?'<p>初回踏破！</p>':''}${rewards.gems?`<p>💎 ジェム +${rewards.gems}</p>`:''}${rewards.levelStones?`<p>🪨 レベルストーン ×${rewards.levelStones}</p>`:''}${rewards.drop?`<p>英雄獲得！<br><b>${esc(rewards.drop.name)}</b><br><span class="small">${esc(rewards.drop.message)}</span></p>`:''}`:'<p>編成や装備を見直して再挑戦しよう。</p>'}<button data-action="returnMap">荒野へ戻る</button></div>`;
       return;
     }
     oldRenderBattleResult();
@@ -532,7 +557,7 @@ ensureQuests();renderAll();renderShop();renderEventList();if(dailyAvailable('bon
       battle.running=false;
       battle.token=-1;
       battle=null;
-      selectedWastelandStage=Math.min(5,state.wastelandCleared+1);
+      selectedWastelandStage=Math.min(10,state.wastelandCleared+1);
       currentStoryMap='wasteland';
       showPage('battle');
       renderAll();
@@ -558,15 +583,17 @@ ensureQuests();renderAll();renderShop();renderEventList();if(dailyAvailable('bon
       return;
     }
     wastelandProgress();
-    const unlocked=Math.min(5,state.wastelandCleared+1);
+    const unlocked=Math.min(10,state.wastelandCleared+1);
     const nodes=Array.from({length:20},(_,i)=>{
-      const n=i+1,notReady=n>5,locked=n>unlocked||notReady;
-      return `<button class="stage-node ${n<=state.wastelandCleared?'completed':''} ${n===unlocked?'current':''} ${n===selectedWastelandStage?'selected':''} ${locked?'locked':''}" data-action="selectWastelandStage" data-stage="${n}" ${locked?'disabled':''}><span class="num">${n}</span><span class="small">${notReady?'未実装':locked?'未解放':n<=state.wastelandCleared?'踏破済み':'挑戦可能'}</span></button>`;
+      const n=i+1,notReady=n>10,locked=n>unlocked||notReady;
+      return `<button class="stage-node ${n<=state.wastelandCleared?'completed':''} ${n===unlocked?'current':''} ${n===10?'boss':''} ${n===selectedWastelandStage?'selected':''} ${locked?'locked':''}" data-action="selectWastelandStage" data-stage="${n}" ${locked?'disabled':''}><span class="num">${n}</span><span class="small">${notReady?'未実装':locked?'未解放':n<=state.wastelandCleared?'踏破済み':'挑戦可能'}</span></button>`;
     }).join('');
     const enemies=WASTELAND[selectedWastelandStage]||[];
     const cleared=(Number(state.wastelandCounts[selectedWastelandStage])||0)>0;
     const names=cleared?enemies.map(([id])=>byId(id)?.name||id).join(' / '):'？？？（初回クリア後に公開）';
-    $('stageMap').innerHTML=tabs+`<div class="stage-map" style="background:linear-gradient(145deg,#705035,#4b382d 55%,#7c6246);border-color:#c29a65"><h3>🏜️ 砂塵の荒野</h3><p>踏破済み ${state.wastelandCleared} / 20（現在5まで実装）</p><div class="map-grid">${nodes}</div><div class="stage-info"><b>ステージ ${selectedWastelandStage}</b><br>敵編成：${esc(names)}<br>クリア報酬：🪙 800金貨</div><button class="map-start" data-action="startBattle" ${state.party.length?'':'disabled'}>荒野 ステージ${selectedWastelandStage} に挑戦</button></div>`;
+    const rewardGold=selectedWastelandStage===10?3000:selectedWastelandStage>=6?900:800;
+    const bossReward=selectedWastelandStage===10&&!cleared?'<br>初回報酬：💎 100ジェム ＋ 🪨 レベルストーン ×1':'';
+    $('stageMap').innerHTML=tabs+`<div class="stage-map" style="background:linear-gradient(145deg,#705035,#4b382d 55%,#7c6246);border-color:#c29a65"><h3>🏜️ 砂塵の荒野</h3><p>踏破済み ${state.wastelandCleared} / 20（現在10まで実装）</p><div class="map-grid">${nodes}</div><div class="stage-info"><b>ステージ ${selectedWastelandStage}</b><br>敵編成：${esc(names)}<br>クリア報酬：🪙 ${rewardGold}金貨${bossReward}</div><button class="map-start" data-action="startBattle" ${state.party.length?'':'disabled'}>荒野 ステージ${selectedWastelandStage} に挑戦</button></div>`;
   };
   const oldSelectStage=selectStage;
   selectStage=function(stage){currentStoryMap='grass';oldSelectStage(stage)};
@@ -594,7 +621,7 @@ ensureQuests();renderAll();renderShop();renderEventList();if(dailyAvailable('bon
       renderAll();
     }else if(btn.dataset.action==='selectWastelandStage'){
       const n=Number(btn.dataset.stage);
-      if(Number.isInteger(n)&&n>=1&&n<=5&&n<=state.wastelandCleared+1){
+      if(Number.isInteger(n)&&n>=1&&n<=10&&n<=state.wastelandCleared+1){
         currentStoryMap='wasteland';selectedWastelandStage=n;renderAll();
       }
     }
@@ -636,9 +663,17 @@ ensureQuests();renderAll();renderShop();renderEventList();if(dailyAvailable('bon
 */
 (() => {
   'use strict';
-  const GAME_VERSION='1.1.0';
+  const GAME_VERSION='1.2.0';
   const VERSION_SEEN_KEY='hoshiyomi_seen_version_v1';
   const GAME_CHANGELOG=[
+    {version:'1.2.0',date:'2026-11-09',title:'砂塵の荒野・新たな英雄',changes:[
+      'ノーマル英雄「ミイラ」「ガーゴイル」を追加',
+      'ミイラは荒野ステージドロップ限定（ガチャ・ショップ対象外）',
+      '荒野ステージ6～10を追加、10はガーゴイルの首領戦',
+      '荒野6～9は900金貨、荒野10は3000金貨を獲得',
+      '荒野10の初回踏破に100ジェムとレベルストーン1個',
+      '荒野で敵キャラクターのステージドロップを追加'
+    ]},
     {version:'1.1.0',date:'2026-11-09',title:'アップデート情報機能',changes:[
       'ゲーム画面にバージョン番号を表示',
       '本拠地から過去のアップデート履歴を確認可能',
