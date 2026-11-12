@@ -81,7 +81,7 @@ body.scene-battle-grass .stage-map,body.scene-battle-wasteland .stage-map{backgr
 .music-button{font-family:system-ui,sans-serif;font-size:12px;white-space:nowrap;padding:6px 9px;border-color:#b5a27d}.music-button[aria-pressed="true"]{background:#4a654e;color:#e5f9e7}.music-status{font-size:10px;opacity:.8}
 </style></head><body>
 <div class="wrap">
-<header class="top"><div class="brand">✦ 星詠みの旅団</div><button type="button" id="versionHeaderButton" class="version-label" data-action="showVersionHistory" aria-label="アップデート履歴を開く">Ver.1.8.0</button><button type="button" id="musicToggle" class="music-button" aria-pressed="false" title="BGMの再生・停止">♫ BGM オフ</button><div class="row"><span class="pill">💎 <b id="gems">0</b></span><span class="pill">🪙 <b id="gold">0</b></span><span class="pill">到達 <b id="stage">1</b></span></div></header><div id="errorBox" class="error" role="alert"></div>
+<header class="top"><div class="brand">✦ 星詠みの旅団</div><button type="button" id="versionHeaderButton" class="version-label" data-action="showVersionHistory" aria-label="アップデート履歴を開く">Ver.1.8.0</button><button type="button" id="sfxToggle" class="music-button" aria-pressed="true" title="効果音のオン・オフ">🔊 効果音 オン</button><div class="row"><span class="pill">💎 <b id="gems">0</b></span><span class="pill">🪙 <b id="gold">0</b></span><span class="pill">到達 <b id="stage">1</b></span></div></header><div id="errorBox" class="error" role="alert"></div>
 <nav class="nav"><button data-page="home">ホーム</button><button data-page="gacha">ガチャ</button><button data-page="team">キャラ・編成</button><button data-page="battle">バトル</button><button data-page="shop">ショップ</button><button data-page="quests">ミッション</button><button data-page="forge">🔨 鍛冶屋</button></nav>
 <main>
 <section id="home" class="page active"><div class="panel hero"><h1>星の導きが、旅の始まり</h1><p class="muted">剣と魔法を携え、未知なる大地へ。</p><div class="row" style="justify-content:center"><button data-page="gacha">仲間を召喚する</button><button data-page="team">キャラを編成する</button><button data-page="battle">バトルへ進む</button><button data-page="quests">ミッション</button><button data-page="forge">🔨 鍛冶屋</button></div></div><div class="panel"><div class="row" style="justify-content:center"><button data-action="startTutorial">📖 遊び方（5ステップ）</button></div></div><div class="panel"><h2 class="section-title">旅団の記録</h2><div id="homeSummary"></div></div><div class="panel"><div class="row" style="justify-content:space-between"><div><h2 class="section-title">旅団のお知らせ</h2><p class="small">現在のバージョン：<b id="versionHomeLabel">Ver.1.8.0</b></p></div><button type="button" data-action="showVersionHistory">アップデート履歴を見る</button></div></div><div class="panel daily-panel"><h2 class="section-title">デイリーボーナス</h2><p class="small">毎日0時（日本時間）に更新</p><div class="daily-buttons"><button data-action="dailyBonusOpen">ログインボーナス</button><button data-action="dailyWheelOpen">デイリールーレット</button></div><p id="dailyStatus" class="small"></p></div></section>
@@ -195,7 +195,7 @@ let selectedEvent='undead',eventStage=1,pvpOpponent=null;
 function save(){try{localStorage.setItem(KEY,JSON.stringify(state))}catch(e){console.warn('セーブ失敗',e)}}
 function showError(message){const el=$('errorBox');el.textContent=message;el.style.display='block';setTimeout(()=>{if(el.textContent===message)el.style.display='none'},4500)}
 function resolveScene(page){if(page==='battle')return document.body.dataset.storyMap==='wasteland'?'scene-battle-wasteland':'scene-battle-grass';if(page==='battleFight'){if(battle?.mode==='pvp')return 'scene-fight-pvp';if(battle?.grassEx)return 'scene-fight-grassEx';if(battle?.eventId){const eventScenes={undead:'scene-fight-undead',general:'scene-fight-general',goblinRaid:'scene-fight-goblin',dragon:'scene-fight-dragon',golem:'scene-fight-golem',martial:'scene-fight-martial'};return eventScenes[battle.eventId]||'scene-fight-event'}if(battle?.storyMap==='wasteland')return 'scene-fight-wasteland';return 'scene-fight-grass'}const sceneMap={home:'scene-home',gacha:'scene-gacha',team:'scene-team',shop:'scene-shop',forge:'scene-forge',quests:'scene-quests',events:'scene-events',subEventMap:'scene-subEventMap',pvp:'scene-pvp'};return sceneMap[page]||'scene-home'}
-function applyScene(page){const body=document.body;if(!body)return;body.className=body.className.split(/\s+/).filter(name=>name&&!name.startsWith('scene-')).join(' ');body.classList.add(resolveScene(page));window.HOSHI_AUDIO?.setScene(resolveScene(page))}
+function applyScene(page){const body=document.body;if(!body)return;body.className=body.className.split(/\s+/).filter(name=>name&&!name.startsWith('scene-')).join(' ');body.classList.add(resolveScene(page));}
 function showPage(page){document.querySelectorAll('.page').forEach(el=>el.classList.toggle('active',el.id===page));applyScene(page);if(page!=='battleFight')renderAll();window.scrollTo(0,0)}
 const QUEST_COUNT=5;
 const QUEST_DEFINITIONS={
@@ -259,7 +259,7 @@ function selectStage(stage){if(!Number.isInteger(stage)||stage<1||stage>MAX_STAG
 function addCharacter(id){const c=byId(id);if(!c)return '';if(!state.owned[id]){state.owned[id]={level:1,dupes:0};beginnerRecord('owned');return '新しい仲間を獲得！'}const o=state.owned[id],before=o.level;if(o.level>=c.max)return '最大レベル到達済み';o.dupes=(o.dupes||0)+1;while(o.level<c.max&&o.dupes>=o.level){o.dupes-=o.level;o.level++}if(o.level>before)beginnerRecord('levelUp');return '重複獲得！ Lv.'+o.level}
 function drawCharacter(){const r=Math.random(),rarity=r<.7?'ノーマル':r<.95?'レア':'エピック';return random(CHARACTERS.filter(c=>c.rarity===rarity&&!c.limited))}
 function summon(count){const cost=count===10?900:100;if(state.gems<cost){showError('ジェムが足りません');return}state.gems-=cost;summonQueue=[];for(let i=0;i<count;i++){const c=drawCharacter();summonQueue.push({c,message:addCharacter(c.id)})}recordQuestEvent('summon',count);save();renderAll();summonIndex=0;$('summonOverlay').classList.add('active');showSummon()}
-function showSummon(){const item=summonQueue[summonIndex];if(!item){finishSummon();return}const token=++animationToken,index=summonIndex,c=item.c,overlay=$('summonOverlay'),epic=c.rarity==='エピック';overlay.classList.toggle('epic-mode',epic);const particles=Array.from({length:32},(_,i)=>`<span class="summon-particle" style="--angle:${i*137.5}deg;--size:${3+i%5}px;--duration:${1.2+i%4*.3}s;--delay:${-(i%9)*.2}s"></span>`).join('');$('summonVisual').innerHTML=`<div class="summon-cinema"><div class="summon-magic"></div><div class="summon-lightning"></div>${particles}<div id="summonCharacter" class="summon-character"><img src="${imagePath(c.imageFile)}" alt="${esc(c.name)}" onerror="this.style.display='none';this.parentElement.append('剣')"></div></div><div id="summonInformation" class="summon-information"><h2>${esc(c.name)}</h2><p class="${rarityClass(c.rarity)}">✦ ${esc(c.rarity)} ✦</p><p>${esc(item.message)}</p></div><div id="summonFlash" class="summon-flash"></div>`;$('summonProgress').textContent=(index+1)+' / '+summonQueue.length;$('summonControls').innerHTML='<button id="summonNextButton" data-action="nextSummon" disabled>召喚中…</button> <button data-action="skipSummon">スキップ</button>';setTimeout(()=>{if(token!==animationToken||summonIndex!==index||!overlay.classList.contains('active'))return;$('summonFlash')?.classList.add('play');$('summonCharacter')?.classList.add('visible');$('summonInformation')?.classList.add('visible');const b=$('summonNextButton');if(b){b.disabled=false;b.textContent=index===summonQueue.length-1?'結果を見る':'次へ'}},epic?4000:1500)}
+function showSummon(){const item=summonQueue[summonIndex];if(!item){finishSummon();return}const token=++animationToken,index=summonIndex,c=item.c,overlay=$('summonOverlay'),epic=c.rarity==='エピック';overlay.classList.toggle('epic-mode',epic);const particles=Array.from({length:32},(_,i)=>`<span class="summon-particle" style="--angle:${i*137.5}deg;--size:${3+i%5}px;--duration:${1.2+i%4*.3}s;--delay:${-(i%9)*.2}s"></span>`).join('');$('summonVisual').innerHTML=`<div class="summon-cinema"><div class="summon-magic"></div><div class="summon-lightning"></div>${particles}<div id="summonCharacter" class="summon-character"><img src="${imagePath(c.imageFile)}" alt="${esc(c.name)}" onerror="this.style.display='none';this.parentElement.append('剣')"></div></div><div id="summonInformation" class="summon-information"><h2>${esc(c.name)}</h2><p class="${rarityClass(c.rarity)}">✦ ${esc(c.rarity)} ✦</p><p>${esc(item.message)}</p></div><div id="summonFlash" class="summon-flash"></div>`;$('summonProgress').textContent=(index+1)+' / '+summonQueue.length;$('summonControls').innerHTML='<button id="summonNextButton" data-action="nextSummon" disabled>召喚中…</button> <button data-action="skipSummon">スキップ</button>';setTimeout(()=>{if(token!==animationToken||summonIndex!==index||!overlay.classList.contains('active'))return;window.HOSHI_SFX?.play(epic?'epic':c.rarity==='レア'?'rare':'reveal');$('summonFlash')?.classList.add('play');$('summonCharacter')?.classList.add('visible');$('summonInformation')?.classList.add('visible');const b=$('summonNextButton');if(b){b.disabled=false;b.textContent=index===summonQueue.length-1?'結果を見る':'次へ'}},epic?4000:1500)}
 function finishSummon(){++animationToken;$('gachaResult').innerHTML=summonQueue.map(x=>`<div class="row" style="margin:8px 0"><div style="width:75px">${portrait(x.c.id)}</div><div><b class="${rarityClass(x.c.rarity)}">${esc(x.c.name)}</b><br><span class="small">${esc(x.message)}</span></div></div>`).join('');$('summonOverlay').classList.remove('active');summonQueue=[];renderAll()}
 function generatePvpCode(){if(!state.party.length){showError('パーティを編成してください');return}const data={version:1,party:state.party.map(id=>({id,level:state.owned[id].level,rings:(state.equipment[id]||[]).slice(0,byId(id).slot??0).map(r=>RING_IDS.includes(r)?r:null)}))};const bytes=new TextEncoder().encode(JSON.stringify(data));let binary='';for(const byte of bytes)binary+=String.fromCharCode(byte);$('pvpMyCode').value='HSPVP1-'+btoa(binary).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'')}
 function loadPvpCode(){const input=$('pvpOpponentCode').value.trim();pvpOpponent=null;$('pvpOpponentPreview').innerHTML='';$('pvpStatus').textContent='対戦相手が未設定です。';try{if(!input.startsWith('HSPVP1-'))throw new Error('対戦符号の形式が異なります');const encoded=input.slice(7).replace(/-/g,'+').replace(/_/g,'/');if(!encoded||encoded.length>10000)throw new Error('符号の長さが不正です');const bytes=Uint8Array.from(atob(encoded),c=>c.charCodeAt(0)),data=JSON.parse(new TextDecoder().decode(bytes));if(data.version!==1||!Array.isArray(data.party)||data.party.length<1||data.party.length>3)throw new Error('対戦データが不正です');const party=data.party.map(item=>{if(!item||typeof item.id!=='string')throw new Error('英雄情報が不正です');const c=byId(item.id);if(!c)throw new Error('未登録の英雄です');if(!Number.isInteger(item.level)||item.level<1||item.level>c.max)throw new Error('レベルが不正です');if(!Array.isArray(item.rings)||item.rings.length>(c.slot??0)||item.rings.some(r=>r!==null&&!RING_IDS.includes(r)))throw new Error('指輪情報が不正です');return {id:c.id,level:item.level,rings:item.rings.slice()}});if(new Set(party.map(c=>c.id)).size!==party.length)throw new Error('同じ英雄が重複しています');pvpOpponent=party;$('pvpOpponentPreview').innerHTML=party.map(p=>`<p class="small">${esc(byId(p.id).name)} Lv.${p.level} / 指輪 ${p.rings.filter(Boolean).length}個</p>`).join('');$('pvpStatus').textContent='読み込み完了。対戦可能です。'}catch(e){pvpOpponent=null;showError(e.message||'対戦符号を読み込めませんでした')}}
@@ -963,7 +963,7 @@ try{if(!localStorage.getItem(TUTORIAL_SEEN_KEY))setTimeout(startTutorial,400)}ca
   'use strict';
   const GAME_VERSION='1.8.0';
   const VERSION_SEEN_KEY='hoshiyomi_seen_version_v1';
-  const GAME_CHANGELOG=[{version:'1.8.0',date:'2026-11-12',title:'風景とオリジナルBGMの大型アップデート',changes:['草原に草花・木々・山並み、荒野に枯れ木・岩場・乾いた大地を描写','ホーム・召喚・ショップ・鍛冶屋・イベントなどに専用の風景を追加','戦闘背景は草原・荒野・EX・各イベント・対戦に対応','シーン別のオリジナルBGMを内蔵（画面右上でオン・オフ可能）','キャラ・セーブデータ・既存機能は維持']},{version:'1.7.0',date:'2026-11-11',title:'背景演出アップデート',changes:['ゲームの各画面に場面に合った背景を追加','草原・荒野・EX・イベント・旅団対戦の戦闘背景を追加','既存機能とセーブデータは変更なし']},{version:'1.6.3',date:'2026-11-11',title:'ステージに応じた戦闘背景を追加',changes:['草原・荒野・草原EXで戦闘背景が変化するよう改善','アンデッド襲来・将軍の進軍・ドラゴン解放などイベントごとに戦闘背景を追加','旅団対戦は専用の戦闘背景で表示','通常画面の背景切り替えや既存の機能・セーブデータは維持']},{version:'1.6.2',date:'2026-11-11',title:'場面ごとの背景を追加',changes:['ホーム・ガチャ・編成・バトル・ショップなどに場面別の背景を追加','鍛冶屋やイベント、対戦画面にも雰囲気に合った背景を設定','背景は画面切り替えに合わせて自動で切り替わるよう改善','既存の機能・セーブデータ・鍛冶屋・チュートリアルを維持']},{version:'1.6.1',date:'2026-11-11',title:'ゲーム内の用語をわかりやすく改善',changes:['ホーム・ガチャ・ショップ・ミッションなど画面名をわかりやすく変更','バトルやイベント、クリア済みの表示を改善','スキルの溜めについて説明を追加','装身具の表示をアクセサリーに統一（その他の育成用語は維持）','既存の機能・編成・鍛冶屋・セーブデータを維持']},{version:'1.6.0',date:'2026-11-11',title:'初心者ガイド・編成操作改善',changes:['5ステップの初心者チュートリアルを追加','各画面の遊び方ガイドを追加','編成枠をタップして所持英雄を選ぶ2タップ直接交換に対応','編成済み英雄同士の位置入れ替えに対応','スワイプに頼らず一覧のページボタンで選択可能','Ver.1.5.0の鍛冶屋・進化・売却機能を維持']},{version:'1.5.0',date:'2026-11-10',title:'鍛冶屋とアクセサリー進化',changes:['新施設・鍛冶屋を追加（進化と売却）','同種のLv.1指輪2個と金貨でLv.2指輪へ進化','指輪・ネックレスの売却は1個につき1,000金貨','守護・火事場の指輪と、不屈・洗脳のネックレスを追加','進化先9種類の効果を戦闘に適用']},{version:'1.4.0',date:'2026-11-10',title:'草原EX・ドラゴン解放',changes:['草原EXを2ステージ追加し、特殊条件による解放と初回限定報酬に対応','信者・ヤングドラゴンを追加','ゴーレムの素早さ12・溜め6、エルフの回復20%に調整','吸血の指輪を追加（同じキャラへの重複装備不可）','毎週火曜日・木曜日にドラゴン解放を開催']},{version:'1.3.0',date:'2026-11-09',title:'週替わり福袋・戦闘バランス調整',changes:['福袋とパックの週替わり商品5種類を追加','毎週月曜日0時（日本時間）に購入回数をリセット','福袋・パックの開封アニメーションを追加','敵のステータス倍率は素早さに適用しない','通常ステージでも固定威力スキルに倍率を適用']},
+  const GAME_CHANGELOG=[{version:'1.8.0',date:'2026-11-12',title:'風景と効果音のアップデート',changes:['草原に草花・木々・山並み、荒野に枯れ木・岩場・乾いた大地を描写','ホーム・召喚・ショップ・鍛冶屋・イベントなどに専用の風景を追加','戦闘背景は草原・荒野・EX・各イベント・対戦に対応','BGMを廃止して、ボタン・ガチャ・戦闘・報酬などの効果音を実装（オン・オフ可能）','キャラ・セーブデータ・既存機能は維持']},{version:'1.7.0',date:'2026-11-11',title:'背景演出アップデート',changes:['ゲームの各画面に場面に合った背景を追加','草原・荒野・EX・イベント・旅団対戦の戦闘背景を追加','既存機能とセーブデータは変更なし']},{version:'1.6.3',date:'2026-11-11',title:'ステージに応じた戦闘背景を追加',changes:['草原・荒野・草原EXで戦闘背景が変化するよう改善','アンデッド襲来・将軍の進軍・ドラゴン解放などイベントごとに戦闘背景を追加','旅団対戦は専用の戦闘背景で表示','通常画面の背景切り替えや既存の機能・セーブデータは維持']},{version:'1.6.2',date:'2026-11-11',title:'場面ごとの背景を追加',changes:['ホーム・ガチャ・編成・バトル・ショップなどに場面別の背景を追加','鍛冶屋やイベント、対戦画面にも雰囲気に合った背景を設定','背景は画面切り替えに合わせて自動で切り替わるよう改善','既存の機能・セーブデータ・鍛冶屋・チュートリアルを維持']},{version:'1.6.1',date:'2026-11-11',title:'ゲーム内の用語をわかりやすく改善',changes:['ホーム・ガチャ・ショップ・ミッションなど画面名をわかりやすく変更','バトルやイベント、クリア済みの表示を改善','スキルの溜めについて説明を追加','装身具の表示をアクセサリーに統一（その他の育成用語は維持）','既存の機能・編成・鍛冶屋・セーブデータを維持']},{version:'1.6.0',date:'2026-11-11',title:'初心者ガイド・編成操作改善',changes:['5ステップの初心者チュートリアルを追加','各画面の遊び方ガイドを追加','編成枠をタップして所持英雄を選ぶ2タップ直接交換に対応','編成済み英雄同士の位置入れ替えに対応','スワイプに頼らず一覧のページボタンで選択可能','Ver.1.5.0の鍛冶屋・進化・売却機能を維持']},{version:'1.5.0',date:'2026-11-10',title:'鍛冶屋とアクセサリー進化',changes:['新施設・鍛冶屋を追加（進化と売却）','同種のLv.1指輪2個と金貨でLv.2指輪へ進化','指輪・ネックレスの売却は1個につき1,000金貨','守護・火事場の指輪と、不屈・洗脳のネックレスを追加','進化先9種類の効果を戦闘に適用']},{version:'1.4.0',date:'2026-11-10',title:'草原EX・ドラゴン解放',changes:['草原EXを2ステージ追加し、特殊条件による解放と初回限定報酬に対応','信者・ヤングドラゴンを追加','ゴーレムの素早さ12・溜め6、エルフの回復20%に調整','吸血の指輪を追加（同じキャラへの重複装備不可）','毎週火曜日・木曜日にドラゴン解放を開催']},{version:'1.3.0',date:'2026-11-09',title:'週替わり福袋・戦闘バランス調整',changes:['福袋とパックの週替わり商品5種類を追加','毎週月曜日0時（日本時間）に購入回数をリセット','福袋・パックの開封アニメーションを追加','敵のステータス倍率は素早さに適用しない','通常ステージでも固定威力スキルに倍率を適用']},
     {version:'1.2.0',date:'2026-11-09',title:'砂塵の荒野・新たな英雄',changes:[
       'ノーマル英雄「ミイラ」「ガーゴイル」を追加',
       'ミイラは荒野ステージドロップ限定（ガチャ・ショップ対象外）',
@@ -1018,67 +1018,82 @@ try{if(!localStorage.getItem(TUTORIAL_SEEN_KEY))setTimeout(startTutorial,400)}ca
   }
 })();
 </script><script>
-/* HOSHI_V18_AUDIO: original synthesized music; audio starts only after user input */
+/* HOSHI_V18_SFX: short synthesized sound effects only. No music, no remote assets. */
 (()=>{'use strict';
-const btn=document.getElementById('musicToggle');
-const tracks={
-home:{bpm:90,root:57,scale:[0,2,3,7,10,12,15,19],lead:[0,2,4,3,5,4,2,1,0,2,5,4,3,1,2,-1],bass:[0,3,4,3]},
-grass:{bpm:112,root:60,scale:[0,2,4,5,7,9,11,12],lead:[0,2,4,5,4,2,1,2,3,5,7,5,4,3,2,0],bass:[0,3,4,3]},
-waste:{bpm:103,root:55,scale:[0,2,3,5,7,8,10,12],lead:[0,2,3,5,4,3,1,0,2,4,5,3,2,1,0,-1],bass:[0,5,3,4]},
-undead:{bpm:85,root:50,scale:[0,1,3,5,6,8,10,12],lead:[0,-1,2,1,3,2,0,-1,0,3,4,2,1,-1,0,-1],bass:[0,2,3,1]},
-dragon:{bpm:143,root:50,scale:[0,2,3,5,7,8,11,12],lead:[0,4,5,7,6,4,3,2,0,2,4,5,7,5,4,2],bass:[0,4,5,3]},
-martial:{bpm:133,root:57,scale:[0,2,4,5,7,9,10,12],lead:[0,2,4,2,5,4,2,1,3,5,6,5,4,2,3,0],bass:[0,3,4,2]},
-magic:{bpm:94,root:58,scale:[0,2,4,6,7,9,11,12],lead:[0,2,4,7,6,4,2,1,0,3,5,7,5,3,2,-1],bass:[0,4,3,4]},
-town:{bpm:96,root:60,scale:[0,2,4,5,7,9,11,12],lead:[0,2,4,2,3,4,5,3,2,1,0,2,4,3,2,-1],bass:[0,3,4,3]},
-forge:{bpm:110,root:53,scale:[0,2,3,5,7,8,10,12],lead:[0,-1,2,3,4,2,1,0,3,5,4,3,2,-1,0,-1],bass:[0,2,3,4]},
-
-/* 戦闘中は探索・町とは異なる旋律を使用。すべてオリジナルの合成音。 */
-grassBattle:{bpm:145,root:57,scale:[0,2,3,5,7,9,10,12],lead:[0,4,5,4,2,4,6,5,4,2,1,3,5,6,4,2],bass:[0,4,3,5]},
-wasteBattle:{bpm:151,root:53,scale:[0,2,3,5,7,8,10,12],lead:[0,3,5,4,2,5,6,4,3,2,0,4,5,7,4,2],bass:[0,5,3,4]},
-exBattle:{bpm:158,root:50,scale:[0,2,3,6,7,9,10,12],lead:[0,3,6,5,3,4,7,5,4,2,5,7,6,4,3,1],bass:[0,3,5,4]},
-bossBattle:{bpm:166,root:50,scale:[0,1,3,5,7,8,10,12],lead:[0,4,6,5,3,6,7,5,4,3,1,5,6,7,5,3],bass:[0,4,5,3]},
-generalBattle:{bpm:150,root:55,scale:[0,2,4,5,7,9,10,12],lead:[0,2,4,6,5,4,2,3,5,7,5,3,4,2,1,0],bass:[0,3,4,2]},
-goblinBattle:{bpm:149,root:62,scale:[0,2,3,5,7,9,10,12],lead:[0,3,1,4,2,5,3,6,4,2,1,5,7,4,3,0],bass:[0,4,3,5]},
-golemBattle:{bpm:100,root:46,scale:[0,2,3,5,6,8,10,12],lead:[0,-1,3,2,0,4,3,-1,0,5,4,2,3,1,0,-1],bass:[0,3,4,2]},
-pvp:{bpm:145,root:57,scale:[0,2,3,5,7,9,10,12],lead:[0,4,2,5,4,6,5,4,3,5,7,5,4,2,1,0],bass:[0,4,3,5]}
-};
-let ctx=null,master=null,trackBus=null,enabled=false,scene='scene-home',trackId='home',tick=0,next=0,timer=null;
-function trackFor(value){
-  // 判定順が重要：戦闘画面を通常の草原・荒野マップより先に判定する。
-  if(value.startsWith('scene-fight-')){
-    if(/pvp/.test(value))return 'pvp';
-    if(/undead/.test(value))return 'undead';
-    if(/dragon/.test(value))return 'dragon';
-    if(/golem/.test(value))return 'golemBattle';
-    if(/general/.test(value))return 'generalBattle';
-    if(/goblin/.test(value))return 'goblinBattle';
-    if(/martial/.test(value))return 'martial';
-    if(/grassEx/.test(value))return 'exBattle';
-    if(/wasteland/.test(value))return 'wasteBattle';
-    if(/grass/.test(value))return 'grassBattle';
-    return 'bossBattle';
+  const toggle=document.getElementById('sfxToggle');
+  const STORE='hoshiyomi_sfx_enabled_v1';
+  let enabled=true,ctx=null,master=null,playedResult=null;
+  try{enabled=localStorage.getItem(STORE)!=='off'}catch(e){}
+  function renderToggle(){if(!toggle)return;toggle.textContent=enabled?'🔊 効果音 オン':'🔇 効果音 オフ';toggle.setAttribute('aria-pressed',String(enabled))}
+  renderToggle();
+  function audio(){
+    if(!enabled)return null;
+    try{
+      const C=window.AudioContext||window.webkitAudioContext;
+      if(!C)return null;
+      if(!ctx){ctx=new C();master=ctx.createGain();master.gain.value=.22;master.connect(ctx.destination)}
+      if(ctx.state==='suspended')ctx.resume().catch(()=>{});
+      return ctx;
+    }catch(e){return null}
   }
-  if(/battle-wasteland/.test(value))return 'waste';
-  if(/battle-grass/.test(value))return 'grass';
-  if(/pvp/.test(value))return 'pvp';
-  if(/forge/.test(value))return 'forge';
-  if(/gacha|event/.test(value))return 'magic';
-  if(/team|shop|quests/.test(value))return 'town';
-  return 'home';
-}
-function changeBus(){
-  if(!ctx||!master)return;
-  const now=ctx.currentTime;
-  if(trackBus){trackBus.gain.cancelScheduledValues(now);trackBus.gain.setTargetAtTime(.0001,now,.055);const oldBus=trackBus;setTimeout(()=>{try{oldBus.disconnect()}catch(e){}},1800)}
-  trackBus=ctx.createGain();trackBus.gain.setValueAtTime(.0001,now);trackBus.gain.setTargetAtTime(1,now,.055);trackBus.connect(master);
-}
-function sound(midi,at,len,kind,vol){if(!ctx||!master||midi<10)return;let osc=ctx.createOscillator(),gain=ctx.createGain();osc.type=kind;osc.frequency.setValueAtTime(440*Math.pow(2,(midi-69)/12),at);gain.gain.setValueAtTime(0.0001,at);gain.gain.exponentialRampToValueAtTime(Math.max(.0002,vol),at+.022);gain.gain.exponentialRampToValueAtTime(.0001,at+len);osc.connect(gain);gain.connect(trackBus||master);osc.start(at);osc.stop(at+len+.04)}
-function playStep(time){const t=tracks[trackId],beat=60/t.bpm,step=tick%16,idx=t.lead[step],midi=idx<0?-1:t.root+t.scale[idx];if(midi>0)sound(midi,time,beat*.42,trackId==='undead'?'sine':'triangle',.10);if(step%4===0){let base=t.root-24+t.scale[t.bass[Math.floor(step/4)%4]];sound(base,time,beat*1.8,'sine',.13);sound(base+12,time,beat*.95,'triangle',.035)}if(step%2===0&&trackId!=='undead')sound(t.root+12+t.scale[(step/2)%7],time,beat*.23,'sine',.02);tick++}
-function schedule(){if(!enabled||!ctx)return;const t=tracks[trackId];while(next<ctx.currentTime+.24){playStep(next);next+=60/t.bpm/2}}
-async function on(){const Context=window.AudioContext||window.webkitAudioContext;if(!Context){btn.textContent='BGM非対応';return}try{if(!ctx){ctx=new Context();master=ctx.createGain();master.gain.value=.45;master.connect(ctx.destination)}await ctx.resume();changeBus();enabled=true;tick=0;next=ctx.currentTime+.06;clearInterval(timer);timer=setInterval(schedule,100);schedule();btn.textContent='♫ BGM オン';btn.setAttribute('aria-pressed','true')}catch(e){console.warn('BGMを再生できません',e)}}
-function off(){enabled=false;clearInterval(timer);timer=null;if(master&&ctx){master.gain.cancelScheduledValues(ctx.currentTime);master.gain.setTargetAtTime(.0001,ctx.currentTime,.04)}btn.textContent='♫ BGM オフ';btn.setAttribute('aria-pressed','false')}
-btn.addEventListener('click',()=>{if(enabled){off()}else{if(master)master.gain.setValueAtTime(.45,ctx.currentTime);on()}});
-window.HOSHI_AUDIO={setScene(nextScene){scene=nextScene;const id=trackFor(scene);if(id!==trackId){trackId=id;tick=0;if(ctx){changeBus();next=ctx.currentTime+.12;if(enabled)schedule()}}}};
-document.addEventListener('visibilitychange',()=>{if(!ctx||!enabled)return;if(document.hidden)ctx.suspend();else ctx.resume().then(()=>{next=ctx.currentTime+.1})});
+  // Every note is brief, envelope-shaped and limited in volume, to avoid overlaps becoming loud.
+  function tone(freq,duration=.10,wave='sine',volume=.20,delay=0,slide=1){
+    const a=audio();if(!a)return;
+    const at=a.currentTime+Math.max(0,delay),o=a.createOscillator(),g=a.createGain();
+    o.type=wave;o.frequency.setValueAtTime(Math.max(25,freq),at);
+    if(slide!==1)o.frequency.exponentialRampToValueAtTime(Math.max(25,freq*slide),at+duration);
+    g.gain.setValueAtTime(.0001,at);
+    g.gain.exponentialRampToValueAtTime(Math.max(.0002,volume),at+.008);
+    g.gain.exponentialRampToValueAtTime(.0001,at+duration);
+    o.connect(g);g.connect(master);o.start(at);o.stop(at+duration+.015);
+  }
+  function play(kind){if(!enabled)return;
+    switch(kind){
+      case 'click':tone(540,.055,'sine',.10);break;
+      case 'select':tone(580,.075,'triangle',.14);tone(760,.075,'sine',.07,.065);break;
+      case 'cancel':tone(510,.08,'sine',.12,0,.72);break;
+      case 'buy':tone(620,.10,'triangle',.14);tone(830,.12,'sine',.13,.09);break;
+      case 'reward':tone(540,.11,'triangle',.15);tone(680,.11,'triangle',.13,.11);tone(900,.22,'sine',.13,.23);break;
+      case 'forge':tone(260,.065,'square',.15,0,.68);tone(460,.16,'triangle',.16,.13);break;
+      case 'battle':tone(260,.13,'sawtooth',.16,0,1.5);tone(390,.16,'triangle',.16,.13,1.35);break;
+      case 'attack':tone(240,.13,'sawtooth',.20,0,1.9);break;
+      case 'skill':tone(400,.16,'triangle',.17,0,1.65);tone(730,.20,'sine',.15,.12,1.3);break;
+      case 'summon':tone(310,.24,'sine',.15,0,1.65);tone(460,.24,'triangle',.12,.12,1.45);tone(710,.28,'sine',.12,.26,1.25);break;
+      case 'reveal':tone(560,.15,'sine',.16);tone(720,.17,'triangle',.13,.11);tone(980,.23,'sine',.14,.22);break;
+      case 'rare':tone(560,.16,'triangle',.15);tone(760,.20,'triangle',.16,.13);tone(990,.31,'sine',.16,.28);break;
+      case 'epic':tone(420,.20,'triangle',.16);tone(620,.22,'triangle',.16,.17);tone(820,.23,'triangle',.16,.36);tone(1100,.42,'sine',.16,.56);break;
+      case 'win':tone(520,.12,'triangle',.15);tone(650,.12,'triangle',.16,.12);tone(780,.12,'triangle',.16,.24);tone(1040,.34,'sine',.17,.37);break;
+      case 'lose':tone(490,.20,'sine',.15,0,.81);tone(310,.30,'triangle',.13,.22,.76);break;
+    }
+  }
+  // Capture phase enables sound to start from the same user gesture on iOS Safari.
+  document.addEventListener('click',e=>{
+    const btn=e.target.closest('button');if(!btn||btn.disabled)return;
+    if(btn===toggle){enabled=!enabled;try{localStorage.setItem(STORE,enabled?'on':'off')}catch(e){}renderToggle();if(enabled)play('select');return}
+    const act=btn.dataset.action||'',page=btn.dataset.page;
+    if(page){play('select');return}
+    if(act==='summon'){play('summon');return}
+    if(/^(battleAttack|selectTarget)$/.test(act)){play('attack');return}
+    if(act==='battleSkill'){play('skill');return}
+    if(/^(startBattle|startEventBattle|startGrassEx|startPvpBattle)$/.test(act)){play('battle');return}
+    if(/^(claim|dailyClaim|shopPurchase|weeklyBundlePurchase)/.test(act)){play(act==='shopPurchase'||act==='weeklyBundlePurchase'?'buy':'reward');return}
+    if(/^(forgeEvolve|forgeSell)$/.test(act)){play('forge');return}
+    if(/^(equip|unequip|formationPick|formationSlot|selectStage|selectWastelandStage|selectEventStage|selectGrassEx|dexRarity|storyMapChange)$/.test(act)){play('select');return}
+    if(/^(close|returnMap|cancel|skipSummon|tutorialSkip)/i.test(act)){play('cancel');return}
+    play('click');
+  },true);
+  // Expose only a tiny event interface to the existing animations.
+  window.HOSHI_SFX={play};
+  // Detect the final outcome after the game has rendered it; no change to battle calculations.
+  const results=document.getElementById('actionArea');
+  if(results){new MutationObserver(()=>{
+    if(!results.querySelector('.result')||!window.HOSHI_SFX)return;
+    const heading=results.querySelector('.result h2')?.textContent||'';
+    const key=(typeof battle!=='undefined'&&battle)?String(battle.token)+':'+String(battle.stage)+':'+heading:heading;
+    if(key===playedResult)return;
+    playedResult=key;
+    play(/敗北|相手軍の勝利/.test(heading)?'lose':'win');
+  }).observe(results,{childList:true,subtree:false})}
+  document.addEventListener('visibilitychange',()=>{if(document.hidden&&ctx&&ctx.state==='running')ctx.suspend().catch(()=>{})});
 })();
 </script></body></html>
