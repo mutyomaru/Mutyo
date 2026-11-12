@@ -1031,17 +1031,54 @@ martial:{bpm:133,root:57,scale:[0,2,4,5,7,9,10,12],lead:[0,2,4,2,5,4,2,1,3,5,6,5
 magic:{bpm:94,root:58,scale:[0,2,4,6,7,9,11,12],lead:[0,2,4,7,6,4,2,1,0,3,5,7,5,3,2,-1],bass:[0,4,3,4]},
 town:{bpm:96,root:60,scale:[0,2,4,5,7,9,11,12],lead:[0,2,4,2,3,4,5,3,2,1,0,2,4,3,2,-1],bass:[0,3,4,3]},
 forge:{bpm:110,root:53,scale:[0,2,3,5,7,8,10,12],lead:[0,-1,2,3,4,2,1,0,3,5,4,3,2,-1,0,-1],bass:[0,2,3,4]},
+
+/* 戦闘中は探索・町とは異なる旋律を使用。すべてオリジナルの合成音。 */
+grassBattle:{bpm:145,root:57,scale:[0,2,3,5,7,9,10,12],lead:[0,4,5,4,2,4,6,5,4,2,1,3,5,6,4,2],bass:[0,4,3,5]},
+wasteBattle:{bpm:151,root:53,scale:[0,2,3,5,7,8,10,12],lead:[0,3,5,4,2,5,6,4,3,2,0,4,5,7,4,2],bass:[0,5,3,4]},
+exBattle:{bpm:158,root:50,scale:[0,2,3,6,7,9,10,12],lead:[0,3,6,5,3,4,7,5,4,2,5,7,6,4,3,1],bass:[0,3,5,4]},
+bossBattle:{bpm:166,root:50,scale:[0,1,3,5,7,8,10,12],lead:[0,4,6,5,3,6,7,5,4,3,1,5,6,7,5,3],bass:[0,4,5,3]},
+generalBattle:{bpm:150,root:55,scale:[0,2,4,5,7,9,10,12],lead:[0,2,4,6,5,4,2,3,5,7,5,3,4,2,1,0],bass:[0,3,4,2]},
+goblinBattle:{bpm:149,root:62,scale:[0,2,3,5,7,9,10,12],lead:[0,3,1,4,2,5,3,6,4,2,1,5,7,4,3,0],bass:[0,4,3,5]},
+golemBattle:{bpm:100,root:46,scale:[0,2,3,5,6,8,10,12],lead:[0,-1,3,2,0,4,3,-1,0,5,4,2,3,1,0,-1],bass:[0,3,4,2]},
 pvp:{bpm:145,root:57,scale:[0,2,3,5,7,9,10,12],lead:[0,4,2,5,4,6,5,4,3,5,7,5,4,2,1,0],bass:[0,4,3,5]}
 };
-let ctx=null,master=null,enabled=false,scene='scene-home',trackId='home',tick=0,next=0,timer=null;
-function trackFor(value){if(/undead/.test(value))return 'undead';if(/dragon/.test(value))return 'dragon';if(/wasteland/.test(value))return 'waste';if(/martial|general|grassEx|golem/.test(value))return 'martial';if(/goblin|grass/.test(value))return 'grass';if(/pvp/.test(value))return 'pvp';if(/forge/.test(value))return 'forge';if(/gacha|event/.test(value))return 'magic';if(/team|shop|quests/.test(value))return 'town';return 'home'}
-function sound(midi,at,len,kind,vol){if(!ctx||!master||midi<10)return;let osc=ctx.createOscillator(),gain=ctx.createGain();osc.type=kind;osc.frequency.setValueAtTime(440*Math.pow(2,(midi-69)/12),at);gain.gain.setValueAtTime(0.0001,at);gain.gain.exponentialRampToValueAtTime(Math.max(.0002,vol),at+.022);gain.gain.exponentialRampToValueAtTime(.0001,at+len);osc.connect(gain);gain.connect(master);osc.start(at);osc.stop(at+len+.04)}
+let ctx=null,master=null,trackBus=null,enabled=false,scene='scene-home',trackId='home',tick=0,next=0,timer=null;
+function trackFor(value){
+  // 判定順が重要：戦闘画面を通常の草原・荒野マップより先に判定する。
+  if(value.startsWith('scene-fight-')){
+    if(/pvp/.test(value))return 'pvp';
+    if(/undead/.test(value))return 'undead';
+    if(/dragon/.test(value))return 'dragon';
+    if(/golem/.test(value))return 'golemBattle';
+    if(/general/.test(value))return 'generalBattle';
+    if(/goblin/.test(value))return 'goblinBattle';
+    if(/martial/.test(value))return 'martial';
+    if(/grassEx/.test(value))return 'exBattle';
+    if(/wasteland/.test(value))return 'wasteBattle';
+    if(/grass/.test(value))return 'grassBattle';
+    return 'bossBattle';
+  }
+  if(/battle-wasteland/.test(value))return 'waste';
+  if(/battle-grass/.test(value))return 'grass';
+  if(/pvp/.test(value))return 'pvp';
+  if(/forge/.test(value))return 'forge';
+  if(/gacha|event/.test(value))return 'magic';
+  if(/team|shop|quests/.test(value))return 'town';
+  return 'home';
+}
+function changeBus(){
+  if(!ctx||!master)return;
+  const now=ctx.currentTime;
+  if(trackBus){trackBus.gain.cancelScheduledValues(now);trackBus.gain.setTargetAtTime(.0001,now,.055);const oldBus=trackBus;setTimeout(()=>{try{oldBus.disconnect()}catch(e){}},1800)}
+  trackBus=ctx.createGain();trackBus.gain.setValueAtTime(.0001,now);trackBus.gain.setTargetAtTime(1,now,.055);trackBus.connect(master);
+}
+function sound(midi,at,len,kind,vol){if(!ctx||!master||midi<10)return;let osc=ctx.createOscillator(),gain=ctx.createGain();osc.type=kind;osc.frequency.setValueAtTime(440*Math.pow(2,(midi-69)/12),at);gain.gain.setValueAtTime(0.0001,at);gain.gain.exponentialRampToValueAtTime(Math.max(.0002,vol),at+.022);gain.gain.exponentialRampToValueAtTime(.0001,at+len);osc.connect(gain);gain.connect(trackBus||master);osc.start(at);osc.stop(at+len+.04)}
 function playStep(time){const t=tracks[trackId],beat=60/t.bpm,step=tick%16,idx=t.lead[step],midi=idx<0?-1:t.root+t.scale[idx];if(midi>0)sound(midi,time,beat*.42,trackId==='undead'?'sine':'triangle',.10);if(step%4===0){let base=t.root-24+t.scale[t.bass[Math.floor(step/4)%4]];sound(base,time,beat*1.8,'sine',.13);sound(base+12,time,beat*.95,'triangle',.035)}if(step%2===0&&trackId!=='undead')sound(t.root+12+t.scale[(step/2)%7],time,beat*.23,'sine',.02);tick++}
 function schedule(){if(!enabled||!ctx)return;const t=tracks[trackId];while(next<ctx.currentTime+.24){playStep(next);next+=60/t.bpm/2}}
-async function on(){const Context=window.AudioContext||window.webkitAudioContext;if(!Context){btn.textContent='BGM非対応';return}try{if(!ctx){ctx=new Context();master=ctx.createGain();master.gain.value=.45;master.connect(ctx.destination)}await ctx.resume();enabled=true;tick=0;next=ctx.currentTime+.06;clearInterval(timer);timer=setInterval(schedule,100);schedule();btn.textContent='♫ BGM オン';btn.setAttribute('aria-pressed','true')}catch(e){console.warn('BGMを再生できません',e)}}
+async function on(){const Context=window.AudioContext||window.webkitAudioContext;if(!Context){btn.textContent='BGM非対応';return}try{if(!ctx){ctx=new Context();master=ctx.createGain();master.gain.value=.45;master.connect(ctx.destination)}await ctx.resume();changeBus();enabled=true;tick=0;next=ctx.currentTime+.06;clearInterval(timer);timer=setInterval(schedule,100);schedule();btn.textContent='♫ BGM オン';btn.setAttribute('aria-pressed','true')}catch(e){console.warn('BGMを再生できません',e)}}
 function off(){enabled=false;clearInterval(timer);timer=null;if(master&&ctx){master.gain.cancelScheduledValues(ctx.currentTime);master.gain.setTargetAtTime(.0001,ctx.currentTime,.04)}btn.textContent='♫ BGM オフ';btn.setAttribute('aria-pressed','false')}
 btn.addEventListener('click',()=>{if(enabled){off()}else{if(master)master.gain.setValueAtTime(.45,ctx.currentTime);on()}});
-window.HOSHI_AUDIO={setScene(nextScene){scene=nextScene;const id=trackFor(scene);if(id!==trackId){trackId=id;tick=0;if(ctx)next=ctx.currentTime+.12}}};
+window.HOSHI_AUDIO={setScene(nextScene){scene=nextScene;const id=trackFor(scene);if(id!==trackId){trackId=id;tick=0;if(ctx){changeBus();next=ctx.currentTime+.12;if(enabled)schedule()}}}};
 document.addEventListener('visibilitychange',()=>{if(!ctx||!enabled)return;if(document.hidden)ctx.suspend();else ctx.resume().then(()=>{next=ctx.currentTime+.1})});
 })();
 </script></body></html>
