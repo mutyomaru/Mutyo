@@ -78,10 +78,71 @@ body .panel{background:linear-gradient(145deg,rgba(33,36,36,.88),rgba(23,27,30,.
 body.scene-fight-grass #battleFight>.panel,body.scene-fight-wasteland #battleFight>.panel,body[class*="scene-fight-"] #battleFight>.panel{background:linear-gradient(180deg,#10192388,#151c20c7);border-color:#c6ad75a8}
 body[class*="scene-fight-"] .unit{background:#263943bd}body[class*="scene-fight-"] .unit.enemy{background:#4d3036ba}
 body.scene-battle-grass .stage-map,body.scene-battle-wasteland .stage-map{background:#1e3027ad}
-.music-button{font-family:system-ui,sans-serif;font-size:12px;white-space:nowrap;padding:6px 9px;border-color:#b5a27d}.music-button[aria-pressed="true"]{background:#4a654e;color:#e5f9e7}.music-status{font-size:10px;opacity:.8}
+
+
+/* MOBILE_COMPACT_V181: gameplay-first layout. No changes to game logic. */
+@media (max-width: 700px){
+  html{scroll-behavior:auto}
+  .wrap{padding:4px 6px 8px;max-width:100%}
+  .top{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:3px 6px;padding:2px 0}
+  .top .brand{font-size:clamp(13px,3.6vw,17px);line-height:1.2;white-space:nowrap}
+  .top .row{grid-column:1/-1;justify-content:center;gap:5px}
+  .top .pill{font-size:11px;padding:2px 7px}
+  .version-label{font-size:10px;padding:4px 6px}
+  .nav{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:3px;margin:4px 0 6px}
+  .nav button{min-width:0;min-height:32px;padding:5px 1px;font-size:clamp(9px,2.5vw,11px);line-height:1.15}
+  .page.active::before{height:2px;margin-bottom:4px}
+  .panel{padding:7px;margin-bottom:6px}
+  .hero{padding:10px 7px}.hero h1{font-size:18px;margin:4px 0}.hero p{margin:4px 0}
+  .section-title{font-size:15px;margin-bottom:5px}
+  h2,h3,h4{margin-top:6px;margin-bottom:5px}
+  p{margin-top:4px;margin-bottom:6px}
+  button{padding:7px 8px;min-height:32px}
+  .row{gap:5px}
+  .map-grid{grid-template-columns:repeat(5,minmax(0,1fr));gap:4px}
+  .stage-map{padding:6px}
+  .stage-node{min-height:45px;padding:2px 1px;gap:0;border-width:1px}
+  .stage-node .num{font-size:15px;line-height:1.1}
+  .stage-node .small{font-size:9px;line-height:1.1}
+  .formation-slots{gap:4px}
+  .formation-slot{padding:3px 1px}
+  .formation-slot .portrait{height:clamp(43px,8dvh,68px)}
+  .formation-list{grid-template-columns:repeat(4,minmax(0,1fr));gap:4px;margin-top:5px}
+  .formation-choice{padding:4px 1px;gap:1px}
+  .formation-choice .portrait{height:clamp(38px,7dvh,58px)}
+  .formation-choice .name{font-size:10px}
+  .formation-info,.quick-help{padding:5px;margin:5px 0}
+  #characterList{grid-template-columns:repeat(3,minmax(0,1fr));gap:4px}
+  .encyclopedia-card{padding:3px 2px 25px}
+  .dex-tabs button{padding:5px 2px}
+  .dex-pages{margin:4px 0}
+  .unit{padding:3px 2px}
+  .unit .portrait{height:clamp(44px,9dvh,72px)}
+  .unit .name{font-size:11px;line-height:1.1}
+  .unit .small,.unit .stats{font-size:10px;line-height:1.25;margin:2px 0}
+  .quest-card,.forge-entry{padding:7px;margin:5px 0}
+  .forge-entry button{margin-top:5px}
+  .daily-wheel-wrap{width:min(44dvh,65vw,230px);margin:5px auto}
+  .footer{padding:4px}
+  .modal{padding:5px;align-items:center}
+  .modal-box{padding:10px;max-height:94dvh;overscroll-behavior:contain}
+  .weekly-bundle-box{max-height:94dvh;padding:10px}
+  .weekly-bundle-icon{height:58px;font-size:46px}
+}
+@media (max-width:380px){
+  .nav button{font-size:9px;min-height:30px}
+  .stage-node{min-height:40px}
+  .formation-list{grid-template-columns:repeat(3,minmax(0,1fr))}
+}
+@media (max-width:700px) and (max-height:700px){
+  .top .row{display:flex}
+  .nav button{min-height:28px}
+  .stage-node{min-height:38px}
+  .unit .portrait{height:42px}
+}
 </style></head><body>
 <div class="wrap">
-<header class="top"><div class="brand">✦ 星詠みの旅団</div><button type="button" id="versionHeaderButton" class="version-label" data-action="showVersionHistory" aria-label="アップデート履歴を開く">Ver.1.8.0</button><button type="button" id="sfxToggle" class="music-button" aria-pressed="true" title="効果音のオン・オフ">🔊 効果音 オン</button><div class="row"><span class="pill">💎 <b id="gems">0</b></span><span class="pill">🪙 <b id="gold">0</b></span><span class="pill">到達 <b id="stage">1</b></span></div></header><div id="errorBox" class="error" role="alert"></div>
+<header class="top"><div class="brand">✦ 星詠みの旅団</div><button type="button" id="versionHeaderButton" class="version-label" data-action="showVersionHistory" aria-label="アップデート履歴を開く">Ver.1.8.1</button><div class="row"><span class="pill">💎 <b id="gems">0</b></span><span class="pill">🪙 <b id="gold">0</b></span><span class="pill">到達 <b id="stage">1</b></span></div></header><div id="errorBox" class="error" role="alert"></div>
 <nav class="nav"><button data-page="home">ホーム</button><button data-page="gacha">ガチャ</button><button data-page="team">キャラ・編成</button><button data-page="battle">バトル</button><button data-page="shop">ショップ</button><button data-page="quests">ミッション</button><button data-page="forge">🔨 鍛冶屋</button></nav>
 <main>
 <section id="home" class="page active"><div class="panel hero"><h1>星の導きが、旅の始まり</h1><p class="muted">剣と魔法を携え、未知なる大地へ。</p><div class="row" style="justify-content:center"><button data-page="gacha">仲間を召喚する</button><button data-page="team">キャラを編成する</button><button data-page="battle">バトルへ進む</button><button data-page="quests">ミッション</button><button data-page="forge">🔨 鍛冶屋</button></div></div><div class="panel"><div class="row" style="justify-content:center"><button data-action="startTutorial">📖 遊び方（5ステップ）</button></div></div><div class="panel"><h2 class="section-title">旅団の記録</h2><div id="homeSummary"></div></div><div class="panel"><div class="row" style="justify-content:space-between"><div><h2 class="section-title">旅団のお知らせ</h2><p class="small">現在のバージョン：<b id="versionHomeLabel">Ver.1.8.0</b></p></div><button type="button" data-action="showVersionHistory">アップデート履歴を見る</button></div></div><div class="panel daily-panel"><h2 class="section-title">デイリーボーナス</h2><p class="small">毎日0時（日本時間）に更新</p><div class="daily-buttons"><button data-action="dailyBonusOpen">ログインボーナス</button><button data-action="dailyWheelOpen">デイリールーレット</button></div><p id="dailyStatus" class="small"></p></div></section>
@@ -961,9 +1022,9 @@ try{if(!localStorage.getItem(TUTORIAL_SEEN_KEY))setTimeout(startTutorial,400)}ca
 */
 (() => {
   'use strict';
-  const GAME_VERSION='1.8.0';
+  const GAME_VERSION='1.8.1';
   const VERSION_SEEN_KEY='hoshiyomi_seen_version_v1';
-  const GAME_CHANGELOG=[{version:'1.8.0',date:'2026-11-12',title:'風景と効果音のアップデート',changes:['草原に草花・木々・山並み、荒野に枯れ木・岩場・乾いた大地を描写','ホーム・召喚・ショップ・鍛冶屋・イベントなどに専用の風景を追加','戦闘背景は草原・荒野・EX・各イベント・対戦に対応','BGMを廃止して、ボタン・ガチャ・戦闘・報酬などの効果音を実装（オン・オフ可能）','キャラ・セーブデータ・既存機能は維持']},{version:'1.7.0',date:'2026-11-11',title:'背景演出アップデート',changes:['ゲームの各画面に場面に合った背景を追加','草原・荒野・EX・イベント・旅団対戦の戦闘背景を追加','既存機能とセーブデータは変更なし']},{version:'1.6.3',date:'2026-11-11',title:'ステージに応じた戦闘背景を追加',changes:['草原・荒野・草原EXで戦闘背景が変化するよう改善','アンデッド襲来・将軍の進軍・ドラゴン解放などイベントごとに戦闘背景を追加','旅団対戦は専用の戦闘背景で表示','通常画面の背景切り替えや既存の機能・セーブデータは維持']},{version:'1.6.2',date:'2026-11-11',title:'場面ごとの背景を追加',changes:['ホーム・ガチャ・編成・バトル・ショップなどに場面別の背景を追加','鍛冶屋やイベント、対戦画面にも雰囲気に合った背景を設定','背景は画面切り替えに合わせて自動で切り替わるよう改善','既存の機能・セーブデータ・鍛冶屋・チュートリアルを維持']},{version:'1.6.1',date:'2026-11-11',title:'ゲーム内の用語をわかりやすく改善',changes:['ホーム・ガチャ・ショップ・ミッションなど画面名をわかりやすく変更','バトルやイベント、クリア済みの表示を改善','スキルの溜めについて説明を追加','装身具の表示をアクセサリーに統一（その他の育成用語は維持）','既存の機能・編成・鍛冶屋・セーブデータを維持']},{version:'1.6.0',date:'2026-11-11',title:'初心者ガイド・編成操作改善',changes:['5ステップの初心者チュートリアルを追加','各画面の遊び方ガイドを追加','編成枠をタップして所持英雄を選ぶ2タップ直接交換に対応','編成済み英雄同士の位置入れ替えに対応','スワイプに頼らず一覧のページボタンで選択可能','Ver.1.5.0の鍛冶屋・進化・売却機能を維持']},{version:'1.5.0',date:'2026-11-10',title:'鍛冶屋とアクセサリー進化',changes:['新施設・鍛冶屋を追加（進化と売却）','同種のLv.1指輪2個と金貨でLv.2指輪へ進化','指輪・ネックレスの売却は1個につき1,000金貨','守護・火事場の指輪と、不屈・洗脳のネックレスを追加','進化先9種類の効果を戦闘に適用']},{version:'1.4.0',date:'2026-11-10',title:'草原EX・ドラゴン解放',changes:['草原EXを2ステージ追加し、特殊条件による解放と初回限定報酬に対応','信者・ヤングドラゴンを追加','ゴーレムの素早さ12・溜め6、エルフの回復20%に調整','吸血の指輪を追加（同じキャラへの重複装備不可）','毎週火曜日・木曜日にドラゴン解放を開催']},{version:'1.3.0',date:'2026-11-09',title:'週替わり福袋・戦闘バランス調整',changes:['福袋とパックの週替わり商品5種類を追加','毎週月曜日0時（日本時間）に購入回数をリセット','福袋・パックの開封アニメーションを追加','敵のステータス倍率は素早さに適用しない','通常ステージでも固定威力スキルに倍率を適用']},
+  const GAME_CHANGELOG=[{version:'1.8.1',date:'2026-11-14',title:'無音・スマホ操作改善',changes:['効果音の再生機能と切替ボタンを削除','スマホ向けにメニュー・編成・戦闘・マップをコンパクト化','既存のゲーム内容と保存データは維持']},{version:'1.8.0',date:'2026-11-12',title:'風景と効果音のアップデート',changes:['草原に草花・木々・山並み、荒野に枯れ木・岩場・乾いた大地を描写','ホーム・召喚・ショップ・鍛冶屋・イベントなどに専用の風景を追加','戦闘背景は草原・荒野・EX・各イベント・対戦に対応','BGMを廃止して、ボタン・ガチャ・戦闘・報酬などの効果音を実装（オン・オフ可能）','キャラ・セーブデータ・既存機能は維持']},{version:'1.7.0',date:'2026-11-11',title:'背景演出アップデート',changes:['ゲームの各画面に場面に合った背景を追加','草原・荒野・EX・イベント・旅団対戦の戦闘背景を追加','既存機能とセーブデータは変更なし']},{version:'1.6.3',date:'2026-11-11',title:'ステージに応じた戦闘背景を追加',changes:['草原・荒野・草原EXで戦闘背景が変化するよう改善','アンデッド襲来・将軍の進軍・ドラゴン解放などイベントごとに戦闘背景を追加','旅団対戦は専用の戦闘背景で表示','通常画面の背景切り替えや既存の機能・セーブデータは維持']},{version:'1.6.2',date:'2026-11-11',title:'場面ごとの背景を追加',changes:['ホーム・ガチャ・編成・バトル・ショップなどに場面別の背景を追加','鍛冶屋やイベント、対戦画面にも雰囲気に合った背景を設定','背景は画面切り替えに合わせて自動で切り替わるよう改善','既存の機能・セーブデータ・鍛冶屋・チュートリアルを維持']},{version:'1.6.1',date:'2026-11-11',title:'ゲーム内の用語をわかりやすく改善',changes:['ホーム・ガチャ・ショップ・ミッションなど画面名をわかりやすく変更','バトルやイベント、クリア済みの表示を改善','スキルの溜めについて説明を追加','装身具の表示をアクセサリーに統一（その他の育成用語は維持）','既存の機能・編成・鍛冶屋・セーブデータを維持']},{version:'1.6.0',date:'2026-11-11',title:'初心者ガイド・編成操作改善',changes:['5ステップの初心者チュートリアルを追加','各画面の遊び方ガイドを追加','編成枠をタップして所持英雄を選ぶ2タップ直接交換に対応','編成済み英雄同士の位置入れ替えに対応','スワイプに頼らず一覧のページボタンで選択可能','Ver.1.5.0の鍛冶屋・進化・売却機能を維持']},{version:'1.5.0',date:'2026-11-10',title:'鍛冶屋とアクセサリー進化',changes:['新施設・鍛冶屋を追加（進化と売却）','同種のLv.1指輪2個と金貨でLv.2指輪へ進化','指輪・ネックレスの売却は1個につき1,000金貨','守護・火事場の指輪と、不屈・洗脳のネックレスを追加','進化先9種類の効果を戦闘に適用']},{version:'1.4.0',date:'2026-11-10',title:'草原EX・ドラゴン解放',changes:['草原EXを2ステージ追加し、特殊条件による解放と初回限定報酬に対応','信者・ヤングドラゴンを追加','ゴーレムの素早さ12・溜め6、エルフの回復20%に調整','吸血の指輪を追加（同じキャラへの重複装備不可）','毎週火曜日・木曜日にドラゴン解放を開催']},{version:'1.3.0',date:'2026-11-09',title:'週替わり福袋・戦闘バランス調整',changes:['福袋とパックの週替わり商品5種類を追加','毎週月曜日0時（日本時間）に購入回数をリセット','福袋・パックの開封アニメーションを追加','敵のステータス倍率は素早さに適用しない','通常ステージでも固定威力スキルに倍率を適用']},
     {version:'1.2.0',date:'2026-11-09',title:'砂塵の荒野・新たな英雄',changes:[
       'ノーマル英雄「ミイラ」「ガーゴイル」を追加',
       'ミイラは荒野ステージドロップ限定（ガチャ・ショップ対象外）',
@@ -1016,84 +1077,5 @@ try{if(!localStorage.getItem(TUTORIAL_SEEN_KEY))setTimeout(startTutorial,400)}ca
       if(!h.classList.contains('active'))n.classList.add('active');
     },550);
   }
-})();
-</script><script>
-/* HOSHI_V18_SFX: short synthesized sound effects only. No music, no remote assets. */
-(()=>{'use strict';
-  const toggle=document.getElementById('sfxToggle');
-  const STORE='hoshiyomi_sfx_enabled_v1';
-  let enabled=true,ctx=null,master=null,playedResult=null;
-  try{enabled=localStorage.getItem(STORE)!=='off'}catch(e){}
-  function renderToggle(){if(!toggle)return;toggle.textContent=enabled?'🔊 効果音 オン':'🔇 効果音 オフ';toggle.setAttribute('aria-pressed',String(enabled))}
-  renderToggle();
-  function audio(){
-    if(!enabled)return null;
-    try{
-      const C=window.AudioContext||window.webkitAudioContext;
-      if(!C)return null;
-      if(!ctx){ctx=new C();master=ctx.createGain();master.gain.value=.22;master.connect(ctx.destination)}
-      if(ctx.state==='suspended')ctx.resume().catch(()=>{});
-      return ctx;
-    }catch(e){return null}
-  }
-  // Every note is brief, envelope-shaped and limited in volume, to avoid overlaps becoming loud.
-  function tone(freq,duration=.10,wave='sine',volume=.20,delay=0,slide=1){
-    const a=audio();if(!a)return;
-    const at=a.currentTime+Math.max(0,delay),o=a.createOscillator(),g=a.createGain();
-    o.type=wave;o.frequency.setValueAtTime(Math.max(25,freq),at);
-    if(slide!==1)o.frequency.exponentialRampToValueAtTime(Math.max(25,freq*slide),at+duration);
-    g.gain.setValueAtTime(.0001,at);
-    g.gain.exponentialRampToValueAtTime(Math.max(.0002,volume),at+.008);
-    g.gain.exponentialRampToValueAtTime(.0001,at+duration);
-    o.connect(g);g.connect(master);o.start(at);o.stop(at+duration+.015);
-  }
-  function play(kind){if(!enabled)return;
-    switch(kind){
-      case 'click':tone(540,.055,'sine',.10);break;
-      case 'select':tone(580,.075,'triangle',.14);tone(760,.075,'sine',.07,.065);break;
-      case 'cancel':tone(510,.08,'sine',.12,0,.72);break;
-      case 'buy':tone(620,.10,'triangle',.14);tone(830,.12,'sine',.13,.09);break;
-      case 'reward':tone(540,.11,'triangle',.15);tone(680,.11,'triangle',.13,.11);tone(900,.22,'sine',.13,.23);break;
-      case 'forge':tone(260,.065,'square',.15,0,.68);tone(460,.16,'triangle',.16,.13);break;
-      case 'battle':tone(260,.13,'sawtooth',.16,0,1.5);tone(390,.16,'triangle',.16,.13,1.35);break;
-      case 'attack':tone(240,.13,'sawtooth',.20,0,1.9);break;
-      case 'skill':tone(400,.16,'triangle',.17,0,1.65);tone(730,.20,'sine',.15,.12,1.3);break;
-      case 'summon':tone(310,.24,'sine',.15,0,1.65);tone(460,.24,'triangle',.12,.12,1.45);tone(710,.28,'sine',.12,.26,1.25);break;
-      case 'reveal':tone(560,.15,'sine',.16);tone(720,.17,'triangle',.13,.11);tone(980,.23,'sine',.14,.22);break;
-      case 'rare':tone(560,.16,'triangle',.15);tone(760,.20,'triangle',.16,.13);tone(990,.31,'sine',.16,.28);break;
-      case 'epic':tone(420,.20,'triangle',.16);tone(620,.22,'triangle',.16,.17);tone(820,.23,'triangle',.16,.36);tone(1100,.42,'sine',.16,.56);break;
-      case 'win':tone(520,.12,'triangle',.15);tone(650,.12,'triangle',.16,.12);tone(780,.12,'triangle',.16,.24);tone(1040,.34,'sine',.17,.37);break;
-      case 'lose':tone(490,.20,'sine',.15,0,.81);tone(310,.30,'triangle',.13,.22,.76);break;
-    }
-  }
-  // Capture phase enables sound to start from the same user gesture on iOS Safari.
-  document.addEventListener('click',e=>{
-    const btn=e.target.closest('button');if(!btn||btn.disabled)return;
-    if(btn===toggle){enabled=!enabled;try{localStorage.setItem(STORE,enabled?'on':'off')}catch(e){}renderToggle();if(enabled)play('select');return}
-    const act=btn.dataset.action||'',page=btn.dataset.page;
-    if(page){play('select');return}
-    if(act==='summon'){play('summon');return}
-    if(/^(battleAttack|selectTarget)$/.test(act)){play('attack');return}
-    if(act==='battleSkill'){play('skill');return}
-    if(/^(startBattle|startEventBattle|startGrassEx|startPvpBattle)$/.test(act)){play('battle');return}
-    if(/^(claim|dailyClaim|shopPurchase|weeklyBundlePurchase)/.test(act)){play(act==='shopPurchase'||act==='weeklyBundlePurchase'?'buy':'reward');return}
-    if(/^(forgeEvolve|forgeSell)$/.test(act)){play('forge');return}
-    if(/^(equip|unequip|formationPick|formationSlot|selectStage|selectWastelandStage|selectEventStage|selectGrassEx|dexRarity|storyMapChange)$/.test(act)){play('select');return}
-    if(/^(close|returnMap|cancel|skipSummon|tutorialSkip)/i.test(act)){play('cancel');return}
-    play('click');
-  },true);
-  // Expose only a tiny event interface to the existing animations.
-  window.HOSHI_SFX={play};
-  // Detect the final outcome after the game has rendered it; no change to battle calculations.
-  const results=document.getElementById('actionArea');
-  if(results){new MutationObserver(()=>{
-    if(!results.querySelector('.result')||!window.HOSHI_SFX)return;
-    const heading=results.querySelector('.result h2')?.textContent||'';
-    const key=(typeof battle!=='undefined'&&battle)?String(battle.token)+':'+String(battle.stage)+':'+heading:heading;
-    if(key===playedResult)return;
-    playedResult=key;
-    play(/敗北|相手軍の勝利/.test(heading)?'lose':'win');
-  }).observe(results,{childList:true,subtree:false})}
-  document.addEventListener('visibilitychange',()=>{if(document.hidden&&ctx&&ctx.state==='running')ctx.suspend().catch(()=>{})});
 })();
 </script></body></html>
