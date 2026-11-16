@@ -152,6 +152,25 @@ body.scene-battle-grass .stage-map,body.scene-battle-wasteland .stage-map{backgr
 .summon-grid220{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px}.summon-card220{padding:4px;border:1px solid #786d5b;border-radius:9px;display:flex;flex-direction:column;gap:3px;align-items:center;text-align:center;min-width:0}.summon-card220 .portrait{width:100%;height:63px}.summon-card220 .portrait img{width:100%;height:100%;object-fit:contain}.summon-card220 b,.summon-card220 small{font-size:10px;overflow-wrap:anywhere}.summon-card220 small{color:#f1d7a2}
 .summon[data-effect="rainbow"] .summon-magic{filter:hue-rotate(120deg) saturate(2.5);animation:rainbow220 1.4s linear infinite}.summon[data-effect="thunder"] .summon-lightning{opacity:1!important;filter:hue-rotate(190deg)}.summon[data-effect="time"] .summon-cinema{animation:time220 2s steps(2,end)}.summon[data-effect="meteor"] .summon-magic{transform:rotate(-40deg);filter:drop-shadow(0 0 20px gold)}.summon[data-effect="break"] .summon-cinema{box-shadow:inset 0 0 0 4px #ffdd9a;animation:break220 1.2s ease}.summon[data-effect="gold"] .summon-magic{filter:brightness(1.8) sepia(1)}.summon-epic-title{color:#f8ce70;font-weight:bold;letter-spacing:.07em}
 @keyframes rainbow220{from{filter:hue-rotate(0deg) saturate(2.4)}to{filter:hue-rotate(360deg) saturate(2.4)}}@keyframes time220{0%,40%{filter:grayscale(1)}60%,100%{filter:none}}@keyframes break220{0%{transform:scale(.94)}55%{transform:scale(1.03)}100%{transform:scale(1)}}
+
+/* RAID_CUTSCENE_V221: 荒野16のヤングドラゴン乱入演出（無音） */
+.raid-cutscene221{position:fixed;inset:0;z-index:4500;display:none;align-items:center;justify-content:center;overflow:hidden;padding:16px;background:radial-gradient(circle at 50% 52%,#68261e 0%,#250b10 49%,#040406 90%);color:#fff;text-align:center;isolation:isolate}
+.raid-cutscene221.active{display:flex;animation:raidScreenIn221 .3s ease-out both}
+.raid-cutscene221::before{content:"";position:absolute;inset:-35%;background:repeating-linear-gradient(112deg,transparent 0 17px,#ffbc5b1c 18px 20px,transparent 21px 58px);animation:raidStorm221 1.2s linear infinite;pointer-events:none}
+.raid-cutscene221::after{content:"";position:absolute;inset:0;box-shadow:inset 0 0 95px 18px #030304;pointer-events:none}
+.raid-cutscene221 .raid-panel221{position:relative;z-index:1;width:min(100%,520px);padding:20px 10px}
+.raid-cutscene221 .raid-alert221{font:900 clamp(20px,7vw,39px)/1.1 system-ui,sans-serif;letter-spacing:.13em;color:#ffcc75;text-shadow:0 0 14px #ff3c19,0 0 36px #f00;animation:raidFlicker221 .22s steps(2,end) 6}
+.raid-cutscene221 .raid-title221{margin:14px 0 4px;font-size:clamp(19px,6vw,32px);color:#fff0dc;text-shadow:0 2px 18px #ff623a}
+.raid-cutscene221 .raid-figure221{height:min(35dvh,260px);min-height:145px;display:flex;align-items:center;justify-content:center;margin:10px auto;animation:raidFigure221 1.4s cubic-bezier(.12,.72,.22,1) both}
+.raid-cutscene221 .raid-figure221 img{display:block;max-width:85%;max-height:100%;object-fit:contain;filter:brightness(.52) sepia(.6) drop-shadow(0 0 28px #ff512c)}
+.raid-cutscene221 .raid-name221{color:#ffd690;font-weight:900;font-size:clamp(19px,5vw,28px);letter-spacing:.07em;text-shadow:0 0 18px #f75}
+.raid-cutscene221 .raid-sub221{margin-top:8px;color:#e9c9b6;font-size:13px}
+.raid-cutscene221 .raid-skip221{margin-top:15px;background:#312326;border-color:#ae7468;font-size:13px;padding:8px 16px}
+@keyframes raidScreenIn221{from{opacity:0;filter:brightness(3)}to{opacity:1;filter:brightness(1)}}
+@keyframes raidStorm221{to{transform:translate(90px,45px)}}
+@keyframes raidFlicker221{0%,100%{opacity:1}50%{opacity:.45}}
+@keyframes raidFigure221{0%{opacity:0;transform:scale(1.65);filter:brightness(5)}40%{opacity:1;filter:brightness(2)}100%{opacity:1;transform:scale(1);filter:brightness(1)}}
+@media(prefers-reduced-motion:reduce){.raid-cutscene221,.raid-cutscene221::before,.raid-cutscene221 .raid-alert221,.raid-cutscene221 .raid-figure221{animation:none!important}}
 </style></head><body>
 <div class="wrap">
 <header class="top"><div class="brand">✦ 星詠みの旅団</div><button type="button" id="versionHeaderButton" class="version-label" data-action="showVersionHistory" aria-label="アップデート履歴を開く">Ver.2.1.0</button><div class="row"><span class="pill">💎 <b id="gems">0</b></span><span class="pill">🪙 <b id="gold">0</b></span><span class="pill">到達 <b id="stage">1</b></span></div></header><div id="errorBox" class="error" role="alert"></div>
@@ -177,6 +196,7 @@ body.scene-battle-grass .stage-map,body.scene-battle-wasteland .stage-map{backgr
 <div id="summonOverlay" class="summon"><div class="summon-box"><h2 class="section-title">星詠みの召喚陣（ガチャ）</h2><div id="summonVisual"></div><div id="summonProgress" class="small"></div><div id="summonControls"></div></div></div>
 <div id="versionHistoryModal" class="modal version-notice" role="dialog" aria-modal="true" aria-label="アップデート履歴"><div class="modal-box"><h2 class="version-notice-title">✦ アップデート履歴</h2><div id="versionHistoryContent"></div><button type="button" class="wide" data-action="closeVersionHistory">閉じる</button></div></div>
 <div id="versionUpdateModal" class="modal version-notice" role="dialog" aria-modal="true" aria-label="アップデートのお知らせ"><div class="modal-box"><h2 class="version-notice-title">✦ アップデートのお知らせ</h2><div id="versionUpdateContent"></div><div class="row"><button type="button" style="flex:1" data-action="openVersionHistoryFromNotice">更新履歴を見る</button><button type="button" style="flex:1" data-action="closeVersionUpdate">ゲームを始める</button></div></div></div>
+<div id="raidCutscene221" class="raid-cutscene221" role="dialog" aria-modal="true" aria-label="ヤングドラゴン乱入" aria-hidden="true"><div class="raid-panel221"><div class="raid-alert221">⚠ WARNING ⚠</div><div class="raid-title221">突如、強大な気配が迫る……！</div><div class="raid-figure221"><img id="raidPortrait221" alt="ヤングドラゴン"></div><div class="raid-name221">ヤングドラゴン 乱入！</div><div class="raid-sub221">旅団に新たな敵が襲いかかる！</div><button type="button" class="raid-skip221" id="raidSkip221">演出をスキップ</button></div></div>
 <script>
 'use strict';
 const KEY='hoshiyomi_save_v2';
@@ -351,8 +371,8 @@ function summon(count){const cost=count===10?900:100;if(state.gems<cost){showErr
 const EPIC_SHOWS220=[{name:'黄金の召喚',symbol:'✦',cls:'gold'},{name:'雷鳴の召喚',symbol:'⚡',cls:'thunder'},{name:'限界突破',symbol:'✧',cls:'break'},{name:'虹色の奇跡',symbol:'🌈',cls:'rainbow'},{name:'時間停止',symbol:'⏳',cls:'time'},{name:'星の落下',symbol:'☄️',cls:'meteor'}];
 function growthLabel220(x){if(!x.after)return x.message||'獲得';if(!x.before)return 'NEW！ 初獲得';if(x.before.level>=x.c.max)return '最大Lv到達';const before=x.before,after=x.after;if(!after)return x.message;return after.level>before.level?`Lv.${before.level} → Lv.${after.level}（成長+1体分）`:`育成 +1体分：Lv.${after.level} ${before.dupes||0}/${before.level} → ${after.dupes||0}/${after.level}`} 
 function showSummon(){
- if(summonQueue.length===10&&summonIndex===0)summonIndex=9;
- const item=summonQueue.length===10?(summonQueue.find(x=>x.c.rarity==='エピック')||summonQueue[9]):summonQueue[summonIndex];if(!item){finishSummon();return}
+ // 各召喚演出は実際に抽選された順番のキャラクターを参照する。
+ const item=summonQueue[summonIndex];if(!item){finishSummon();return}
  const token=++animationToken,index=summonIndex,c=item.c,overlay=$('summonOverlay'),epic=c.rarity==='エピック';
  const effect=epic?EPIC_SHOWS220[Math.floor(Math.random()*EPIC_SHOWS220.length)]:null;
  const surprise=epic&&Math.random()<.20;
@@ -815,6 +835,30 @@ ensureQuests();renderAll();renderShop();renderEventList();if(dailyAvailable('bon
     state.wastelandAttempts220??={};state.wastelandAttempts220[selectedWastelandStage]=(Number(state.wastelandAttempts220[selectedWastelandStage])||0)+1;save();newBattle({storyMap:'wasteland',stage:selectedWastelandStage,allies,enemies,message:'荒野へ出陣！'});
   };
 
+  // 乱入戦は抽選・報酬・味方HPを触らず、演出終了後に既存の戦闘処理へ渡す。
+  function playRaidCutscene221(onDone){
+    const overlay=$('raidCutscene221');
+    const skip=$('raidSkip221');
+    if(!overlay){onDone();return}
+    const portraitEl=$('raidPortrait221');
+    if(portraitEl)portraitEl.src=imagePath(byId('youngDragon').imageFile);
+    let finished=false;
+    let timer;
+    function finish(){
+      if(finished)return;
+      finished=true;
+      clearTimeout(timer);
+      skip.removeEventListener('click',finish);
+      overlay.classList.remove('active');
+      overlay.setAttribute('aria-hidden','true');
+      onDone();
+    }
+    skip.addEventListener('click',finish);
+    overlay.setAttribute('aria-hidden','false');
+    overlay.classList.add('active');
+    timer=setTimeout(finish,2800);
+  }
+
   const oldFinishBattle=finishBattle;
   finishBattle=function(victory){
     if(!battle?.running)return;
@@ -864,7 +908,7 @@ ensureQuests();renderAll();renderShop();renderEventList();if(dailyAvailable('bon
         const carried=battle.allies;
         const enemy=makeUnit('youngDragon','enemy',{multiplier:2.5,hpMultiplier:3.2});
         // HP 800% of base: 2.5 * 3.2 = 8.0, not 20x.
-        setTimeout(()=>{if(battle?.storyMap==='wasteland'&&battle.stage===16&&!battle.running){newBattle({storyMap:'wasteland',stage:16,raid220:true,allies:carried,enemies:[enemy],message:'⚠️ WARNING!! ヤングドラゴンが乱入！'})}},650);
+        setTimeout(()=>{const clearedBattle=battle;if(clearedBattle?.storyMap==='wasteland'&&clearedBattle.stage===16&&!clearedBattle.running){playRaidCutscene221(()=>{if(battle===clearedBattle&&!battle.running)newBattle({storyMap:'wasteland',stage:16,raid220:true,allies:carried,enemies:[enemy],message:'⚠️ WARNING!! ヤングドラゴンが乱入！'});});}},650);
         battle.result={victory,rewards,raidIncoming:true};renderBattle();renderAll();return;
       }
     }
@@ -1137,9 +1181,9 @@ try{if(!localStorage.getItem(TUTORIAL_SEEN_KEY))setTimeout(startTutorial,400)}ca
 */
 (() => {
   'use strict';
-  const GAME_VERSION='2.2.0';
+  const GAME_VERSION='2.2.1';
   const VERSION_SEEN_KEY='hoshiyomi_seen_version_v1';
-  const GAME_CHANGELOG=[{version:'2.2.0',date:'2026-11-16',title:'乱入・荒野完結と召喚演出刷新',changes:['荒野16〜20を追加し、荒野16勝利後に一度きりの乱入戦','草原20突破後に荒野を解放、EXの解放条件を隠す','敵編成は挑戦後に公開、敵倍率は非表示、ボスの識別表示を追加','アルティメットカウンターと荒野20ボスの回復を調整','召喚演出6種類・サプライズ昇格・スキップ・10連一覧・育成進捗','初心者・日替わり・週替わりミッション達成通知']},{version:'2.1.0',date:'2026-11-15',title:'新ノーマル・マスケット登場',changes:['新ノーマルキャラ「マスケット」を追加（HP80・攻撃30・素早さ17）','スキル「狙い撃ち」は溜め3で選択した敵に60ダメージ','通常ガチャ・図鑑・ショップに対応（成長率7%・最大Lv20・装備1枠）','既存機能とセーブデータを維持']},{version:'2.0.2',date:'2026-11-15',title:'黄金の凶戦士アックスマン上方修正',changes:['攻撃力を40から60に強化','素早さを16から19に強化','エンハンスドキリングの撃破時攻撃力上昇を+100%から+150%に強化','その他の機能とセーブデータを維持']},{version:'2.0.1',date:'2026-11-15',title:'ログインルーレット修正・ガチャバナー',changes:['ルーレットの賞品ラベルと色付き円盤を一体化し停止位置を修正','ルーレット抽選結果を演出前に確定保存して報酬取りこぼしを防止','新エピック3体のガチャ更新バナーを追加','Ver.2.0.0の戦闘・イベント・ガチャ内容は維持']},{version:'2.0.0',date:'2026-11-15',title:'新エピックと目覚めたものたち',changes:['新エピック3体と固有パッシブ・専用スキルを実装','通常ガチャのエピック排出対象を新3体に更新（旧3体は所持継続可能）','新メインイベント「目覚めたものたち」全10ステージを追加','武の境地を前倒し終了し、目覚めたものたちを11月15日から開催','旧イベントの報酬と既存のセーブデータを維持']},{version:'1.9.0',date:'2026-11-15',title:'封印の儀式・荒野拡張と武の境地の開催期限',changes:['封印の儀式を毎月10日から20日に開催（全3ステージ）','荒野ステージ11〜15を追加','草原と荒野のストーリー周回金貨を毎回90%に統一','武の境地は2026年11月19日23:59（日本時間）で終了','既存機能とセーブデータを維持']},{version:'1.8.3',date:'2026-11-15',title:'荒野11〜15とストーリー周回報酬',changes:['荒野11〜15の敵編成と各初回1000金貨を追加','草原と荒野をストーリーステージとして周回ごとに金貨90%へ減少','荒野の表示金貨も周回回数に対応','既存イベント・セーブデータを維持']},{version:'1.8.2',date:'2026-11-15',title:'封印の儀式と周回報酬の改善',changes:['サブイベント「封印の儀式」を毎月10〜20日に開催','全3ステージと金貨・ジェム・癒しの指輪の報酬を追加','ストーリーの金貨周回減少率を80%から90%に変更','既存機能とセーブデータを維持']},{version:'1.8.1',date:'2026-11-14',title:'無音・スマホ操作改善',changes:['効果音の再生機能と切替ボタンを削除','スマホ向けにメニュー・編成・戦闘・マップをコンパクト化','既存のゲーム内容と保存データは維持']},{version:'1.8.0',date:'2026-11-12',title:'風景と効果音のアップデート',changes:['草原に草花・木々・山並み、荒野に枯れ木・岩場・乾いた大地を描写','ホーム・召喚・ショップ・鍛冶屋・イベントなどに専用の風景を追加','戦闘背景は草原・荒野・EX・各イベント・対戦に対応','BGMを廃止して、ボタン・ガチャ・戦闘・報酬などの効果音を実装（オン・オフ可能）','キャラ・セーブデータ・既存機能は維持']},{version:'1.7.0',date:'2026-11-11',title:'背景演出アップデート',changes:['ゲームの各画面に場面に合った背景を追加','草原・荒野・EX・イベント・旅団対戦の戦闘背景を追加','既存機能とセーブデータは変更なし']},{version:'1.6.3',date:'2026-11-11',title:'ステージに応じた戦闘背景を追加',changes:['草原・荒野・草原EXで戦闘背景が変化するよう改善','アンデッド襲来・将軍の進軍・ドラゴン解放などイベントごとに戦闘背景を追加','旅団対戦は専用の戦闘背景で表示','通常画面の背景切り替えや既存の機能・セーブデータは維持']},{version:'1.6.2',date:'2026-11-11',title:'場面ごとの背景を追加',changes:['ホーム・ガチャ・編成・バトル・ショップなどに場面別の背景を追加','鍛冶屋やイベント、対戦画面にも雰囲気に合った背景を設定','背景は画面切り替えに合わせて自動で切り替わるよう改善','既存の機能・セーブデータ・鍛冶屋・チュートリアルを維持']},{version:'1.6.1',date:'2026-11-11',title:'ゲーム内の用語をわかりやすく改善',changes:['ホーム・ガチャ・ショップ・ミッションなど画面名をわかりやすく変更','バトルやイベント、クリア済みの表示を改善','スキルの溜めについて説明を追加','装身具の表示をアクセサリーに統一（その他の育成用語は維持）','既存の機能・編成・鍛冶屋・セーブデータを維持']},{version:'1.6.0',date:'2026-11-11',title:'初心者ガイド・編成操作改善',changes:['5ステップの初心者チュートリアルを追加','各画面の遊び方ガイドを追加','編成枠をタップして所持英雄を選ぶ2タップ直接交換に対応','編成済み英雄同士の位置入れ替えに対応','スワイプに頼らず一覧のページボタンで選択可能','Ver.1.5.0の鍛冶屋・進化・売却機能を維持']},{version:'1.5.0',date:'2026-11-10',title:'鍛冶屋とアクセサリー進化',changes:['新施設・鍛冶屋を追加（進化と売却）','同種のLv.1指輪2個と金貨でLv.2指輪へ進化','指輪・ネックレスの売却は1個につき1,000金貨','守護・火事場の指輪と、不屈・洗脳のネックレスを追加','進化先9種類の効果を戦闘に適用']},{version:'1.4.0',date:'2026-11-10',title:'草原EX・ドラゴン解放',changes:['草原EXを2ステージ追加し、特殊条件による解放と初回限定報酬に対応','信者・ヤングドラゴンを追加','ゴーレムの素早さ12・溜め6、エルフの回復20%に調整','吸血の指輪を追加（同じキャラへの重複装備不可）','毎週火曜日・木曜日にドラゴン解放を開催']},{version:'1.3.0',date:'2026-11-09',title:'週替わり福袋・戦闘バランス調整',changes:['福袋とパックの週替わり商品5種類を追加','毎週月曜日0時（日本時間）に購入回数をリセット','福袋・パックの開封アニメーションを追加','敵のステータス倍率は素早さに適用しない','通常ステージでも固定威力スキルに倍率を適用']},
+  const GAME_CHANGELOG=[{version:'2.2.1',date:'2026-11-16',title:'乱入演出追加',changes:['荒野16クリア後のヤングドラゴン乱入に専用の警告・キャラクター登場演出を追加','演出スキップに対応し、戦闘・報酬・セーブ処理は維持','効果音なしでスマホ表示にも対応']},{version:'2.2.0',date:'2026-11-16',title:'乱入・荒野完結と召喚演出刷新',changes:['荒野16〜20を追加し、荒野16勝利後に一度きりの乱入戦','草原20突破後に荒野を解放、EXの解放条件を隠す','敵編成は挑戦後に公開、敵倍率は非表示、ボスの識別表示を追加','アルティメットカウンターと荒野20ボスの回復を調整','召喚演出6種類・サプライズ昇格・スキップ・10連一覧・育成進捗','初心者・日替わり・週替わりミッション達成通知']},{version:'2.1.0',date:'2026-11-15',title:'新ノーマル・マスケット登場',changes:['新ノーマルキャラ「マスケット」を追加（HP80・攻撃30・素早さ17）','スキル「狙い撃ち」は溜め3で選択した敵に60ダメージ','通常ガチャ・図鑑・ショップに対応（成長率7%・最大Lv20・装備1枠）','既存機能とセーブデータを維持']},{version:'2.0.2',date:'2026-11-15',title:'黄金の凶戦士アックスマン上方修正',changes:['攻撃力を40から60に強化','素早さを16から19に強化','エンハンスドキリングの撃破時攻撃力上昇を+100%から+150%に強化','その他の機能とセーブデータを維持']},{version:'2.0.1',date:'2026-11-15',title:'ログインルーレット修正・ガチャバナー',changes:['ルーレットの賞品ラベルと色付き円盤を一体化し停止位置を修正','ルーレット抽選結果を演出前に確定保存して報酬取りこぼしを防止','新エピック3体のガチャ更新バナーを追加','Ver.2.0.0の戦闘・イベント・ガチャ内容は維持']},{version:'2.0.0',date:'2026-11-15',title:'新エピックと目覚めたものたち',changes:['新エピック3体と固有パッシブ・専用スキルを実装','通常ガチャのエピック排出対象を新3体に更新（旧3体は所持継続可能）','新メインイベント「目覚めたものたち」全10ステージを追加','武の境地を前倒し終了し、目覚めたものたちを11月15日から開催','旧イベントの報酬と既存のセーブデータを維持']},{version:'1.9.0',date:'2026-11-15',title:'封印の儀式・荒野拡張と武の境地の開催期限',changes:['封印の儀式を毎月10日から20日に開催（全3ステージ）','荒野ステージ11〜15を追加','草原と荒野のストーリー周回金貨を毎回90%に統一','武の境地は2026年11月19日23:59（日本時間）で終了','既存機能とセーブデータを維持']},{version:'1.8.3',date:'2026-11-15',title:'荒野11〜15とストーリー周回報酬',changes:['荒野11〜15の敵編成と各初回1000金貨を追加','草原と荒野をストーリーステージとして周回ごとに金貨90%へ減少','荒野の表示金貨も周回回数に対応','既存イベント・セーブデータを維持']},{version:'1.8.2',date:'2026-11-15',title:'封印の儀式と周回報酬の改善',changes:['サブイベント「封印の儀式」を毎月10〜20日に開催','全3ステージと金貨・ジェム・癒しの指輪の報酬を追加','ストーリーの金貨周回減少率を80%から90%に変更','既存機能とセーブデータを維持']},{version:'1.8.1',date:'2026-11-14',title:'無音・スマホ操作改善',changes:['効果音の再生機能と切替ボタンを削除','スマホ向けにメニュー・編成・戦闘・マップをコンパクト化','既存のゲーム内容と保存データは維持']},{version:'1.8.0',date:'2026-11-12',title:'風景と効果音のアップデート',changes:['草原に草花・木々・山並み、荒野に枯れ木・岩場・乾いた大地を描写','ホーム・召喚・ショップ・鍛冶屋・イベントなどに専用の風景を追加','戦闘背景は草原・荒野・EX・各イベント・対戦に対応','BGMを廃止して、ボタン・ガチャ・戦闘・報酬などの効果音を実装（オン・オフ可能）','キャラ・セーブデータ・既存機能は維持']},{version:'1.7.0',date:'2026-11-11',title:'背景演出アップデート',changes:['ゲームの各画面に場面に合った背景を追加','草原・荒野・EX・イベント・旅団対戦の戦闘背景を追加','既存機能とセーブデータは変更なし']},{version:'1.6.3',date:'2026-11-11',title:'ステージに応じた戦闘背景を追加',changes:['草原・荒野・草原EXで戦闘背景が変化するよう改善','アンデッド襲来・将軍の進軍・ドラゴン解放などイベントごとに戦闘背景を追加','旅団対戦は専用の戦闘背景で表示','通常画面の背景切り替えや既存の機能・セーブデータは維持']},{version:'1.6.2',date:'2026-11-11',title:'場面ごとの背景を追加',changes:['ホーム・ガチャ・編成・バトル・ショップなどに場面別の背景を追加','鍛冶屋やイベント、対戦画面にも雰囲気に合った背景を設定','背景は画面切り替えに合わせて自動で切り替わるよう改善','既存の機能・セーブデータ・鍛冶屋・チュートリアルを維持']},{version:'1.6.1',date:'2026-11-11',title:'ゲーム内の用語をわかりやすく改善',changes:['ホーム・ガチャ・ショップ・ミッションなど画面名をわかりやすく変更','バトルやイベント、クリア済みの表示を改善','スキルの溜めについて説明を追加','装身具の表示をアクセサリーに統一（その他の育成用語は維持）','既存の機能・編成・鍛冶屋・セーブデータを維持']},{version:'1.6.0',date:'2026-11-11',title:'初心者ガイド・編成操作改善',changes:['5ステップの初心者チュートリアルを追加','各画面の遊び方ガイドを追加','編成枠をタップして所持英雄を選ぶ2タップ直接交換に対応','編成済み英雄同士の位置入れ替えに対応','スワイプに頼らず一覧のページボタンで選択可能','Ver.1.5.0の鍛冶屋・進化・売却機能を維持']},{version:'1.5.0',date:'2026-11-10',title:'鍛冶屋とアクセサリー進化',changes:['新施設・鍛冶屋を追加（進化と売却）','同種のLv.1指輪2個と金貨でLv.2指輪へ進化','指輪・ネックレスの売却は1個につき1,000金貨','守護・火事場の指輪と、不屈・洗脳のネックレスを追加','進化先9種類の効果を戦闘に適用']},{version:'1.4.0',date:'2026-11-10',title:'草原EX・ドラゴン解放',changes:['草原EXを2ステージ追加し、特殊条件による解放と初回限定報酬に対応','信者・ヤングドラゴンを追加','ゴーレムの素早さ12・溜め6、エルフの回復20%に調整','吸血の指輪を追加（同じキャラへの重複装備不可）','毎週火曜日・木曜日にドラゴン解放を開催']},{version:'1.3.0',date:'2026-11-09',title:'週替わり福袋・戦闘バランス調整',changes:['福袋とパックの週替わり商品5種類を追加','毎週月曜日0時（日本時間）に購入回数をリセット','福袋・パックの開封アニメーションを追加','敵のステータス倍率は素早さに適用しない','通常ステージでも固定威力スキルに倍率を適用']},
     {version:'1.2.0',date:'2026-11-09',title:'砂塵の荒野・新たな英雄',changes:[
       'ノーマル英雄「ミイラ」「ガーゴイル」を追加',
       'ミイラは荒野ステージドロップ限定（ガチャ・ショップ対象外）',
