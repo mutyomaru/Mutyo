@@ -163,6 +163,54 @@ body.scene-fight-forest{background-image:linear-gradient(180deg,#00180b44,#00100
 .summon-grid220{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px}.summon-card220{padding:4px;border:1px solid #786d5b;border-radius:9px;display:flex;flex-direction:column;gap:3px;align-items:center;text-align:center;min-width:0}.summon-card220 .portrait{width:100%;height:63px}.summon-card220 .portrait img{width:100%;height:100%;object-fit:contain}.summon-card220 b,.summon-card220 small{font-size:10px;overflow-wrap:anywhere}.summon-card220 small{color:#f1d7a2}
 .summon[data-effect="rainbow"] .summon-magic{filter:hue-rotate(120deg) saturate(2.5);animation:rainbow220 1.4s linear infinite}.summon[data-effect="thunder"] .summon-lightning{opacity:1!important;filter:hue-rotate(190deg)}.summon[data-effect="time"] .summon-cinema{animation:time220 2s steps(2,end)}.summon[data-effect="meteor"] .summon-magic{transform:rotate(-40deg);filter:drop-shadow(0 0 20px gold)}.summon[data-effect="break"] .summon-cinema{box-shadow:inset 0 0 0 4px #ffdd9a;animation:break220 1.2s ease}.summon[data-effect="gold"] .summon-magic{filter:brightness(1.8) sepia(1)}.summon-epic-title{color:#f8ce70;font-weight:bold;letter-spacing:.07em}
 @keyframes rainbow220{from{filter:hue-rotate(0deg) saturate(2.4)}to{filter:hue-rotate(360deg) saturate(2.4)}}@keyframes time220{0%,40%{filter:grayscale(1)}60%,100%{filter:none}}@keyframes break220{0%{transform:scale(.94)}55%{transform:scale(1.03)}100%{transform:scale(1)}}
+</style><style id="card-readability-v232">
+/* CARD_READABILITY_V232: portrait-first mobile layout; visual only */
+.battle-side{gap:7px}
+.unit{padding:6px 4px;overflow-wrap:anywhere}
+.unit .portrait{height:clamp(105px,17dvh,158px);width:100%;overflow:hidden}
+.unit .portrait img,.formation-slot .portrait img,.formation-choice .portrait img,.card .portrait img{max-width:100%;max-height:100%;object-fit:contain}
+.unit .name{font-size:clamp(12px,1.8vw,15px);line-height:1.25}
+.unit .small,.unit .stats{font-size:12px;line-height:1.3}
+.unit .hpbar{height:8px;margin:5px 0}
+.formation-slots,.formation-list{gap:8px}
+.formation-slot{padding:8px 4px}
+.formation-slot .portrait{height:clamp(95px,16dvh,145px);width:100%}
+.formation-slot .name{font-size:clamp(12px,2.8vw,15px);line-height:1.3;overflow-wrap:anywhere}
+.formation-choice{padding:7px 3px;gap:4px}
+.formation-choice .portrait{height:clamp(83px,13dvh,120px)}
+.formation-choice .name{font-size:clamp(11px,2.5vw,13px);line-height:1.25;overflow-wrap:anywhere}
+.card .portrait{height:clamp(95px,15dvh,135px)}
+.card .name{font-size:clamp(12px,2.3vw,15px);line-height:1.3}
+.card .stats{font-size:clamp(11px,2vw,13px);line-height:1.4}
+.encyclopedia-image .portrait{height:clamp(140px,20dvh,195px)}
+.encyclopedia-card .name{font-size:clamp(11px,2.3vw,14px);line-height:1.3}
+@media(max-width:600px){
+  .battle-side{grid-template-columns:repeat(3,minmax(0,1fr));gap:5px}
+  .unit{padding:4px 2px}
+  .unit .portrait{height:clamp(76px,12.5dvh,108px)}
+  .unit .name{font-size:11px;line-height:1.22}
+  .unit .small,.unit .stats{font-size:10px;line-height:1.25;margin:3px 0}
+  .unit .hpbar{height:7px;margin:4px 0}
+  .formation-slots{gap:5px}
+  .formation-slot{padding:5px 2px}
+  .formation-slot .portrait{height:clamp(86px,14dvh,122px)}
+  .formation-slot .name{font-size:12px;line-height:1.25}
+  .formation-list{grid-template-columns:repeat(3,minmax(0,1fr));gap:5px;margin-top:7px}
+  .formation-choice{padding:5px 2px;gap:3px}
+  .formation-choice .portrait{height:clamp(76px,12dvh,106px)}
+  .formation-choice .name{font-size:11px;line-height:1.25}
+  .card .portrait{height:clamp(88px,13dvh,118px)}
+  .card .name{font-size:12px}
+  .card .stats{font-size:11px;line-height:1.3}
+  .encyclopedia-image .portrait{height:clamp(126px,18dvh,170px)}
+  .encyclopedia-card .name,.encyclopedia-level{font-size:11px}
+}
+@media(max-width:360px){
+  .unit .portrait{height:clamp(72px,11dvh,95px)}
+  .unit .name{font-size:10.5px}
+  .formation-slot .portrait{height:clamp(78px,12dvh,108px)}
+  .formation-choice .portrait{height:clamp(70px,11dvh,94px)}
+}
 </style></head><body>
 <div class="wrap">
 <header class="top"><div class="brand">✦ 星詠みの旅団</div><button type="button" id="versionHeaderButton" class="version-label" data-action="showVersionHistory" aria-label="アップデート履歴を開く">Ver.2.1.0</button><div class="row"><span class="pill">💎 <b id="gems">0</b></span><span class="pill">🪙 <b id="gold">0</b></span><span class="pill">到達 <b id="stage">1</b></span></div></header><div id="errorBox" class="error" role="alert"></div>
@@ -1338,9 +1386,9 @@ try{if(!localStorage.getItem(TUTORIAL_SEEN_KEY))setTimeout(startTutorial,400)}ca
 */
 (() => {
   'use strict';
-  const GAME_VERSION='2.3.1';
+  const GAME_VERSION='2.3.2';
   const VERSION_SEEN_KEY='hoshiyomi_seen_version_v1';
-  const GAME_CHANGELOG=[{version:'2.3.1',date:'2026-11-18',title:'機能やUIの微調整',changes:['アルティメットカウンターの戦闘中の表示を「カウンター！」に変更','覚醒ステージを開催中のイベント一覧へ統合し、開催曜日以外は非表示','既存の覚醒進捗・報酬・セーブデータを維持']},{version:'2.3.0',date:'2026-11-18',title:'深い森・3英雄覚醒・装備改善',changes:['新ストーリーマップ「深い森」全20ステージ枠を追加','深い森1〜5の敵編成を追加し各ステージ初回1000金貨','荒野20クリアで深い森解放、6〜20は未実装表示','ノーマル3英雄の曜日限定覚醒ステージと専用スキルを追加','装備選択画面を整理し、鍛冶屋の進化手順を案内','既存の戦闘・ドロップ・90%周回報酬ルールを適用']},{version:'2.2.0',date:'2026-11-16',title:'乱入・荒野完結と召喚演出刷新',changes:['荒野16〜20を追加し、荒野16勝利後に一度きりの乱入戦','草原20突破後に荒野を解放、EXの解放条件を隠す','敵編成は挑戦後に公開、敵倍率は非表示、ボスの識別表示を追加','アルティメットカウンターと荒野20ボスの回復を調整','召喚演出6種類・サプライズ昇格・スキップ・10連一覧・育成進捗','初心者・日替わり・週替わりミッション達成通知']},{version:'2.1.0',date:'2026-11-15',title:'新ノーマル・マスケット登場',changes:['新ノーマルキャラ「マスケット」を追加（HP80・攻撃30・素早さ17）','スキル「狙い撃ち」は溜め3で選択した敵に60ダメージ','通常ガチャ・図鑑・ショップに対応（成長率7%・最大Lv20・装備1枠）','既存機能とセーブデータを維持']},{version:'2.0.2',date:'2026-11-15',title:'黄金の凶戦士アックスマン上方修正',changes:['攻撃力を40から60に強化','素早さを16から19に強化','エンハンスドキリングの撃破時攻撃力上昇を+100%から+150%に強化','その他の機能とセーブデータを維持']},{version:'2.0.1',date:'2026-11-15',title:'ログインルーレット修正・ガチャバナー',changes:['ルーレットの賞品ラベルと色付き円盤を一体化し停止位置を修正','ルーレット抽選結果を演出前に確定保存して報酬取りこぼしを防止','新エピック3体のガチャ更新バナーを追加','Ver.2.0.0の戦闘・イベント・ガチャ内容は維持']},{version:'2.0.0',date:'2026-11-15',title:'新エピックと目覚めたものたち',changes:['新エピック3体と固有パッシブ・専用スキルを実装','通常ガチャのエピック排出対象を新3体に更新（旧3体は所持継続可能）','新メインイベント「目覚めたものたち」全10ステージを追加','武の境地を前倒し終了し、目覚めたものたちを11月15日から開催','旧イベントの報酬と既存のセーブデータを維持']},{version:'1.9.0',date:'2026-11-15',title:'封印の儀式・荒野拡張と武の境地の開催期限',changes:['封印の儀式を毎月10日から20日に開催（全3ステージ）','荒野ステージ11〜15を追加','草原と荒野のストーリー周回金貨を毎回90%に統一','武の境地は2026年11月19日23:59（日本時間）で終了','既存機能とセーブデータを維持']},{version:'1.8.3',date:'2026-11-15',title:'荒野11〜15とストーリー周回報酬',changes:['荒野11〜15の敵編成と各初回1000金貨を追加','草原と荒野をストーリーステージとして周回ごとに金貨90%へ減少','荒野の表示金貨も周回回数に対応','既存イベント・セーブデータを維持']},{version:'1.8.2',date:'2026-11-15',title:'封印の儀式と周回報酬の改善',changes:['サブイベント「封印の儀式」を毎月10〜20日に開催','全3ステージと金貨・ジェム・癒しの指輪の報酬を追加','ストーリーの金貨周回減少率を80%から90%に変更','既存機能とセーブデータを維持']},{version:'1.8.1',date:'2026-11-14',title:'無音・スマホ操作改善',changes:['効果音の再生機能と切替ボタンを削除','スマホ向けにメニュー・編成・戦闘・マップをコンパクト化','既存のゲーム内容と保存データは維持']},{version:'1.8.0',date:'2026-11-12',title:'風景と効果音のアップデート',changes:['草原に草花・木々・山並み、荒野に枯れ木・岩場・乾いた大地を描写','ホーム・召喚・ショップ・鍛冶屋・イベントなどに専用の風景を追加','戦闘背景は草原・荒野・EX・各イベント・対戦に対応','BGMを廃止して、ボタン・ガチャ・戦闘・報酬などの効果音を実装（オン・オフ可能）','キャラ・セーブデータ・既存機能は維持']},{version:'1.7.0',date:'2026-11-11',title:'背景演出アップデート',changes:['ゲームの各画面に場面に合った背景を追加','草原・荒野・EX・イベント・旅団対戦の戦闘背景を追加','既存機能とセーブデータは変更なし']},{version:'1.6.3',date:'2026-11-11',title:'ステージに応じた戦闘背景を追加',changes:['草原・荒野・草原EXで戦闘背景が変化するよう改善','アンデッド襲来・将軍の進軍・ドラゴン解放などイベントごとに戦闘背景を追加','旅団対戦は専用の戦闘背景で表示','通常画面の背景切り替えや既存の機能・セーブデータは維持']},{version:'1.6.2',date:'2026-11-11',title:'場面ごとの背景を追加',changes:['ホーム・ガチャ・編成・バトル・ショップなどに場面別の背景を追加','鍛冶屋やイベント、対戦画面にも雰囲気に合った背景を設定','背景は画面切り替えに合わせて自動で切り替わるよう改善','既存の機能・セーブデータ・鍛冶屋・チュートリアルを維持']},{version:'1.6.1',date:'2026-11-11',title:'ゲーム内の用語をわかりやすく改善',changes:['ホーム・ガチャ・ショップ・ミッションなど画面名をわかりやすく変更','バトルやイベント、クリア済みの表示を改善','スキルの溜めについて説明を追加','装身具の表示をアクセサリーに統一（その他の育成用語は維持）','既存の機能・編成・鍛冶屋・セーブデータを維持']},{version:'1.6.0',date:'2026-11-11',title:'初心者ガイド・編成操作改善',changes:['5ステップの初心者チュートリアルを追加','各画面の遊び方ガイドを追加','編成枠をタップして所持英雄を選ぶ2タップ直接交換に対応','編成済み英雄同士の位置入れ替えに対応','スワイプに頼らず一覧のページボタンで選択可能','Ver.1.5.0の鍛冶屋・進化・売却機能を維持']},{version:'1.5.0',date:'2026-11-10',title:'鍛冶屋とアクセサリー進化',changes:['新施設・鍛冶屋を追加（進化と売却）','同種のLv.1指輪2個と金貨でLv.2指輪へ進化','指輪・ネックレスの売却は1個につき1,000金貨','守護・火事場の指輪と、不屈・洗脳のネックレスを追加','進化先9種類の効果を戦闘に適用']},{version:'1.4.0',date:'2026-11-10',title:'草原EX・ドラゴン解放',changes:['草原EXを2ステージ追加し、特殊条件による解放と初回限定報酬に対応','信者・ヤングドラゴンを追加','ゴーレムの素早さ12・溜め6、エルフの回復20%に調整','吸血の指輪を追加（同じキャラへの重複装備不可）','毎週火曜日・木曜日にドラゴン解放を開催']},{version:'1.3.0',date:'2026-11-09',title:'週替わり福袋・戦闘バランス調整',changes:['福袋とパックの週替わり商品5種類を追加','毎週月曜日0時（日本時間）に購入回数をリセット','福袋・パックの開封アニメーションを追加','敵のステータス倍率は素早さに適用しない','通常ステージでも固定威力スキルに倍率を適用']},
+  const GAME_CHANGELOG=[{version:'2.3.2',date:'2026-11-18',title:'キャラカードの視認性改善',changes:['バトルの味方・敵キャラ画像を拡大','編成中のキャラと候補一覧を拡大し、名前も読みやすく調整','図鑑や各種カードの画像・文字・余白を改善','スマートフォンでも横3列を基本に見やすさを調整']},{version:'2.3.1',date:'2026-11-18',title:'機能やUIの微調整',changes:['アルティメットカウンターの戦闘中の表示を「カウンター！」に変更','覚醒ステージを開催中のイベント一覧へ統合し、開催曜日以外は非表示','既存の覚醒進捗・報酬・セーブデータを維持']},{version:'2.3.0',date:'2026-11-18',title:'深い森・3英雄覚醒・装備改善',changes:['新ストーリーマップ「深い森」全20ステージ枠を追加','深い森1〜5の敵編成を追加し各ステージ初回1000金貨','荒野20クリアで深い森解放、6〜20は未実装表示','ノーマル3英雄の曜日限定覚醒ステージと専用スキルを追加','装備選択画面を整理し、鍛冶屋の進化手順を案内','既存の戦闘・ドロップ・90%周回報酬ルールを適用']},{version:'2.2.0',date:'2026-11-16',title:'乱入・荒野完結と召喚演出刷新',changes:['荒野16〜20を追加し、荒野16勝利後に一度きりの乱入戦','草原20突破後に荒野を解放、EXの解放条件を隠す','敵編成は挑戦後に公開、敵倍率は非表示、ボスの識別表示を追加','アルティメットカウンターと荒野20ボスの回復を調整','召喚演出6種類・サプライズ昇格・スキップ・10連一覧・育成進捗','初心者・日替わり・週替わりミッション達成通知']},{version:'2.1.0',date:'2026-11-15',title:'新ノーマル・マスケット登場',changes:['新ノーマルキャラ「マスケット」を追加（HP80・攻撃30・素早さ17）','スキル「狙い撃ち」は溜め3で選択した敵に60ダメージ','通常ガチャ・図鑑・ショップに対応（成長率7%・最大Lv20・装備1枠）','既存機能とセーブデータを維持']},{version:'2.0.2',date:'2026-11-15',title:'黄金の凶戦士アックスマン上方修正',changes:['攻撃力を40から60に強化','素早さを16から19に強化','エンハンスドキリングの撃破時攻撃力上昇を+100%から+150%に強化','その他の機能とセーブデータを維持']},{version:'2.0.1',date:'2026-11-15',title:'ログインルーレット修正・ガチャバナー',changes:['ルーレットの賞品ラベルと色付き円盤を一体化し停止位置を修正','ルーレット抽選結果を演出前に確定保存して報酬取りこぼしを防止','新エピック3体のガチャ更新バナーを追加','Ver.2.0.0の戦闘・イベント・ガチャ内容は維持']},{version:'2.0.0',date:'2026-11-15',title:'新エピックと目覚めたものたち',changes:['新エピック3体と固有パッシブ・専用スキルを実装','通常ガチャのエピック排出対象を新3体に更新（旧3体は所持継続可能）','新メインイベント「目覚めたものたち」全10ステージを追加','武の境地を前倒し終了し、目覚めたものたちを11月15日から開催','旧イベントの報酬と既存のセーブデータを維持']},{version:'1.9.0',date:'2026-11-15',title:'封印の儀式・荒野拡張と武の境地の開催期限',changes:['封印の儀式を毎月10日から20日に開催（全3ステージ）','荒野ステージ11〜15を追加','草原と荒野のストーリー周回金貨を毎回90%に統一','武の境地は2026年11月19日23:59（日本時間）で終了','既存機能とセーブデータを維持']},{version:'1.8.3',date:'2026-11-15',title:'荒野11〜15とストーリー周回報酬',changes:['荒野11〜15の敵編成と各初回1000金貨を追加','草原と荒野をストーリーステージとして周回ごとに金貨90%へ減少','荒野の表示金貨も周回回数に対応','既存イベント・セーブデータを維持']},{version:'1.8.2',date:'2026-11-15',title:'封印の儀式と周回報酬の改善',changes:['サブイベント「封印の儀式」を毎月10〜20日に開催','全3ステージと金貨・ジェム・癒しの指輪の報酬を追加','ストーリーの金貨周回減少率を80%から90%に変更','既存機能とセーブデータを維持']},{version:'1.8.1',date:'2026-11-14',title:'無音・スマホ操作改善',changes:['効果音の再生機能と切替ボタンを削除','スマホ向けにメニュー・編成・戦闘・マップをコンパクト化','既存のゲーム内容と保存データは維持']},{version:'1.8.0',date:'2026-11-12',title:'風景と効果音のアップデート',changes:['草原に草花・木々・山並み、荒野に枯れ木・岩場・乾いた大地を描写','ホーム・召喚・ショップ・鍛冶屋・イベントなどに専用の風景を追加','戦闘背景は草原・荒野・EX・各イベント・対戦に対応','BGMを廃止して、ボタン・ガチャ・戦闘・報酬などの効果音を実装（オン・オフ可能）','キャラ・セーブデータ・既存機能は維持']},{version:'1.7.0',date:'2026-11-11',title:'背景演出アップデート',changes:['ゲームの各画面に場面に合った背景を追加','草原・荒野・EX・イベント・旅団対戦の戦闘背景を追加','既存機能とセーブデータは変更なし']},{version:'1.6.3',date:'2026-11-11',title:'ステージに応じた戦闘背景を追加',changes:['草原・荒野・草原EXで戦闘背景が変化するよう改善','アンデッド襲来・将軍の進軍・ドラゴン解放などイベントごとに戦闘背景を追加','旅団対戦は専用の戦闘背景で表示','通常画面の背景切り替えや既存の機能・セーブデータは維持']},{version:'1.6.2',date:'2026-11-11',title:'場面ごとの背景を追加',changes:['ホーム・ガチャ・編成・バトル・ショップなどに場面別の背景を追加','鍛冶屋やイベント、対戦画面にも雰囲気に合った背景を設定','背景は画面切り替えに合わせて自動で切り替わるよう改善','既存の機能・セーブデータ・鍛冶屋・チュートリアルを維持']},{version:'1.6.1',date:'2026-11-11',title:'ゲーム内の用語をわかりやすく改善',changes:['ホーム・ガチャ・ショップ・ミッションなど画面名をわかりやすく変更','バトルやイベント、クリア済みの表示を改善','スキルの溜めについて説明を追加','装身具の表示をアクセサリーに統一（その他の育成用語は維持）','既存の機能・編成・鍛冶屋・セーブデータを維持']},{version:'1.6.0',date:'2026-11-11',title:'初心者ガイド・編成操作改善',changes:['5ステップの初心者チュートリアルを追加','各画面の遊び方ガイドを追加','編成枠をタップして所持英雄を選ぶ2タップ直接交換に対応','編成済み英雄同士の位置入れ替えに対応','スワイプに頼らず一覧のページボタンで選択可能','Ver.1.5.0の鍛冶屋・進化・売却機能を維持']},{version:'1.5.0',date:'2026-11-10',title:'鍛冶屋とアクセサリー進化',changes:['新施設・鍛冶屋を追加（進化と売却）','同種のLv.1指輪2個と金貨でLv.2指輪へ進化','指輪・ネックレスの売却は1個につき1,000金貨','守護・火事場の指輪と、不屈・洗脳のネックレスを追加','進化先9種類の効果を戦闘に適用']},{version:'1.4.0',date:'2026-11-10',title:'草原EX・ドラゴン解放',changes:['草原EXを2ステージ追加し、特殊条件による解放と初回限定報酬に対応','信者・ヤングドラゴンを追加','ゴーレムの素早さ12・溜め6、エルフの回復20%に調整','吸血の指輪を追加（同じキャラへの重複装備不可）','毎週火曜日・木曜日にドラゴン解放を開催']},{version:'1.3.0',date:'2026-11-09',title:'週替わり福袋・戦闘バランス調整',changes:['福袋とパックの週替わり商品5種類を追加','毎週月曜日0時（日本時間）に購入回数をリセット','福袋・パックの開封アニメーションを追加','敵のステータス倍率は素早さに適用しない','通常ステージでも固定威力スキルに倍率を適用']},
     {version:'1.2.0',date:'2026-11-09',title:'砂塵の荒野・新たな英雄',changes:[
       'ノーマル英雄「ミイラ」「ガーゴイル」を追加',
       'ミイラは荒野ステージドロップ限定（ガチャ・ショップ対象外）',
