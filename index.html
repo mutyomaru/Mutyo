@@ -14,6 +14,42 @@ button,textarea{font:inherit}button{color:inherit;border:1px solid #938467;backg
 .daily-panel{text-align:center}.daily-wheel-wrap{position:relative;width:min(76vw,290px);aspect-ratio:1;margin:15px auto}.daily-wheel{width:100%;height:100%;border-radius:50%;border:7px solid var(--gold);box-shadow:0 0 22px #f4c76b66;transition:transform 4.5s cubic-bezier(.12,.75,.12,1)}.daily-wheel-label{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);transform-origin:center;color:white;font-size:clamp(9px,2.6vw,11px);font-weight:900;text-shadow:0 1px 3px black;pointer-events:none;white-space:nowrap;text-align:center;line-height:1.3;max-width:31%}.daily-pointer{position:absolute;top:-15px;left:50%;transform:translateX(-50%);z-index:5;color:#ffb46b;font-size:36px;text-shadow:0 2px 3px black}.daily-center{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:54px;height:54px;border-radius:50%;display:grid;place-items:center;background:var(--gold);color:#34240a;border:4px solid #ede4d0;font-weight:900}.daily-buttons{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:10px}.daily-buttons button{min-width:135px}.shop-product-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:12px 0}.shop-product{min-width:0;display:flex;flex-direction:column;align-items:center;text-align:center;gap:6px;background:#333631;border:1px solid var(--line);border-radius:8px;padding:9px 6px}.shop-product-image{width:100%;height:110px;display:flex;justify-content:center;align-items:center}.shop-product-image .portrait{width:100%;height:100%}.shop-product b{font-size:13px;overflow-wrap:anywhere}.shop-ring-icon{display:flex;align-items:center;justify-content:center;height:85px}.shop-product-price{margin-top:auto;color:var(--gold);font-weight:900}.shop-product button{font-size:12px;padding:9px 3px}#shopMessage:not(:empty){color:#b0e5bd;padding:8px}
 .summon{display:none;position:fixed;inset:0;z-index:1100;background:radial-gradient(circle,#33454a,#030612 80%);align-items:center;justify-content:center;padding:15px;overflow:hidden;--summon-color:#9bc5d5;--summon-glow:#659cba}.summon.active{display:flex}.summon.epic-mode{--summon-color:#ffe18a;--summon-glow:#ffb700;background:radial-gradient(circle,#463210,#05040b 80%)}.summon-box{text-align:center;max-width:520px;width:100%;position:relative;z-index:2}.summon-cinema{position:relative;height:min(52dvh,370px);min-height:270px;display:flex;justify-content:center;align-items:center;isolation:isolate}.summon-magic{position:absolute;width:min(65vw,260px);aspect-ratio:1;border:3px solid var(--summon-color);border-radius:50%;box-shadow:0 0 30px var(--summon-glow),inset 0 0 35px var(--summon-glow);animation:summonRotate 4s linear infinite,summonAppear 1s ease-out both}.summon-magic:before{content:"✦ ✧ ✦ ✧ ✦ ✧";position:absolute;inset:15px;border:2px dashed var(--summon-color);border-radius:50%;display:grid;place-items:center;color:var(--summon-color);letter-spacing:5px}.summon-magic:after{content:"";position:absolute;inset:43px;border:2px solid var(--summon-color);border-radius:50%;box-shadow:0 0 20px var(--summon-glow)}.summon-particle{position:absolute;left:50%;top:50%;width:var(--size);height:var(--size);border-radius:50%;background:var(--summon-color);box-shadow:0 0 12px var(--summon-color);animation:summonParticle var(--duration) ease-in-out infinite;animation-delay:var(--delay)}.summon-character{position:relative;z-index:3;opacity:0;transform:scale(.3);filter:brightness(4)}.summon-character.visible{animation:summonReveal .85s ease-out forwards}.summon-character img{width:min(55vw,190px);height:210px;object-fit:contain;filter:drop-shadow(0 0 20px var(--summon-glow))}.summon-information{opacity:0;transform:translateY(15px)}.summon-information.visible{animation:summonText .5s ease-out forwards}.summon-information h2{color:var(--summon-color);text-shadow:0 0 18px var(--summon-glow)}.summon-flash{position:fixed;inset:0;background:white;opacity:0;pointer-events:none;z-index:5}.summon-flash.play{animation:summonFlash .8s ease-out}.summon-lightning{position:absolute;inset:0;opacity:0;pointer-events:none;background:linear-gradient(115deg,transparent 43%,#fff7c7 47%,#ffcf49 50%,transparent 54%)}.epic-mode .summon-lightning{animation:summonLightning .55s steps(2) infinite}.epic-mode .summon-magic{animation:summonRotate 2s linear infinite,summonAppear 1s ease-out both,summonPulse .7s ease-in-out infinite alternate}@keyframes summonRotate{to{transform:rotate(360deg)}}@keyframes summonAppear{from{opacity:0;scale:.1}to{opacity:1;scale:1}}@keyframes summonPulse{to{box-shadow:0 0 75px var(--summon-glow),inset 0 0 50px var(--summon-glow)}}@keyframes summonParticle{0%{opacity:0;transform:rotate(var(--angle)) translateX(145px)}50%{opacity:1}100%{opacity:0;transform:rotate(var(--angle)) translateX(10px)}}@keyframes summonReveal{from{opacity:0;transform:scale(.3);filter:brightness(4)}to{opacity:1;transform:scale(1);filter:brightness(1)}}@keyframes summonText{to{opacity:1;transform:translateY(0)}}@keyframes summonFlash{0%{opacity:0}30%{opacity:.95}100%{opacity:0}}@keyframes summonLightning{0%,100%{opacity:0}50%{opacity:.8}}
 .footer{text-align:center;color:var(--muted);font-size:11px;padding:9px}@media(max-width:600px){html,body{width:100%;overflow-x:hidden}.wrap{max-width:100%;padding:5px 6px}.top{padding:3px 0;gap:4px}.brand{font-size:15px}.top .row{gap:4px}.pill{padding:3px 6px;font-size:11px}.nav{gap:3px;margin:5px 0 7px}.nav button{padding:9px 1px;font-size:10px;border-radius:5px}.panel{padding:7px;margin-bottom:6px;border-radius:7px}.section-title{font-size:15px;margin-bottom:5px}.panel p{margin:5px 0}.hero{padding:10px 6px}.hero h1{font-size:19px;margin:5px 0}.grid{gap:5px}.card{padding:4px 3px 32px}.card .portrait{height:60px}.card .name{font-size:11px}.card .stats{font-size:10px}.card button.wide{font-size:10px;padding:5px 1px}#characterList{gap:4px}.encyclopedia-card{padding:3px 2px 29px}.encyclopedia-image .portrait{height:clamp(110px,16vh,155px)}.encyclopedia-card .name,.encyclopedia-level{font-size:11px}.battle-side{gap:4px}.unit{padding:3px 2px}.unit .portrait{height:clamp(65px,12vh,100px)}.unit .name,.unit .small{font-size:10px}.hpbar{height:6px;margin:3px 0}.battle-divider{margin:4px}.action-panel{margin-top:5px;padding:7px}.action-buttons button{min-height:38px;padding:5px;font-size:12px}.stage-map{padding:6px}.map-grid{gap:4px}.stage-node{min-height:47px;padding:3px 1px}.stage-node .num{font-size:15px}.stage-node .small{font-size:9px}.stage-info{padding:6px;margin-top:6px;font-size:12px}.modal{padding:7px}.modal-box{max-height:91dvh;padding:10px}.footer{display:none}}
+/* BATTLE_FOCUS_V240: battles remove global chrome and emphasize action */
+body.battle-focus .top,body.battle-focus .nav{display:none!important}
+body.battle-focus .wrap{padding-top:max(3px,env(safe-area-inset-top))}
+body.battle-focus #battleFight::before{display:none}
+body.battle-focus #battleFight>.panel{padding:7px 8px;margin:0 auto}
+body.battle-focus #battleFight>.panel>.row:first-child{min-height:30px;margin-bottom:2px;gap:5px}
+body.battle-focus #battleFight .section-title{margin:0;font-size:16px}
+body.battle-focus #battleFight h3{font-size:13px;line-height:1.2;margin:3px 0 4px!important}
+body.battle-focus #battleFight .battle-divider{font-size:12px;margin:3px 0;line-height:1}
+body.battle-focus #battleFight .battle-side{gap:5px}
+body.battle-focus #battleFight .unit{padding:3px 3px 4px}
+body.battle-focus #battleFight .unit .portrait{height:clamp(95px,16dvh,145px);width:100%}
+body.battle-focus #battleFight .unit .name{font-size:clamp(11px,2.6vw,14px);line-height:1.16}
+body.battle-focus #battleFight .unit .small{font-size:11px;line-height:1.2}
+body.battle-focus #battleFight .unit .hpbar{height:7px;margin:3px 0}
+body.battle-focus #battleFight .status-badges{margin-top:3px;gap:2px}
+body.battle-focus #battleFight .action-panel{margin-top:6px;padding:8px}
+body.battle-focus #battleFight .action-buttons{gap:7px;margin-top:5px}
+body.battle-focus #battleFight .action-buttons button{min-height:44px;font-size:14px;padding:8px 5px}
+@media(max-width:600px){body.battle-focus .wrap{padding:max(2px,env(safe-area-inset-top)) 5px 5px}body.battle-focus #battleFight>.panel{padding:5px}body.battle-focus #battleFight .battle-side{gap:4px}body.battle-focus #battleFight .unit .portrait{height:clamp(87px,14dvh,123px)}body.battle-focus #battleFight .unit .name{font-size:11px}body.battle-focus #battleFight .unit .small{font-size:10px}}
+@media(max-height:700px){body.battle-focus #battleFight .unit .portrait{height:clamp(72px,12dvh,100px)}body.battle-focus #battleFight .battle-divider{margin:2px 0}body.battle-focus #battleFight .action-panel{margin-top:4px;padding:6px}}
+/* MAGICAL_GEM_V240 */
+.magical-panel{border:1px solid #a98ac8;background:linear-gradient(135deg,#322943,#222731);border-radius:10px;padding:12px;margin:10px 0}
+.magical-panel h3{color:#eac5ff;margin:0 0 7px}.magical-panel p{margin:5px 0}
+.magical-panel .row{margin-top:9px}.magical-panel button{min-height:40px}
+.mailbox-count[hidden]{display:none!important}
+.mail-expiry{color:#ffd2a2;font-weight:700}
+/* MAILBOX_V233: 未受取報酬。既存のデータ保存キーを維持 */
+.mailbox-count{display:inline-grid;place-items:center;min-width:20px;height:20px;padding:0 5px;border-radius:20px;background:#9f503c;color:#fff;font:700 11px system-ui,sans-serif;margin-left:3px}
+.mailbox-item{padding:12px;margin:9px 0;border:1px solid #8e8062;border-radius:9px;background:#262b29}
+.mailbox-item-head{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.mailbox-item h3{font-size:15px;color:var(--gold);margin:0 0 4px}
+.mailbox-item p{margin:7px 0;line-height:1.55}
+.mailbox-item button{min-width:110px}
+.mailbox-empty{text-align:center;padding:22px 8px;color:var(--muted)}
+@media(max-width:600px){.mailbox-item{padding:9px}.mailbox-item button{min-width:85px;font-size:12px}.mailbox-item h3{font-size:13px}}
 /* FORGE_ACCESSORIES_V1 */
 .nav{grid-template-columns:repeat(7,minmax(0,1fr))}.forge-tabs{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:10px 0}.forge-tabs button.selected{border:2px solid var(--gold);color:var(--gold)}.forge-entry{background:#272d2c;border:1px solid var(--line);border-radius:9px;padding:11px;margin:9px 0}.forge-entry button{width:100%;margin-top:8px}.forge-entry .small{line-height:1.55}.forge-title{font-weight:900;color:var(--gold)}@media(max-width:600px){.nav{grid-template-columns:repeat(4,minmax(0,1fr))}.nav button{font-size:10px}}
 /* 初心者依頼とレベルストーン */
@@ -163,62 +199,53 @@ body.scene-fight-forest{background-image:linear-gradient(180deg,#00180b44,#00100
 .summon-grid220{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px}.summon-card220{padding:4px;border:1px solid #786d5b;border-radius:9px;display:flex;flex-direction:column;gap:3px;align-items:center;text-align:center;min-width:0}.summon-card220 .portrait{width:100%;height:63px}.summon-card220 .portrait img{width:100%;height:100%;object-fit:contain}.summon-card220 b,.summon-card220 small{font-size:10px;overflow-wrap:anywhere}.summon-card220 small{color:#f1d7a2}
 .summon[data-effect="rainbow"] .summon-magic{filter:hue-rotate(120deg) saturate(2.5);animation:rainbow220 1.4s linear infinite}.summon[data-effect="thunder"] .summon-lightning{opacity:1!important;filter:hue-rotate(190deg)}.summon[data-effect="time"] .summon-cinema{animation:time220 2s steps(2,end)}.summon[data-effect="meteor"] .summon-magic{transform:rotate(-40deg);filter:drop-shadow(0 0 20px gold)}.summon[data-effect="break"] .summon-cinema{box-shadow:inset 0 0 0 4px #ffdd9a;animation:break220 1.2s ease}.summon[data-effect="gold"] .summon-magic{filter:brightness(1.8) sepia(1)}.summon-epic-title{color:#f8ce70;font-weight:bold;letter-spacing:.07em}
 @keyframes rainbow220{from{filter:hue-rotate(0deg) saturate(2.4)}to{filter:hue-rotate(360deg) saturate(2.4)}}@keyframes time220{0%,40%{filter:grayscale(1)}60%,100%{filter:none}}@keyframes break220{0%{transform:scale(.94)}55%{transform:scale(1.03)}100%{transform:scale(1)}}
-</style><style id="card-readability-v232">
-/* CARD_READABILITY_V232: portrait-first mobile layout; visual only */
-.battle-side{gap:7px}
-.unit{padding:6px 4px;overflow-wrap:anywhere}
-.unit .portrait{height:clamp(105px,17dvh,158px);width:100%;overflow:hidden}
-.unit .portrait img,.formation-slot .portrait img,.formation-choice .portrait img,.card .portrait img{max-width:100%;max-height:100%;object-fit:contain}
-.unit .name{font-size:clamp(12px,1.8vw,15px);line-height:1.25}
-.unit .small,.unit .stats{font-size:12px;line-height:1.3}
-.unit .hpbar{height:8px;margin:5px 0}
-.formation-slots,.formation-list{gap:8px}
-.formation-slot{padding:8px 4px}
-.formation-slot .portrait{height:clamp(95px,16dvh,145px);width:100%}
-.formation-slot .name{font-size:clamp(12px,2.8vw,15px);line-height:1.3;overflow-wrap:anywhere}
-.formation-choice{padding:7px 3px;gap:4px}
-.formation-choice .portrait{height:clamp(83px,13dvh,120px)}
-.formation-choice .name{font-size:clamp(11px,2.5vw,13px);line-height:1.25;overflow-wrap:anywhere}
-.card .portrait{height:clamp(95px,15dvh,135px)}
-.card .name{font-size:clamp(12px,2.3vw,15px);line-height:1.3}
-.card .stats{font-size:clamp(11px,2vw,13px);line-height:1.4}
-.encyclopedia-image .portrait{height:clamp(140px,20dvh,195px)}
-.encyclopedia-card .name{font-size:clamp(11px,2.3vw,14px);line-height:1.3}
+</style>
+<style id="battle-layout-241">
+/* Ver.2.4.1: battle-only compact spacing with larger readable character art. */
+body.battle-focus .top, body.battle-focus .nav{display:none!important}
+body.battle-focus .wrap{padding-top:max(2px, env(safe-area-inset-top))}
+body.battle-focus #battleFight::before{display:none}
+body.battle-focus #battleFight>.panel{padding:5px 6px 7px;margin:0;border-radius:7px}
+body.battle-focus #battleFight>.panel>.row:first-child{min-height:27px;margin:0 0 1px;gap:4px}
+body.battle-focus #battleFight .section-title{margin:0;font-size:15px;line-height:1.2}
+body.battle-focus #battleFight button[data-action="returnMap"]{padding:5px 8px;font-size:11px;line-height:1.2;min-height:29px}
+body.battle-focus #battleFight h3{margin:2px 0!important;font-size:12px;line-height:1.2}
+body.battle-focus #battleFight .battle-side{gap:4px}
+body.battle-focus #battleFight .unit{padding:2px 2px 3px;overflow:hidden}
+body.battle-focus #battleFight .unit .portrait{height:clamp(100px,15.7dvh,148px);width:100%;margin:0 auto;display:flex;align-items:center;justify-content:center}
+body.battle-focus #battleFight .unit .portrait img{max-width:100%;max-height:100%;object-fit:contain}
+body.battle-focus #battleFight .unit .name{font-size:clamp(11px,2.7vw,13px);line-height:1.15;margin:1px 0;overflow-wrap:anywhere}
+body.battle-focus #battleFight .unit .small,body.battle-focus #battleFight .unit .stats{font-size:10px;line-height:1.2;margin:2px 0}
+body.battle-focus #battleFight .unit .hpbar{height:7px;margin:2px 0}
+body.battle-focus #battleFight .battle-divider{font-size:12px;line-height:1.1;margin:2px 0}
+body.battle-focus #battleFight .status-badges{gap:2px;margin-top:2px}
+body.battle-focus #battleFight .status-badge{font-size:9px;padding:1px 3px}
+body.battle-focus #battleFight .boss-crown{font-size:11px;line-height:1.1}
+body.battle-focus #battleFight .action-panel{margin-top:4px;padding:6px 7px}
+body.battle-focus #battleFight .action-panel p{margin:3px 0;font-size:11px;line-height:1.25}
+body.battle-focus #battleFight .action-panel b{font-size:12px}
+body.battle-focus #battleFight .action-buttons{margin-top:4px;gap:6px}
+body.battle-focus #battleFight .action-buttons button{min-height:43px;padding:7px 4px;font-size:13px}
 @media(max-width:600px){
-  .battle-side{grid-template-columns:repeat(3,minmax(0,1fr));gap:5px}
-  .unit{padding:4px 2px}
-  .unit .portrait{height:clamp(76px,12.5dvh,108px)}
-  .unit .name{font-size:11px;line-height:1.22}
-  .unit .small,.unit .stats{font-size:10px;line-height:1.25;margin:3px 0}
-  .unit .hpbar{height:7px;margin:4px 0}
-  .formation-slots{gap:5px}
-  .formation-slot{padding:5px 2px}
-  .formation-slot .portrait{height:clamp(86px,14dvh,122px)}
-  .formation-slot .name{font-size:12px;line-height:1.25}
-  .formation-list{grid-template-columns:repeat(3,minmax(0,1fr));gap:5px;margin-top:7px}
-  .formation-choice{padding:5px 2px;gap:3px}
-  .formation-choice .portrait{height:clamp(76px,12dvh,106px)}
-  .formation-choice .name{font-size:11px;line-height:1.25}
-  .card .portrait{height:clamp(88px,13dvh,118px)}
-  .card .name{font-size:12px}
-  .card .stats{font-size:11px;line-height:1.3}
-  .encyclopedia-image .portrait{height:clamp(126px,18dvh,170px)}
-  .encyclopedia-card .name,.encyclopedia-level{font-size:11px}
+ body.battle-focus .wrap{padding:max(2px,env(safe-area-inset-top)) 4px 4px}
+ body.battle-focus #battleFight>.panel{padding:4px 4px 6px}
+ body.battle-focus #battleFight .unit .portrait{height:clamp(94px,14dvh,127px)}
 }
-@media(max-width:360px){
-  .unit .portrait{height:clamp(72px,11dvh,95px)}
-  .unit .name{font-size:10.5px}
-  .formation-slot .portrait{height:clamp(78px,12dvh,108px)}
-  .formation-choice .portrait{height:clamp(70px,11dvh,94px)}
+@media(max-height:700px){
+ body.battle-focus #battleFight .unit .portrait{height:clamp(77px,12.6dvh,103px)}
+ body.battle-focus #battleFight .unit .hpbar{margin:1px 0}
+ body.battle-focus #battleFight .action-panel{margin-top:3px;padding:5px}
 }
-</style></head><body>
+</style>
+</head><body>
 <div class="wrap">
 <header class="top"><div class="brand">✦ 星詠みの旅団</div><button type="button" id="versionHeaderButton" class="version-label" data-action="showVersionHistory" aria-label="アップデート履歴を開く">Ver.2.1.0</button><div class="row"><span class="pill">💎 <b id="gems">0</b></span><span class="pill">🪙 <b id="gold">0</b></span><span class="pill">到達 <b id="stage">1</b></span></div></header><div id="errorBox" class="error" role="alert"></div>
-<nav class="nav"><button data-page="home">ホーム</button><button data-page="gacha">ガチャ</button><button data-page="team">キャラ・編成</button><button data-page="battle">バトル</button><button data-page="shop">ショップ</button><button data-page="quests">ミッション</button><button data-page="forge">🔨 鍛冶屋</button></nav>
+<nav class="nav"><button data-page="home">ホーム</button><button data-page="gacha">ガチャ</button><button data-page="team">キャラ・編成</button><button data-page="battle">バトル</button><button data-page="shop">ショップ</button><button data-page="quests">ミッション</button><button data-page="forge">🔨 鍛冶屋</button><button data-page="mailbox" id="mailNav">📬 受取箱<span id="mailCount" class="mailbox-count" hidden></span></button></nav>
 <main>
 <section id="home" class="page active"><div class="panel hero"><h1>星の導きが、旅の始まり</h1><p class="muted">剣と魔法を携え、未知なる大地へ。</p><div class="row" style="justify-content:center"><button data-page="gacha">仲間を召喚する</button><button data-page="team">キャラを編成する</button><button data-page="battle">バトルへ進む</button><button data-page="quests">ミッション</button><button data-page="forge">🔨 鍛冶屋</button></div></div><div class="panel"><div class="row" style="justify-content:center"><button data-action="startTutorial">📖 遊び方（5ステップ）</button></div></div><div class="panel"><h2 class="section-title">旅団の記録</h2><div id="homeSummary"></div></div><div class="panel"><div class="row" style="justify-content:space-between"><div><h2 class="section-title">旅団のお知らせ</h2><p class="small">現在のバージョン：<b id="versionHomeLabel">Ver.1.8.0</b></p></div><button type="button" data-action="showVersionHistory">アップデート履歴を見る</button></div></div><div class="panel daily-panel"><h2 class="section-title">デイリーボーナス</h2><p class="small">毎日0時（日本時間）に更新</p><div class="daily-buttons"><button data-action="dailyBonusOpen">ログインボーナス</button><button data-action="dailyWheelOpen">デイリールーレット</button></div><p id="dailyStatus" class="small"></p></div></section>
-<section id="gacha" class="page"><div class="panel"><h2 class="section-title">星詠みの召喚陣（ガチャ）</h2><p>ノーマル 70% / レア 25% / エピック 5%</p><div id="gachaBanner" class="gacha-banner-wrap"></div><div class="row"><button data-action="summon" data-count="1">1回召喚（💎100）</button><button data-action="summon" data-count="10">10回召喚（💎900）</button></div><div id="gachaResult" style="margin-top:12px">召喚結果が表示されます。</div></div><div class="panel"><h2 class="section-title">仲間の記録</h2><div id="gachaOwned"></div></div></section>
+<section id="gacha" class="page"><div class="panel"><h2 class="section-title">星詠みの召喚陣（ガチャ）</h2><p>ノーマル 70% / レア 25% / エピック 5%</p><div id="gachaBanner" class="gacha-banner-wrap"></div><div class="row"><button data-action="summon" data-count="1">1回召喚（💎100）</button><button data-action="summon" data-count="10">10回召喚（💎900）</button></div><div class="magical-panel"><h3>🔮 マジカルジェム — エピック確定召喚</h3><p id="magicalCounts">🔮 所持 0個　🔹 欠片 0/10個</p><p class="small">通常ガチャのエピック1体確定。限定キャラは出ません。昇格演出なしでエピック確定演出をランダムに再生。</p><div class="row"><button data-action="magicalSummon" id="magicalSummonButton">🔮 1個使って召喚</button><button data-action="magicalExchange" id="magicalExchangeButton">🔹 欠片10個で交換</button></div><p id="magicalMessage" role="status" class="small"></p></div><div id="gachaResult" style="margin-top:12px">召喚結果が表示されます。</div></div><div class="panel"><h2 class="section-title">仲間の記録</h2><div id="gachaOwned"></div></div></section>
 <section id="team" class="page"><div class="panel"><h2 class="section-title">パーティ編成</h2><p class="muted">交換したい編成枠をタップ→仲間をタップして直接交換。編成中の仲間を選べば配置も交換できます。</p><div id="partyView" class="grid"></div><div id="formationChoices"></div></div><div class="panel"><h2 class="section-title">キャラ図鑑</h2><div id="levelStoneInventory" class="stone-inventory"></div><div id="dexControls"></div><div id="characterList"></div></div></section>
+<section id="mailbox" class="page"><div class="panel"><div class="row" style="justify-content:space-between"><h2 class="section-title">📬 プレゼントボックス</h2><button data-action="mailClaimAll" id="mailClaimAll">一括受け取り</button></div><p class="small">ステージ・イベント・ミッション・デイリー報酬が届きます。個別・一括受け取りができます。期限付きのプレゼントは期限を過ぎると削除されます。</p><p id="mailboxStatus" role="status"></p><div id="mailboxItems"></div></div></section>
 <section id="shop" class="page"></section>
 <section id="forge" class="page"><div class="panel"><h2 class="section-title">🔨 鍛冶屋</h2><p class="small">同じLv.1指輪2個と金貨で確実に進化。指輪もネックレスも売却は1個1,000金貨。</p><div class="forge-tabs"><button type="button" data-action="forgeTab" data-tab="evolve" id="forgeTabEvolve">✨ 進化</button><button type="button" data-action="forgeTab" data-tab="sell" id="forgeTabSell">🪙 売却</button></div><p>🪙 所持金貨：<b id="forgeGold">0</b></p><div id="forgeContents"></div><div id="forgeMessage" role="status" class="small"></div></div></section>
 <section id="quests" class="page"><div class="panel"><h2 class="section-title">旅団の依頼掲示板</h2><p class="small">日替わりは毎日0時、週替わりは月曜日0時（日本時間）に更新。各5件が抽選されます。</p><div class="quest-tabs"><button data-action="questTab" data-type="beginner" id="questBeginnerTab">初心者ミッション</button><button data-action="questTab" data-type="daily" id="questDailyTab">日替わり依頼</button><button data-action="questTab" data-type="weekly" id="questWeeklyTab">週替わり依頼</button></div><div id="questList"></div></div></section>
@@ -333,17 +360,57 @@ function renderGachaBanner(){
 }
 
 function ringMark(type,large=false){const ring=RINGS[type];return ring?`<span class="ring-mark ${large?'large':''}" style="--ring-color:${ring.color}" aria-label="${esc(ring.name)}" title="${esc(ring.name)}"></span>`:''}
-function fresh(){return {gems:500,gold:300,stage:1,clearedStage:0,stageClearCounts:{},owned:{swordman:{level:1,dupes:0},archer:{level:1,dupes:0},spearman:{level:1,dupes:0}},party:['swordman','archer','spearman'],ringInventory:{power:0,heart:0,skill:0},equipment:{}}}
-function loadState(){let saved;try{saved=JSON.parse(localStorage.getItem(KEY))}catch(e){}if(!saved||typeof saved!=='object')return fresh();const s={...fresh(),...saved};s.owned=saved.owned||fresh().owned;s.party=Array.isArray(saved.party)?saved.party.filter(id=>s.owned[id]&&byId(id)).slice(0,3):fresh().party;s.stageClearCounts=saved.stageClearCounts||{};s.ringInventory={power:0,heart:0,skill:0,...saved.ringInventory};for(const type of RING_IDS)s.ringInventory[type]=Math.max(0,Number(s.ringInventory[type])||0);s.equipment=saved.equipment||{};s.gems=Math.max(0,Number(s.gems)||0);s.gold=Math.max(0,Number(s.gold)||0);s.clearedStage=Math.min(MAX_STAGE,Math.max(0,Number(s.clearedStage)||0));s.stage=Math.min(MAX_STAGE,Math.max(1,Number(s.stage)||1));for(const id of Object.keys(s.owned)){const c=byId(id);if(!c){delete s.owned[id];continue}const o=s.owned[id];if(!o||typeof o!=='object')s.owned[id]={level:1,dupes:0};else{o.level=Math.min(c.max,Math.max(1,Number(o.level)||1));o.dupes=Math.max(0,Number(o.dupes)||0)}}return s}
+function fresh(){return {magicalGems:0,epicShards:0,nov2026GiftIssued:false,mailbox:[],mailNextId:1,gems:500,gold:300,stage:1,clearedStage:0,stageClearCounts:{},owned:{swordman:{level:1,dupes:0},archer:{level:1,dupes:0},spearman:{level:1,dupes:0}},party:['swordman','archer','spearman'],ringInventory:{power:0,heart:0,skill:0},equipment:{}}}
+function loadState(){let saved;try{saved=JSON.parse(localStorage.getItem(KEY))}catch(e){}if(!saved||typeof saved!=='object')return fresh();const s={...fresh(),...saved};s.mailbox=Array.isArray(saved.mailbox)?saved.mailbox.filter(x=>x&&typeof x==='object'&&Number.isFinite(Number(x.id))&&x.rewards&&typeof x.rewards==='object').slice(-500):[];s.mailNextId=Math.max(1,Number(saved.mailNextId)||1,...s.mailbox.map(x=>Number(x.id)+1));s.magicalGems=Math.max(0,Math.floor(Number(saved.magicalGems)||0));s.epicShards=Math.max(0,Math.floor(Number(saved.epicShards)||0));s.nov2026GiftIssued=!!saved.nov2026GiftIssued;s.owned=saved.owned||fresh().owned;s.party=Array.isArray(saved.party)?saved.party.filter(id=>s.owned[id]&&byId(id)).slice(0,3):fresh().party;s.stageClearCounts=saved.stageClearCounts||{};s.ringInventory={power:0,heart:0,skill:0,...saved.ringInventory};for(const type of RING_IDS)s.ringInventory[type]=Math.max(0,Number(s.ringInventory[type])||0);s.equipment=saved.equipment||{};s.gems=Math.max(0,Number(s.gems)||0);s.gold=Math.max(0,Number(s.gold)||0);s.clearedStage=Math.min(MAX_STAGE,Math.max(0,Number(s.clearedStage)||0));s.stage=Math.min(MAX_STAGE,Math.max(1,Number(s.stage)||1));for(const id of Object.keys(s.owned)){const c=byId(id);if(!c){delete s.owned[id];continue}const o=s.owned[id];if(!o||typeof o!=='object')s.owned[id]={level:1,dupes:0};else{o.level=Math.min(c.max,Math.max(1,Number(o.level)||1));o.dupes=Math.max(0,Number(o.dupes)||0)}}return s}
 function readDaily(){try{return JSON.parse(localStorage.getItem(DAILY_KEY))||{}}catch(e){return {}}}
 let state=loadState(),selectedStage=Math.min(MAX_STAGE,state.clearedStage+1),ringTarget=null,slotTarget=null,battle=null,summonQueue=[],summonIndex=0;
 let dexRarity='ノーマル',dexPage=0,battleSerial=0,dailyData=readDaily(),dailySpinning=false,dailyRotation=0,animationToken=0;
 let selectedEvent='undead',eventStage=1,pvpOpponent=null;
 function save(){try{localStorage.setItem(KEY,JSON.stringify(state))}catch(e){console.warn('セーブ失敗',e)}}
+// 報酬は付与せず保存。受け取り時のみ所持品に加算する。
+function enqueueMail(source,rewards){
+ const r={gems:Math.max(0,Math.floor(Number(rewards?.gems)||0)),gold:Math.max(0,Math.floor(Number(rewards?.gold)||0)),magicalGems:Math.max(0,Math.floor(Number(rewards?.magicalGems)||0)),epicShards:Math.max(0,Math.floor(Number(rewards?.epicShards)||0)),rings:{}};
+ for(const [id,n] of Object.entries(rewards?.rings||{}))if(RINGS[id]&&Number(n)>0)r.rings[id]=Math.floor(Number(n));
+ if(!r.gems&&!r.gold&&!r.magicalGems&&!r.epicShards&&!Object.keys(r.rings).length)return;
+ if(!Array.isArray(state.mailbox))state.mailbox=[];
+ state.mailNextId=Math.max(1,Number(state.mailNextId)||1);
+ state.mailbox.unshift({id:state.mailNextId++,source:String(source||'報酬'),rewards:r,receivedAt:new Date().toISOString()});
+ save();updateMailBadge();
+}
+const NOV_GIFT_EXPIRES=Date.parse('2026-12-01T00:00:00+09:00');
+function purgeExpiredMail(){if(!Array.isArray(state.mailbox))state.mailbox=[];const initial=state.mailbox.length;state.mailbox=state.mailbox.filter(x=>!x.expiresAt||Date.now()<Date.parse(x.expiresAt));if(initial!==state.mailbox.length)save()}
+function ensureNovemberGift(){
+ purgeExpiredMail();
+ if(state.nov2026GiftIssued||Date.now()>=NOV_GIFT_EXPIRES)return;
+ state.nov2026GiftIssued=true;
+ state.mailNextId=Math.max(1,Number(state.mailNextId)||1);
+ state.mailbox.unshift({id:state.mailNextId++,source:'🎁 11月限定配布：マジカルジェム',rewards:{magicalGems:1},receivedAt:new Date().toISOString(),expiresAt:'2026-12-01T00:00:00+09:00'});
+ save();
+}
+function applyMailReward(r){
+ state.gems+=Math.max(0,Math.floor(Number(r.gems)||0));state.gold+=Math.max(0,Math.floor(Number(r.gold)||0));
+ state.magicalGems+=Math.max(0,Math.floor(Number(r.magicalGems)||0));state.epicShards+=Math.max(0,Math.floor(Number(r.epicShards)||0));
+ for(const [type,n] of Object.entries(r.rings||{}))if(RINGS[type])state.ringInventory[type]=(Number(state.ringInventory[type])||0)+Math.max(0,Math.floor(Number(n)||0));
+}
+function claimMail(id){purgeExpiredMail();
+ const index=state.mailbox.findIndex(m=>Number(m.id)===Number(id));if(index<0)return;
+ const mail=state.mailbox[index],r=mail.rewards||{};
+ applyMailReward(r);
+ state.mailbox.splice(index,1);save();renderAll();renderMailbox();
+}
+function claimAllMail(){purgeExpiredMail();
+ if(!state.mailbox?.length)return;
+ // まとめて更新し、一括で保存する。
+ for(const mail of state.mailbox)applyMailReward(mail.rewards||{});
+ state.mailbox=[];save();renderAll();renderMailbox();
+}
+function mailRewardText(r){const parts=[];if(r.gold)parts.push('🪙 金貨 ×'+Number(r.gold).toLocaleString('ja-JP'));if(r.gems)parts.push('💎 ジェム ×'+Number(r.gems).toLocaleString('ja-JP'));if(r.magicalGems)parts.push('🔮 マジカルジェム ×'+Number(r.magicalGems));if(r.epicShards)parts.push('🔹 エピックの欠片 ×'+Number(r.epicShards));for(const [type,n] of Object.entries(r.rings||{}))if(RINGS[type])parts.push('💍 '+RINGS[type].name+' ×'+n);return parts.join(' / ')}
+function updateMailBadge(){ensureNovemberGift();const count=state.mailbox?.length||0,el=$('mailCount');if(el){el.hidden=count===0;el.textContent=count>99?'99+':String(count)}}
+function renderMailbox(){ensureNovemberGift();const list=$('mailboxItems');if(!list)return;const mails=state.mailbox||[];$('mailClaimAll').disabled=!mails.length;$('mailboxStatus').textContent='未受取 '+mails.length+'件';list.innerHTML=mails.length?mails.map(m=>`<article class="mailbox-item"><div class="mailbox-item-head"><h3>${esc(m.source)}</h3><button data-action="mailClaim" data-mail-id="${Number(m.id)}">受け取る</button></div><p>${esc(mailRewardText(m.rewards||{}))}</p><span class="small">${esc((m.receivedAt||'').slice(0,10))}</span>${m.expiresAt?'<p class="mail-expiry">受取期限：2026年11月30日 23:59（日本時間）／期限を過ぎると削除</p>':''}</article>`).join(''):'<div class="mailbox-empty">📭 未受取のプレゼントはありません。</div>'}
 function showError(message){const el=$('errorBox');el.textContent=message;el.style.display='block';setTimeout(()=>{if(el.textContent===message)el.style.display='none'},4500)}
-function resolveScene(page){if(page==='battle')return document.body.dataset.storyMap==='wasteland'?'scene-battle-wasteland':'scene-battle-grass';if(page==='battleFight'){if(battle?.mode==='pvp')return 'scene-fight-pvp';if(battle?.grassEx)return 'scene-fight-grassEx';if(battle?.eventId){const eventScenes={undead:'scene-fight-undead',general:'scene-fight-general',goblinRaid:'scene-fight-goblin',dragon:'scene-fight-dragon',golem:'scene-fight-golem',martial:'scene-fight-martial',awakened:'scene-fight-martial'};return eventScenes[battle.eventId]||'scene-fight-event'}if(battle?.storyMap==='wasteland')return 'scene-fight-wasteland';return 'scene-fight-grass'}const sceneMap={home:'scene-home',gacha:'scene-gacha',team:'scene-team',shop:'scene-shop',forge:'scene-forge',quests:'scene-quests',events:'scene-events',subEventMap:'scene-subEventMap',pvp:'scene-pvp'};return sceneMap[page]||'scene-home'}
+function resolveScene(page){if(page==='battle')return document.body.dataset.storyMap==='wasteland'?'scene-battle-wasteland':'scene-battle-grass';if(page==='battleFight'){if(battle?.mode==='pvp')return 'scene-fight-pvp';if(battle?.grassEx)return 'scene-fight-grassEx';if(battle?.eventId){const eventScenes={undead:'scene-fight-undead',general:'scene-fight-general',goblinRaid:'scene-fight-goblin',dragon:'scene-fight-dragon',golem:'scene-fight-golem',martial:'scene-fight-martial',awakened:'scene-fight-martial'};return eventScenes[battle.eventId]||'scene-fight-event'}if(battle?.storyMap==='wasteland')return 'scene-fight-wasteland';return 'scene-fight-grass'}const sceneMap={mailbox:'scene-home',home:'scene-home',gacha:'scene-gacha',team:'scene-team',shop:'scene-shop',forge:'scene-forge',quests:'scene-quests',events:'scene-events',subEventMap:'scene-subEventMap',pvp:'scene-pvp'};return sceneMap[page]||'scene-home'}
 function applyScene(page){const body=document.body;if(!body)return;body.className=body.className.split(/\s+/).filter(name=>name&&!name.startsWith('scene-')).join(' ');body.classList.add(resolveScene(page));}
-function showPage(page){document.querySelectorAll('.page').forEach(el=>el.classList.toggle('active',el.id===page));applyScene(page);if(page!=='battleFight')renderAll();window.scrollTo(0,0)}
+function showPage(page){document.body.classList.toggle('battle-focus',page==='battleFight');document.querySelectorAll('.page').forEach(el=>el.classList.toggle('active',el.id===page));applyScene(page);if(page!=='battleFight')renderAll();window.scrollTo(0,0)}
 const QUEST_COUNT=5;
 const QUEST_DEFINITIONS={
   daily:{summon:{title:'星詠みの召喚',goal:1,event:'summon',reward:{gems:20}},shop:{title:'商館の取引',goal:1,event:'shop',reward:{gold:1000}},story:{title:'草原の遠征',goal:3,event:'storyWin',reward:{gems:20}}},
@@ -378,8 +445,8 @@ function renderQuests(){
   for(const id of q.ids){const def=QUEST_DEFINITIONS[type][id],current=Math.min(def.goal,Math.max(0,Number(q.progress[id])||0)),completed=current>=def.goal,received=q.claimed.includes(id);html+=`<article class="quest-card ${completed?'quest-complete':''}"><div class="quest-head"><b>${esc(def.title)}</b><span class="quest-reward">${questRewardText(def.reward)}</span></div><p class="small">${esc(questDetail(def))}</p><div class="quest-progress"><i style="width:${Math.round(current/def.goal*100)}%"></i></div><div class="quest-foot"><span class="small">${current} / ${def.goal}</span><button data-action="claimQuest" data-type="${type}" data-quest="${esc(id)}" ${!completed||received?'disabled':''}>${received?'受取済み':completed?'報酬を受け取る':'進行中'}</button></div></article>`}
   const allClaimed=claimed===QUEST_COUNT;html+=`<div class="quest-card quest-complete"><div class="quest-head"><b>依頼全件達成報酬</b><span class="quest-reward">💎 ${QUEST_COMPLETE_BONUS[type]}ジェム</span></div><p class="small">5件すべての依頼報酬を受け取ると解放</p><div class="quest-foot"><span class="small">${claimed}/${QUEST_COUNT}</span><button data-action="claimQuestBonus" data-type="${type}" ${!allClaimed||q.bonusClaimed?'disabled':''}>${q.bonusClaimed?'受取済み':allClaimed?'報酬を受け取る':'未達成'}</button></div></div>`;$('questList').innerHTML=html;
 }
-function claimQuest(type,id){ensureQuests();const q=state.quests[type],def=QUEST_DEFINITIONS[type]?.[id];if(!q||!def||!q.ids.includes(id)||q.claimed.includes(id))return;if((Number(q.progress[id])||0)<def.goal)return;q.claimed.push(id);state.gems+=(def.reward.gems||0);state.gold+=(def.reward.gold||0);save();renderAll();renderQuests()}
-function claimQuestBonus(type){ensureQuests();const q=state.quests[type];if(!q||q.bonusClaimed||q.claimed.length!==QUEST_COUNT)return;q.bonusClaimed=true;state.gems+=QUEST_COMPLETE_BONUS[type];save();renderAll();renderQuests()}
+function claimQuest(type,id){ensureQuests();const q=state.quests[type],def=QUEST_DEFINITIONS[type]?.[id];if(!q||!def||!q.ids.includes(id)||q.claimed.includes(id))return;if((Number(q.progress[id])||0)<def.goal)return;q.claimed.push(id);enqueueMail('ミッション報酬',{gems:def.reward.gems||0,gold:def.reward.gold||0});save();renderAll();renderQuests()}
+function claimQuestBonus(type){ensureQuests();const q=state.quests[type];if(!q||q.bonusClaimed||q.claimed.length!==QUEST_COUNT)return;q.bonusClaimed=true;enqueueMail('ミッション全達成報酬',{gems:QUEST_COMPLETE_BONUS[type]});save();renderAll();renderQuests()}
 const LEVEL_GROWING_EFFECTS=new Set(['damage','heal']);
 function getLevelMultiplier(id){const c=byId(id);return Math.pow(1+c.growth,(state.owned[id]?.level||1)-1)}
 function getEquipped(id,type){return(state.equipment[id]||[]).filter(x=>x===type).length}
@@ -406,6 +473,18 @@ function renderStageMap(){let nodes='';const unlocked=Math.min(MAX_STAGE,state.c
 function selectStage(stage){if(!Number.isInteger(stage)||stage<1||stage>MAX_STAGE||stage>state.clearedStage+1)return;selectedStage=stage;renderAll()}
 function addCharacter(id){const c=byId(id);if(!c)return '';if(!state.owned[id]){state.owned[id]={level:1,dupes:0};beginnerRecord('owned');return '新しい仲間を獲得！'}const o=state.owned[id],before=o.level;if(o.level>=c.max)return '最大レベル到達済み';o.dupes=(o.dupes||0)+1;while(o.level<c.max&&o.dupes>=o.level){o.dupes-=o.level;o.level++}if(o.level>before)beginnerRecord('levelUp');return '重複獲得！ Lv.'+o.level}
 function drawCharacter(){const r=Math.random(),rarity=r<.7?'ノーマル':r<.95?'レア':'エピック';return random(CHARACTERS.filter(c=>c.rarity===rarity&&!c.limited&&!['鍛錬剣士','狙撃手アーチャー','一閃スピアドン'].includes(c.id)))}
+function renderMagicalGems(){const counts=$('magicalCounts');if(!counts)return;counts.textContent='🔮 マジカルジェム '+state.magicalGems+'個　🔹 エピックの欠片 '+state.epicShards+'/10個';$('magicalSummonButton').disabled=state.magicalGems<1;$('magicalExchangeButton').disabled=state.epicShards<10}
+function exchangeMagicalGem(){if(state.epicShards<10){showError('エピックの欠片が10個必要です');return}state.epicShards-=10;state.magicalGems++;save();renderAll();$('magicalMessage').textContent='🔮 マジカルジェム1個と交換しました！'}
+function magicalSummon(){
+ if(state.magicalGems<1){showError('マジカルジェムがありません');return}
+ const pool=CHARACTERS.filter(c=>c.rarity==='エピック'&&!c.limited&&!['鍛錬剣士','狙撃手アーチャー','一閃スピアドン'].includes(c.id));
+ if(!pool.length){showError('召喚対象のエピックがありません');return}
+ const c=random(pool),before=state.owned[c.id]?{...state.owned[c.id]}:null;
+ state.magicalGems--;
+ const message=addCharacter(c.id),after={...state.owned[c.id]};
+ summonQueue=[{c,message,before,after,magical:true}];summonIndex=0;
+ recordQuestEvent('summon',1);save();renderAll();$('summonOverlay').classList.add('active');showSummon();
+}
 function summon(count){const cost=count===10?900:100;if(state.gems<cost){showError('ジェムが足りません');return}state.gems-=cost;summonQueue=[];for(let i=0;i<count;i++){const c=drawCharacter();const before=state.owned[c.id]?{...state.owned[c.id]}:null;const message=addCharacter(c.id);const after={...state.owned[c.id]};summonQueue.push({c,message,before,after})}recordQuestEvent('summon',count);save();renderAll();summonIndex=0;$('summonOverlay').classList.add('active');showSummon()}
 const EPIC_SHOWS220=[{name:'黄金の召喚',symbol:'✦',cls:'gold'},{name:'雷鳴の召喚',symbol:'⚡',cls:'thunder'},{name:'限界突破',symbol:'✧',cls:'break'},{name:'虹色の奇跡',symbol:'🌈',cls:'rainbow'},{name:'時間停止',symbol:'⏳',cls:'time'},{name:'星の落下',symbol:'☄️',cls:'meteor'}];
 function growthLabel220(x){if(!x.after)return x.message||'獲得';if(!x.before)return 'NEW！ 初獲得';if(x.before.level>=x.c.max)return '最大Lv到達';const before=x.before,after=x.after;if(!after)return x.message;return after.level>before.level?`Lv.${before.level} → Lv.${after.level}（成長+1体分）`:`育成 +1体分：Lv.${after.level} ${before.dupes||0}/${before.level} → ${after.dupes||0}/${after.level}`} 
@@ -414,7 +493,7 @@ function showSummon(){
  const item=summonQueue.length===10?(summonQueue.find(x=>x.c.rarity==='エピック')||summonQueue[9]):summonQueue[summonIndex];if(!item){finishSummon();return}
  const token=++animationToken,index=summonIndex,c=item.c,overlay=$('summonOverlay'),epic=c.rarity==='エピック';
  const effect=epic?EPIC_SHOWS220[Math.floor(Math.random()*EPIC_SHOWS220.length)]:null;
- const surprise=epic&&Math.random()<.20;
+ const surprise=epic&&!item.magical&&Math.random()<.20;
  overlay.classList.toggle('epic-mode',epic&&!surprise);overlay.dataset.effect=surprise?'normal':effect?.cls||'normal';
  const particles=Array.from({length:24},(_,i)=>`<span class="summon-particle" style="--angle:${i*137.5}deg;--size:${3+i%5}px;--duration:${1.2+i%4*.3}s;--delay:${-(i%9)*.2}s"></span>`).join('');
  const decoy=surprise?random(CHARACTERS.filter(x=>['ノーマル','レア'].includes(x.rarity)&&!x.limited)):null;
@@ -461,9 +540,9 @@ async function performAction(u,useSkill){if(!battle?.running)return;const c=byId
 function selectTargetAction(uid){if(!battle?.running||battle.busy||battle.pendingUseSkill===undefined)return;const targets=alive(battle.current?.side==='enemy'?battle.allies:battle.enemies);if(!targets.some(u=>u.uid===uid))return;const useSkill=battle.pendingUseSkill;battle.pendingUseSkill=undefined;battle.targetUID=uid;battle.busy=true;battle.awaitingAction=false;(async()=>{const token=battle.token;await performAction(battle.current,useSkill);if(!battle?.running||battle.token!==token)return;battle.targetUID=null;battle.busy=false;clearActing();if(checkBattleEnd())return;await sleep(450);if(battle?.running&&battle.token===token)advanceTurn()})()}
 function checkBattleEnd(){if(!battle?.running)return true;if(!alive(battle.enemies).length){finishBattle(true);return true}if(!alive(battle.allies).length){finishBattle(false);return true}return false}
 function createStageDrop(stage){const candidates=[...new Set(STAGE_ENEMIES[stage].map(x=>x[0]))],successful=[];for(const id of candidates){const c=byId(id);if(c&&Math.random()*100<DROP_RATES[c.rarity])successful.push(id)}if(!successful.length)return null;const id=random(successful);return {id,name:byId(id).name,message:addCharacter(id)}}
-function grantStageRewards(stage){const count=Number(state.stageClearCounts[stage])||0,firstClear=count===0,gold=Math.floor(STAGE_GOLD[stage]*Math.pow(.9,count));state.gold+=gold;let gems=0;if(firstClear&&Math.random()<.2){gems=50;state.gems+=gems}let ringReward=null;if(stage===20&&firstClear){state.ringInventory.power=(Number(state.ringInventory.power)||0)+1;ringReward='power'}const drop=createStageDrop(stage);state.stageClearCounts[stage]=count+1;state.clearedStage=Math.max(state.clearedStage,stage);state.stage=Math.min(MAX_STAGE,state.clearedStage+1);save();return {firstClear,gold,gems,ringReward,drop}}
-function finishBattle(victory){if(!battle?.running)return;battle.running=false;battle.busy=false;battle.awaitingAction=false;clearActing();let rewards=null;if(victory&&battle.mode!=='pvp'){if(battle.eventId){const progress=eventProgress(battle.eventId,battle.eventPeriod),firstClear=!progress.cleared.includes(battle.stage);rewards={firstClear,gold:0,gems:0,character:null};if(firstClear){const d=EVENT_DATA[battle.eventId].stages[battle.stage-1];rewards.gold=d.gold||0;rewards.gems=d.gems||0;state.gold+=rewards.gold;state.gems+=rewards.gems;if(d.characterDrop?.length){const id=random(d.characterDrop);rewards.character={name:byId(id).name,message:addCharacter(id)}}if(d.ringReward&&RINGS[d.ringReward]){state.ringInventory[d.ringReward]=(Number(state.ringInventory[d.ringReward])||0)+1;rewards.ringReward=d.ringReward}progress.cleared.push(battle.stage);save()}}else{rewards=grantStageRewards(battle.stage);recordQuestEvent('storyWin')}}battle.result={victory,rewards};renderBattle();if(battle.eventId)renderAll()}
-function renderBattleResult(){const {victory,rewards}=battle.result;if(battle.mode==='pvp'){$('actionArea').innerHTML=`<div class="result"><h2>${victory?'自軍の勝利！':'相手軍の勝利！'}</h2><p>旅団対戦が決着しました。対戦では報酬は発生しません。</p><button data-action="returnMap">対戦の間へ戻る</button></div>`;return}if(battle.eventId){let html='';if(!victory)html='<h2>敗北…</h2><p>編成を見直して再挑戦しよう。</p>';else if(rewards?.firstClear){html='<h2>初回踏破！</h2>';if(rewards.gold)html+=`<p>🪙 金貨 +${rewards.gold}</p>`;if(rewards.gems)html+=`<p>💎 ジェム +${rewards.gems}</p>`;if(rewards.character)html+=`<p>${esc(rewards.character.name)} ×1</p><p class="small">${esc(rewards.character.message)}</p>`;if(rewards.ringReward)html+=`<p>💍 ${esc(RINGS[rewards.ringReward].name)} ×1</p>`}else html='<h2>戦役踏破！</h2><p>初回報酬は獲得済みです。</p>';$('actionArea').innerHTML=`<div class="result">${html}<button data-action="returnMap">戦役マップへ戻る</button></div>`;return}if(!victory){$('actionArea').innerHTML='<div class="result"><h2>敗北…</h2><p>編成や装備を見直して再挑戦しよう。</p><button data-action="returnMap">草原へ戻る</button></div>';return}let html=`<p>🪙 金貨 +${rewards.gold}</p>`;if(rewards.gems)html+=`<p>💎 ジェム +${rewards.gems}</p>`;if(rewards.ringReward)html+='<p>チカラの指輪 ×1<br><span class="small">初回踏破報酬</span></p>';if(rewards.drop)html+=`<p>英雄獲得！<br><b>${esc(rewards.drop.name)}</b><br><span class="small">${esc(rewards.drop.message)}</span></p>`;$('actionArea').innerHTML=`<div class="result"><h2>草原を踏破！</h2><p>ステージ ${battle.stage} 勝利！</p>${rewards.firstClear?'<p>初回踏破！</p>':''}${html}<button data-action="returnMap">草原へ戻る</button></div>`}
+function grantStageRewards(stage){const count=Number(state.stageClearCounts[stage])||0,firstClear=count===0,gold=Math.floor(STAGE_GOLD[stage]*Math.pow(.9,count));let gems=0;if(firstClear&&Math.random()<.2){gems=50}let ringReward=null;if(stage===20&&firstClear){ringReward='power'}enqueueMail('草原 STAGE '+stage+' クリア報酬',{gold,gems,rings:ringReward?{[ringReward]:1}:{}});const drop=createStageDrop(stage);state.stageClearCounts[stage]=count+1;state.clearedStage=Math.max(state.clearedStage,stage);state.stage=Math.min(MAX_STAGE,state.clearedStage+1);save();return {firstClear,gold,gems,ringReward,drop}}
+function finishBattle(victory){if(!battle?.running)return;battle.running=false;battle.busy=false;battle.awaitingAction=false;clearActing();let rewards=null;if(victory&&battle.mode!=='pvp'){if(battle.eventId){const progress=eventProgress(battle.eventId,battle.eventPeriod),firstClear=!progress.cleared.includes(battle.stage);rewards={firstClear,gold:0,gems:0,character:null};if(firstClear){const d=EVENT_DATA[battle.eventId].stages[battle.stage-1];rewards.gold=d.gold||0;rewards.gems=d.gems||0;if(d.characterDrop?.length){const id=random(d.characterDrop);rewards.character={name:byId(id).name,message:addCharacter(id)}}if(d.ringReward&&RINGS[d.ringReward]){rewards.ringReward=d.ringReward}enqueueMail(EVENT_DATA[battle.eventId].name+' STAGE '+battle.stage+' 報酬',{gold:rewards.gold,gems:rewards.gems,rings:rewards.ringReward?{[rewards.ringReward]:1}:{},epicShards:battle.stage===EVENT_DATA[battle.eventId].stages.length?1:0});progress.cleared.push(battle.stage);save()}}else{rewards=grantStageRewards(battle.stage);recordQuestEvent('storyWin')}}battle.result={victory,rewards};renderBattle();if(battle.eventId)renderAll()}
+function renderBattleResult(){const {victory,rewards}=battle.result;if(battle.mode==='pvp'){$('actionArea').innerHTML=`<div class="result"><h2>${victory?'自軍の勝利！':'相手軍の勝利！'}</h2><p>旅団対戦が決着しました。対戦では報酬は発生しません。</p><button data-action="returnMap">対戦の間へ戻る</button></div>`;return}if(battle.eventId){let html='';if(!victory)html='<h2>敗北…</h2><p>編成を見直して再挑戦しよう。</p>';else if(rewards?.firstClear){html='<h2>初回踏破！</h2>';if(rewards.gold)html+=`<p>📬 金貨 +${rewards.gold}（受取箱）</p>`;if(rewards.gems)html+=`<p>💎 ジェム +${rewards.gems}</p>`;if(rewards.character)html+=`<p>${esc(rewards.character.name)} ×1</p><p class="small">${esc(rewards.character.message)}</p>`;if(rewards.ringReward)html+=`<p>💍 ${esc(RINGS[rewards.ringReward].name)} ×1</p>`}else html='<h2>戦役踏破！</h2><p>初回報酬は獲得済みです。</p>';$('actionArea').innerHTML=`<div class="result">${html}<button data-action="returnMap">戦役マップへ戻る</button></div>`;return}if(!victory){$('actionArea').innerHTML='<div class="result"><h2>敗北…</h2><p>編成や装備を見直して再挑戦しよう。</p><button data-action="returnMap">草原へ戻る</button></div>';return}let html=`<p>📬 金貨 +${rewards.gold}（受取箱）</p>`;if(rewards.gems)html+=`<p>💎 ジェム +${rewards.gems}</p>`;if(rewards.ringReward)html+='<p>チカラの指輪 ×1<br><span class="small">初回踏破報酬</span></p>';if(rewards.drop)html+=`<p>英雄獲得！<br><b>${esc(rewards.drop.name)}</b><br><span class="small">${esc(rewards.drop.message)}</span></p>`;$('actionArea').innerHTML=`<div class="result"><h2>草原を踏破！</h2><p>ステージ ${battle.stage} 勝利！</p>${rewards.firstClear?'<p>初回踏破！</p>':''}${html}<button data-action="returnMap">草原へ戻る</button></div>`}
 function returnMap(){if(battle?.mode==='pvp'){battle.running=false;battle.token=-1;battle=null;showPage('pvp');return}if(battle?.eventId){const id=battle.eventId;battle.running=false;battle.token=-1;battle=null;if(activeEventPeriod(id)){selectedEvent=id;showPage('subEventMap');renderEventMap()}else{showPage('events');renderEventList()}return}if(battle){battle.running=false;battle.token=-1}battle=null;selectedStage=Math.min(MAX_STAGE,Math.max(1,state.clearedStage+1));showPage('battle')}
 function dailyDate(){return new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Tokyo',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date())}
 function saveDaily(){try{localStorage.setItem(DAILY_KEY,JSON.stringify(dailyData))}catch(e){console.warn('デイリー保存失敗',e)}}
@@ -472,7 +551,7 @@ function updateDailyStatus(){const el=$('dailyStatus');if(el)el.textContent='支
 function openDailyModal(){$('dailyModal').classList.add('active')}
 function closeDailyModal(){if(dailySpinning)return;$('dailyModal').classList.remove('active')}
 function showDailyBonus(){$('dailyContent').innerHTML=`<h2>日々の支給品</h2><p style="font-size:25px">💎 50ジェム</p><p style="font-size:25px">🪙 200金貨</p><button class="wide" data-action="dailyClaim" ${dailyAvailable('bonus')?'':'disabled'}>${dailyAvailable('bonus')?'受け取る':'本日は受取済み'}</button>`;openDailyModal()}
-function claimDailyBonus(){if(!dailyAvailable('bonus'))return;dailyData.bonus=dailyDate();saveDaily();state.gems+=50;state.gold+=200;save();renderAll();$('dailyContent').innerHTML='<h2>支給品を受領しました</h2><p>💎 50ジェム</p><p>🪙 200金貨</p><p>明日も旅団に立ち寄ろう。</p>'}
+function claimDailyBonus(){if(!dailyAvailable('bonus'))return;dailyData.bonus=dailyDate();saveDaily();enqueueMail('ログインボーナス',{gems:50,gold:200});save();renderAll();$('dailyContent').innerHTML='<h2>プレゼントボックスに届きました</h2><p>💎 50ジェム</p><p>🪙 200金貨</p><p>明日も旅団に立ち寄ろう。</p>'}
 function wheelGradient(){return 'conic-gradient('+DAILY_COLORS.map((color,i)=>`${color} ${i*60}deg ${(i+1)*60}deg`).join(',')+')'}
 function showDailyWheel(){
   // 賞品ラベルは回転する円盤の子要素にする（色の部分だけ回る問題を修正）
@@ -493,7 +572,7 @@ function spinDailyWheel(){
   const index=chooseDailyPrize(),prize=DAILY_PRIZES[index],today=dailyDate();
   // 結果はアニメーション開始時点で確定・保存する。途中でアプリが閉じても失われない。
   dailySpinning=true;
-  state[prize.type]+=prize.amount;
+  enqueueMail('デイリールーレット',{[prize.type]:prize.amount});
   dailyData.wheel=today;
   dailyData.lastWheelPrize={date:today,index};
   save();saveDaily();updateDailyStatus();
@@ -503,7 +582,7 @@ function spinDailyWheel(){
   // 1つの円盤を回転させるため、絵柄とラベルが同時に移動し停止位置が一致する。
   requestAnimationFrame(()=>requestAnimationFrame(()=>{wheel.style.transform=`rotate(${dailyRotation}deg)`}));
   setTimeout(()=>{
-    result.innerHTML=`<h2>${prize.label} を獲得！</h2>`;
+    result.innerHTML=`<h2>${prize.label} が受取箱に届きました！</h2>`;
     dailySpinning=false;close.disabled=false;
     renderAll();
   },4700);
@@ -648,11 +727,11 @@ function renderBeginner(){
 }
 function claimBeginner(id){
   const b=ensureBeginner(),m=BEGINNER_LIST.find(x=>x.id===id);if(!m||b.claimed.includes(id)||(Number(b.progress[id])||0)<m.goal)return;
-  b.claimed.push(id);state.gems+=m.gems;save();renderAll();renderBeginner();
+  b.claimed.push(id);enqueueMail('初心者ミッション報酬',{gems:m.gems});save();renderAll();renderBeginner();
 }
 function claimBeginnerBonus(){
   const b=ensureBeginner();if(b.bonusClaimed||!BEGINNER_LIST.every(m=>b.claimed.includes(m.id)))return;
-  b.bonusClaimed=true;state.gems+=500;const note=addCharacter('超越武士');save();renderAll();renderBeginner();
+  b.bonusClaimed=true;enqueueMail('初心者ミッション全達成',{gems:500});const note=addCharacter('超越武士');save();renderAll();renderBeginner();
   alert('初心者ミッション全達成！\n💎 500ジェム\n超越の武神武士 ×1\n'+note);
 }
 function useLevelStone(id){
@@ -682,9 +761,9 @@ function evolveAccessory(id){const data=FORGE_EVOLUTIONS[id];if(!data)return;con
  if(getRingAvailable(id)<2||state.gold<cost)return;state.ringInventory[id]-=2;state.ringInventory[next]=(Number(state.ringInventory[next])||0)+1;state.gold-=cost;save();renderAll();renderForge();$('forgeMessage').textContent=RINGS[next].name+'を獲得しました！'}
 function sellAccessory(id){if(!RINGS[id]||getRingAvailable(id)<1)return;if(!confirm(RINGS[id].name+'を1個、1,000金貨で売却しますか？'))return;if(getRingAvailable(id)<1)return;state.ringInventory[id]--;state.gold+=1000;save();renderAll();renderForge();$('forgeMessage').textContent=RINGS[id].name+'を売却しました（+1,000金貨）'}
 function renderAll(){
-  $('gems').textContent=state.gems;$('gold').textContent=state.gold;$('stage').textContent=Math.min(MAX_STAGE,state.clearedStage+1);
+  updateMailBadge();$('gems').textContent=state.gems;$('gold').textContent=state.gold;$('stage').textContent=Math.min(MAX_STAGE,state.clearedStage+1);
   $('homeSummary').innerHTML=`所持する英雄：${Object.keys(state.owned).length}体<br>編成中：${state.party.map(id=>esc(byId(id)?.name||id)).join(' / ')||'なし'}<br>草原踏破：${state.clearedStage} / 20`;
-  $('gachaOwned').textContent=Object.keys(state.owned).length+' / '+CHARACTERS.length+'体を所持';renderGachaBanner();
+  $('gachaOwned').textContent=Object.keys(state.owned).length+' / '+CHARACTERS.length+'体を所持';renderGachaBanner();renderMagicalGems();
   $('partyView').innerHTML=state.party.map(id=>cardHTML(id)).join('')||'<p>編成がありません。</p>';
   $('levelStoneInventory').innerHTML='🪨 レベルストーン：<b>'+Math.max(0,Number(state.levelStones)||0)+'</b>個 <span class="small">（重複キャラ1体分として使用）</span>';renderDex();renderStageMap();
   $('battleIntro').innerHTML=`選択中：ステージ ${selectedStage}<br>敵編成：${esc(formationText(selectedStage))}<br>味方編成：${state.party.map(id=>esc(byId(id)?.name||id)).join(' / ')||'なし'}`;
@@ -692,9 +771,13 @@ function renderAll(){
 }
 document.addEventListener('click',event=>{
   const button=event.target.closest('button');if(!button||button.disabled)return;
-  if(button.dataset.page){showPage(button.dataset.page);if(button.dataset.page==='shop')renderShop();if(button.dataset.page==='forge')renderForge();if(button.dataset.page==='events')renderEventList();if(button.dataset.page==='quests')renderQuests();return}
+  if(button.dataset.page){showPage(button.dataset.page);if(button.dataset.page==='mailbox')renderMailbox();if(button.dataset.page==='shop')renderShop();if(button.dataset.page==='forge')renderForge();if(button.dataset.page==='events')renderEventList();if(button.dataset.page==='quests')renderQuests();return}
   const a=button.dataset.action,id=button.dataset.id,index=Number(button.dataset.index);
   switch(a){
+     case 'mailClaim':claimMail(Number(button.dataset.mailId));break;
+     case 'mailClaimAll':claimAllMail();break;
+     case 'magicalExchange':exchangeMagicalGem();break;
+     case 'magicalSummon':magicalSummon();break;
     case 'forgeTab':forgeMode=button.dataset.tab==='sell'?'sell':'evolve';$('forgeMessage').textContent='';renderForge();break;
     case 'forgeEvolve':evolveAccessory(button.dataset.type);break;
     case 'forgeSell':sellAccessory(button.dataset.type);break;
@@ -843,7 +926,7 @@ ensureQuests();renderAll();renderShop();renderEventList();if(dailyAvailable('bon
     if(rewards.firstClear && (stage===10||stage===20)){
       if(!state.bossBonusClaims20261109||typeof state.bossBonusClaims20261109!=='object')state.bossBonusClaims20261109={};
       if(!state.bossBonusClaims20261109[stage]){
-        state.gems+=100;
+        enqueueMail('草原ボス追加報酬',{gems:100});
         rewards.gems+=100;
         if(stage===20){
           state.levelStones=(Number(state.levelStones)||0)+1;
@@ -881,7 +964,7 @@ ensureQuests();renderAll();renderShop();renderEventList();if(dailyAvailable('bon
     if(battle.raid220){
       battle.running=false;battle.busy=false;battle.awaitingAction=false;clearActing();
       let rewards=null;
-      if(victory&&!state.raid220Cleared){state.raid220Cleared=true;state.gold+=5000;state.gems+=100;state.ringInventory.vampire=(Number(state.ringInventory.vampire)||0)+1;rewards={gold:5000,gems:100,ringReward:'vampire',firstClear:true};save()}
+      if(victory&&!state.raid220Cleared){state.raid220Cleared=true;enqueueMail('乱入ボス初回報酬',{gold:5000,gems:100,rings:{vampire:1}});rewards={gold:5000,gems:100,ringReward:'vampire',firstClear:true};save()}
       battle.result={victory,rewards};renderBattle();renderAll();return;
     }
     battle.running=false;
@@ -897,14 +980,13 @@ ensureQuests();renderAll();renderShop();renderEventList();if(dailyAvailable('bon
       const baseGold=stage===20?6000:stage>=11?1000:stage===10?3000:stage>=6?900:800;
        const gold=Math.floor(baseGold*Math.pow(.9,count));
       rewards={firstClear,gold,gems:0,levelStones:0,drop:null};
-      state.gold+=gold;
-      if(stage===20 && firstClear){rewards.gems=300;rewards.levelStones=1;rewards.ringReward='heal2';state.gems+=300;state.levelStones=(Number(state.levelStones)||0)+1;state.ringInventory.heal2=(Number(state.ringInventory.heal2)||0)+1;}
+      if(stage===20 && firstClear){rewards.gems=300;rewards.levelStones=1;rewards.ringReward='heal2';state.levelStones=(Number(state.levelStones)||0)+1;}
       if(stage===10 && firstClear){
         rewards.gems=100;
-        rewards.levelStones=1;
-        state.gems+=100;
+         rewards.levelStones=1;
         state.levelStones=(Number(state.levelStones)||0)+1;
       }
+       enqueueMail('荒野 STAGE '+stage+' クリア報酬',{gold,gems:rewards.gems,rings:rewards.ringReward?{[rewards.ringReward]:1}:{}});
       // 荒野の出現敵は草原と同じレアリティ別確率でドロップ。
       // 敵が重複していても同一キャラは1回の抽選とする。
       const successful=[...new Set(WASTELAND[stage].map(([id])=>id))].filter(id=>{
@@ -938,7 +1020,7 @@ ensureQuests();renderAll();renderShop();renderEventList();if(dailyAvailable('bon
       const {victory,rewards}=battle.result;
       if(battle.raid220){$('actionArea').innerHTML=`<div class="result"><h2>${victory?'乱入ボス撃破！':'乱入戦 敗北…'}</h2>${victory?'<p>🪙 5000金貨</p><p>💎 100ジェム</p><p>💍 吸血の指輪 ×1</p>':'<p>荒野17は解放済み。荒野16に再挑戦すると再び乱入します。</p>'}<button data-action="returnMap">荒野へ戻る</button></div>`;return}
       if(battle.result.raidIncoming){$('actionArea').innerHTML='<div class="result"><h2>荒野16クリア！</h2><p>⚠️ 異変を感じる…</p></div>';return}
-      $('actionArea').innerHTML=`<div class="result"><h2>${victory?'荒野を踏破！':'敗北…'}</h2>${victory?`<p>荒野 ステージ${battle.stage} 勝利！</p><p>🪙 金貨 +${rewards.gold}</p>${rewards.firstClear?'<p>初回踏破！</p>':''}${rewards.gems?`<p>💎 ジェム +${rewards.gems}</p>`:''}${rewards.levelStones?`<p>🪨 レベルストーン ×${rewards.levelStones}</p>`:''}${rewards.ringReward?`<p>💍 ${esc(RINGS[rewards.ringReward].name)} ×1</p>`:''}${rewards.drop?`<p>英雄獲得！<br><b>${esc(rewards.drop.name)}</b><br><span class="small">${esc(rewards.drop.message)}</span></p>`:''}`:'<p>編成や装備を見直して再挑戦しよう。</p>'}<button data-action="returnMap">荒野へ戻る</button></div>`;
+      $('actionArea').innerHTML=`<div class="result"><h2>${victory?'荒野を踏破！':'敗北…'}</h2>${victory?`<p>荒野 ステージ${battle.stage} 勝利！</p><p>📬 金貨 +${rewards.gold}（受取箱）</p>${rewards.firstClear?'<p>初回踏破！</p>':''}${rewards.gems?`<p>💎 ジェム +${rewards.gems}</p>`:''}${rewards.levelStones?`<p>🪨 レベルストーン ×${rewards.levelStones}</p>`:''}${rewards.ringReward?`<p>💍 ${esc(RINGS[rewards.ringReward].name)} ×1</p>`:''}${rewards.drop?`<p>英雄獲得！<br><b>${esc(rewards.drop.name)}</b><br><span class="small">${esc(rewards.drop.message)}</span></p>`:''}`:'<p>編成や装備を見直して再挑戦しよう。</p>'}<button data-action="returnMap">荒野へ戻る</button></div>`;
       return;
     }
     oldRenderBattleResult();
@@ -1035,7 +1117,7 @@ ensureQuests();renderAll();renderShop();renderEventList();if(dailyAvailable('bon
     for(const stage of [10,20]){
       const cleared=state.clearedStage>=stage || (Number(state.stageClearCounts?.[stage])||0)>0;
       if(!cleared || claimed[stage])continue;
-      state.gems+=100;
+      enqueueMail('草原ボス過去踏破補填',{gems:100});
       grantedGems+=100;
       if(stage===20){
         state.levelStones=(Number(state.levelStones)||0)+1;
@@ -1095,8 +1177,8 @@ ensureQuests();renderAll();renderShop();renderEventList();if(dailyAvailable('bon
       const stage=battle.stage,count=Number(state.forestCounts[stage])||0;
       const gold=Math.floor(1000*Math.pow(.9,count));
       rewards={firstClear:count===0,gold,gems:0,drop:null};
-      state.gold+=gold;
-      const successful=[...new Set(DEEP_FOREST[stage].map(([id])=>id))].filter(id=>{
+      enqueueMail('深い森 STAGE '+stage+' クリア報酬',{gold});
+       const successful=[...new Set(DEEP_FOREST[stage].map(([id])=>id))].filter(id=>{
         const c=byId(id);return c&&Math.random()*100<DROP_RATES[c.rarity];
       });
       if(successful.length){const id=random(successful);rewards.drop={name:byId(id).name,message:addCharacter(id)}}
@@ -1110,7 +1192,7 @@ ensureQuests();renderAll();renderShop();renderEventList();if(dailyAvailable('bon
   renderBattleResult=function(){
     if(battle?.storyMap!=='forest')return prevResultForest();
     const {victory,rewards}=battle.result;
-    $('actionArea').innerHTML=`<div class="result"><h2>${victory?'深い森を踏破！':'敗北…'}</h2>${victory?`<p>深い森 ステージ${battle.stage} 勝利！</p><p>🪙 金貨 +${rewards.gold}</p>${rewards.firstClear?'<p>初回踏破！</p>':''}${rewards.drop?`<p>英雄獲得！<br><b>${esc(rewards.drop.name)}</b><br><span class="small">${esc(rewards.drop.message)}</span></p>`:''}`:'<p>編成や装備を見直して再挑戦しよう。</p>'}<button data-action="returnMap">深い森へ戻る</button></div>`;
+    $('actionArea').innerHTML=`<div class="result"><h2>${victory?'深い森を踏破！':'敗北…'}</h2>${victory?`<p>深い森 ステージ${battle.stage} 勝利！</p><p>📬 金貨 +${rewards.gold}（受取箱）</p>${rewards.firstClear?'<p>初回踏破！</p>':''}${rewards.drop?`<p>英雄獲得！<br><b>${esc(rewards.drop.name)}</b><br><span class="small">${esc(rewards.drop.message)}</span></p>`:''}`:'<p>編成や装備を見直して再挑戦しよう。</p>'}<button data-action="returnMap">深い森へ戻る</button></div>`;
   };
   const prevReturnForest=returnMap;
   returnMap=function(){
@@ -1197,9 +1279,9 @@ ensureQuests();renderAll();renderShop();renderEventList();if(dailyAvailable('bon
       let rewards=null;
       if(victory){
         const q=exState(),d=EX[info],firstClear=!q.cleared[info];
-        state.gold+=d.gold;
+        enqueueMail('草原 EX-'+info+' 報酬',{gold:d.gold,gems:firstClear?d.gems:0});
         rewards={gold:d.gold,gems:0,levelStones:0,firstClear,character:null};
-        if(firstClear){state.gems+=d.gems;state.levelStones=(Number(state.levelStones)||0)+1;rewards.gems=d.gems;rewards.levelStones=1;rewards.character={name:byId(d.character).name,message:addCharacter(d.character)};q.cleared[info]=true}
+        if(firstClear){state.levelStones=(Number(state.levelStones)||0)+1;rewards.gems=d.gems;rewards.levelStones=1;rewards.character={name:byId(d.character).name,message:addCharacter(d.character)};q.cleared[info]=true}
         q.counts[info]=(Number(q.counts[info])||0)+1;save();
         recordQuestEvent('storyWin');
       }
@@ -1347,7 +1429,7 @@ try{if(!localStorage.getItem(TUTORIAL_SEEN_KEY))setTimeout(startTutorial,400)}ca
   const oldFinish=finishBattle;
   finishBattle=function(victory){if(!battle?.awakening)return oldFinish(victory);if(!battle.running)return;
     battle.running=false;battle.busy=false;battle.awaitingAction=false;clearActing();let rewards=null;
-    if(victory){const id=battle.awakening,n=battle.stage,cleared=Number(state.awakenCleared[id])||0;if(n===cleared+1){state.awakenCleared[id]=n;if(n===1){state.gems+=50;rewards={gems:50}}else{state.awakened[id]=true;rewards={awakening:true}}save()}}
+    if(victory){const id=battle.awakening,n=battle.stage,cleared=Number(state.awakenCleared[id])||0;if(n===cleared+1){state.awakenCleared[id]=n;if(n===1){enqueueMail('覚醒試練 STAGE 1 報酬',{gems:50});rewards={gems:50}}else{state.awakened[id]=true;rewards={awakening:true}}save()}}
     battle.result={victory,rewards};renderBattle();renderAll();
   };
   const oldResult=renderBattleResult;
@@ -1386,9 +1468,9 @@ try{if(!localStorage.getItem(TUTORIAL_SEEN_KEY))setTimeout(startTutorial,400)}ca
 */
 (() => {
   'use strict';
-  const GAME_VERSION='2.3.2';
+  const GAME_VERSION='2.4.1';
   const VERSION_SEEN_KEY='hoshiyomi_seen_version_v1';
-  const GAME_CHANGELOG=[{version:'2.3.2',date:'2026-11-18',title:'キャラカードの視認性改善',changes:['バトルの味方・敵キャラ画像を拡大','編成中のキャラと候補一覧を拡大し、名前も読みやすく調整','図鑑や各種カードの画像・文字・余白を改善','スマートフォンでも横3列を基本に見やすさを調整']},{version:'2.3.1',date:'2026-11-18',title:'機能やUIの微調整',changes:['アルティメットカウンターの戦闘中の表示を「カウンター！」に変更','覚醒ステージを開催中のイベント一覧へ統合し、開催曜日以外は非表示','既存の覚醒進捗・報酬・セーブデータを維持']},{version:'2.3.0',date:'2026-11-18',title:'深い森・3英雄覚醒・装備改善',changes:['新ストーリーマップ「深い森」全20ステージ枠を追加','深い森1〜5の敵編成を追加し各ステージ初回1000金貨','荒野20クリアで深い森解放、6〜20は未実装表示','ノーマル3英雄の曜日限定覚醒ステージと専用スキルを追加','装備選択画面を整理し、鍛冶屋の進化手順を案内','既存の戦闘・ドロップ・90%周回報酬ルールを適用']},{version:'2.2.0',date:'2026-11-16',title:'乱入・荒野完結と召喚演出刷新',changes:['荒野16〜20を追加し、荒野16勝利後に一度きりの乱入戦','草原20突破後に荒野を解放、EXの解放条件を隠す','敵編成は挑戦後に公開、敵倍率は非表示、ボスの識別表示を追加','アルティメットカウンターと荒野20ボスの回復を調整','召喚演出6種類・サプライズ昇格・スキップ・10連一覧・育成進捗','初心者・日替わり・週替わりミッション達成通知']},{version:'2.1.0',date:'2026-11-15',title:'新ノーマル・マスケット登場',changes:['新ノーマルキャラ「マスケット」を追加（HP80・攻撃30・素早さ17）','スキル「狙い撃ち」は溜め3で選択した敵に60ダメージ','通常ガチャ・図鑑・ショップに対応（成長率7%・最大Lv20・装備1枠）','既存機能とセーブデータを維持']},{version:'2.0.2',date:'2026-11-15',title:'黄金の凶戦士アックスマン上方修正',changes:['攻撃力を40から60に強化','素早さを16から19に強化','エンハンスドキリングの撃破時攻撃力上昇を+100%から+150%に強化','その他の機能とセーブデータを維持']},{version:'2.0.1',date:'2026-11-15',title:'ログインルーレット修正・ガチャバナー',changes:['ルーレットの賞品ラベルと色付き円盤を一体化し停止位置を修正','ルーレット抽選結果を演出前に確定保存して報酬取りこぼしを防止','新エピック3体のガチャ更新バナーを追加','Ver.2.0.0の戦闘・イベント・ガチャ内容は維持']},{version:'2.0.0',date:'2026-11-15',title:'新エピックと目覚めたものたち',changes:['新エピック3体と固有パッシブ・専用スキルを実装','通常ガチャのエピック排出対象を新3体に更新（旧3体は所持継続可能）','新メインイベント「目覚めたものたち」全10ステージを追加','武の境地を前倒し終了し、目覚めたものたちを11月15日から開催','旧イベントの報酬と既存のセーブデータを維持']},{version:'1.9.0',date:'2026-11-15',title:'封印の儀式・荒野拡張と武の境地の開催期限',changes:['封印の儀式を毎月10日から20日に開催（全3ステージ）','荒野ステージ11〜15を追加','草原と荒野のストーリー周回金貨を毎回90%に統一','武の境地は2026年11月19日23:59（日本時間）で終了','既存機能とセーブデータを維持']},{version:'1.8.3',date:'2026-11-15',title:'荒野11〜15とストーリー周回報酬',changes:['荒野11〜15の敵編成と各初回1000金貨を追加','草原と荒野をストーリーステージとして周回ごとに金貨90%へ減少','荒野の表示金貨も周回回数に対応','既存イベント・セーブデータを維持']},{version:'1.8.2',date:'2026-11-15',title:'封印の儀式と周回報酬の改善',changes:['サブイベント「封印の儀式」を毎月10〜20日に開催','全3ステージと金貨・ジェム・癒しの指輪の報酬を追加','ストーリーの金貨周回減少率を80%から90%に変更','既存機能とセーブデータを維持']},{version:'1.8.1',date:'2026-11-14',title:'無音・スマホ操作改善',changes:['効果音の再生機能と切替ボタンを削除','スマホ向けにメニュー・編成・戦闘・マップをコンパクト化','既存のゲーム内容と保存データは維持']},{version:'1.8.0',date:'2026-11-12',title:'風景と効果音のアップデート',changes:['草原に草花・木々・山並み、荒野に枯れ木・岩場・乾いた大地を描写','ホーム・召喚・ショップ・鍛冶屋・イベントなどに専用の風景を追加','戦闘背景は草原・荒野・EX・各イベント・対戦に対応','BGMを廃止して、ボタン・ガチャ・戦闘・報酬などの効果音を実装（オン・オフ可能）','キャラ・セーブデータ・既存機能は維持']},{version:'1.7.0',date:'2026-11-11',title:'背景演出アップデート',changes:['ゲームの各画面に場面に合った背景を追加','草原・荒野・EX・イベント・旅団対戦の戦闘背景を追加','既存機能とセーブデータは変更なし']},{version:'1.6.3',date:'2026-11-11',title:'ステージに応じた戦闘背景を追加',changes:['草原・荒野・草原EXで戦闘背景が変化するよう改善','アンデッド襲来・将軍の進軍・ドラゴン解放などイベントごとに戦闘背景を追加','旅団対戦は専用の戦闘背景で表示','通常画面の背景切り替えや既存の機能・セーブデータは維持']},{version:'1.6.2',date:'2026-11-11',title:'場面ごとの背景を追加',changes:['ホーム・ガチャ・編成・バトル・ショップなどに場面別の背景を追加','鍛冶屋やイベント、対戦画面にも雰囲気に合った背景を設定','背景は画面切り替えに合わせて自動で切り替わるよう改善','既存の機能・セーブデータ・鍛冶屋・チュートリアルを維持']},{version:'1.6.1',date:'2026-11-11',title:'ゲーム内の用語をわかりやすく改善',changes:['ホーム・ガチャ・ショップ・ミッションなど画面名をわかりやすく変更','バトルやイベント、クリア済みの表示を改善','スキルの溜めについて説明を追加','装身具の表示をアクセサリーに統一（その他の育成用語は維持）','既存の機能・編成・鍛冶屋・セーブデータを維持']},{version:'1.6.0',date:'2026-11-11',title:'初心者ガイド・編成操作改善',changes:['5ステップの初心者チュートリアルを追加','各画面の遊び方ガイドを追加','編成枠をタップして所持英雄を選ぶ2タップ直接交換に対応','編成済み英雄同士の位置入れ替えに対応','スワイプに頼らず一覧のページボタンで選択可能','Ver.1.5.0の鍛冶屋・進化・売却機能を維持']},{version:'1.5.0',date:'2026-11-10',title:'鍛冶屋とアクセサリー進化',changes:['新施設・鍛冶屋を追加（進化と売却）','同種のLv.1指輪2個と金貨でLv.2指輪へ進化','指輪・ネックレスの売却は1個につき1,000金貨','守護・火事場の指輪と、不屈・洗脳のネックレスを追加','進化先9種類の効果を戦闘に適用']},{version:'1.4.0',date:'2026-11-10',title:'草原EX・ドラゴン解放',changes:['草原EXを2ステージ追加し、特殊条件による解放と初回限定報酬に対応','信者・ヤングドラゴンを追加','ゴーレムの素早さ12・溜め6、エルフの回復20%に調整','吸血の指輪を追加（同じキャラへの重複装備不可）','毎週火曜日・木曜日にドラゴン解放を開催']},{version:'1.3.0',date:'2026-11-09',title:'週替わり福袋・戦闘バランス調整',changes:['福袋とパックの週替わり商品5種類を追加','毎週月曜日0時（日本時間）に購入回数をリセット','福袋・パックの開封アニメーションを追加','敵のステータス倍率は素早さに適用しない','通常ステージでも固定威力スキルに倍率を適用']},
+  const GAME_CHANGELOG=[{version:'2.4.1',date:'2026-11-18',title:'戦闘画面の余白とキャラ表示を改善',changes:['戦闘画面の空白や行間を縮め、行動ボタンを押しやすい位置へ','敵味方の画像サイズとキャラ名・HPの読みやすさを調整','他の画面や戦闘処理・受取箱・マジカルジェムの仕様は維持']},{version:'2.4.0',date:'2026-11-18',title:'プレゼントボックス・戦闘操作・マジカルジェム',changes:['ジェム・金貨・指輪を受取箱に送り個別・一括受取に対応','戦闘中は上部メニュー・所持資源を隠し操作ボタンを上へ調整','🔮マジカルジェム1個で通常エピックを確定召喚（昇格演出はなし）','🔹エピックの欠片10個でマジカルジェム1個と交換','期間限定プレゼントを受取箱に1個配布（11月30日23:59 JSTまで）']},{version:'2.3.1',date:'2026-11-18',title:'機能やUIの微調整',changes:['アルティメットカウンターの戦闘中の表示を「カウンター！」に変更','覚醒ステージを開催中のイベント一覧へ統合し、開催曜日以外は非表示','既存の覚醒進捗・報酬・セーブデータを維持']},{version:'2.3.0',date:'2026-11-18',title:'深い森・3英雄覚醒・装備改善',changes:['新ストーリーマップ「深い森」全20ステージ枠を追加','深い森1〜5の敵編成を追加し各ステージ初回1000金貨','荒野20クリアで深い森解放、6〜20は未実装表示','ノーマル3英雄の曜日限定覚醒ステージと専用スキルを追加','装備選択画面を整理し、鍛冶屋の進化手順を案内','既存の戦闘・ドロップ・90%周回報酬ルールを適用']},{version:'2.2.0',date:'2026-11-16',title:'乱入・荒野完結と召喚演出刷新',changes:['荒野16〜20を追加し、荒野16勝利後に一度きりの乱入戦','草原20突破後に荒野を解放、EXの解放条件を隠す','敵編成は挑戦後に公開、敵倍率は非表示、ボスの識別表示を追加','アルティメットカウンターと荒野20ボスの回復を調整','召喚演出6種類・サプライズ昇格・スキップ・10連一覧・育成進捗','初心者・日替わり・週替わりミッション達成通知']},{version:'2.1.0',date:'2026-11-15',title:'新ノーマル・マスケット登場',changes:['新ノーマルキャラ「マスケット」を追加（HP80・攻撃30・素早さ17）','スキル「狙い撃ち」は溜め3で選択した敵に60ダメージ','通常ガチャ・図鑑・ショップに対応（成長率7%・最大Lv20・装備1枠）','既存機能とセーブデータを維持']},{version:'2.0.2',date:'2026-11-15',title:'黄金の凶戦士アックスマン上方修正',changes:['攻撃力を40から60に強化','素早さを16から19に強化','エンハンスドキリングの撃破時攻撃力上昇を+100%から+150%に強化','その他の機能とセーブデータを維持']},{version:'2.0.1',date:'2026-11-15',title:'ログインルーレット修正・ガチャバナー',changes:['ルーレットの賞品ラベルと色付き円盤を一体化し停止位置を修正','ルーレット抽選結果を演出前に確定保存して報酬取りこぼしを防止','新エピック3体のガチャ更新バナーを追加','Ver.2.0.0の戦闘・イベント・ガチャ内容は維持']},{version:'2.0.0',date:'2026-11-15',title:'新エピックと目覚めたものたち',changes:['新エピック3体と固有パッシブ・専用スキルを実装','通常ガチャのエピック排出対象を新3体に更新（旧3体は所持継続可能）','新メインイベント「目覚めたものたち」全10ステージを追加','武の境地を前倒し終了し、目覚めたものたちを11月15日から開催','旧イベントの報酬と既存のセーブデータを維持']},{version:'1.9.0',date:'2026-11-15',title:'封印の儀式・荒野拡張と武の境地の開催期限',changes:['封印の儀式を毎月10日から20日に開催（全3ステージ）','荒野ステージ11〜15を追加','草原と荒野のストーリー周回金貨を毎回90%に統一','武の境地は2026年11月19日23:59（日本時間）で終了','既存機能とセーブデータを維持']},{version:'1.8.3',date:'2026-11-15',title:'荒野11〜15とストーリー周回報酬',changes:['荒野11〜15の敵編成と各初回1000金貨を追加','草原と荒野をストーリーステージとして周回ごとに金貨90%へ減少','荒野の表示金貨も周回回数に対応','既存イベント・セーブデータを維持']},{version:'1.8.2',date:'2026-11-15',title:'封印の儀式と周回報酬の改善',changes:['サブイベント「封印の儀式」を毎月10〜20日に開催','全3ステージと金貨・ジェム・癒しの指輪の報酬を追加','ストーリーの金貨周回減少率を80%から90%に変更','既存機能とセーブデータを維持']},{version:'1.8.1',date:'2026-11-14',title:'無音・スマホ操作改善',changes:['効果音の再生機能と切替ボタンを削除','スマホ向けにメニュー・編成・戦闘・マップをコンパクト化','既存のゲーム内容と保存データは維持']},{version:'1.8.0',date:'2026-11-12',title:'風景と効果音のアップデート',changes:['草原に草花・木々・山並み、荒野に枯れ木・岩場・乾いた大地を描写','ホーム・召喚・ショップ・鍛冶屋・イベントなどに専用の風景を追加','戦闘背景は草原・荒野・EX・各イベント・対戦に対応','BGMを廃止して、ボタン・ガチャ・戦闘・報酬などの効果音を実装（オン・オフ可能）','キャラ・セーブデータ・既存機能は維持']},{version:'1.7.0',date:'2026-11-11',title:'背景演出アップデート',changes:['ゲームの各画面に場面に合った背景を追加','草原・荒野・EX・イベント・旅団対戦の戦闘背景を追加','既存機能とセーブデータは変更なし']},{version:'1.6.3',date:'2026-11-11',title:'ステージに応じた戦闘背景を追加',changes:['草原・荒野・草原EXで戦闘背景が変化するよう改善','アンデッド襲来・将軍の進軍・ドラゴン解放などイベントごとに戦闘背景を追加','旅団対戦は専用の戦闘背景で表示','通常画面の背景切り替えや既存の機能・セーブデータは維持']},{version:'1.6.2',date:'2026-11-11',title:'場面ごとの背景を追加',changes:['ホーム・ガチャ・編成・バトル・ショップなどに場面別の背景を追加','鍛冶屋やイベント、対戦画面にも雰囲気に合った背景を設定','背景は画面切り替えに合わせて自動で切り替わるよう改善','既存の機能・セーブデータ・鍛冶屋・チュートリアルを維持']},{version:'1.6.1',date:'2026-11-11',title:'ゲーム内の用語をわかりやすく改善',changes:['ホーム・ガチャ・ショップ・ミッションなど画面名をわかりやすく変更','バトルやイベント、クリア済みの表示を改善','スキルの溜めについて説明を追加','装身具の表示をアクセサリーに統一（その他の育成用語は維持）','既存の機能・編成・鍛冶屋・セーブデータを維持']},{version:'1.6.0',date:'2026-11-11',title:'初心者ガイド・編成操作改善',changes:['5ステップの初心者チュートリアルを追加','各画面の遊び方ガイドを追加','編成枠をタップして所持英雄を選ぶ2タップ直接交換に対応','編成済み英雄同士の位置入れ替えに対応','スワイプに頼らず一覧のページボタンで選択可能','Ver.1.5.0の鍛冶屋・進化・売却機能を維持']},{version:'1.5.0',date:'2026-11-10',title:'鍛冶屋とアクセサリー進化',changes:['新施設・鍛冶屋を追加（進化と売却）','同種のLv.1指輪2個と金貨でLv.2指輪へ進化','指輪・ネックレスの売却は1個につき1,000金貨','守護・火事場の指輪と、不屈・洗脳のネックレスを追加','進化先9種類の効果を戦闘に適用']},{version:'1.4.0',date:'2026-11-10',title:'草原EX・ドラゴン解放',changes:['草原EXを2ステージ追加し、特殊条件による解放と初回限定報酬に対応','信者・ヤングドラゴンを追加','ゴーレムの素早さ12・溜め6、エルフの回復20%に調整','吸血の指輪を追加（同じキャラへの重複装備不可）','毎週火曜日・木曜日にドラゴン解放を開催']},{version:'1.3.0',date:'2026-11-09',title:'週替わり福袋・戦闘バランス調整',changes:['福袋とパックの週替わり商品5種類を追加','毎週月曜日0時（日本時間）に購入回数をリセット','福袋・パックの開封アニメーションを追加','敵のステータス倍率は素早さに適用しない','通常ステージでも固定威力スキルに倍率を適用']},
     {version:'1.2.0',date:'2026-11-09',title:'砂塵の荒野・新たな英雄',changes:[
       'ノーマル英雄「ミイラ」「ガーゴイル」を追加',
       'ミイラは荒野ステージドロップ限定（ガチャ・ショップ対象外）',
